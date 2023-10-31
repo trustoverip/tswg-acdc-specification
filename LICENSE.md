@@ -1,7 +1,8 @@
 # Licensing
 
 All software and documentation in this repository are *Copyright 2023 ACDC Contributors* and 
-all contributions to this repository are *Licensed under the OWFa 1.0 (the "License")* [here](https://github.com/trustoverip/tswg-acdc-specification/blob/main/LICENSE);
+all contributions to this repository are *Licensed under the OWFa 1.0 (the "License")* [here](https://github.com/trustoverip/tswg-acdc-specification/blob/main/LICENSE).
+
 As as defined in the License, contributions include but are not limited to patents, source code, specification text, 
 documentation, comments and issues. You may not use the software or documentation in this repository except in compliance with the License.
 Unless required by applicable law or agreed to in writing, software distributed
@@ -19,5 +20,4 @@ The legal structure of this repository with respect to the licensing of its
 associated contributions also follows GitHub's Open Source Guide reccomendations for
 open source standards and code. These may be found [here](https://opensource.guide/legal/)
 
-In addition to the copyright and licensing restrictions described above, all contributions to this repository may be contributions to a terminal standards body such as IETF[link] ISO[link] or equivelant. The IETF license terms are defined in the
-[guidelines for contributions](https://github.com/WebOfTrust/keri/blob/main/CONTRIBUTING.md).
+In addition to the copyright and licensing restrictions described above, all contributions to this repository may be contributions to a terminal standards body such as [IETF](https://www.ietf.org), [ISO](https://www.iso.org/home.html) or equivelant.
