@@ -33,6 +33,10 @@ Authentic Chained Data Containers (ACDC)
 
 ## Foreword
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/8
+:::
+
 An Authentic chained data container (ACDC) specification [@ACDC_ID][@ACDC_WP][@VCEnh] is being incubated at the ToIP (Trust over IP) Foundation [@TOIP][@ACDC_TF].  An ACDC is a compliant external proof format of the W3C VC 2.0 specification.  The ACDC specification supports the use of KERI-based (Key Event Receipt Infrastructure) DID methods such as did:KERI and did:webs as primary identifiers  (W3C DID (Decentralized Identifier) specification [@W3C_DID]. A major use case for the ACDC specification is the use of ACDCs as vLEIs (verifiable Legal Entity Identifiers) within the ecosystem and infrastructure developed by[@vLEI][@GLEIF_vLEI][@GLEIF_KERI]. the Global Legal Entity Identifier Foundation [@GLEIF]. An ISO standard for vLEIs currently is under development at the International Organization for Standardization (ISO).  ACDCs are dependent on a suite of related specifications along with the KERI [@KERI_ID][@KERI] specification. These include CESR [@CESR_ID], SAID [@SAID_ID], did:keri [@DIDK_ID], and OOBI [@OOBI_ID]. Some of the major distinguishing features of ACDCs include normative support for chaining, use of composable JSON Schema [@JSch][@JSchCp], multiple serialization formats, namely, JSON [@JSON][@RFC4627], CBOR [@CBOR][@RFC8949], MGPK [@MGPK], and CESR [@CESR_ID], support for Ricardian contracts [@RC],  support for chain-link confidentiality [@CLC], a well-defined security model derived from KERI [@KERI][@KERI_ID],Compact formats for resource constrained applications, simple Partial disclosure mechanisms and simple Selective disclosure mechanisms. ACDCs provision data using a synergy of provenance, protection, and performance.
 
 
@@ -43,6 +47,10 @@ An Authentic chained data container (ACDC) specification [@ACDC_ID][@ACDC_WP][@V
 [//]: # (::: introtitle)
 
 ## Introduction
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/11
+:::
 
 content
 
@@ -122,6 +130,10 @@ Perfect security – a special case of Information theoretic security [@ITPS]
 One-time-pad (OTP)(also called a Vernum Cipher OTP) [@VCphr]
 Secret splitting [@SSplt] a type of secret sharing [@SShr] that uses the same technique as an OTP.
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/36
+:::
+
 Selective disclosure
 Graduated disclosure
 Partial disclosure
@@ -153,6 +165,26 @@ Rules
 Edge
 Schema
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/16
+:::
+
+Derived Identifier
+
+Disclosure
+Disclosee
+Discloser
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/19
+:::
+
+Simple Grant Language
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/25
+:::
+
 [//]: # (ACDC fields  {#sec:content})
 
 ## ACDC fields
@@ -163,7 +195,15 @@ A field may be represented by a Framing code or block delimited serialization.  
 
 ### Field label tables
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/13
+:::
+
 #### Top-Level fields
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/12
+:::
 
 | Label | Title | Description |
 |:-:|:--|:--|
@@ -214,6 +254,10 @@ Although a given ACDC serialization type may have a field map delimiter or frami
 
 ### Self-addressing identifier (SAID) fields
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/14
+:::
+
 Some fields in ACDCs may have for their value either a field map or a SAID. A SAID follows the SAID protocol [@SAID_ID]. Essentially a SAID is a Self-addressing identifier (self-referential content addressable). A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-addressed data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) may be compacted into its SAID. The uncompacted blocks for each associated SAID may be attached or cached to optimize bandwidth and availability without decreasing security.
 
 Several top-level ACDC fields may have for their value either a serialized field map or the SAID of that field map. Each SAID provides a stable universal cryptographically verifiable and agile reference to its encapsulating block (serialized field map). Specifically, the value of top-level `s`, `a`, `e`, and `r` fields may be replaced by the SAID of their associated field map. When replaced by their SAID, these top-level sections are in compact form.
@@ -227,6 +271,10 @@ The purpose of the UUID, `u`, field in any block is to provide sufficient entrop
 A UUID, `u` field may optionally appear in any block (field map) at any level of an ACDC. Whenever a block in an ACDC includes a UUID, `u`, field then its associated SAID, `d`, field makes a blinded commitment to the contents of that block. The UUID, `u`, field is the blinding factor. This makes that block securely partially disclosable or even selectively disclosable notwithstanding disclosure of the associated schema of the block. The block contents can only be discovered given disclosure of the included UUID field. Likewise, when a UUID, `u`, field appears at the top level of an ACDC then that top-level SAID, `d`, field makes a blinded commitment to the contents of the whole ACDC itself. Thus, the whole ACDC, not merely some block within the ACDC, may be disclosed in a privacy-preserving (correlation minimizing) 
 
 ### Autonomic identifier (AID) and Derived identifier fields
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/15
+:::
 
 Some fields, such as the `i`, Issuer identifier field, must each have an AID as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [@KERI][@KERI_ID]. A related type of identifier field is the `ri`, registry identifier field. The `ri` field is cryptographically derived from the Issuer identifier field value so has securely attributable control authority via the AID from which it is derived.  A SCID is derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [@DSig]. Each AID has a set of one or more Controllers who each control a private key. By virtue of their private key(s), the set of Controllers may make statements on behalf of the associated AID that is backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then may verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is required. The verifiable key state for AIDs is established with the KERI protocol [@KERI][@KERI_ID]. The use of AIDS enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
 
@@ -267,6 +315,10 @@ An example of a fully compact public ACDC is shown below.
 ```
 
 #### Compact private ACDC  
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/22
+:::
 
 An example of a fully compact private ACDC is shown below.
 
@@ -357,6 +409,10 @@ The schema for the Compact private ACDC example above is provided below.
 
 ## Disclosure mechanisms
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/30
+:::
+
 An important design goal of ACDCs is to support the sharing of provably authentic data while also protecting against the unpermissioned exploitation of that data. Often the term privacy protection is used to describe similar properties. But a narrow focus on privacy protection may lead to problematic design trade-offs. With ACDCs, the primary design goal is not data privacy protection per se, but the more general goal of protection from the unpermissioned exploitation of data. In this light, a given privacy protection mechanism may be employed to help protect against unpermissioned exploitation of data but only when it serves that more general-purpose and not as an end in and of itself.
 
 As described previously, ACDCs employ Graduated disclosure mechanisms that satisfy the principle of least disclosure. Requoted here the principle of least disclosure is as follows:
@@ -367,6 +423,10 @@ For example, Compact disclosure, Partial disclosure, Selective disclosure and Fu
 
 
 ### Graduated disclosure and Contractually protected disclosure
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/17
+:::
 
 ACDC leverages several closely related mechanisms for what can be called Graduated disclosure. Graduated disclosure enables adherence to the principle of least disclosure which is expressed as follows:
 
@@ -447,11 +507,17 @@ ACDCs must use static JSON Schema (i.e., SAIDifiable schema). These may include 
 
 ### Schema dialect
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/18
+:::
+
 The Schema dialect for ACDC 1.0 is JSON Schema 2020-12 and is indicated by the identifier `"https://json-schema.org/draft/2020-12/schema"`  [@JSch][@JSch_202012]. This is indicated in a JSON Schema via the value of the top-level `$schema` field. Although the value of `$schema` is expressed as a URI, de-referencing does not provide dynamically downloadable schema dialect validation code. This would be an attack vector. The Validator must control the tooling code dialect used for schema validation and hence the tooling dialect version actually used. A mismatch between the supported tooling code dialect version and the `$schema` string value should cause the validation to fail. The string is simply an identifier that communicates the intended dialect to be processed by the schema validation tool. When provided, the top-level `$schema` field value for ACDC version 1.0 must be "https://json-schema.org/draft/2020-12/schema".
 
 ### Schema versioning
 
-create issue
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/20
+:::
 
 ### Schema availability
 
@@ -1174,6 +1240,10 @@ The following example adds both SAID, `d`, and schema, `s`, fields (edge propert
 
 ##### Operator field 
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/23
+:::
+
 When present, the operator, `o` field must appear immediately following all of the SAID, `d`, node, `n`, or schema, `s`, fields in the edge sub-block. The function of the operator field is explained in a later section.
 
 ##### Weight field
@@ -1491,6 +1561,10 @@ Nested edge-group:
 
 ###### Default AND example
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/24
+:::
+
 When an ECR vLEI is issued by the QVI, it is not chained, Issuer-to-Issuee, via the Legal Entity (LE) vLEI credential. A more accurate way of expressing the chaining would be to use the `AND` Operator to include both the LE and QVI vLEI credentials as edges in the ECR and also to apply the unary `NI2I` to the LE vLEI instead of only chaining the ECR vLEI to the Legal Entity vLEI and not chaining to ECR vLEI to the QVI vLEI at all.
 
 In the following example: The top-level edge-block uses the default of `AND` and the `qvi` edge uses the default of `I2I` because it points to a Targeted ACDC.  The `le` edge, on the other hand, points to a Targeted ACDC. It uses the unary Operator, `NI2I` in its operator, `o`, field so that it will be accepted it even though its targeted Issuee is not the Issuer of the current credential.
@@ -1521,6 +1595,10 @@ Certainly, an even more expressive syntax could be developed. The proposed synta
 The intelligent defaults for the Operator, `o`, field, including the default application of the `I2I` or `NI2I` unary operator, means that in most current use cases, the Operator, `o`, field, does not even need to be present.
 
 ###### Node discovery
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/26
+:::
 
 In general, the discovery of the details of an ACDC referenced as a node, `n` field value, in an edge sub-block begins with the node SAID or the SAID of the associated edge sub-block. Because a SAID is a cryptographic digest with high collision resistance, it provides a universally unique identifier to the referenced ACDC as a node. The discovery of a service endpoint URL that provides database access to a copy of the ACDC may be bootstrapped via an OOBI (Out-Of-Band-Introduction) that links the service endpoint URL to the SAID of the ACDC [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at the time of issuance a copy of the referenced ACDC. In either case, after a successful exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced ACDCs as nodes in the edge sections of all ACDCs so chained. That Issuee will then have everything it needs to make a successful disclosure to some other Disclosee. This is the essence of Percolated discovery.
 
@@ -1692,6 +1770,10 @@ Consider the following disclosure-specific ACDC. The Issuer is the Discloser, th
 Informative examples of fully-featured variants of ACDCs can be found in Annex C.
 
 ## Selective disclosure
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/21
+:::
 
 As explained previously in section 5, the primary difference between Partial disclosure and Selective disclosure is determined by the correlatability with respect to its encompassing block after Full disclosure of the detailed field value. A partially disclosable field becomes correlatable to its encompassing block after its Full disclosure. Whereas a selectively disclosable field may be excluded from the Full disclosure of any other selectively disclosable fields in its encompassing block. After Selective disclosure, the selectively disclosed fields are not correlatable to the so far undisclosed but selectively disclosable fields in the same encompassing block. In this sense, Full disclosure means detailed disclosure of the selectively disclosed attributes not detailed disclosure of all selectively disclosable attributes.
 
@@ -2089,6 +2171,10 @@ for correlation of uses of the VC.
 
 ### Public TEL (PTEL)
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/31
+:::
+
 A KERI KEL can control a TEL by anchoring the TEL to key events of the KEL with the following:
 
 1. Create the inception event for the TEL with the TEL specific unique identifier.
@@ -2412,6 +2498,10 @@ steps:
 ## FIX ME
 ### Blindable state TEL 
 
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/32
+:::
+
 In some applications, it is desirable that the current state of a TEL be hidden or blinded such that the only way for a potential Verifier of the state to observe that state is when the Controller of a designated AID discloses it at the time of presentation. This designated AID is called the Discloser. Typically for ACDCs that have an Issuee, the Discloser is the Issuee, but the Issuer could designate any AID as the Discloser. Only the Discloser will be able to unblind the state to a potential Disclosee.
 
 In a blindable state TEL, the state disclosure is interactive. A Disclosee may observe the state only when unblinded via an interactive exchange with the Discloser. After disclosure, the Discloser may then request that the Issuer update the state with a new blinding factor (the blind). The Disclosee cannot then observe the current state of the TEL without yet another disclosure interaction with the Discloser.
@@ -2447,9 +2537,15 @@ Blindable state TEL attribute (state) fields:
 
 ### Transfer registry TEL
 
-[//]: # (github topic?)
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/34
+:::
 
 ### Independent TEL bulk-issued ACDCs
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/33
+:::
 
 Recall that the purpose of using the aggregate ‘B for a bulk-issued set from which the TEL identifier is derived is to enable a set of bulk-issued ACDCs to share a single public TEL and/or a single anchoring seal in the Issuer's KEL without enabling unpermissioned correlation to any other members of the bulk set by virtue of the shared aggregate ‘B’ used for either the TEL or anchoring seal in the KEL. When using a TEL, this enables the issuance/revocation/transfer state of all copies of a set of bulk-issued ACDCs to be provided by a single TEL which minimizes the storage and compute requirements on the TEL registry while providing Selective disclosure to prevent unpermissioned correlation via the public TEL. When using an anchoring seal, this enables one signature to provide proof of inclusion in the bulk-issued aggregate ‘B’.
 
@@ -2498,6 +2594,10 @@ The highest level of cryptographic security with respect to a cryptographic secr
 [//]: # (# Examples {#sec:annexC .informative} )
 
 ### Examples 
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/27
+:::
 
 Public ACDC with compact and uncompacted variants
 
