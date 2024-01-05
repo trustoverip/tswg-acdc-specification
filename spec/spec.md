@@ -577,8 +577,7 @@ The following schema supports a compact variant:
   "description": "Example JSON Schema Public ACDC.",
   "credentialType": "PublicACDCExample",
   "type": "object",
-   "required":
-  [
+  "required": [
     "v",
     "d",
     "i",
@@ -588,33 +587,26 @@ The following schema supports a compact variant:
     "e",
     "r"
   ],
-  "properties":
-  {
-    "v":
-    {
+  "properties": {
+    "v": {
       "description": "ACDC version string",
       "type": "string"
     },
-    "d":
-    {
-     "description": "ACDC SAID",
+    "d": {
+      "description": "ACDC SAID",
       "type": "string"
     },
-    "i":
-    {
+    "i": {
       "description": "Issuer AID",
       "type": "string"
     },
-    "ri":
-    {
+    "ri": {
       "description": "credential status registry AID",
       "type": "string"
     },
-    "s":
-    {
+    "s": {
       "description": "schema section",
-      "oneOf":
-      [
+      "oneOf": [
         {
           "description": "schema section SAID",
           "type": "string"
@@ -622,14 +614,12 @@ The following schema supports a compact variant:
         {
           "description": "schema detail",
           "type": "object"
-        },
+        }
       ]
     },
-    "a":
-    {
+    "a": {
       "description": "attribute section",
-      "oneOf":
-      [
+      "oneOf": [
         {
           "description": "attribute section SAID",
           "type": "string"
@@ -637,45 +627,37 @@ The following schema supports a compact variant:
         {
           "description": "attribute detail",
           "type": "object",
-          "required":
-          [
+          "required": [
             "d",
             "i",
             "score",
             "name"
           ],
-          "properties":
-          {
-            "d":
-            {
+          "properties": {
+            "d": {
               "description": "attribute section SAID",
               "type": "string"
             },
-            "i":
-            {
+            "i": {
               "description": "Issuee AID",
               "type": "string"
             },
-            "score":
-            {
+            "score": {
               "description": "test score",
               "type": "integer"
             },
-            "name":
-            {
+            "name": {
               "description": "test taker full name",
               "type": "string"
             }
           },
-          "additionalProperties": false,
+          "additionalProperties": false
         }
       ]
     },
-    "e":
-    {
+    "e": {
       "description": "edge section",
-      "oneOf":
-      [
+      "oneOf": [
         {
           "description": "edge section SAID",
           "type": "string"
@@ -683,64 +665,53 @@ The following schema supports a compact variant:
         {
           "description": "edge detail",
           "type": "object",
-          "required":
-          [
+          "required": [
             "d",
             "boss"
           ],
-          "properties":
-          {
-            "d":
-            {
+          "properties": {
+            "d": {
               "description": "edge section SAID",
               "type": "string"
             },
-            "boss":
-            {
+            "boss": {
               "description": "boss edge",
               "type": "object",
-              "required":
-              [
+              "required": [
                 "d",
                 "n",
-                's',
+                "s",
                 "w"
               ],
-              "properties":
-              {
-                "d":
-                {
+              "properties": {
+                "d": {
                   "description": "edge SAID",
                   "type": "string"
                 },
-                "n":
-                {
+                "n": {
                   "description": "far node SAID",
                   "type": "string"
                 },
-                "s":
-                {
+                "s": {
                   "description": "far node schema SAID",
                   "type": "string",
-                  "const": ""EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
+                  "const": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
                 },
-                "w":
-                {
+                "w": {
                   "description": "edge weight",
                   "type": "string"
+                }
               },
               "additionalProperties": false
-            },
+            }
           },
           "additionalProperties": false
         }
       ]
     },
-    "r":
-    {
+    "r": {
       "description": "rule section",
-      "oneOf":
-      [
+      "oneOf": [
         {
           "description": "rule section SAID",
           "type": "string"
@@ -748,61 +719,48 @@ The following schema supports a compact variant:
         {
           "description": "rule detail",
           "type": "object",
-          "required":
-          [
+          "required": [
             "d",
             "warrantyDisclaimer",
             "liabilityDisclaimer"
           ],
-          "properties":
-          {
-            "d":
-            {
+          "properties": {
+            "d": {
               "description": "edge section SAID",
               "type": "string"
             },
-            "warrantyDisclaimer":
-            {
+            "warrantyDisclaimer": {
               "description": "warranty disclaimer clause",
               "type": "object",
-              "required":
-              [
+              "required": [
                 "d",
                 "l"
               ],
-              "properties":
-              {
-                "d":
-                {
+              "properties": {
+                "d": {
                   "description": "clause SAID",
                   "type": "string"
                 },
-                "l":
-                {
+                "l": {
                   "description": "legal language",
                   "type": "string"
                 }
               },
               "additionalProperties": false
             },
-            "liabilityDisclaimer":
-            {
+            "liabilityDisclaimer": {
               "description": "liability disclaimer clause",
               "type": "object",
-              "required":
-              [
+              "required": [
                 "d",
                 "l"
               ],
-              "properties":
-              {
-                "d":
-                {
+              "properties": {
+                "d": {
                   "description": "clause SAID",
                   "type": "string"
                 },
-                "l":
-                {
+                "l": {
                   "description": "legal language",
                   "type": "string"
                 }
