@@ -2813,6 +2813,33 @@ Composed schema that supports both public compact and uncompacted variants
 }
 ```
 
+### Extensibility
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/35
+:::
+
+Append-only verifiable data structures have strong security properties that simplify end-verifiability and foster decentralization.
+
+Append-only provides permission-less extensibility by downstream issuers, presenters, and/or verifiers
+
+Each ACDC has a universally-unique content-based identifier with a universally-unique content-based schema identifier.
+
+Fully decentralized name-spacing.
+
+Custom fields are appended via chaining via one or more custom ACDCs defined by custom schema (type-is-schema).
+
+No need for centralized permissioned name-space registries to resolve name-space collisions.
+
+The purposes of a registry now become merely schema discovery or schema blessing for a given context or ecosystem.
+
+The reach of the registry is tuned to the reach of desired interoperability by the ecosystem participants.
+
+Human meaningful labels on SAIDs are local context only.
+
+Versioning is simplified because edges still verify if new schema are backwards compatible. (persistent data structure model).
+
+
 [//]: # (\newpage)
 
 [//]: # (\makebibliography)
