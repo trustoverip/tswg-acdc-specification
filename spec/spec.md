@@ -52,7 +52,19 @@ An Authentic chained data container (ACDC) specification [@ACDC_ID][@ACDC_WP][@V
 https://github.com/trustoverip/tswg-acdc-specification/issues/11
 :::
 
-content
+One primary purpose of the ACDC protocol is to provide granular provenanced proof-of-authorship (authenticity) of their contained data via a tree or chain of linked ACDCs (technically a directed acyclic graph or DAG). Similar to the concept of a chain-of-custody, ACDCs provide a verifiable chain of proof-of-authorship of the contained data. With a little additional syntactic sugar, this primary facility of chained (treed) proof-of-authorship (authenticity) is extensible to a chained (treed) verifiable authentic proof-of-authority (proof-of-authorship-of-authority). A proof-of-authority may be used to provide verifiable authorizations or permissions or rights or credentials. A chained (treed) proof-of-authority enables delegation of authority and delegated authorizations. These proofs of authorship and/or authority provide provenance of an ACDC itself and by association any data that is so conveyed.
+
+The dictionary definition of credential is evidence of authority, status, rights, entitlement to privileges, or the like.  Appropriately structured ACDCs may be used as credentials when their semantics provide verifiable evidence of authority. Chained ACDCs may provide delegated credentials.
+
+Chains of ACDCs that merely provide proof-of-authorship (authenticity) of data may be appended to chains of ACDCs that provide proof-of-authority (delegation) to enable verifiable delegated authorized authorship of data. This is a vital facility for authentic data supply chains. Furthermore, any physical supply chain may be measured, monitored, regulated, audited, and/or archived by a data supply chain acting as a digital twin [@Twin]. Therefore, ACDCs provide the critical enabling facility for an authentic data economy and by association an authentic real (twinned) economy.
+
+ACDCs act as securely attributed (authentic) fragments of a distributed property graph (PG) [@PGM][@Dots]. Thus, ACDCs may be used to construct knowledge graphs expressed as property graphs [@KG]. ACDCs enable securely-attributed and privacy-protecting knowledge graphs.
+
+The ACDC specification (including its Partial and Selective disclosure mechanisms) leverages two primary cryptographic operations namely digests and digital signatures [@Hash][@DSig]. These operations when used in an ACDC must have a security level, cryptographic strength, or entropy of approximately 128 bits [@Level]. (See the Annex A for a discussion of cryptographic strength and security)
+
+An important property of high-strength cryptographic digests is that a verifiable cryptographic commitment (such as a digital signature) to the digest of some data is equivalent to a commitment to the data itself. ACDCs leverage this property to enable compact chains of ACDCs that anchor data via digests. The data Contained in an ACDC therefore may be merely its equivalent anchoring digest. The anchored data is thereby equivalently authenticated or authorized by the chain of ACDCs.
+
+
 
 [//]: # (:::)
 
@@ -89,18 +101,7 @@ IN NO EVENT WILL ANY ToIP PARTY BE LIABLE TO ANY OTHER PARTY FOR LOST PROFITS OR
 
 ## Scope
 
-One primary purpose of the ACDC protocol is to provide granular provenanced proof-of-authorship (authenticity) of their contained data via a tree or chain of linked ACDCs (technically a directed acyclic graph or DAG). Similar to the concept of a chain-of-custody, ACDCs provide a verifiable chain of proof-of-authorship of the contained data. With a little additional syntactic sugar, this primary facility of chained (treed) proof-of-authorship (authenticity) is extensible to a chained (treed) verifiable authentic proof-of-authority (proof-of-authorship-of-authority). A proof-of-authority may be used to provide verifiable authorizations or permissions or rights or credentials. A chained (treed) proof-of-authority enables delegation of authority and delegated authorizations. These proofs of authorship and/or authority provide provenance of an ACDC itself and by association any data that is so conveyed.
-
-The dictionary definition of credential is evidence of authority, status, rights, entitlement to privileges, or the like.  Appropriately structured ACDCs may be used as credentials when their semantics provide verifiable evidence of authority. Chained ACDCs may provide delegated credentials.
-
-Chains of ACDCs that merely provide proof-of-authorship (authenticity) of data may be appended to chains of ACDCs that provide proof-of-authority (delegation) to enable verifiable delegated authorized authorship of data. This is a vital facility for authentic data supply chains. Furthermore, any physical supply chain may be measured, monitored, regulated, audited, and/or archived by a data supply chain acting as a digital twin [@Twin]. Therefore, ACDCs provide the critical enabling facility for an authentic data economy and by association an authentic real (twinned) economy.
-
-ACDCs act as securely attributed (authentic) fragments of a distributed property graph (PG) [@PGM][@Dots]. Thus, ACDCs may be used to construct knowledge graphs expressed as property graphs [@KG]. ACDCs enable securely-attributed and privacy-protecting knowledge graphs.
-
-The ACDC specification (including its Partial and Selective disclosure mechanisms) leverages two primary cryptographic operations namely digests and digital signatures [@Hash][@DSig]. These operations when used in an ACDC must have a security level, cryptographic strength, or entropy of approximately 128 bits [@Level]. (See the Annex A for a discussion of cryptographic strength and security)
-
-An important property of high-strength cryptographic digests is that a verifiable cryptographic commitment (such as a digital signature) to the digest of some data is equivalent to a commitment to the data itself. ACDCs leverage this property to enable compact chains of ACDCs that anchor data via digests. The data Contained in an ACDC therefore may be merely its equivalent anchoring digest. The anchored data is thereby equivalently authenticated or authorized by the chain of ACDCs.
-
+narrow scope here
 
 ## Normative references
 
@@ -217,10 +218,7 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/12
 |`A`| Attribute Aggregate| Either the aggregate of a selectively disclosable block of attributes or the block itself. |
 |`e`| Edge| Either the SAID of a block of edges or the block itself.|
 |`r`| Rule | Either the SAID a block of rules or the block itself. |
-|`n`| Node| SAID of another ACDC as the terminating point of a directed edge that connects the encapsulating ACDC node to the specified ACDC node as a fragment of a distributed property graph (PG).|
-|`o`| Operator| Either unary operator on edge or m-ary operator on edge-group in edge section. Enables expressing of edge logic on edge subgraph.|
-|`w`| Weight| Edge weight property that enables default property for directed weighted edges and operators on directed weighted edges.|
-|`l`| Legal Language| Text of Ricardian contract clause.|
+
 
 #### Other fields
 
@@ -470,6 +468,9 @@ Notable is the fact that there are no top-level type fields in an ACDC. This is 
 
 The usual field label for SAID fields in ACDCs is `d`. In the case of the schema section, however, the field label for the SAID of the schema section is `$id`. This repurposes the schema id field label, `$id` as defined by JSON Schema [@JSchId][@JSchCx].  The top-level id, `$id`, field value in a JSON Schema provides a unique identifier of the schema instance. In a non-ACDC schema, the value of the id, `$id`, field is expressed as a URI. This is called the Base URI of the schema. In an ACDC schema, however, the top-level id, `$id`, field value is repurposed. This field value must include the SAID of the schema. This ensures that the ACDC schema is static and verifiable to their SAIDS. A verifiably static schema satisfies one of the essential security properties of ACDCs as discussed below. There are several ACDC supported formats for the value of the top-level id, `$id`, field but all of the formats must include the SAID of the schema (see below). Correspondingly, the value of the top-level schema, `s`, field must be the SAID included in the schema's top-level `$id` field. The detailed schema is either attached or cached and maybe discovered via its SAIDified, id, `$id`, field value.
 
+The digest algorithm employed for generating schema SAIDS shall have an approximate cryptographic strength of 128 bits. The SAID MUST be generated in compliance with the ToIP SAID internet draft specification and MUST be encoded using CESR. The CESR encoding indicates the type of cryptographic digest used to generate the SAID. 
+
+
 When an id, '$id', field appears in a sub-schema, it indicates a bundled sub-schema called a schema resource [@JSchId][@JSchCx]. The value of the id, '$id', field in any ACDC bundled sub-schema resource must include the SAID of that sub-schema using one of the formats described below. The sub-schema so bundled must be verifiable against its referenced and embedded SAID value. This ensures secure bundling.
 
 ### Static (immutable) schema
@@ -518,6 +519,18 @@ The Schema dialect for ACDC 1.0 is JSON Schema 2020-12 and is indicated by the i
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/20
 :::
+
+Each schema shall have at the top level version field with field label `version`. The value of the `version` field shall be a semantic version string in the dotted decimal notation of the form "major.minor.path" . For example, "1.2.3" has a major version number of 1, a minor version number of 2, and a patch version of 3. This value is informative. The `version` field value is not used in the JSON Schema validation against the ACDC. Therefore, a given ACDC may properly pass JSON Schema validation process regardless of the value of its schema `version` field.  
+
+{{Semantic Versioning Specification 2.0 https://semver.org}}
+
+
+Recall that the value of the Schema ID, `$id` field in an ACDC schema is a SAID which provides an encoded agile cryptographic digest of the contents of the schema. Any change to the schema, including a change to its `version` field, results in a new SAID. Any copy of a schema that verifies against the same SAID given by the Schema ID, `$id` field value can be assumed to be identical to any other copy that verifies to the same SAID by virtue of the strong collision resistance of the digest employed.
+
+This gives rise to two meanings of the word "version" when applied to an ACDC's schema. One is the version given by the value of its `$id` field, and the other is the version given by its `version` field. The version provided by the `$id` field is cryptographically verifiable. Whereas the version provided by the `version` field is not. Thus, the latter is an informative indication of the version, and the former is a normative determiner of the version. In this sense, the schema ID, `$id` field value as a SAID provides a cryptographically verifiable version indicator independent of the version field value. To avoid confusion, any change to the schema that changes the value of the `$id` shall also be reflected in a correspondingly unique value of its `version` field. Business logic may depend on consistency between the `version` field value with respect to the `$id` field value. Notwithstanding the actual value of the `version` field, the `$id` field value is the normative determiner of the schema's true, verifiable version.
+
+The JSON schema for an ACDC may use composition operators (see below). This allows extensibility in schema such that, in some cases, ACDCs with newer schema versions may be backward (im)compatible with older schema versions. A new schema version, as given by the `$id` field value, is considered backward incompatible with respect to a previous version of a schema when any instance of an ACDC that validates (in the JSON Schema sense of validation) against the previous version of the schema may not be guaranteed to validate against the new version. Because any change to the `version` field value results in a different `$id` field value, the backward compatibility rule also applies changes in the `version` field value. To comply with the semantic versioning rules, a backward incompatible schema shall have a higher major version number in its `version` field value than any backward incompatible version.
+
 
 ### Schema availability
 
