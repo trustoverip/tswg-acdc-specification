@@ -52,18 +52,21 @@ An Authentic chained data container (ACDC) specification [@ACDC_ID][@ACDC_WP][@V
 https://github.com/trustoverip/tswg-acdc-specification/issues/11
 :::
 
-One primary purpose of the ACDC protocol is to provide granular provenanced proof-of-authorship (authenticity) of their contained data via a tree or chain of linked ACDCs (technically a directed acyclic graph or DAG). Similar to the concept of a chain-of-custody, ACDCs provide a verifiable chain of proof-of-authorship of the contained data. With a little additional syntactic sugar, this primary facility of chained (treed) proof-of-authorship (authenticity) is extensible to a chained (treed) verifiable authentic proof-of-authority (proof-of-authorship-of-authority). A proof-of-authority may be used to provide verifiable authorizations or permissions or rights or credentials. A chained (treed) proof-of-authority enables delegation of authority and delegated authorizations. These proofs of authorship and/or authority provide provenance of an ACDC itself and by association any data that is so conveyed.
+One primary purpose of the ACDC protocol is to provide granular provenanced proof-of-authorship (authenticity) of their contained data via a tree or chain of linked ACDCs (technically a directed acyclic graph or DAG). Similar to the concept of a chain-of-custody, ACDCs provide a verifiable chain of proof-of-authorship of the contained data. This could enable an "authentic" web where all data on the web has verifiable proof-of-authorship. 
 
-The dictionary definition of credential is evidence of authority, status, rights, entitlement to privileges, or the like.  Appropriately structured ACDCs may be used as credentials when their semantics provide verifiable evidence of authority. Chained ACDCs may provide delegated credentials.
+With a little additional syntactic sugar, this primary facility of chained (treed) proof-of-authorship (authenticity) is extensible to a chained (treed) verifiable authentic proof-of-authority (proof-of-authorship-of-authority). A proof-of-authority may be used to provide different types of verifiable authorizations such as, entitlements, licences, permissions, rights, or credentials. A chained (treed) proof-of-authority enables delegation of authority and hence delegated authorizations. These proofs of authorship and/or authority provide provenance of an ACDC itself and, by association, any data that is so conveyed.
 
-Chains of ACDCs that merely provide proof-of-authorship (authenticity) of data may be appended to chains of ACDCs that provide proof-of-authority (delegation) to enable verifiable delegated authorized authorship of data. This is a vital facility for authentic data supply chains. Furthermore, any physical supply chain may be measured, monitored, regulated, audited, and/or archived by a data supply chain acting as a digital twin [@Twin]. Therefore, ACDCs provide the critical enabling facility for an authentic data economy and by association an authentic real (twinned) economy.
+To elaborate, the dictionary definition of credential is "evidence of authority, status, rights, entitlement to privileges, etc."  Appropriately structured ACDCs may be used as credentials when their semantics provide verifiable evidence of authority. Chained ACDCs may provide delegated credentials.
 
-ACDCs act as securely attributed (authentic) fragments of a distributed property graph (PG) [@PGM][@Dots]. Thus, ACDCs may be used to construct knowledge graphs expressed as property graphs [@KG]. ACDCs enable securely-attributed and privacy-protecting knowledge graphs.
+Chains of ACDCs that merely provide proof-of-authorship (authenticity) of data may be appended to chains of ACDCs that provide proof-of-authority (delegation) to enable verifiable delegated authorized authorship of data.  This is also a vital facility for authentic data supply chains. Furthermore, any physical supply chain may be measured, monitored, regulated, audited, and/or archived by a data supply chain acting as a digital twin [@Twin]. Therefore, ACDCs provide the critical enabling facility for an authentic data economy and, by association, an authentic real (twinned) economy.
 
-The ACDC specification (including its Partial and Selective disclosure mechanisms) leverages two primary cryptographic operations namely digests and digital signatures [@Hash][@DSig]. These operations when used in an ACDC must have a security level, cryptographic strength, or entropy of approximately 128 bits [@Level]. (See the Annex A for a discussion of cryptographic strength and security)
+ACDCs act as securely attributed (authentic) fragments of a distributed property graph (PG) [@PGM][@Dots]. Thus, ACDCs may be used to construct knowledge graphs expressed as property graphs [@KG]. ACDCs enable securely-attributed and privacy-protecting knowledge graphs. Semantically modulated verifiable provenanceable graphs enable authenticatable, delegable, attenuable, and aggregable authorizations and attributions.
 
-An important property of high-strength cryptographic digests is that a verifiable cryptographic commitment (such as a digital signature) to the digest of some data is equivalent to a commitment to the data itself. ACDCs leverage this property to enable compact chains of ACDCs that anchor data via digests. The data Contained in an ACDC therefore may be merely its equivalent anchoring digest. The anchored data is thereby equivalently authenticated or authorized by the chain of ACDCs.
+The ACDC specification (including its disclosure mechanisms) leverages two primary cryptographic operations, namely digests and digital signatures [@Hash][@DSig]. These operations, when used in an ACDC, must have a security level, cryptographic strength, or entropy of approximately 128 bits [@Level]. (See the Annex A for a discussion of cryptographic strength and security)
 
+An important property of high-strength cryptographic digests is that a verifiable cryptographic commitment (such as a digital signature) to the digest of some data is equivalent to a commitment to the data itself. The digest enables confidentiality because secure attribution of the commitment to the digest may be verified without disclosing the digested data. Later, confidential disclosure of the digested data can be verified against the digest. ACDCs leverage this property to enable compact chains of ACDCs that commit to (anchor or seal) data via digests. The data actually contained in an ACDC, therefore, may be merely its digest. The digested data may thereby be equivalently but more compactly and confidentially authenticated and authorized by the chain of ACDCs.
+
+There are several different variants of ACDCs. These enable different types of disclosure mechanisms that provide differing levels of protection from exploitation and enable functional privacy with provisional authentication. A notable feature of ACDCs is support for contractually protected disclosure that provides more comprehensive privacy protection than mere selective disclosure alone might provide.
 
 
 [//]: # (:::)
@@ -188,7 +191,9 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/25
 
 [//]: # (ACDC fields  {#sec:content})
 
-## ACDC fields
+
+
+## ACDC Structure
 
 An ACDC may be modeled abstractly as a nested `key: value` mapping. To avoid confusion with the cryptographic use of the term key,  the term field is used instead to refer to a mapping pair and the terms field label and field value for each member of a pair. These pairs can be represented by two tuples e.g., `(label, value)`. This terminology can be qualified, when necessary, by using the term field map to reference such a mapping. Field maps may be nested where a given field value is itself a reference to another field map. A nested set of fields is called a nested field map or simply a nested map for short. 
 
@@ -200,7 +205,7 @@ A field may be represented by a Framing code or block delimited serialization.  
 https://github.com/trustoverip/tswg-acdc-specification/issues/13
 :::
 
-#### Top-Level fields
+### Top-Level fields
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/12
@@ -220,7 +225,7 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/12
 |`r`| Rule | Either the SAID a block of rules or the block itself. |
 
 
-#### Other fields
+### Other fields
 
 These may appear at other levels besides the top-level of an ACDC but are nonetheless reserved.
 
@@ -276,24 +281,40 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/15
 
 Some fields, such as the `i`, Issuer identifier field, must each have an AID as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [@KERI][@KERI_ID]. A related type of identifier field is the `ri`, registry identifier field. The `ri` field is cryptographically derived from the Issuer identifier field value so has securely attributable control authority via the AID from which it is derived.  A SCID is derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [@DSig]. Each AID has a set of one or more Controllers who each control a private key. By virtue of their private key(s), the set of Controllers may make statements on behalf of the associated AID that is backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then may verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is required. The verifiable key state for AIDs is established with the KERI protocol [@KERI][@KERI_ID]. The use of AIDS enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
 
-#### Namespaced AIDs
+### Namespaced AIDs
 
 Because KERI is agnostic about the namespace for any particular AID, different namespace standards may be used to express KERI AIDs or identifiers derived from AIDs as the value of these AID related fields in an ACDC. The examples below use the W3C DID namespace specification with the `did:keri` method [@DIDK_ID]. But the examples would have the same validity from a KERI perspective if some other supported namespace was used or no namespace was used at all. The latter case consists of a bare KERI AID (identifier prefix) expressed in CESR format [@CESR_ID].
 
 
 ### Selectively disclosable attribute aggregate field
 
-The top-level selectively disclosable attribute aggregate section, `A`, field value is an aggregate of cryptographic commitments used to make a commitment to a set (bundle) of selectively disclosable attributes. The value of the attribute aggregate, `A`, field depends on the type of Selective disclosure mechanism employed. For example, the aggregate value could be the cryptographic digest of the concatenation of an ordered set of cryptographic digests, a Merkle tree root digest of an ordered set of cryptographic digests, or a cryptographic accumulator.
+The top-level selectively disclosable attribute aggregate section, `A`, field value is an aggregate of cryptographic commitments used to make a commitment to a set (bundle) of selectively disclosable attributes. The value of the attribute aggregate, `A`, field depends on the type of Selective disclosure mechanism employed. For example, the aggregate value could be the cryptographic digest of the concatenation of an ordered set of cryptographic digests, a Merkle tree root digest of an ordered set of cryptographic digests, or a cryptographic accumulator. The different Selective disclosure mechanisms are described in detail in the Selective disclosure section. 
 
-### ADCD structure
-
-#### Field ordering
+### Field ordering
 
 The ordering of the top-level fields when present in an ACDC must be as follows, `v`, `d`, `u`, `i`, `ri`, `s`, `a`, `e`, `r`.
+
+
+
+## ACDC variants
+
+There are several variants of ACDCs determined by the presence/absence of certain fields and/or the value of those fields when used in combination. The primary ACDC variants are public, private, metadata, and bespoke. A given variant may be targeted (untargeted). 
+
+All the variants have two alternate forms, compact and non-compact. In the compact form of any variant, the values of the top-level fields for the attribute, schema, edge, and rule sections are the SAIDs (digests) of the corresponding expanded (non-compact) form of each section {{SAID}}. The attribute section of any variant may have nested sub-blocks that are either compact or non-compact.
+
+A given variant may be either targeted or untargeted.
+
+The details of each variant are explained below.
+
+
+
 
 #### Compact ACDC
 The top-level section field values of a Compact ACDC are the SAIDs of each uncompacted top-level section. The section field labels
 are `s`, `a`, `e`, and `r`.
+
+
+  At the top level, the presence (absence), of the UUID, `u`, field produces two variants. These are private (public) respectively. In addition, a present but empty UUID, `u`, field produces a private metadata variant.
 
 #### Compact public ACDC
 
@@ -405,58 +426,25 @@ The schema for the Compact private ACDC example above is provided below.
 }
 ```
 
-## Disclosure mechanisms
 
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/30
-:::
+### Public ACDC
 
-An important design goal of ACDCs is to support the sharing of provably authentic data while also protecting against the unpermissioned exploitation of that data. Often the term privacy protection is used to describe similar properties. But a narrow focus on privacy protection may lead to problematic design trade-offs. With ACDCs, the primary design goal is not data privacy protection per se, but the more general goal of protection from the unpermissioned exploitation of data. In this light, a given privacy protection mechanism may be employed to help protect against unpermissioned exploitation of data but only when it serves that more general-purpose and not as an end in and of itself.
+Given that there is no top-level UUID, `u`, field in an ACDC, then knowledge of both the schema of the ACDC and the top-level SAID, `d`, field may enable the discovery of the remaining contents of the ACDC via a rainbow table attack [@RB][@DRB]. Therefore, although the top-level, `d`, field is a cryptographic digest, it may not securely blind the contents of the ACDC when knowledge of the schema is available.  The field values may be discoverable. Consequently, any cryptographic commitment to the top-level SAID, `d`, field may provide a fixed point of correlation potentially to the ACDC field values themselves in spite of non-disclosure of those field values. Thus, an ACDC without a top-level UUID, `u`, field must be considered a public (non-confidential) ACDC.
 
-As described previously, ACDCs employ Graduated disclosure mechanisms that satisfy the principle of least disclosure. Requoted here the principle of least disclosure is as follows:
+### Private ACDC
 
-The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction and no more. [@IDSys]
+Given a top-level UUID, `u`, field, whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of an ACDC may provide a secure cryptographic digest that blinds the contents of the ACDC [@Hash]. An adversary when given both the schema of the ACDC and the top-level SAID, `d`, field, is not able to discover the remaining contents of the ACDC in a computationally feasible manner such as through a rainbow table attack [@RB][@DRB]. Therefore, the top-level, UUID, `u`, field may be used to securely blind the contents of the ACDC notwithstanding knowledge of the schema and top-level, SAID, `d`, field.  Moreover, a cryptographic commitment to that that top-level SAID, `d`, field does not provide a fixed point of correlation to the other ACDC field values themselves unless and until there has been a disclosure of those field values. Thus, an ACDC with a sufficiently high entropy top-level UUID, `u`, field may be considered a private (confidential) ACDC. enables a verifiable commitment to the top-level SAID of a private ACDC to be made prior to the disclosure of the details of the ACDC itself without leaking those contents. This is called Partial disclosure. Furthermore, the inclusion of a UUID, `u`, field in a block also enables Selective disclosure mechanisms described later in the section on Selective disclosure.
 
-For example, Compact disclosure, Partial disclosure, Selective disclosure and Full disclosure are all Graduated disclosure mechanisms. Contractually protected disclosure leverages Graduated disclosure so that contractual protections can be put into place using the least disclosure necessary to that end. This minimizes the leakage of information that can be correlated. One type of contractually protected disclosure is Chain-link confidentiality [@CLC].
+### Metadata ACDC 
 
+An empty, top-level UUID, `u`, field appearing in an ACDC indicates that the ACDC is a metadata ACDC. The purpose of a metadata ACDC is to provide a mechanism for a Discloser to make cryptographic commitments to the metadata of a yet to be disclosed private ACDC without providing any point of correlation to the actual top-level SAID, `d`, field of that yet to be disclosed ACDC. The top-level SAID, `d`, field, of the metadata ACDC, is cryptographically derived from an ACDC with an empty top-level UUID, `u`, field so its value will necessarily be different from that of an ACDC with a high entropy top-level UUID, `u`, field value. Nonetheless, the Discloser may make a non-repudiable cryptographic commitment to the metadata SAID in order to initiate a Chain-link confidentiality exchange without leaking correlation to the actual ACDC to be disclosed [@CLC]. A Disclosee may verify the other metadata information in the metadata ACDC before agreeing to any restrictions imposed by the future disclosure. The metadata includes the Issuer, the schema, the provenancing edges, and the rules (terms-of-use). The top-level attribute section, `a`, field value of a metadata ACDC may be empty so that its value is not correlatable across disclosures (presentations). Should the potential Disclosee refuse to agree to the rules, then the Discloser has not leaked the SAID of the actual ACDC or the SAID of the Attribute block that would have been disclosed.
 
-### Graduated disclosure and Contractually protected disclosure
+Given the metadata ACDC, the potential Disclosee is able to verify the Issuer, the schema, the provenanced edges, and rules prior to agreeing to the rules.  Similarly, an Issuer may use a metadata ACDC to get agreement to a contractual waiver expressed in the rule section with a potential Issuee prior to issuance. Should the Issuee refuse to accept the terms of the waiver, then the Issuer has not leaked the SAID of the actual ACDC that would have been issued nor the SAID of its attributes block nor the attribute values themselves.
 
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/17
-:::
+When a metadata ACDC is disclosed (presented) only the Discloser's signature(s) is attached, not the Issuer's signature(s). This precludes the Issuer's signature(s) from being used as a point of correlation until after the Disclosee has agreed to the terms in the rule section. When Chain-link confidentiality is used, the Issuer's signature(s) are not disclosed to the Disclosee until after the Disclosee has agreed to keep them confidential. The Disclosee is protected from a forged Discloser because ultimately verification of the disclosed ACDC will fail if the Discloser does not eventually provide verifiable Issuer's signatures. Nonetheless, should the potential Disclosee not agree to the terms of the disclosure expressed in the rule section, then the Issuer's signature(s) is not leaked.
 
-ACDC leverages several closely related mechanisms for what can be called Graduated disclosure. Graduated disclosure enables adherence to the principle of least disclosure which is expressed as follows:
+## Top-level ACDC sections
 
-The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction and no more. [@IDSys]
-
-To clarify, Graduated disclosure enables a potential Discloser to follow the principle of least disclosure by providing the least amount of information i.e., partial, incomplete, or uncorrelatable information needed to further a transaction.
-
-The important insight is that one type of transaction enabled by least disclosure is a transaction that specifically enables further disclosure. In other words, disclose enough to enable more disclosure which in turn may enable even more disclosure which is the essence of Graduated disclosure. This progression of successive least Graduated disclosures to enable a transaction that itself enables a farther least Graduated disclosure forms a recursive loop of least disclosure enabled transactions. In other words, the principle of least disclosure may be applied recursively.
-
-A type of transaction that leverages Graduated disclosure to enable further disclosure is called a Contractually protected disclosure transaction. In a Contractually protected disclosure, the potential Discloser first makes an offer using the least (partial) disclosure of some information about other information to be disclosed (full disclosure) contingent on the potential Disclosee first agreeing to the contractual terms provided in the offer. The contractual terms could, for example, limit the disclosure to third parties of the yet to be disclosed information. But those contractual terms may also include provisions that protect against liability or other concerns not merely disclosure to third parties.
-
-One special case of a Contractually protected disclosure is a Chain-link confidential disclosure [@CLC].
-
-Another special case of Contractually protected disclosure is Contingent disclosure. In a Contingent disclosure, some contingency is specified in the rule section that places an obligation by some party to make a disclosure when the contingency is satisfied. This might be recourse given the breach of some other term of the contract. When that contingency is met then the Contingent disclosure must be made by the party whose responsibility it is to satisfy that disclosure obligation. The responsible party may be the Discloser of the ACDC or it may be some other party such as an escrow agent. The Contingent disclosure clause may reference a cryptographic commitment to a private ACDC or private attribute ACDC (Partial disclosure) that satisfies via its Full disclosure the Contingent disclosure requirement. Contingent disclosure may be used to limit the actual disclosure of personally identifying information (PII) to a just-in-time, need-to-know basis (i.e., upon the contingency) and not a priori. As long as the Discloser and Disclosee trust the escrow agent and the verifiability of the commitment, there is no need to disclose PII about the Discloser in order to enable a transaction, but merely an agreement to the terms of the contingency. This enables something called latent accountability. Recourse via PII is latent in the Contingent disclosure but is not ever realized (actualized) until recourse is truly needed. The minimizes inadvertent leakage while protecting the Disclosee.
-
-### Types of Graduated disclosure
-
-ACDCs employ three specific closely related types of Graduated disclosure. These are Compact disclosure, Partial disclosure Selective disclosure and Full disclosure . The mechanism for Compact disclosure is a cryptographic digest of the content expressed in the form of a SAID of that content. Both Partial and Selective disclosure rely on the Compact disclosure of content that is also cryptographically blinded or hidden. Content in terms of an ACDC means a block (field map or field map array).
-
-The difference between Partial disclosure and Selective disclosure of a given block is determined by the correlatability of the disclosed field(s) after Full disclosure of the detailed field value with respect to its enclosing block (field map or field map array). A partially disclosable field becomes correlatable after Full disclosure. Whereas a selectively disclosable field may be excluded from the Full disclosure of any other selectively disclosable fields in the selectively disclosable block (usually a field map array). After such Selective disclosure, the selectively disclosed fields are not correlatable to the so-far undisclosed but selectively disclosable fields in that block (field map array).
-
-When used in the context of Selective disclosure, Full disclosure means detailed disclosure of the selectively disclosed attributes not detailed disclosure of all selectively disclosable attributes. Whereas when used in the context of Partial disclosure, Full disclosure means detailed disclosure of the field map that was so far only partially disclosed.
-
-Partial disclosure is an essential mechanism needed to support both performant exchange of information and Contractually protected disclosure such as Chain-link confidentiality on exchanged information [@CLC]. The exchange of only the SAID of a given field map is a type of Partial disclosure. Another type of Partial disclosure is the disclosure of validatable metadata about a detailed field map e.g., the schema of a field map.
-
-The SAID of a field map provides a compact cryptographically equivalent commitment to the yet to be undisclosed field map details.  A later exchange of the uncompacted field map detail provides full disclosure. Any later Full disclosure is verifiable to an earlier Partial disclosure. Partial disclosure via compact SAIDs enables the scalable repeated verifiable exchange of SAID references to cached Full disclosures. Multiple SAID references to cached fully disclosed field maps may be transmitted compactly without redundant retransmission of the full details each time a new reference is transmitted. 
-
-Likewise, Partial disclosure via SAIDs also supports the bow-tie model of Ricardian contracts [@RC]. Similarly, the schema of a field map is metadata about the structure of the field map this is validatable given the Full disclosure of the field mp. The details of compact and/or confidential exchange mechanisms that leverage Partial disclosure are explained later. When the field map includes sufficient cryptographic entropy such as through a UUID field (salty nonce), then the SAID of that field map effectively blinds the contents of the field map. This enables the field map contents identified by its SAID and characterized by its schema (i.e., Partial disclosure) to remain private until later Full disclosure.
-
-Selective disclosure, on the other hand, is an essential mechanism needed to unbundle in a correlation minimizing way a single commitment by an Issuer to a bundle of fields (i.e., a nested array or list or tuple of fields) as a whole. This allows separating a stew (bundle) of ingredients (attributes) into its constituent ingredients (attributes) without correlating the constituents via the Issuer's commitment to the stew (bundle) as a whole.
-
-Another variant of disclosure that is application specific is Disclosure-specific (bespoke) issued ACDCs which is described section 11.4.
 
 ## Schema 
 
@@ -551,371 +539,6 @@ To elaborate, a Validator can confirm compliance of any non-schema section of th
 One of the most important features of ACDCs is support for Chain-link confidentiality [@CLC]. This provides a powerful mechanism for protecting against unpermissioned exploitation of the data disclosed via an ACDC. Essentially, an exchange of information compatible with Chain-link confidentiality starts with an offer by the Discloser to disclose confidential information to a potential Disclosee. This offer includes sufficient metadata about the information to be disclosed such that the Disclosee can agree to those terms. Specifically, the metadata includes both the schema of the information to be disclosed and the terms of use of that data once disclosed. Once the Disclosee has accepted the terms, then Full disclosure is made. A full disclosure that happens after contractual acceptance of the terms of use is called permissioned disclosure. The pre-acceptance disclosure of metadata is a form of Partial disclosure.
 
 As is the case for Compact (uncompacted) ACDC disclosure, composable JSON schema, enables the use of the same base schema for both the validation of the Partial disclosure of the offer metadata prior to contract acceptance and validation of full or detailed disclosure after contract acceptance [@JSch][@JSchCp]. A cryptographic commitment to the base schema securely specifies the allowable semantics for both Partial and Full disclosure. Decomposition of the base schema enables a Validator to impose more specific semantics at later stages of the exchange process. Specifically, the `oneOf` sub-schema composition operator validates against either the compact SAID of a block or the full block. Decomposing the schema to remove the optional Compact variant enables a Validator to ensure complaint Full disclosure. To clarify, a Validator can confirm schema compliance both before and after detailed disclosure by using a composed base schema pre-disclosure and a decomposed schema post-disclosure with the undisclosed options removed. These features provide a mechanism for secure schema-validated contractually-bound Partial (and/or Selective) disclosure of confidential data via ACDCs.
-
-## ACDC variants
-
-There are several variants of ACDCs determined by the presence/absence of certain fields and/or the value of those fields.  At the top level, the presence (absence), of the UUID, `u`, field produces two variants. These are private (public) respectively. In addition, a present but empty UUID, `u`, field produces a private metadata variant.
-
-### Public ACDC
-
-Given that there is no top-level UUID, `u`, field in an ACDC, then knowledge of both the schema of the ACDC and the top-level SAID, `d`, field may enable the discovery of the remaining contents of the ACDC via a rainbow table attack [@RB][@DRB]. Therefore, although the top-level, `d`, field is a cryptographic digest, it may not securely blind the contents of the ACDC when knowledge of the schema is available.  The field values may be discoverable. Consequently, any cryptographic commitment to the top-level SAID, `d`, field may provide a fixed point of correlation potentially to the ACDC field values themselves in spite of non-disclosure of those field values. Thus, an ACDC without a top-level UUID, `u`, field must be considered a public (non-confidential) ACDC.
-
-### Private ACDC
-
-Given a top-level UUID, `u`, field, whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of an ACDC may provide a secure cryptographic digest that blinds the contents of the ACDC [@Hash]. An adversary when given both the schema of the ACDC and the top-level SAID, `d`, field, is not able to discover the remaining contents of the ACDC in a computationally feasible manner such as through a rainbow table attack [@RB][@DRB]. Therefore, the top-level, UUID, `u`, field may be used to securely blind the contents of the ACDC notwithstanding knowledge of the schema and top-level, SAID, `d`, field.  Moreover, a cryptographic commitment to that that top-level SAID, `d`, field does not provide a fixed point of correlation to the other ACDC field values themselves unless and until there has been a disclosure of those field values. Thus, an ACDC with a sufficiently high entropy top-level UUID, `u`, field may be considered a private (confidential) ACDC. enables a verifiable commitment to the top-level SAID of a private ACDC to be made prior to the disclosure of the details of the ACDC itself without leaking those contents. This is called Partial disclosure. Furthermore, the inclusion of a UUID, `u`, field in a block also enables Selective disclosure mechanisms described later in the section on Selective disclosure.
-
-### Metadata ACDC 
-
-An empty, top-level UUID, `u`, field appearing in an ACDC indicates that the ACDC is a metadata ACDC. The purpose of a metadata ACDC is to provide a mechanism for a Discloser to make cryptographic commitments to the metadata of a yet to be disclosed private ACDC without providing any point of correlation to the actual top-level SAID, `d`, field of that yet to be disclosed ACDC. The top-level SAID, `d`, field, of the metadata ACDC, is cryptographically derived from an ACDC with an empty top-level UUID, `u`, field so its value will necessarily be different from that of an ACDC with a high entropy top-level UUID, `u`, field value. Nonetheless, the Discloser may make a non-repudiable cryptographic commitment to the metadata SAID in order to initiate a Chain-link confidentiality exchange without leaking correlation to the actual ACDC to be disclosed [@CLC]. A Disclosee may verify the other metadata information in the metadata ACDC before agreeing to any restrictions imposed by the future disclosure. The metadata includes the Issuer, the schema, the provenancing edges, and the rules (terms-of-use). The top-level attribute section, `a`, field value of a metadata ACDC may be empty so that its value is not correlatable across disclosures (presentations). Should the potential Disclosee refuse to agree to the rules, then the Discloser has not leaked the SAID of the actual ACDC or the SAID of the Attribute block that would have been disclosed.
-
-Given the metadata ACDC, the potential Disclosee is able to verify the Issuer, the schema, the provenanced edges, and rules prior to agreeing to the rules.  Similarly, an Issuer may use a metadata ACDC to get agreement to a contractual waiver expressed in the rule section with a potential Issuee prior to issuance. Should the Issuee refuse to accept the terms of the waiver, then the Issuer has not leaked the SAID of the actual ACDC that would have been issued nor the SAID of its attributes block nor the attribute values themselves.
-
-When a metadata ACDC is disclosed (presented) only the Discloser's signature(s) is attached, not the Issuer's signature(s). This precludes the Issuer's signature(s) from being used as a point of correlation until after the Disclosee has agreed to the terms in the rule section. When Chain-link confidentiality is used, the Issuer's signature(s) are not disclosed to the Disclosee until after the Disclosee has agreed to keep them confidential. The Disclosee is protected from a forged Discloser because ultimately verification of the disclosed ACDC will fail if the Discloser does not eventually provide verifiable Issuer's signatures. Nonetheless, should the potential Disclosee not agree to the terms of the disclosure expressed in the rule section, then the Issuer's signature(s) is not leaked.
-
-## Issuance and Presentation Exchange (IPEX)
-
-The Issuance and Presentation Exchange (IPEX) Protocol provides a uniform mechanism
-for the issuance and presentation of ACDCs [@ACDC-ID] in a securely attributable manner.
-A single protocol is able to work for both types of exchanges by recognizing
-that all exchanges (both issuance and presentation) may be modeled as the
-disclosure of information by a Discloser to a Disclosee. The difference between
-exchange types is the information disclosed not the mechanism for disclosure.
-Furthermore, the chaining mechanism of ACDCs and support for both targeted and
-untargeted ACDCs provide sufficient variability to accommodate the differences
-in applications or use cases without requiring a difference in the exchange
-protocol itself. This greatly simplifies the exchange protocol. This simplification
-has two primary advantages. The first is enhanced security. A well-delimited
-protocol can be designed and analyzed to minimize and mitigate attack mechanisms.
-The second is convenience. A standard simple protocol is easier to implement,
-support, update, understand, and adopt. The tooling is more consistent.
-
-This IPEX [@IPEX-ID] protocol leverages important features of ACDCs and ancillary protocols such as CESR [@CESR-ID], SAIDs [@SAID-ID], and CESR-Proofs [@Proof-ID] as well as Ricardian contracts [@RC] and graduated disclosure (partial, selective, full) to enable contractually protected disclosure. Contractually protected disclosure includes both chain-link confidential [@CLC] and contingent disclosure [@ACDC-ID].
-
-### Chain-Link Confidentiality
-
-Disclosures via Presentations Exchanges may be contractually protected by Chain-Link Confidentiality (i.e a Chain-Link Confidential disclosure). The chaining in this case is different from the chaining described above between Issuances in a DAG of chained Issuances. Chain-link confidentiality, in contrast, chains together a sequence of Disclosees. Each Disclosee in the sequence in turn is the Discloser to the next Disclosee. The terms-of-use of the original disclosure as applied to the original Disclosee MUST be applied by each subsequent Discloser to each subsequent Disclosee via each of the subsequent disclosures (presentation exchanges). These terms-of-use typically constrain disclosure to only approved parties, i.e. imbue the chain of disclosures with some degree of confidentiality. These terms-of-use are meant to contractually protect the data rights of the original Issuer or Issuee of the data being disclosed.
-
-### Exchange Protocol
-
-| Discloser | Disclosee | Initiate | Contents |  Description |
-|:-:|:-:|:-:|:--|:--|
-| | `apply`| Y | schema or its SAID, attribute field label list, signature on `apply` or its SAID | schema SAID is type of ACDC, optional label list for selective disclosure, CESR-Proof signature|
-|`spurn`|  | N | |rejects `apply` |
-|`offer`|  | Y | metadata ACDC or its SAID, signature on `offer` or its SAID  | includes schema or its SAID, other partial disclosures, selective disclosure label list, CESR-Proof signature |
-| | `spurn` | N | |rejects `offer` |
-| | `agree`| N | signature on `offer` or its SAID | CESR-Proof signature |
-|`spurn`|  | N | |rejects `agree` |
-|`grant`|  | Y | full or selective disclosure ACDC, signature on `grant` or its SAID  | includes attribute values, CESR-Proof signature |
-|| `admit` | N | signature on `grant` or its SAID  | CESR-Proof signature |
-
-#### Discussion
-
-All the variants of an ACDC are various degrees of expansion of the compact variant. Therefore, an Issuer commitment via a signature to any variant of ACDC (compact, full, etc)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top level section field is either the SAD or the SAID of the SAD of the associated section. Both a SAD and its SAID, when signed, each provide a verifiable commitment to the SAD. In the former the signature verification is directly agains the SAD itself. In the latter, the SAID as digest must first be verified against its SAD and then the signature on the SAID may be verified. This indirect verifiablity assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top level structure as the compact variant, then a signature on any variant  may be used to verify the Issuer's committment to any other variant either directly or indirectly, in whole or in part on a top-level section by top-level section basis. This cross-variant Issuer commitment verifiability is an essential property that supports graduated disclosure by the Disclosee of any or all variants wether it be full, compact, metadata, partial, selective, bulk issued, or contractually protected.
-
-To elaborate, the SAID of a given variant is useful even when it is not the SAID of the variant the Issuer signed because during graduated disclosure the Discloser MAY choose to sign that given variant to fullfill a given step in an IPEX graduated disclosure transaction. The Discloser thereby can make a verifiable disclosure in a given step of the SAD of a given variant that fulfills a commitment made in a prior step via its signature on merely the SAID of the SAD of the variant so disclosed.
-
-For example, the Metadata variant of an ACDC will have a different SAID than the Compact variant because some of the top-level field values may be empty in the Metadata variant. One can think of the The metadata variant as a partial manifest that only includes those top level sections that the Discloser is committing to disclose in order to induce the Disclosee to agree to the contractual terms of use when disclosed. The IPEX transaction is between the Discloser and Disclosee, who both may make non-repudiable commitments via signing to each other. Typically this means that the Discloser will eventually need to fulfull its commitment with a proof of disclosure to the Disclosee. This proof may be satisfied with either directly against the Discloser's signature on the the actual disclosed SAD or indirectly agaisnt the Discloser's signature on the SAID of the actual disclosed SAD. In addition, the Disclosee will typically require a proof of issuance via a non-repudiable signature by the Issuer on a variant of the disclosed SAD that is verifiable (directly or indirectly) against the variant that is the disclosed SAD.
-
-To summarize, when the Issuer commits to the composed schema of an ACDC it is committing to all the variants so composed. As described above, the top level field values in the compact variant enable verification against a disclosure of any of the other Issuer committed variants because they all share the same top level structure. This applies even to the metadata variant in spite of it only providing values for some top level sections and not others. The verifiablity of a top level section is separable.
-
-Consequently, the IPEX protocol must specify how a validator does validation of any variant in a graduated disclosure. To restate there are two proofs that a Discloser must provide. The first is proof of issuance and the second is proof of disclosure. In the former, the Discloser provide the variant via its SAD that was actually signed (as SAD or SAID of SAD) by the Issuer in order for the Disclosee to verify authentic issuance via the signature on that variant.  In the latter, the Discloser must disclose any other Issuer enabled (via schema composition) variants that the Discloser offered to disclose as part of the graduated disclosure process.
-
-#### IPEX Validation
-
-The goal is to define a validation process (set of rules) that works for all variants of an ACDC and for all types of graduated disclosure of that ACDC.
-
-For example, in the bulk issuance of an ACDC, the Issuer only signs the blinded SAID of the SAD that is the Compact variant of the ACDC not the SAD itself. This enable a Discloser to make a proof of inclusion of the ACDC in a bulk issuance set by unblinding the signature on the blinded SAID without leaking correlation to anything but the blinded SAID itself. To clarify, the Disclosee can verify the signature on the SAID without to prove set inclusion with needing the disclosure of any other information about the ACDC. Issuer signing of the SAID not the SAD also has the side benefit of minimizing the computation of large numbers of bulk issued signatures.
-
-##### Issuer Signing Rules
-
-The Issuer MUST provide a signature on the SAID of the most compact variant defined by the schema of the ACDC. When more than one variant is defined by the schema via the oneOf composition operator for any top-level field, the most compact variant MUST appear as the first entry in the oneOf list. When only one variant of each top-level field is defined by the schema, that variant is therefore by defintion the most compact variant.
-
-The different variants of an ACDC form a hash tree (using SAIDs) that is analogous to a Merkle Tree.
-Signing the top-level SAID of the compact version of the ACDC is equivalent to signing the Merkle Root of a Merkle Tree.
-Different variants of an ACDC (SADs with SAIDs) correspond to different paths through a Merkle tree.
-The process of verifying that  a SAD via its SAID of a section is included in a schema authorized variant down from the  top-level SAID is equivalent to a Merkle Tree proof of inclusion along a path in the Merkel Tree down from its Root.
-This allows a single signature to provide proof of Issuance of the presentation of any schema authorized variants of the ACDC.
-
-An Issuer MAY provide signatures of the SAIDS of other variants, as well as signatures of the SADs of other variants.
-
-Proof of issuance is provided by disclosing the SAID of the most compact variant and the signature by the Issuer on that SAID.
-
-Proof of disclosure is provided by disclosing the SAD of the most compact variant and then recursively disclosing the nested SADs of each of the top level sections of the most compact variant as needed for the promised disclosure.
-
-Thus for any disclosed variant of an ACDC, the Disclosee need only verify only one proof of issuance as defined above and may need to verify a different proof of disclosure for each disclosed variant as defined above.
-
-### Example Most Compact Variant
-
-The following schema supports a compact variant:
-
-```json
-{
-  "$id": "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Public ACDC",
-  "description": "Example JSON Schema Public ACDC.",
-  "credentialType": "PublicACDCExample",
-  "type": "object",
-  "required": [
-    "v",
-    "d",
-    "i",
-    "ri",
-    "s",
-    "a",
-    "e",
-    "r"
-  ],
-  "properties": {
-    "v": {
-      "description": "ACDC version string",
-      "type": "string"
-    },
-    "d": {
-      "description": "ACDC SAID",
-      "type": "string"
-    },
-    "i": {
-      "description": "Issuer AID",
-      "type": "string"
-    },
-    "ri": {
-      "description": "credential status registry AID",
-      "type": "string"
-    },
-    "s": {
-      "description": "schema section",
-      "oneOf": [
-        {
-          "description": "schema section SAID",
-          "type": "string"
-        },
-        {
-          "description": "schema detail",
-          "type": "object"
-        }
-      ]
-    },
-    "a": {
-      "description": "attribute section",
-      "oneOf": [
-        {
-          "description": "attribute section SAID",
-          "type": "string"
-        },
-        {
-          "description": "attribute detail",
-          "type": "object",
-          "required": [
-            "d",
-            "i",
-            "score",
-            "name"
-          ],
-          "properties": {
-            "d": {
-              "description": "attribute section SAID",
-              "type": "string"
-            },
-            "i": {
-              "description": "Issuee AID",
-              "type": "string"
-            },
-            "score": {
-              "description": "test score",
-              "type": "integer"
-            },
-            "name": {
-              "description": "test taker full name",
-              "type": "string"
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    },
-    "e": {
-      "description": "edge section",
-      "oneOf": [
-        {
-          "description": "edge section SAID",
-          "type": "string"
-        },
-        {
-          "description": "edge detail",
-          "type": "object",
-          "required": [
-            "d",
-            "boss"
-          ],
-          "properties": {
-            "d": {
-              "description": "edge section SAID",
-              "type": "string"
-            },
-            "boss": {
-              "description": "boss edge",
-              "type": "object",
-              "required": [
-                "d",
-                "n",
-                "s",
-                "w"
-              ],
-              "properties": {
-                "d": {
-                  "description": "edge SAID",
-                  "type": "string"
-                },
-                "n": {
-                  "description": "far node SAID",
-                  "type": "string"
-                },
-                "s": {
-                  "description": "far node schema SAID",
-                  "type": "string",
-                  "const": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
-                },
-                "w": {
-                  "description": "edge weight",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    },
-    "r": {
-      "description": "rule section",
-      "oneOf": [
-        {
-          "description": "rule section SAID",
-          "type": "string"
-        },
-        {
-          "description": "rule detail",
-          "type": "object",
-          "required": [
-            "d",
-            "warrantyDisclaimer",
-            "liabilityDisclaimer"
-          ],
-          "properties": {
-            "d": {
-              "description": "edge section SAID",
-              "type": "string"
-            },
-            "warrantyDisclaimer": {
-              "description": "warranty disclaimer clause",
-              "type": "object",
-              "required": [
-                "d",
-                "l"
-              ],
-              "properties": {
-                "d": {
-                  "description": "clause SAID",
-                  "type": "string"
-                },
-                "l": {
-                  "description": "legal language",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            },
-            "liabilityDisclaimer": {
-              "description": "liability disclaimer clause",
-              "type": "object",
-              "required": [
-                "d",
-                "l"
-              ],
-              "properties": {
-                "d": {
-                  "description": "clause SAID",
-                  "type": "string"
-                },
-                "l": {
-                  "description": "legal language",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    }
-  },
-  "additionalProperties": false
-}
-```
-
-The following JSON field map serialization satisfies the rules for most compact variant of the schema above:
-
-```json
-{
-  "v":  "ACDC10JSON00011c_",
-  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "did:keri:EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
-  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
-```
-
-The Issuer signs the SAID, `d` field value of the field map above.
-
-## Exploitation Protection Mechanisms
-
-An ACDC may employ several mechanisms to protect against exploitation using unpermissioned disclosure of data. These are:
-
-Contractually protected disclosure
-    - Chain-link confidentiality [@CLC]
-    - Contingent disclosure
-Partial disclosure
-Selective disclosure
-
-
-For example, the Partial disclosure of portions of an ACDC to enable Chain-link confidentiality of the subsequent full disclosure is an application of the principle of least disclosure. Likewise, unbundling only the necessary attributes from a bundled commitment using Selective disclosure to enable a correlation minimizing disclosure from that bundle is an application of the principle of least disclosure.
-
-### Three-party exploitation model 
-
-Exploitation based on unpermissioned disclosure is characterized with a Three-party model. The three parties are as follows:
-
-- First-party = Discloser of data.
-- Second-party = Disclosee of data received from First party (Discloser).
-- Third-party = Observer of data disclosed by First party (Discloser) to Second party (Disclosee).
-
-Second-party (Disclosee) exploitation
-- Implicit permissioned correlation - no contractual restrictions on the use of disclosed data.
-- Explicit permissioned correlation - use as permitted by contract.
-Explicit unpermissioned correlation with other Second-parties or Third- parties - malicious use in violation of contract.
-
-Third-party (Observer) exploitation
-- Implicit permissioned correlation - no contractual restrictions on the use of observed data.
-- Explicit unpermissioned correlation via collusion with Second-parties - malicious use in violation of Second-party contract.
-
-### Chain-link confidentiality exchange  
-
-Chain-link confidentiality imposes contractual restrictions and liability on any Disclosee (Second-party) [@CLC]. The exchange provides a fair contract consummation mechanism. The essential steps in a Chain-link confidentiality exchange are shown below. Other steps may be included in a more comprehensive exchange protocol.
-
-- Discloser provides a non-repudiable Offer with verifiable metadata (sufficient Partial disclosure), which includes any terms or restrictions on use.
-- Disclosee verifies Offer against composed schema and metadata adherence to desired data.
-- Disclosee provides non-repudiable Accept of terms that are contingent on compliant disclosure.
-- Discloser provides non-repudiable Disclosure with sufficient compliant detail.
-- Disclosee verifies Disclosure using decomposed schema and adherence of disclosed data to Offer.
-
-Disclosee may now engage in permissioned use and carries liability as a deterrent against unpermissioned use.
-
-## Top-level ACDC sections
 
 ### Attribute section
 
@@ -1725,6 +1348,411 @@ The disclosure of some clauses may be pre-conditioned on acceptance of Chain-lin
 #### Clause discovery 
 
 In compact form, the discovery of either the rule section as a whole or a given clause begins with the provided SAID. Because the SAID, `d`, field of any block is a cryptographic digest with high collision resistance, it provides a universally unique identifier to the referenced block details (whole rule section or individual clause). The discovery of a service endpoint URL that provides database access to a copy of the rule section or to any of its clauses may be bootstrapped via an OOBI that links the service endpoint URL to the SAID of the respective block [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at issuance a copy of the referenced contract associated with the whole rule section or any clause. In either case, after a successful issuance exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced contracts in whole or in part of all ACDCs so issued. That Issuee will then have everything subsequently needed to make a successful presentation or disclosure to a Disclosee. This is the essence of percolated discovery.
+
+
+## Disclosure mechanisms and exploitation protection
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/30
+:::
+
+An important design goal of ACDCs is to support the sharing of provably authentic data while also protecting against the unpermissioned exploitation of that data. Often the term privacy protection is used to describe similar properties. But a narrow focus on privacy protection may lead to problematic design trade-offs. With ACDCs, the primary design goal is not data privacy protection per se, but the more general goal of protection from the unpermissioned exploitation of data. In this light, a given privacy protection mechanism may be employed to help protect against unpermissioned exploitation of data but only when it serves that more general-purpose and not as an end in and of itself.
+
+### Three-party exploitation model 
+
+Exploitation based on unpermissioned disclosure is characterized with a Three-party model. The three parties are as follows:
+
+- First-party = Discloser of data.
+- Second-party = Disclosee of data received from First party (Discloser).
+- Third-party = Observer of data disclosed by First party (Discloser) to Second party (Disclosee).
+
+Second-party (Disclosee) exploitation
+- Implicit permissioned correlation - no contractual restrictions on the use of disclosed data.
+- Explicit permissioned correlation - use as permitted by contract.
+Explicit unpermissioned correlation with other Second-parties or Third- parties - malicious use in violation of contract.
+
+Third-party (Observer) exploitation
+- Implicit permissioned correlation - no contractual restrictions on the use of observed data.
+- Explicit unpermissioned correlation via collusion with Second-parties - malicious use in violation of Second-party contract.
+
+
+## Exploitation Protection Mechanisms
+
+An ACDC may employ several mechanisms to protect against exploitation using unpermissioned disclosure of data. These are:
+
+- Contractually protected disclosure
+    - Chain-link confidentiality [@CLC]
+    - Contingent disclosure
+- Partial disclosure
+- Selective disclosure
+
+
+For example, the Partial disclosure of portions of an ACDC to enable Chain-link confidentiality of the subsequent full disclosure is an application of the principle of least disclosure. Likewise, unbundling only the necessary attributes from a bundled commitment using Selective disclosure to enable a correlation minimizing disclosure from that bundle is an application of the principle of least disclosure.
+
+
+### Chain-link confidentiality exchange  
+
+Chain-link confidentiality imposes contractual restrictions and liability on any Disclosee (Second-party) [@CLC]. The exchange provides a fair contract consummation mechanism. The essential steps in a Chain-link confidentiality exchange are shown below. Other steps may be included in a more comprehensive exchange protocol.
+
+- Discloser provides a non-repudiable Offer with verifiable metadata (sufficient Partial disclosure), which includes any terms or restrictions on use.
+- Disclosee verifies Offer against composed schema and metadata adherence to desired data.
+- Disclosee provides non-repudiable Accept of terms that are contingent on compliant disclosure.
+- Discloser provides non-repudiable Disclosure with sufficient compliant detail.
+- Disclosee verifies Disclosure using decomposed schema and adherence of disclosed data to Offer.
+
+Disclosee may now engage in permissioned use and carries liability as a deterrent against unpermissioned use.
+
+
+
+As described previously, ACDCs employ Graduated disclosure mechanisms that satisfy the principle of least disclosure. Requoted here the principle of least disclosure is as follows:
+
+The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction and no more. [@IDSys]
+
+For example, Compact disclosure, Partial disclosure, Selective disclosure and Full disclosure are all Graduated disclosure mechanisms. Contractually protected disclosure leverages Graduated disclosure so that contractual protections can be put into place using the least disclosure necessary to that end. This minimizes the leakage of information that can be correlated. One type of contractually protected disclosure is Chain-link confidentiality [@CLC].
+
+
+### Graduated disclosure and Contractually protected disclosure
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/17
+:::
+
+ACDC leverages several closely related mechanisms for what can be called Graduated disclosure. Graduated disclosure enables adherence to the principle of least disclosure which is expressed as follows:
+
+The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction and no more. [@IDSys]
+
+To clarify, Graduated disclosure enables a potential Discloser to follow the principle of least disclosure by providing the least amount of information i.e., partial, incomplete, or uncorrelatable information needed to further a transaction.
+
+The important insight is that one type of transaction enabled by least disclosure is a transaction that specifically enables further disclosure. In other words, disclose enough to enable more disclosure which in turn may enable even more disclosure which is the essence of Graduated disclosure. This progression of successive least Graduated disclosures to enable a transaction that itself enables a farther least Graduated disclosure forms a recursive loop of least disclosure enabled transactions. In other words, the principle of least disclosure may be applied recursively.
+
+A type of transaction that leverages Graduated disclosure to enable further disclosure is called a Contractually protected disclosure transaction. In a Contractually protected disclosure, the potential Discloser first makes an offer using the least (partial) disclosure of some information about other information to be disclosed (full disclosure) contingent on the potential Disclosee first agreeing to the contractual terms provided in the offer. The contractual terms could, for example, limit the disclosure to third parties of the yet to be disclosed information. But those contractual terms may also include provisions that protect against liability or other concerns not merely disclosure to third parties.
+
+One special case of a Contractually protected disclosure is a Chain-link confidential disclosure [@CLC].
+
+Another special case of Contractually protected disclosure is Contingent disclosure. In a Contingent disclosure, some contingency is specified in the rule section that places an obligation by some party to make a disclosure when the contingency is satisfied. This might be recourse given the breach of some other term of the contract. When that contingency is met then the Contingent disclosure must be made by the party whose responsibility it is to satisfy that disclosure obligation. The responsible party may be the Discloser of the ACDC or it may be some other party such as an escrow agent. The Contingent disclosure clause may reference a cryptographic commitment to a private ACDC or private attribute ACDC (Partial disclosure) that satisfies via its Full disclosure the Contingent disclosure requirement. Contingent disclosure may be used to limit the actual disclosure of personally identifying information (PII) to a just-in-time, need-to-know basis (i.e., upon the contingency) and not a priori. As long as the Discloser and Disclosee trust the escrow agent and the verifiability of the commitment, there is no need to disclose PII about the Discloser in order to enable a transaction, but merely an agreement to the terms of the contingency. This enables something called latent accountability. Recourse via PII is latent in the Contingent disclosure but is not ever realized (actualized) until recourse is truly needed. The minimizes inadvertent leakage while protecting the Disclosee.
+
+### Types of Graduated disclosure
+
+ACDCs employ three specific closely related types of Graduated disclosure. These are Compact disclosure, Partial disclosure Selective disclosure and Full disclosure . The mechanism for Compact disclosure is a cryptographic digest of the content expressed in the form of a SAID of that content. Both Partial and Selective disclosure rely on the Compact disclosure of content that is also cryptographically blinded or hidden. Content in terms of an ACDC means a block (field map or field map array).
+
+The difference between Partial disclosure and Selective disclosure of a given block is determined by the correlatability of the disclosed field(s) after Full disclosure of the detailed field value with respect to its enclosing block (field map or field map array). A partially disclosable field becomes correlatable after Full disclosure. Whereas a selectively disclosable field may be excluded from the Full disclosure of any other selectively disclosable fields in the selectively disclosable block (usually a field map array). After such Selective disclosure, the selectively disclosed fields are not correlatable to the so-far undisclosed but selectively disclosable fields in that block (field map array).
+
+When used in the context of Selective disclosure, Full disclosure means detailed disclosure of the selectively disclosed attributes not detailed disclosure of all selectively disclosable attributes. Whereas when used in the context of Partial disclosure, Full disclosure means detailed disclosure of the field map that was so far only partially disclosed.
+
+Partial disclosure is an essential mechanism needed to support both performant exchange of information and Contractually protected disclosure such as Chain-link confidentiality on exchanged information [@CLC]. The exchange of only the SAID of a given field map is a type of Partial disclosure. Another type of Partial disclosure is the disclosure of validatable metadata about a detailed field map e.g., the schema of a field map.
+
+The SAID of a field map provides a compact cryptographically equivalent commitment to the yet to be undisclosed field map details.  A later exchange of the uncompacted field map detail provides full disclosure. Any later Full disclosure is verifiable to an earlier Partial disclosure. Partial disclosure via compact SAIDs enables the scalable repeated verifiable exchange of SAID references to cached Full disclosures. Multiple SAID references to cached fully disclosed field maps may be transmitted compactly without redundant retransmission of the full details each time a new reference is transmitted. 
+
+Likewise, Partial disclosure via SAIDs also supports the bow-tie model of Ricardian contracts [@RC]. Similarly, the schema of a field map is metadata about the structure of the field map this is validatable given the Full disclosure of the field mp. The details of compact and/or confidential exchange mechanisms that leverage Partial disclosure are explained later. When the field map includes sufficient cryptographic entropy such as through a UUID field (salty nonce), then the SAID of that field map effectively blinds the contents of the field map. This enables the field map contents identified by its SAID and characterized by its schema (i.e., Partial disclosure) to remain private until later Full disclosure.
+
+Selective disclosure, on the other hand, is an essential mechanism needed to unbundle in a correlation minimizing way a single commitment by an Issuer to a bundle of fields (i.e., a nested array or list or tuple of fields) as a whole. This allows separating a stew (bundle) of ingredients (attributes) into its constituent ingredients (attributes) without correlating the constituents via the Issuer's commitment to the stew (bundle) as a whole.
+
+Another variant of disclosure that is application specific is Disclosure-specific (bespoke) issued ACDCs which is described section 11.4.
+
+
+
+## Issuance and Presentation Exchange (IPEX)
+
+The Issuance and Presentation Exchange (IPEX) Protocol provides a uniform mechanism
+for the issuance and presentation of ACDCs [@ACDC-ID] in a securely attributable manner.
+A single protocol is able to work for both types of exchanges by recognizing
+that all exchanges (both issuance and presentation) may be modeled as the
+disclosure of information by a Discloser to a Disclosee. The difference between
+exchange types is the information disclosed not the mechanism for disclosure.
+Furthermore, the chaining mechanism of ACDCs and support for both targeted and
+untargeted ACDCs provide sufficient variability to accommodate the differences
+in applications or use cases without requiring a difference in the exchange
+protocol itself. This greatly simplifies the exchange protocol. This simplification
+has two primary advantages. The first is enhanced security. A well-delimited
+protocol can be designed and analyzed to minimize and mitigate attack mechanisms.
+The second is convenience. A standard simple protocol is easier to implement,
+support, update, understand, and adopt. The tooling is more consistent.
+
+This IPEX [@IPEX-ID] protocol leverages important features of ACDCs and ancillary protocols such as CESR [@CESR-ID], SAIDs [@SAID-ID], and CESR-Proofs [@Proof-ID] as well as Ricardian contracts [@RC] and graduated disclosure (partial, selective, full) to enable contractually protected disclosure. Contractually protected disclosure includes both chain-link confidential [@CLC] and contingent disclosure [@ACDC-ID].
+
+### Chain-Link Confidentiality
+
+Disclosures via Presentations Exchanges may be contractually protected by Chain-Link Confidentiality (i.e a Chain-Link Confidential disclosure). The chaining in this case is different from the chaining described above between Issuances in a DAG of chained Issuances. Chain-link confidentiality, in contrast, chains together a sequence of Disclosees. Each Disclosee in the sequence in turn is the Discloser to the next Disclosee. The terms-of-use of the original disclosure as applied to the original Disclosee MUST be applied by each subsequent Discloser to each subsequent Disclosee via each of the subsequent disclosures (presentation exchanges). These terms-of-use typically constrain disclosure to only approved parties, i.e. imbue the chain of disclosures with some degree of confidentiality. These terms-of-use are meant to contractually protect the data rights of the original Issuer or Issuee of the data being disclosed.
+
+### Exchange Protocol
+
+| Discloser | Disclosee | Initiate | Contents |  Description |
+|:-:|:-:|:-:|:--|:--|
+| | `apply`| Y | schema or its SAID, attribute field label list, signature on `apply` or its SAID | schema SAID is type of ACDC, optional label list for selective disclosure, CESR-Proof signature|
+|`spurn`|  | N | |rejects `apply` |
+|`offer`|  | Y | metadata ACDC or its SAID, signature on `offer` or its SAID  | includes schema or its SAID, other partial disclosures, selective disclosure label list, CESR-Proof signature |
+| | `spurn` | N | |rejects `offer` |
+| | `agree`| N | signature on `offer` or its SAID | CESR-Proof signature |
+|`spurn`|  | N | |rejects `agree` |
+|`grant`|  | Y | full or selective disclosure ACDC, signature on `grant` or its SAID  | includes attribute values, CESR-Proof signature |
+|| `admit` | N | signature on `grant` or its SAID  | CESR-Proof signature |
+
+#### Discussion
+
+All the variants of an ACDC are various degrees of expansion of the compact variant. Therefore, an Issuer commitment via a signature to any variant of ACDC (compact, full, etc)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top level section field is either the SAD or the SAID of the SAD of the associated section. Both a SAD and its SAID, when signed, each provide a verifiable commitment to the SAD. In the former the signature verification is directly agains the SAD itself. In the latter, the SAID as digest must first be verified against its SAD and then the signature on the SAID may be verified. This indirect verifiablity assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top level structure as the compact variant, then a signature on any variant  may be used to verify the Issuer's committment to any other variant either directly or indirectly, in whole or in part on a top-level section by top-level section basis. This cross-variant Issuer commitment verifiability is an essential property that supports graduated disclosure by the Disclosee of any or all variants wether it be full, compact, metadata, partial, selective, bulk issued, or contractually protected.
+
+To elaborate, the SAID of a given variant is useful even when it is not the SAID of the variant the Issuer signed because during graduated disclosure the Discloser MAY choose to sign that given variant to fullfill a given step in an IPEX graduated disclosure transaction. The Discloser thereby can make a verifiable disclosure in a given step of the SAD of a given variant that fulfills a commitment made in a prior step via its signature on merely the SAID of the SAD of the variant so disclosed.
+
+For example, the Metadata variant of an ACDC will have a different SAID than the Compact variant because some of the top-level field values may be empty in the Metadata variant. One can think of the The metadata variant as a partial manifest that only includes those top level sections that the Discloser is committing to disclose in order to induce the Disclosee to agree to the contractual terms of use when disclosed. The IPEX transaction is between the Discloser and Disclosee, who both may make non-repudiable commitments via signing to each other. Typically this means that the Discloser will eventually need to fulfull its commitment with a proof of disclosure to the Disclosee. This proof may be satisfied with either directly against the Discloser's signature on the the actual disclosed SAD or indirectly agaisnt the Discloser's signature on the SAID of the actual disclosed SAD. In addition, the Disclosee will typically require a proof of issuance via a non-repudiable signature by the Issuer on a variant of the disclosed SAD that is verifiable (directly or indirectly) against the variant that is the disclosed SAD.
+
+To summarize, when the Issuer commits to the composed schema of an ACDC it is committing to all the variants so composed. As described above, the top level field values in the compact variant enable verification against a disclosure of any of the other Issuer committed variants because they all share the same top level structure. This applies even to the metadata variant in spite of it only providing values for some top level sections and not others. The verifiablity of a top level section is separable.
+
+Consequently, the IPEX protocol must specify how a validator does validation of any variant in a graduated disclosure. To restate there are two proofs that a Discloser must provide. The first is proof of issuance and the second is proof of disclosure. In the former, the Discloser provide the variant via its SAD that was actually signed (as SAD or SAID of SAD) by the Issuer in order for the Disclosee to verify authentic issuance via the signature on that variant.  In the latter, the Discloser must disclose any other Issuer enabled (via schema composition) variants that the Discloser offered to disclose as part of the graduated disclosure process.
+
+#### IPEX Validation
+
+The goal is to define a validation process (set of rules) that works for all variants of an ACDC and for all types of graduated disclosure of that ACDC.
+
+For example, in the bulk issuance of an ACDC, the Issuer only signs the blinded SAID of the SAD that is the Compact variant of the ACDC not the SAD itself. This enable a Discloser to make a proof of inclusion of the ACDC in a bulk issuance set by unblinding the signature on the blinded SAID without leaking correlation to anything but the blinded SAID itself. To clarify, the Disclosee can verify the signature on the SAID without to prove set inclusion with needing the disclosure of any other information about the ACDC. Issuer signing of the SAID not the SAD also has the side benefit of minimizing the computation of large numbers of bulk issued signatures.
+
+##### Issuer Signing Rules
+
+The Issuer MUST provide a signature on the SAID of the most compact variant defined by the schema of the ACDC. When more than one variant is defined by the schema via the oneOf composition operator for any top-level field, the most compact variant MUST appear as the first entry in the oneOf list. When only one variant of each top-level field is defined by the schema, that variant is therefore by defintion the most compact variant.
+
+The different variants of an ACDC form a hash tree (using SAIDs) that is analogous to a Merkle Tree.
+Signing the top-level SAID of the compact version of the ACDC is equivalent to signing the Merkle Root of a Merkle Tree.
+Different variants of an ACDC (SADs with SAIDs) correspond to different paths through a Merkle tree.
+The process of verifying that  a SAD via its SAID of a section is included in a schema authorized variant down from the  top-level SAID is equivalent to a Merkle Tree proof of inclusion along a path in the Merkel Tree down from its Root.
+This allows a single signature to provide proof of Issuance of the presentation of any schema authorized variants of the ACDC.
+
+An Issuer MAY provide signatures of the SAIDS of other variants, as well as signatures of the SADs of other variants.
+
+Proof of issuance is provided by disclosing the SAID of the most compact variant and the signature by the Issuer on that SAID.
+
+Proof of disclosure is provided by disclosing the SAD of the most compact variant and then recursively disclosing the nested SADs of each of the top level sections of the most compact variant as needed for the promised disclosure.
+
+Thus for any disclosed variant of an ACDC, the Disclosee need only verify only one proof of issuance as defined above and may need to verify a different proof of disclosure for each disclosed variant as defined above.
+
+### Example Most Compact Variant
+
+The following schema supports a compact variant:
+
+```json
+{
+  "$id": "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Public ACDC",
+  "description": "Example JSON Schema Public ACDC.",
+  "credentialType": "PublicACDCExample",
+  "type": "object",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "ri",
+    "s",
+    "a",
+    "e",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "d": {
+      "description": "ACDC SAID",
+      "type": "string"
+    },
+    "i": {
+      "description": "Issuer AID",
+      "type": "string"
+    },
+    "ri": {
+      "description": "credential status registry AID",
+      "type": "string"
+    },
+    "s": {
+      "description": "schema section",
+      "oneOf": [
+        {
+          "description": "schema section SAID",
+          "type": "string"
+        },
+        {
+          "description": "schema detail",
+          "type": "object"
+        }
+      ]
+    },
+    "a": {
+      "description": "attribute section",
+      "oneOf": [
+        {
+          "description": "attribute section SAID",
+          "type": "string"
+        },
+        {
+          "description": "attribute detail",
+          "type": "object",
+          "required": [
+            "d",
+            "i",
+            "score",
+            "name"
+          ],
+          "properties": {
+            "d": {
+              "description": "attribute section SAID",
+              "type": "string"
+            },
+            "i": {
+              "description": "Issuee AID",
+              "type": "string"
+            },
+            "score": {
+              "description": "test score",
+              "type": "integer"
+            },
+            "name": {
+              "description": "test taker full name",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "e": {
+      "description": "edge section",
+      "oneOf": [
+        {
+          "description": "edge section SAID",
+          "type": "string"
+        },
+        {
+          "description": "edge detail",
+          "type": "object",
+          "required": [
+            "d",
+            "boss"
+          ],
+          "properties": {
+            "d": {
+              "description": "edge section SAID",
+              "type": "string"
+            },
+            "boss": {
+              "description": "boss edge",
+              "type": "object",
+              "required": [
+                "d",
+                "n",
+                "s",
+                "w"
+              ],
+              "properties": {
+                "d": {
+                  "description": "edge SAID",
+                  "type": "string"
+                },
+                "n": {
+                  "description": "far node SAID",
+                  "type": "string"
+                },
+                "s": {
+                  "description": "far node schema SAID",
+                  "type": "string",
+                  "const": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
+                },
+                "w": {
+                  "description": "edge weight",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "rule section",
+      "oneOf": [
+        {
+          "description": "rule section SAID",
+          "type": "string"
+        },
+        {
+          "description": "rule detail",
+          "type": "object",
+          "required": [
+            "d",
+            "warrantyDisclaimer",
+            "liabilityDisclaimer"
+          ],
+          "properties": {
+            "d": {
+              "description": "edge section SAID",
+              "type": "string"
+            },
+            "warrantyDisclaimer": {
+              "description": "warranty disclaimer clause",
+              "type": "object",
+              "required": [
+                "d",
+                "l"
+              ],
+              "properties": {
+                "d": {
+                  "description": "clause SAID",
+                  "type": "string"
+                },
+                "l": {
+                  "description": "legal language",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "liabilityDisclaimer": {
+              "description": "liability disclaimer clause",
+              "type": "object",
+              "required": [
+                "d",
+                "l"
+              ],
+              "properties": {
+                "d": {
+                  "description": "clause SAID",
+                  "type": "string"
+                },
+                "l": {
+                  "description": "legal language",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+The following JSON field map serialization satisfies the rules for most compact variant of the schema above:
+
+```json
+{
+  "v":  "ACDC10JSON00011c_",
+  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
+  "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "ri": "did:keri:EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
+  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
+  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
+}
+```
+
+The Issuer signs the SAID, `d` field value of the field map above.
+
+
 
 
 ### Disclosure-specific (bespoke) issued ACDCs
