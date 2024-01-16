@@ -300,13 +300,8 @@ The ordering of the top-level fields when present in an ACDC must be as follows,
 
 There are several variants of ACDCs determined by the presence/absence of certain fields and/or the value of those fields when used in combination. The primary ACDC variants are public, private, metadata, and bespoke. A given variant may be targeted (untargeted). 
 
-All the variants have two alternate forms, compact and non-compact. In the compact form of any variant, the values of the top-level fields for the attribute, schema, edge, and rule sections are the SAIDs (digests) of the corresponding expanded (non-compact) form of each section {{SAID}}. The attribute section of any variant may have nested sub-blocks that are either compact or non-compact.
-
-A given variant may be either targeted or untargeted.
-
+All the variants have two alternate forms, compact and non-compact. In the compact form of any variant, the values of the top-level fields for the attribute, attribute aggregate, schema, edge, and rule sections are the SAIDs (digests) of the corresponding expanded (non-compact) form of each section {{SAID}}. Additional variants arise from the presence or absence of different fields inside the attribute or attribute aggregate section. For example, a given variant may be either targeted or untargeted based on the presence of the Issuee field in the attribute or attribute aggreate sections. Similarly, any variant with an attribute section may have nested sub-blocks within the attribute section that are either compact or non-compact. The type of disclosure a given variant provides may be dependent on how the different sections appear in the ACDC.
 The details of each variant are explained below.
-
-
 
 
 #### Compact ACDC
