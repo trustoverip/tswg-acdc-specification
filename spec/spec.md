@@ -195,21 +195,26 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/25
 
 ## ACDC Structure
 
+### Ordered nested field maps
+
 An ACDC may be modeled abstractly as a nested `key: value` mapping. To avoid confusion with the cryptographic use of the term key,  the term field is used instead to refer to a mapping pair and the terms field label and field value for each member of a pair. These pairs can be represented by two tuples e.g., `(label, value)`. This terminology can be qualified, when necessary, by using the term field map to reference such a mapping. Field maps may be nested where a given field value is itself a reference to another field map. A nested set of fields is called a nested field map or simply a nested map for short. 
 
 A field may be represented by a Framing code or block delimited serialization.  In a block delimited serialization, such as JSON, each field map is represented by an object block with block delimiters such as `{}` [@RFC8259][@JSON][@RFC4627]. Given this equivalence, the term block or nested block also may be used as synonymous with field map or nested field map. In many programming languages, a field map is implemented as a dictionary or hash table in order to enable performant asynchronous lookup of a field value from its field label. Reproducible serialization of field maps requires a canonical ordering of those fields. One such canonical ordering is called insertion or field creation order. A list of `(field, value)` pairs provides an ordered representation of any field map. Most programming languages now support ordered dictionaries or hash tables that provide reproducible iteration over a list of ordered field `(label, value)` pairs where the ordering is the insertion or field creation order. This enables reproducible round-trip serialization/deserialization of field maps.  ACDCs depend on insertion ordered field maps for canonical serialization/deserialization. ACDCs support multiple serialization types, namely JSON, CBOR, MGPK, and CESR but for the sake of simplicity, JSON only will be used for examples [@RFC8259][@JSON]. The basic set of normative field labels in ACDC field maps is defined in the following table.
 
-### Field label tables
+
+### Top-Level fields
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/12
+:::
+
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/13
 :::
 
-### Top-Level fields
+The following table defines the top-level fields in an ACDC and their order of appearance. Some fields are optional but all fields that appear must appear in a defined order.
 
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/12
-:::
+
 
 | Label | Title | Description |
 |:-:|:--|:--|
@@ -225,9 +230,11 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/12
 |`r`| Rule | Either the SAID a block of rules or the block itself. |
 
 
-### Other fields
+### Other reserved fields
 
-These may appear at other levels besides the top-level of an ACDC but are nonetheless reserved.
+The following table defines non-top-level fields whose labels are reserved. 
+These appear at other levels besides the top-level of an ACDC.
+
 
 | Label | Title | Description |
 |:-:|:--|:--|
@@ -245,15 +252,19 @@ The primary field labels are compact in that they use only one or two characters
 
 ### Version string field
 
-The version string field here follows the Composable Event Streaming Representation (CESR) specification for versionstring fields.
 
-The version string, `v`, field must be the first field in any top-level ACDC field map. The string provides a regular expression target for determining the serialization format and size (character count) of a serialized ACDC. A stream-parser may use the version string to extract and deserialize (deterministically) any serialized ACDC in a stream of serialized ACDCs. Each ACDC in a stream may use a different serialization type.
+The version string, `v`, field MUST be the first field in any top-level field map of any ACDC. It provides a regular expression target for determining a serialized field map's serialization format and size (character count) that constitutes an ACDC field map (message body). A stream parser may use the version string to extract and deserialize (deterministically) any serialized stream of ACDC fields maps in a set of ACDC field maps. Each field map in a stream may use a different serialization type.
 
-The format of the version string is `ACDCvvSSSShhhhhh_`. The first four characters `ACDC` indicate the enclosing field map serialization. The next two characters, `vv` provide the lowercase hexadecimal notation for the major and minor version numbers of the version of the ACDC specification used for the serialization. The first `v` provides the major version number and the second `v` provides the minor version number. For example, `01` indicates major version 0 and minor version 1 or in dotted-decimal notation `0.1`. Likewise, `1c` indicates major version 1 and minor version decimal 12 or in dotted-decimal notation `1.12`. The next four characters `SSSS` indicate the serialization type in uppercase. The four supported serialization types are `JSON`, `CBOR`, `MGPK`, and `CESR` for the JSON, CBOR, MessagePack, and CESR serialization standards respectively [@JSON][@RFC4627][@CBOR][@RFC8949][@MGPK][@CESR_ID]. 
+The format of the version string is `ACDCVVVKKKKBBBB_`. It is 16 characters in length and is divided into five parts: protocol, version, serialization kind, serialization length, and terminator. The first four characters, `ACDC` indicate the protocol. The CESR encoding standard supports multiple protocols, `ACDC` being one of them.  The next three characters, `VVV`, provide in Base64 notation the major and minor version numbers of the version of the ACDC protocol specification. The first `V` character provides the major version number, and the final two `VV` characters provide the minor version number. For example, `CAA` indicates major version 2 and minor version 00 or in dotted-decimal notation, i.e., `2.00`. Likewise, `CAQ` indicates major version 2 and minor version decimal 16 or in dotted-decimal notation `1.16`. The version part supports up to 64 major versions with  4096 minor versions per major version. The next four characters, `KKKK` indicate the serialization kind in uppercase. The four supported serialization kinds are `JSON`, `CBOR`, `MGPK`, and `CESR` for the JSON, CBOR, MessagePack, and CESR serialization standards, respectively [[spec: RFC4627]] [[spec: RFC4627]] [[ref: CBOR]] [[ref: RFC8949]] [[ref: MGPK]] [[ref: CESR]]. The next six characters provide in Base64  notation the total length of the serialization, inclusive of the version string and any prefixed characters or bytes. This length is the total number of characters in the serialization of the ACDC field map. The maximum length of a given ACDC field map serialization is thereby constrained to be *2<sup>24</sup> = 16,777,216* characters in length. The final character `_` is the version string terminator. This enables later versions of ACDC to change the total version string size and thereby enable versioned changes to the composition of the fields in the version string while preserving deterministic regular expression extractability of the version string. 
 
-The next six characters provide in lowercase hexadecimal notation the total number of characters in the serialization of the ACDC. The maximum length of a given ACDC thereby is constrained to be 2<sup>24</sup> = 16,777,216 characters in length. The final character `-` is the version string terminator. This enables later versions of ACDC to change the total version string size and thereby enable versioned changes to the composition of the fields in the version string while preserving deterministic regular expression extractability of the version string. 
+Although a given ACDC field map serialization kind may have characters or bytes such as field map delimiters or framing codes that appear before, i.e., prefix the version string field in a serialization, the set of possible prefixes for each of the supported serialization kinds is sufficiently constrained by the allowed serialization protocols to guarantee that a regular expression can determine unambiguously the start of any ordered field map serialization that includes the version string as the first field value. Given the length of the version string, a parser may then determine the end of the serialization to extract the full ACDC field map serialization from the stream without first deserializing it. This enables performant stream parsing and off-loading of ACDC streams that include any or all of the supported serialization types.
 
-Although a given ACDC serialization type may have a field map delimiter or framing code characters that appear before (i.e., prefix) the version string field in a serialization, the set of possible prefixes is sufficiently constrained by the allowed serialization protocols to guarantee that a regular expression can determine unambiguously the start of any ordered field map serialization that includes the version string as the first field value. Given the version string, a parser then may determine the end of the serialization so that it can extract the full ACDC from the stream without first deserializing it. This enables performant stream parsing and off-loading of ACDC streams that include any or all of the supported serialization types.
+##### Legacy version string field format
+
+Compliant ACDC version 2.XX implementations shall support the old ACDC version 1.XX version string format to properly verify ACDCs created with 1.XX format events.
+
+The format of the version string for ACDC 1.XX is `ACDCvvKKKKllllll_`. It is 16 characters in length and is divided into five parts: protocol, version, serialization kind, serialization length, and terminator. The first four characters, `ACDC` indicate the protocol. The CESR encoding standard supports multiple protocols, `ACDC` being one of them.  The next two characters, `vv` provide the major and minor version numbers of the version of the ACDC protocol specification in lowercase hexadecimal notation. The first `v` provides the major version number, and the second `v` provides the minor version number. For example, `01` indicates major version 0 and minor version 1 or in dotted-decimal notation `0.1`. Likewise, `1c` indicates major version 1 and minor version decimal 12 or in dotted-decimal notation `1.12`. The next four characters, `KKKK` indicate the serialization kind in uppercase. The four supported serialization kinds are `JSON`, `CBOR`, `MGPK`, and `CESR` for the JSON, CBOR, MessagePack, and CESR serialization standards, respectively [[spec: RFC4627]] [[spec: RFC4627]] [[ref: CBOR]] [[ref: RFC8949]] [[ref: MGPK]] [[ref: CESR]]. The next six characters provide in lowercase hexadecimal notation the total length of the serialization, inclusive of the version string and any prefixed characters or bytes. This length is the total number of characters in the serialization of the ACDC field map. The maximum length of a given ACDC field map serialization is thereby constrained to be *2<sup>24</sup> = 16,777,216* characters in length. For example, when the length of serialization is 384 decimal characters/bytes, the length part of the version string has the value `000180`. The final character `_` is the version string terminator. This enables later versions of ACDC to change the total version string size and thereby enable versioned changes to the composition of the fields in the version string while preserving deterministic regular expression extractability of the version string. 
+
 
 ### Self-addressing identifier (SAID) fields
 
