@@ -657,30 +657,11 @@ When the value of the  Attribute section has been compacted into its SAID, its s
 
 #### Attribute section variants
 
-Two other variants namely, targeted (untargeted) are defined respectively by the presence (absence) of an Issuee, `i`, field at the top-level of the uncompacted Attribute section block.
+Two variants, namely, targeted (untargeted), are defined respectively by the presence (absence) of an Issuee, `i` field at the top-level of the uncompacted Attribute section block.
 
-Two other variants, namely private (public) are defined respectively by the presence (absence) of a UUID, `u`, field at the top-level of the uncompacted Attribute section block.
+Two other variants, namely private (public), are defined respectively by the presence (absence) of a UUID, `u`, field at the top-level of the uncompacted Attribute section block.
 
-##### Untargeted attribute section
-
-Consider the case where the Issuee, `i`, field is absent at the top level of the Attribute section, as shown below:
-
-```json
-{
-  "a":
-  {
-    "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-    "temp": 45,
-    "lat": "N40.3433",
-    "lon": "W111.7208"
-  }
-}
-```
-This ACDC has an Issuer but no Issuee. Therefore, there is no provably controllable Target AID. This may be thought of as an undirected verifiable attestation or observation of the data in the Attributes section by the Issuer. One could say that the attestation is addressed to "whom it may concern," which is, therefore, an Untargeted ACDC or, equivalently, an Unissueed ACDC. An untargeted ACDC enables verifiable authorship by the Issuer of the data in the Attributes section, but there is no specified counterparty and no verifiable mechanism for delegation of authority.  Consequently, the rule section may provide only contractual obligations of implied counterparties.
-
-This form of an ACDC provides a container for authentic data only (not authentic data as authorization). But authentic data is still a very important use case. To clarify, an Untargeted ACDC enables verifiable authorship of data. An observer, such as a sensor that controls an AID, may make verifiable, nonrepudiable measurements and publish them as ACDCs. These may be chained together to provide provenance for or a chain-of-custody of any data.  These ACDCs could be used to provide a verifiable data supply chain for any compliance-regulated application. This provides a way to protect participants in a supply chain from imposters. Such data supply chains are also useful as a verifiable digital twin of a physical supply chain [@Twin].
-
-A hybrid chain of one or more targeted ACDCs ending in a chain of one or more untargeted ACDCs enables delegated authorized attestations at the tail of that chain. This may be very useful in many regulated supply chain applications such as verifiable authorized authentic datasheets for a given pharmaceutical.
+These four variants may appear in combination.
 
 ##### Targeted attribute section 
 
@@ -698,140 +679,39 @@ Consider the case where the Issuee, `i`, field is present at the top level of th
   }
 }
 ```
+When present at the top level of the Attribute section, the Issuee, `i`, field value is the ACDC's Issuee AID. This Issuee AID is a provably controllable identifier that is the Target. This makes the ACDC a Targeted ACDC. Targeted ACDCs may be used for many different purposes, such as authorization or delegation directed at the Target. In other words, a targeted ACDC provides a container for authentic data that may also be used as some form of authorization, such as a credential that is verifiably bound to the Issuee as targeted by the Issuer. Furthermore, by virtue of the targeted Issuee's provable control over its AID, the Targeted ACDC may be verifiably presented (disclosed) by the Issuee AID Controller.
 
+To elaborate, the definition of the term credential is "evidence of authority, status, rights, entitlement to privileges, or the like". The presence of an attribute section top-level Issuee, `i`, field enables the ACDC to be used as a verifiable credential given by the Issuer to the Issuee.
 
-When present at the top level of the Attribute section, the Issuee, `i`, field value provides the AID of the Issuee of the ACDC. This Issuee AID is a provably controllable identifier that serves as the Target AID. This makes the ACDC a Targeted ACDC or equivalently an Issueed ACDC. Targeted ACDCs may be used for many different purposes such as an authorization or a delegation directed at the Issuee AID, i.e., the Target. In other words, a targeted ACDC provides a container for authentic data that may also be used as some form of authorization such as a credential that is verifiably bound to the Issuee as targeted by the Issuer. Furthermore, by virtue of the targeted Issuee's provable control over its AID, the Targeted ACDC may be verifiably presented (disclosed) by the Controller of the Issuee AID.
+One reason the Issuee, `i`, field is nested into the Attribute section, `a`, block is to enable the Issuee AID to be partially or selectively disclosable. Because the actual semantics of Issuee may depend on the use case, the semantically precise albeit less common terms of Issuer and Issuee are used in this specification. In some use cases, for example, an Issuee may be called the Holder; in others, the Subject of the ACDC. But no matter the use case, the `i` field designates the Issuee AID, i.e. Target. The ACDC is "issued by" an Issuer and is "issued to" an Issuee. This precise terminology does not bias or color the role (function) that an Issuee plays in using an ACDC. What the presence of Issuee AID does provide is a mechanism for control of the subsequent use of the ACDC once it has been issued. To elaborate, because the Issuee, `i`, field value is an AID, by definition, there is a provable Controller of that AID. Therefore, the Issuee Controller may make non-repudiable commitments via digital signatures on behalf of its AID.  Therefore, subsequent use of the ACDC by the Issuee may be securely attributed to the Issuee.
 
-For example, the definition of the term credential is evidence of authority, status, rights, entitlement to privileges, or the like. To elaborate, the presence of an attribute section top-level Issuee, `i`, field enables the ACDC to be used as a verifiable credential given by the Issuer to the Issuee.
+Importantly, the presence of an Issuee, `i`, field enables the associated Issuee to make authoritative verifiable presentations or disclosures of the ACDC. A designated Issuee also better enables the initiation of presentation exchanges of the ACDC between that Issuee as Discloser and a Disclosee (Verifier).
 
-One reason the Issuee, `i`, field is nested into the Attribute section, `a`, block is to enable the Issuee AID to be private or partially or selectively disclosable. The Issuee may also be called the Holder or Subject of the ACDC.  But here the more semantically precise albeit less common terms of Issuer and Issuee are used. The ACDC is issued from or by an Issuer and is issued to or for an Issuee. This precise terminology does not bias or color the role (function) that an Issuee plays in the use of an ACDC. What the presence of Issuee AID does provide is a mechanism for control of the subsequent use of the ACDC once it has been issued. To elaborate, because the Issuee, `i`, field value is an AID, by definition, there is a provable Controller of that AID. Therefore that Issuee Controller may make non-repudiable commitments via digital signatures on behalf of its AID.  Therefore, subsequent use of the ACDC by the Issuee may be securely attributed to the Issuee.
+In addition, because the Issuee is a specified counterparty, the Issuer may engage in a contract with the Issuee that the Issuee agrees to by virtue of its non-repudiable signature on an offer of the ACDC prior to its issuance. This agreement may be a pre-condition to the issuance and thereby impose liability waivers or other terms of use on that Issuee. 
 
-Importantly the presence of an Issuee, `i`, field enables the associated Issuee to make authoritative verifiable presentations or disclosures of the ACDC. A designated Issuee also better enables the initiation of presentation exchanges of the ACDC between that Issuee as Discloser and a Disclosee (Verifier).
+Likewise, the presence of an Issuee, `i`, field enables the Issuer to use the ACDC as a contractual vehicle for conveying authorization to the Issuee.  This enables verifiable delegation chains of authority because the Issuee in one ACDC may become the Issuer of another ACDC. Thereby, an Issuer may delegate authority to an Issuee who may then become a verifiably authorized Issuer that then delegates that authority (or attenuation of that authority) to some other verifiably authorized Issuee and so forth.
 
-In addition, because the Issuee is a specified counterparty the Issuer may engage in a contract with the Issuee that the Issuee agrees to by virtue of its non-repudiable signature on an offer of the ACDC prior to its issuance. This agreement may be a pre-condition to the issuance and thereby impose liability waivers or other terms of use on that Issuee.
+Contractual issuance and presentation exchanges are described in detail later in the IPEX protocol section {{reference to IPEX section}}.
 
-Likewise, the presence of an Issuee, `i`, field, enables the Issuer to use the ACDC as a contractual vehicle for conveying an authorization to the Issuee.  This enables verifiable delegation chains of authority because the Issuee in one ACDC may become the Issuer in some other ACDC. Thereby, an Issuer may delegate authority to an Issuee who may then become a verifiably authorized Issuer that then delegates that authority (or an attenuation of that authority) to some other verifiably authorized Issuee and so forth.
+##### Untargeted attribute section
 
-#### Targeted public-attribute section example
-Suppose that the un-compacted value of the attribute section as denoted by the Attribute section, `a`, field is as follows,
+Consider the case where the Issuee, `i`, field is absent at the top level of the Attribute section, as shown below:
 
 ```json
 {
   "a":
   {
     "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-    "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA",
-    "score": 96,
-    "name": "Jane Doe"
+    "temp": 45,
+    "lat": "N40.3433",
+    "lon": "W111.7208"
   }
 }
 ```
+This ACDC has an Issuer but no Issuee. There is no provably controllable AID as a Target of the issuance, i.e., Untargeted. The data in the Attribute section may be considered an undirected verifiable attestation or observation by the Issuer.  One could say that the attestation is addressed "to whom it may concern." An untargeted ACDC enables verifiable authorship by the Issuer of the data in the Attributes section, but there is no specified counterparty and no verifiable mechanism for delegation of authority.  Consequently, the Rule section may provide only contractual obligations of implied counterparties.
 
-The SAID, `d`, field at the top level of the uncompacted attribute block is the same SAID used as the compacted value of the Attribute section, `a`, field.
+This form of an ACDC provides a container for authentic data only (not authentic data as authorization). But authentic data is still a very important use case. To clarify, an Untargeted ACDC enables verifiable authorship of data. An observer, such as a sensor that controls an AID, may make verifiable, nonrepudiable measurements and publish them as ACDCs. These may be chained together to provide provenance for or a chain-of-custody of any data.  Furthermore, A hybrid chain of one or more targeted ACDCs ending in a chain of one or more untargeted ACDCs enables delegated authorized attestations at the tail of that chain. These provenanceable chains of ACDCs could be used to provide a verifiable data supply chain for any compliance-regulated application. This provides a way to protect participants in a supply chain from imposters. Such data supply chains are also useful as a verifiable digital twin of a physical supply chain [@Twin].
 
-As discussed above, the presence of the `i` field at the top level of the attribute section block makes this a targeted attribute section. The AID given by the `i` field value is the target entity called the Issuee. The semantics of the Issuee maybe defined by the ACDC EGF (Ecosystem Governance Framework).
-
-Given the absence of a `u` field at the top level of the attributes block, then knowledge of both SAID, `d`, field at the top level of an attributes block and the schema of the attributes block may enable the discovery of the remaining contents of the attributes block via a rainbow table attack [@RB][@DRB]. Therefore, the SAID, `d`, field of the attributes block, although a cryptographic digest, does not securely blind the contents of the attributes block given knowledge of the schema. It only provides compactness, not privacy. Moreover, any cryptographic commitment to that SAID, `d`, field potentially provides a fixed point of correlation to the attribute block field values despite non-disclosure of those field values via a Compact ACDC. Thus, an ACDC without a UUID, `u`, field in its attributes block must be considered a public-attribute ACDC even when expressed in compact form.
-
-#### Targeted Public attribute section subschema example
-
-The subschema for the public uncompacted Attribute section is shown below,
-
-```json
-{
-  "a":
-  {
-    "description": "attribute section",
-    "type": "object",
-    "required":
-    [
-      "d",
-      "i",
-      "score",
-      "name"
-    ],
-    "properties":
-    {
-      "d":
-      {
-        "description": "attribute SAID",
-        "type": "string"
-      },
-      "i":
-      {
-        "description": "Issuee AID",
-        "type": "string"
-      },
-      "score":
-      {
-        "description": "test score",
-        "type": "integer"
-      },
-      "name":
-      {
-        "description": "test taker full name",
-        "type": "string"
-      }
-    },
-    "additionalProperties": false
-  }
-}
-```
-
-#### Composed subschema for both public compact and uncompacted targeted attribute section variants
-
-Through the use of the JSON Schema `oneOf` composition operator, the following composed subschema will validate against both the Compact and un-compacted value of the Attribute section field.
-
-```json
-{
-  "a":
-  {
-    "description": "attribute section",
-    "oneOf":
-    [
-      {
-        "description": "attribute SAID",
-        "type": "string"
-      },
-      {
-        "description": "uncompacted attribute section",
-        "type": "object",
-        "required":
-        [
-          "d",
-          "i",
-          "score",
-          "name"
-        ],
-        "properties":
-        {
-          "d":
-          {
-            "description": "attribute SAID",
-            "type": "string"
-          },
-          "i":
-          {
-            "description": "Issuee AID",
-            "type": "string"
-          },
-          "score":
-          {
-            "description": "test score",
-            "type": "integer"
-          },
-          "name":
-          {
-            "description": "test taker full name",
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      }
-    ]
-  }
-}
-```
 
 #### Targeted private-attribute section example
 
@@ -850,17 +730,7 @@ Consider the following form of an uncompacted private-attribute block,
 }
 ```
 
-As discussed above, the presence of the `i` field at the top level of the attribute section block makes this a targeted attribute section. The AID given by the `i` field value is the target entity called the Issuee. The semantics of the Issuee maybe defined by the ACDC EGF (Ecosystem Governance Framework).
-
-Given the presence of a top-level UUID, `u`, field of the attribute block whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of the attribute block provides a secure cryptographic digest of the contents of the attribute block [@Hash]. An adversary when given both the schema of the attribute block and its SAID, `d`, field, is not able to discover the remaining contents of the attribute block in a computationally feasible manner such as a rainbow table attack [@RB][@DRB].  Therefore, the attribute block's UUID, `u`, field in a compact ACDC enables its attribute block's SAID, `d`, field to securely blind the contents of the attribute block notwithstanding knowledge of the attribute block's schema and SAID, `d` field.  Moreover, a cryptographic commitment to that attribute block's, SAID, d`, field does not provide a fixed point of correlation to the attribute field values themselves unless and until there has been a disclosure of those field values.
-
-To elaborate, when an ACDC includes a sufficiently high entropy UUID, `u`, field at the top level of its attributes block then the ACDC may be considered a private-attributes ACDC when expressed in compact form, that is, the attribute block is represented by its SAID, `d`, field and the value of its top-level Attribute section, `a`, field is the value of the nested SAID, `d`, field from the uncompacted version of the attribute block. A verifiable commitment may be made to the compact form of the ACDC without leaking details of the attributes. Later disclosure of the uncompacted attribute block may be verified against its SAID, `d`, field that was provided in the compact form as the value of the top-level Attribute section, `a`, field.
-
-Because the Issuee AID is nested in the attribute block as that block's top-level, Issuee, `i`, field, a presentation exchange (disclosure) could be initiated on behalf of a different AID that has not yet been correlated to the Issuee AID and then only correlated to the Issuee AID after the Disclosee has agreed to the Chain-link confidentiality provisions in the rules section of the private-attributes ACDC [@CLC].
-
-#### Composed subschema for both compact and uncompacted targeted private-attribute section variants
-
-Through the use of the JSON Schema `oneOf` composition operator, the following composed subschema will validate against both the compact and un-compacted value of the private-attribute section, `a`, field.
+with subschema below,
 
 
 ```json
@@ -920,117 +790,280 @@ Through the use of the JSON Schema `oneOf` composition operator, the following c
 }
 ```
 
-As described above in the Schema section of this specification, the `oneOf` sub-schema composition operator validates against either the compact SAID of a block or the full block. A Validator can use a composed schema that has been committed to by the Issuer to securely confirm schema compliance both before and after detailed disclosure by using the fully composed base schema pre-disclosure and a specific decomposed variant post-disclosure. Decomposing the schema to remove the optional compact variant (i.e., removing the `oneOf` compact option) enables a Validator to ensure compliant Full disclosure.
 
+As described above in the Schema section of this specification, the `oneOf` sub-schema composition operator validates against either the compact SAID of a block or the full block. A Validator can use a composed schema that has been committed to by the Issuer to securely confirm schema compliance both before and after detailed disclosure by using the fully composed base schema pre-disclosure and a specific decomposed variant post-disclosure. Decomposing the schema to remove the optional compact variant (i.e., removing the `oneOf` compact option) enables a Validator to ensure compliant Full disclosure. To clarify, using the JSON Schema `oneOf` composition operator enables the composed subschema to validate against both the compact and un-compacted value of the private-attribute section, `a`, field.
 
+As discussed above, the presence of the `i` field at the top level of the attribute section block makes this a targeted attribute section. The AID given by the `i` field value is the target entity called the Issuee. The semantics of the Issuee maybe defined by the ACDC EGF (Ecosystem Governance Framework).
 
-### Edge section  
+Given the presence of a top-level UUID, `u`, field of the attribute block whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of the attribute block provides a secure cryptographic digest of the contents of the attribute block [@Hash]. An adversary when given both the schema of the attribute block and its SAID, `d`, field, is not able to discover the remaining contents of the attribute block in a computationally feasible manner such as a rainbow table attack [@RB][@DRB].  Therefore, the attribute block's UUID, `u`, field in a compact ACDC enables its attribute block's SAID, `d`, field to securely blind the contents of the attribute block notwithstanding knowledge of the attribute block's schema and SAID, `d` field.  Moreover, a cryptographic commitment to that attribute block's, SAID, `d`, field does not provide a fixed point of correlation to the attribute field values themselves unless and until there has been a disclosure of those field values.
 
-In the compact ACDC examples above, the edge section has been compacted into merely the SAID of that section. Suppose that the uncompacted value of the edge section denoted by the top-level edge, `e`, field is as follows,
+To elaborate, when an ACDC includes a sufficiently high entropy UUID, `u`, field at the top level of its attributes block then the ACDC may be considered a private-attributes ACDC when expressed in compact form, that is, the attribute block is represented by its SAID, `d`, field and the value of its top-level Attribute section, `a`, field is the value of the nested SAID, `d`, field from the uncompacted version of the attribute block. A verifiable commitment may be made to the compact form of the ACDC without leaking details of the attributes. Later disclosure of the uncompacted attribute block may be verified against its SAID, `d`, field that was provided in the compact form as the value of the top-level Attribute section, `a`, field.
+
+Because the Issuee AID is nested in the attribute block as that block's top-level, Issuee, `i`, field, a presentation exchange (disclosure) could be initiated on behalf of a different AID that has not yet been correlated to the Issuee AID and then only correlated to the Issuee AID after the Disclosee has agreed to the Chain-link confidentiality provisions in the rules section of the private-attributes ACDC [@CLC].
+
+#### Targeted public-attribute section example
+
+Suppose that the un-compacted value of the attribute section as denoted by the Attribute section, `a`, field is as follows,
 
 ```json
 {
-  "e":
+  "a":
   {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA"
-    }
+    "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+    "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA",
+    "score": 96,
+    "name": "Jane Doe"
   }
 }
 ```
 
-The edge section's top-level SAID, `d`, field is the SAID of the edge block and is the same SAID used as the compacted value of the ACDC's top-level edge, `e`, field. Each edge in the edge section gets its own field with its own local label. The value of the field may be a sub-block or in the simplest case a string. In the example above, the edge label is `"boss"`. Note that each edge does NOT include a type field. The type of each edge is provided by the schema vis-a-vis the label of that edge. This is in accordance with the design principle of ACDCs that may be succinctly expressed as "type-is-schema". This approach varies somewhat from many property graphs which often do not have a schema [@PGM][@Dots][@KG]. Because ACDCs have a schema for other reasons, however, they leverage that schema to provide edge types with a cleaner separation of concerns. Notwithstanding, this separation, an edge sub-block may include a constraint on the type of the ACDC to which that edge points by including the SAID of the schema of the pointed-to ACDC as a property of that edge.
+with subschema below,
 
-#### Edge sub-block reserved fields
+```json
+{
+  "a":
+  {
+    "description": "attribute section",
+    "oneOf":
+    [
+      {
+        "description": "attribute SAID",
+        "type": "string"
+      },
+      {
+        "description": "uncompacted attribute section",
+        "type": "object",
+        "required":
+        [
+          "d",
+          "i",
+          "score",
+          "name"
+        ],
+        "properties":
+        {
+          "d":
+          {
+            "description": "attribute SAID",
+            "type": "string"
+          },
+          "i":
+          {
+            "description": "Issuee AID",
+            "type": "string"
+          },
+          "score":
+          {
+            "description": "test score",
+            "type": "integer"
+          },
+          "name":
+          {
+            "description": "test taker full name",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    ]
+  }
+}
+```
 
-A main distinguishing feature of a property graph (PG) is that both nodes and edges may have a set of properties [@PGM][@Dots][@KG]. These might include modifiers that influence how the connected node is to be combined or place a constraint on the allowed type(s) of connected nodes.
+As described above in the Schema section of this specification, the `oneOf` sub-schema composition operator validates against either the compact SAID of a block or the full block. A Validator can use a composed schema that has been committed to by the Issuer to securely confirm schema compliance both before and after detailed disclosure by using the fully composed base schema pre-disclosure and a specific decomposed variant post-disclosure. Decomposing the schema to remove the optional compact variant (i.e., removing the `oneOf` compact option) enables a Validator to ensure compliant Full disclosure. To clarify, using the JSON Schema `oneOf` composition operator enables the composed subschema to validate against both the compact and un-compacted value of the public-attribute section, `a`, field.
 
-There several reserved field labels for edge sub-blocks. These are detailed in the table below. Each edge sub-block may have other non-reserved field labels as needed for a particular edge type.
+The SAID, `d`, field at the top level of the uncompacted attribute block is the same SAID used as the compacted value of the Attribute section, `a`, field.
+
+As discussed above, the presence of the `i` field at the top level of the attribute section block makes this a targeted attribute section. The AID given by the `i` field value is the Target or Issuee. The semantics of the issuance may be defined by the ACDC's EGF (Ecosystem Governance Framework).
+
+Given the absence of a `u` field at the top level of the attributes block, however, knowledge of both SAID, `d`, field at the top level of an attributes block and the schema of the attributes block may enable the discovery of the remaining contents of the attributes block via a rainbow table attack [@RB][@DRB]. Therefore, the SAID, `d`, field of the attributes block, although a cryptographic digest, does not securely blind the contents of the attributes block given knowledge of the schema. It only provides compactness, not privacy. Moreover, any cryptographic commitment to that SAID, `d`, field potentially provides a fixed correlation point to the attribute block field values despite the non-disclosure of those field values via a Compact Attribute section. Thus, an ACDC without a UUID, `u` field in its attributes block must be considered a Public-Attribute ACDC even when expressed in compact form.
+
+
+### Edge section  
+
+The Edge Section, `e` field appears as a top-level block within the ACDC.  The Edge Section has several reserved fields that may appear as top-level fields within its block. 
+
+#### Block types
+
+There are two types of field maps or blocks that may appear as values of fields within the Edge Section, `e` field either at the top level of the Edge block itself or nested. These are Edges or Edge-groups. Edges may only appear as locally unique labeled (using non-reserved labels)  blocks nested within an Edge Group. 
+
+The Edge Section is the top-level Edge-group. 
+
+Nested Edge-groups may only appear as locally unique labeled blocks nested within another Edge-group. The block type, Edge or Edge-group, is indicated by its corresponding labeled sub-schema, with the exception of the top-level Edge-group, which is the Edge Section and is indicated by the Edge Section sub-schema. An Edge is indicated by the required presence of a node, `n` field in the non-compact variant of its sub-schema. An Edge-group shall not have a node, `n` field.
+
+#### ACDCs as secure graph fragments of a globally distributed property graph (PG)
+
+A set of ACDCs as nodes connected by edges forms a labeled property graph (LPG) or property graph (PG) for short [@PGM][@Dots][@KG]. Property graphs have properties not only in the nodes but also in the edges. The properties of each node (ACDC) are provided essentially by its Attribute Section. The properties of each edge are provided by the combination of Edge blocks and Edge-group blocks. In this regard, the set of nested Edge-groups within a given top-level Edge Section, i.e., the `e` field block of a given ACDC, constitute a sub-graph of a super-graph of ACDCs where the nodes of the super-graph are ACDCs. The nodes of the sub-graph are the Edge-groups and Edges, not whole ACDCs. One of the attractive features of property graphs (PGs) is their support for different edge and node types, which enables nested sub-graphs that support the rich expression of complex logical or aggregative operations on groups of Edges and/or Edge-groups (as subnodes) within the top-level Edge Section, `e`, field of an ACDC (as supernode).
+
+To clarify, the Edge Section of an ACDC forms a sub-graph where each Edge block is a leaf of a branch in that sub-graph that terminates at the value of its node, `n`, field. Its node, `n` field, points to some other ACDC that is itself a sub-graph. The head of each sub-graph is the top level Edge-group, i.e. the Edge Section. Thus, an Edge block is a leaf with respect to the sub-graph formed by any nested Edge-group blocks in which the Edge appears.  
+
+Abstractly, an ACDC with one or more edges may be viewed as a fragment of a larger distributed property graph where each ACDC Edge Section is a sub-graph. Each node in this larger graph is universally uniquely identified by the SAID of its ACDC. Recall that a SAID is a cryptographic digest. The local labels on each Edge block or Edge-group block are not universally uniquely resolvable, so they are inappropriate as a verifiable hook for resolving the edges in a globally distributed property graph. This requires resolving both nodes and edges. To enable both the node and its connecting edge to be globally uniquely resolvable, each Edge's block must also have a SAID, `d`, field. Recall that a SAID is a cryptographic digest. Therefore, it will universally and uniquely identify an edge with a given set of properties [@Hash], including the node it points to. 
+
+Thus, a given ACDC with its edges may be universally uniquely resolvable as a graph fragment of a larger graph.  Moreover, because each ACDC with edges, i.e., a graph fragment, may be independently sourced and securely attributed, a distributed property graph can be securely assembled and verified fragment by fragment. To summarize, these features enable ACDCs to be used as securely attributed fragments of a globally distributed property graph (PG). This further enables such a property graph so assembled to serve as a global verifiable knowledge graph that crosses trust domains [@PGM][@Dots][@KG]. 
+
+The universal uniqueness of the ACDC SAIDs (nodes) and their Edge SAIDs enable the simplified discovery of ACDCs via service endpoints. The discovery of a service endpoint URL that provides database access to a copy of the ACDC may be bootstrapped via an OOBI (Out-Of-Band-Introduction) that links the service endpoint URL to the SAID of the ACDC or by the SAID of the Edge that points to the SAID of that ACDC [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at the time of issuance a copy of the referenced ACDC. In either case, after a successful exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced ACDCs as nodes in the edge sections of all referenced ACDCs. That Issuee will then have everything it needs to make a successful disclosure to some other Disclosee. This is the essence of Percolated discovery [@OOBI_ID].
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/26
+:::
+
+
+
+
+#### Edge-group
+
+The reserved field labels for an Edge-group are detailed in the table below. 
+
+| Label | Title | Description |
+|:-:|:--|:--|
+|`d`| Digest (SAID) | Optional, self-referential fully qualified cryptographic digest of enclosing Edge-group block. |
+|`u`| UUID | Optional random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
+|`o`| Operator| Optional as an m-ary operator on the Edges in the Edge-group. Enables expression of the edge logic on edge subgraph.|
+|`w`| Weight| Optional property for nested Edges or Edge-groups for weighted average `WAVG` operator. Enables expression weighted average on Edge or Edge-group sub-graph.|
+
+When present, the order of appearance of these fields is as follows: `[d, u, o, w]'.
+
+An Edge-group shall not have a node, `n`, field. 
+
+##### SAID, `d` field
+The SAID, `d` field is required and shall appear as the first field in the Edge-group block. The value of this field shall be the SAID of its enclosing block.
+
+##### UUID, `u` field
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge-group block. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+
+##### Operator, `o` field
+The Operator, `o` field must appear immediately following the SAID, `d` field,  and UUID, `u` field (when present) in the Edge-group block. The Operator field in an Edge-group block is an aggregating (m-ary) operator on all the nested labeled Edges or Edge-groups that appear in its block. This differs from the Operator, `o` field in an Edge block (see below).
+
+The m-ary operators are defined in the table below:
+
+| M-ary Operator | Description | Default|
+|:-:|:--|:--|:--|
+|`AND`| Logical AND of the validity of the edge-group members. Edge-group is valid only if all members are valid. | Yes |
+|`OR`| Logical OR of the validity of the edge-group members. Edge-group is valid if all members are valid. | No |
+|`NAND`| Logical NAND of the validity of the edge-group members. Edge-group is valid only if not all members are valid. | No |
+|`NOR`| Logical NOR of the validity of the edge-group members. Edge-group is valid only if all members are invalid. | No |
+|`AVG`| Arithmetic average of a given edge-group member property. Averaged property is defined by the schema or EGF. | No |
+|`WAVG`| Weighted arithmetic average of a given edge-group member property. Weight is given by the `w` field. Averaged property is defined by the schema or EGF. | No |
+
+When the Operator, `o`, field is missing in an edge-group block, the default value for the Operator, `o`, field shall be the `AND` operator.
+
+The actual logic for interpreting the validity of a set of chained or treed ACDCs is EGF dependent.  But as a default, one may interpret a set of chained (treed) ACDCs as a provenance chain (tree) with the default logic explained below.
+
+When the top-level Edge-group, the Edge Section includes only one Edge, the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of the connected far node ACDC pointed to by that edge may be considered a link in a provenance chain.  When any node in a provenance chain is invalid, then an edge that points to that node is also invalid. If a node has an invalid Edge, then the node is invalid.  To elaborate, a chain of nodes with edges has a head and a tail. The edges are directed from the head to the tail. All links from the node at the head at one end of a chain to the tail at the other end must be valid in order for the node (head) to be valid. If any links between the head and the tail are broken (invalid), then the head is itself invalid. The unary operators (defined below) for edges enable modulation of the validation logic of a given edge/node in a chain of ACDCs.
+
+When the top-level Edge-group, the Edge Section includes more than one Edge directly or indirectly (as nested Edge(s) in nested Edge-group), then the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of all the connected far node ACDCs pointed to by those edges may be a provenance tree.  Now, instead of a single chain from the head to a single tail, we have a tree with the truck at the head and branches as chains of directed edges that each point to a branch tail (leaf) node. To clarify, each branch is a chain from head to branch tail.  All branches from the head must be valid for the head node to be valid. The m-ary operators (defined above) in combination with the unary operators (defined below) allow modulation of the validation aggregation logic of groups of edges/nodes at each branch in a tree of ACDCs.
+
+##### Weight, `w` field
+The Weight, `w` field must appear immediately following all of the SAID, `d` field,  UUID, `u` field (when present), and Operator, `o` field  (when present) in the Edge-group block. The Weight field enables weighted averages with operators that perform some type of weighted average, such as the `WAVG` operator. The top-level Edge-group shall not have a weight, `w` field, because it is not a member of another Edge-group.
+
+A Edge-group with a weight provides an aggregate of weighted directed edges. Weighted directed edges may represent degrees of confidence or likelihood. PGs with weighted, directed edges are commonly used for machine learning or reasoning under uncertainty. The Weight, `w` field provides a reserved label for the primary weight on an Edge group to be applied by the operator of its enclosing Edge-group. To elaborate, many aggregating operators used for automated reasoning, such as the weighted average, `WAVG`, Operator, or ranking aggregation operators, depend on each input's weight. To simplify the semantics for such operators, the Weight, `w`, field is the reserved field label for weighting. Other fields with other labels (labeled Edge-group properties) could provide other types of weights, but having a default label, namely `w`, simplifies the default definitions of weighted operators.
+
+##### Labeled nested edge and edge-group fields
+
+Edge-groups and Edges nested within a given Edge-group appear as labeled fields whose labels are not any of the reserved field labels for either Edge-groups or Edges, namely, `[d, u, n, s, o, w]'. Labeled nested Edge or Edge-group fields must appear after all of any fields with a reserved field label.
+
+Each nested Edge or Edge-group block within an Edge-group including the top-level Edge Section Edge-group shall be labeled with a locally unique non-reserved field label that indicates the type of the nested block. To clarify, each nested block in every Edge-group gets its own field with its own local (to the ACDC) label. The field's value may be either an edge sub-block or when in compact form, a string. The compact forms are defined below.
+
+Note that each nested block shall not include a type field. The type of each block is provided by that associated sub-schema in the Edge Section's sub-schema with a matching label. This is in accordance with the design principle of ACDCs that may be succinctly expressed as "type-is-schema." This approach varies somewhat from other types of property graphs, which often do not have a schema [@PGM][@Dots][@KG]. Because ACDCs have a schema, they leverage it to provide property graph edge types with a cleaner separation of concerns. Notwithstanding this separation, an Edge block may include a constraint on the type of the ACDC to which that Edge points by including the SAID of the schema of the pointed-to ACDC as a property of that edge (see below).  
+
+A main distinguishing feature of a property graph (PG) is that both nodes and edges may have a set of properties [@PGM][@Dots][@KG]. These might include modifiers that influence how the connected node is to be combined or place a constraint on the allowed type(s) of connected nodes. Each Edge's block provides the Edge's properties vis-a-vis a property graph. Additional properties may be inferred from the properties of an enclosing Edge-group's block. Each labeled Edge and Edge-group type is defined by the sub-schema designated by its label. 
+
+#### Edge
+
+The reserved field labels within an Edge sub-block are defined in the table below.
 
 | Label | Title | Description |
 |:-:|:--|:--|
 |`d`| Digest (SAID) | Optional, self-referential fully qualified cryptographic digest of enclosing edge map. |
 |`u`| UUID | Optional random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
+|`n`| Node| Required SAID of the far node ACDC as the terminating point of a directed edge that connects the edge's encapsulating near node ACDC to the specified far node ACDC as a fragment of a distributed property graph (PG).|
 |`s`| Schema| Optional SAID of the JSON Schema block of the far node ACDC. |
-|`n`| Node| Required SAID of the far ACDC as the terminating point of a directed edge that connects the edge's encapsulating near ACDC to the specified far ACDC as a fragment of a distributed property graph (PG).|
-|`o`| Operator| Optional as either a unary operator on edge or an m-ary operator on edge-group in edge section. Enables expression of the edge logic on edge subgraph.|
+|`o`| Operator| Optional as either a unary operator on the edge itself or an m-ary operator on the edge-group in edge section. Enables expression of the edge logic on edge subgraph.|
 |`w`| Weight| Optional edge weight property that enables default property for directed weighted edges and operators that use weights.|
 
+An Edge block shall have a node, `n`, field. This differentiates an Edge block from an Edge-group block.  The SAID, `d`, UUID, `u`, schema, `s`, operator, `o`, and weight, `w`  fields are optional. To clarify, each Edge block shall have a node, `n`, field and  may have any combination of SAID, `d`, UUID, `u`, schema, `s`, operator, `o`, or weight, `w` fields. When present the order of appearance of these fields is as follows: `[d, u, n, s, o, w]'.
 
-The node, `n`, field is required. The SAID, `d`, UUID, `u`, schema, `s`, operator, `o`, and weight, `w`,  fields are optional. To clarify, each edge sub-block MUST have a node, `n`, field and  MAY have any combination of SAID, `d`, UUID, `u`, schema, `s`, operator, `o`, or weight, `w`, fields.
+##### SAID, `d` field
 
-##### SAID field
+The SAID, `d` field is optional but, when present, shall appear as the first field in the Edge block. The value of this field shall be the SAID of its enclosing block.
 
-When present, the SAID, `d`, field must appear as the first field in the edge sub-block. When present, the value of the SAID, `d` field must be the SAID of its enclosing edge sub-block.
+###### Compact edge
 
-##### UUID field
+Given that an individual edge's property block includes a SAID, `d`, field, a compact representation of the edge's property block is provided by replacing it with its SAID. This may be useful for complex edges with many properties. This is called a compact edge. The schema for that edge's label shall indicate that the edge value is the edge block SAID.
 
-A UUID, `u`, field must not appear unless there is also a SAID, `d` field. When present, the UUID, `u`, field must appear immediately after as the SAID, `d`, field in the edge sub-block. When present, the value of the UUID, `u` is a pseudorandom string with approximately 128 bits of cryptographic entropy. The UUID, `u`, field acts as a salty nonce to hide the values of the edge sub-block in spite of knowledge of the edge sub-blocks SAID, `d`, field and its, the edge's, actual near schema (not its far node schema field).
+##### UUID, `u` field
 
-##### Node field 
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge block. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
 
-When the edge sub-block does not include a SAID, `d`, field then the node, `n`, field must appear as the first field in the edge sub-block, i.e., following the SAID, `d`, field which is first. When the edge sub-block does include a SAID, `d`, field then the node, `n`, field must appear as the second field in the edge sub-block.
-
-The value of the required node, `n`, field is the SAID of the ACDC to which the edge connects i.e., the node, `n`, field indicated, designates, references, or "points to" another ACDC. The edge is directed from the near node that is the ACDC in which the edge sub-block resides and is directed to the far node that is the ACDC indicated by the node, `n`, field of that edge sub-block. In order for the edge (chain) to be valid, the ACDC Validator must confirm that the SAID of the provided far ACDC matches the node, `n`, field value given in the edge sub-block in near ACDC and must confirm that the provided far ACDC satisfies its own schema.
-
-##### Schema field
-
-When present, the schema, `s` field must appear immediately following the node `n`, field in the edge sub-block. When present, the value of the schema, `s` field must be the SAID of the top-level schema, `s`, field of the ACDC indicated by the edge's far node, `n`, field. When the schema, `s`, field is present in an edge sub-block, in order for the edge (chain) to be valid, the ACDC Validator, after validating that the provided far ACDC indicated by the node, `n`, field satisfies its (the far ACDC's) own schema, must also confirm that the value of the edge's schema, `s`, field matches the SAID of the far ACDC's schema as indicated by its top-level schema, `s`, field.
-
-The following example adds both SAID, `d`, and schema, `s`, fields (edge properties) to the edge sub-block.
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
-    }
-  }
-}
-```
-
-##### Operator field 
-
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/23
-:::
-
-When present, the operator, `o` field must appear immediately following all of the SAID, `d`, node, `n`, or schema, `s`, fields in the edge sub-block. The function of the operator field is explained in a later section.
-
-##### Weight field
-
-When present, the weight, `w` field must appear immediately following all of the SAID, `d`, node, `n`, schema, `s`, or operator, `o`, fields in the edge sub-block. The function of the weight field is explained in a later section.
-
-#### Globally distributed secure graph fragments 
-
-Abstractly, an ACDC with one or more edges may be a fragment of a distributed property graph. However, the local label does not enable the direct unique global resolution of a given edge including its properties other than a trivial edge with only one property, its node, `n` field. To enable an edge with additional properties to be globally uniquely resolvable, that edge's block must have a SAID, `d`, field. Because a SAID is a cryptographic digest it will universally and uniquely identify an edge with a given set of properties [@Hash]. This allows ACDCs to be used as secure fragments of a globally distributed property graph (PG). This enables a property graph to serve as a global knowledge graph in a secure manner that crosses trust domains [@PGM][@Dots][@KG]. This is shown below.
+The absence of the UUID, `u` field in an Edge block makes that edge a Public Edge. 
+The presence of the UUID, `u` field in an Edge block makes that Edge a Private Edge.  A Private Edge in compact form, i.e., a Compact Private Edge, enables a presenter of that ACDC to make a verifiable commitment to the ACDC attached to the edge without disclosing any details of that ACDC, including the ACDC's SAID. Private ACDCs (nodes) and Private Edges may be combined to better protect the privacy of the information in a distributed property graph.
 
 
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "d": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "w": "high"
-    }
-  }
-}
-```
+##### Node, `n` field
 
-#### Compact edge
+When an edge block does not include a SAID, `d` field, then the node, `n` field must appear as the first field in the block. 
 
-Given that an individual edge's property block includes a SAID, `d`, field then a compact representation of the edge's property block is provided by replacing it with its SAID. This may be useful for complex edges with many properties. This is called a compact edge. This is shown as follows,
+The value of the required node, `n` field, is the SAID of the ACDC to which the edge connects, i.e., the node, `n` field indicates, designates, references, links, or "points to" another ACDC called the far node. To clarify, the edge is directed from the near node, i.e., the ACDC in which the edge block resides, to the far node, which is the ACDC indicated by the value of node, `n` field of that block. The edges and nodes form a directed acyclic graph (DAG). 
+
+In order for a given Edge to be valid, at the very least, a Validator shall confirm that the SAID of the provided far node ACDC matches the node, `n` field value given in the near node ACDC edge block and shall confirm that the provided far node ACDC satisfies its own schema. When the edge block has a schema, `s` field is present (see below), then the far node shall also validate against the schema indicated by the near node edge's schema, `s` field value.
+
+
+###### Simple compact edge
+
+When an Edge sub-block has only one field, that is, its node, `n` field, i.e., it has no other properties, then the edge block may use an alternate simplified, compact form where the labeled edge field value is the value of its node, `n,` field. The schema for that edge's label shall indicate that the edge value is a node SAID and not the edge block SAID, as would be the case for the normal compact form shown above. The edge is, therefore, public.  This enables the very compact expression of simple public edges.
+
+
+##### Schema, `s` field
+
+When present, the schema `s` field must appear immediately following the node `n` field in the edge sub-block. The schema, `s` field provides an additional constraint on the far node ACDC. The far node ACDC shall also validate against an edge block schema, `s` field when present.  To clarify, the Validator, after validating that the provided far node ACDC indicated by the node, `n` field satisfies its (the far ACDC's) own schema, shall also confirm that far node ACDC passes schema validation with respect to the edge's `s` field value. This validation is simplified whenever the SAID of the far node ACDC schema matches the SAID fo the edge's schema, `s` field. Then, only one schema validation has to be performed. When the schema SAIDs differ, then two schema validation runs have to be performed. The edge schema, `s` field enables a given Issuer of an ACDC to force forward compatibility constraints on old ACDCs to which a new issuance is chained.
+
+##### Operator, `o` field
+
+The Operator, `o` field must appear immediately following the SAID, `d` field, UUID, `u` field, node, `n` field, or schema, `s` field  (when present) in the Edge block. The Operator, `o`, field value in an Edge block is a unary operator on the Edge itself. When more than one unary operator is applied to a given Edge, then the value of the Operator, `o`, field is a list of those unary operators. When multiple unary operators appear in the list, and there is a conflict between operators, the latest operator among the conflicting operators in the list takes precedence. This differs from the Operator, `o` field in an Edge-group block (see above).
+
+The unary operators are defined in the table below:
+
+| Unary Operator | Description | Default|
+|:-:|:--|:--|:--|
+|`I2I`| Issuer-To-Issuee, The Issuer AID of this ACDC shall be the Issuee AID of the node this Edge points to.  | Yes |
+|`NI2I`| Not-Issuer-To-Issuee, The Issuer AID of this ACDC may or may not be the Issuee AID of the node that this Edge points to. |  No |
+|`DI2I`| Delegated-Issuer-To-Issuee, The Issuer AID of this ACDC must be either the Issuee AID or a delegated AID of the Issuee AID of the node this edge points to. | No |
+|`NOT`| Logical NOT. The validity of the node this edge points to is inverted. If valid, then not valid. If invalid then valid.  | No |
+
+When the Operator, `o`, field is missing or empty or is present but does not include any of the `I2I`, `NI2I` or `DI2I` Operators then:
+
+- If the node pointed to by the edge is a targeted ACDC, i.e., has an Issuee, then the  `I2I` Operator shall be appended to the Operator, `o`, field's effective list value.
+
+- If the node pointed to by the edge block is an Untargeted ACDC i.e., does not have an Issuee, then the `NI2I` operator shall be appended to the Operator, `o`, field's effective list value.
+
+
+Many ACDC chains use targeted ACDCs (i.e., have Issuees). A chain of Issuer-To-Issuee-To-Issuer targeted ACDCs in which each Issuee becomes the Issuer of the next ACDC in the chain can be used to provide a chain-of-authority. A common use case of a chain-of-authority is a delegation chain for authorization.
+
+The `I2I` unary operator, when present, means that the Issuer AID of the current ACDC in which the edge resides must be the Issuee AID of the node to which the edge points. Therefore, to be valid, the ACDC node pointed to by this edge shall be a Targeted ACDC. This is the default value when the operator 'o' field value is missing or empty.
+
+The `NI2I` unary operator, when present, removes or nullifies any requirement expressed by the `I2I` operator described above. In other words, any requirement that the Issuer AID of the current ACDC in which the edge resides must be the Issuee AID, if any, of the node the edge points to is relaxed (not applicable). To clarify, when operative (present), the `NI2I` Operator means that both an Untargeted ACDC or Targeted ACDC, as the node pointed to by the edge, may be valid even when untargeted or if targeted even when the Issuer of the ACDC in which the edge appears is not the Issuee AID, of that node to which the edge points.
+
+The `DI2I` unary Operator, when present, expands the class of allowed Issuer AIDs of the node the edge resides in to include not only the Issuee AID but also any delegated AIDS of the Issuee of the node to which the edge points.  Therefore, to be valid, the ACDC node pointed to by this edge shall be a Targeted ACDC.
+
+The `NOT` unary Operator, when present, inverts the validation truthiness of the node pointed to by this Edge. If this Edge's far node ACDC is invalid, then the presence of the `NOT` operator makes this Edge valid. Conversely, if this Edge's far node ACDC is valid, then the presence of the `NOT` operator makes this Edge invalid.   
+
+###### Weight, `w`, field.
+
+The Weight, `w` field must appear immediately following the SAID, `d` field, UUID, `u` field, Node, `n` field, Schema, `s` field, or Operator, `o` field  (when present) in the Edge block. The Weight field enables weighted direct edges. The weighted directed edges within an enclosing Edge-group may be aggregated when that Edge-group's operator performs some type of weighted average.
+
+Weighted directed edges may represent degrees of confidence or likelihood. PGs with weighted, directed edges are commonly used for machine learning or reasoning under uncertainty. The Weight, `w` field provides a reserved label for the primary weight on an Edge. To elaborate, many aggregating operators used for automated reasoning, such as the weighted average, `WAVG`, Operator, or ranking aggregation operators, depend on each input's weight. To simplify the semantics for such operators, the Weight, `w` field is the reserved field label for weighting. Other fields with other labels (labeled Edge properties) could provide other types of weights, but having a default label, namely `w` simplifies the default definitions of weighted operators.
+
+##### Labeled property fields
+
+Edge property fields appear as labeled fields whose labels are not any of the reserved field labels for either Edge-groups or Edges, namely, `[d, u, n, s, o, w].' Labeled property fields must appear after all of any fields with a reserved field label.
+
+
+
+#### Edge Section Examples
+
+Examples of an Edge section with schema are shown below.
+
+ This is shown as follows,
 
 ```json
 {
@@ -1042,9 +1075,7 @@ Given that an individual edge's property block includes a SAID, `d`, field then 
 }
 ```
 
-#### Simple compact edge
-
-When an edge sub-block has only one field that is its node, `n`, field then the edge block may use an alternate simplified compact form where the labeled edge field value is the value of its node, `n`, field. The schema for that particular edge label, in this case, `"boss"`, will indicate that the edge value is a node SAID and not the edge sub-block SAID as would be the case for the normal compact form shown above. This alternate compact form is shown below.
+This alternate compact form is shown below.
 
 ```json
 {
@@ -1055,10 +1086,6 @@ When an edge sub-block has only one field that is its node, `n`, field then the 
   }
 }
 ```
-
-#### Private edge
-
-Each edge's properties may be blinded by its SAID, `d`, field (i.e., be private) if its properties block includes a UUID, `u` field. As with UUID, `u`, fields used elsewhere in ACDC, if the UUID, `u`, field value has sufficient entropy then the values of the properties of its enclosing block are not discoverable in a computationally feasible manner merely given the schema for the edge block and its SAID, `d` field. This is called a private edge. When a private edge is provided in compact form then the edge detail is hidden and is partially disclosable. An uncompacted private edge is shown below.
 
 ```json
 {
@@ -1076,60 +1103,8 @@ Each edge's properties may be blinded by its SAID, `d`, field (i.e., be private)
 }
 ```
 
-When an edge points to a private ACDC, a Discloser may choose to use a metadata version of that private ACDC when presenting the node, `n`, field of that edge prior to acceptance of the terms of disclosure. The Disclosee can verify the metadata of the private node without the Discloser exposing the actual node contents via the actual node SAID or other attributes.
 
-Private ACDCs (nodes) and private edges may be used in combination to prevent an unpermissioned correlation of the distributed property graph.
-
-#### Operations on edges and edge-groups
-
-When the top-level edge section, `e`, field includes more than one edge there is a need or opportunity to define the logic for evaluating those edges with respect to validating the ACDC itself with respect to the validity of the other ACDCs to which it is connected. More than one edge creates a provenance tree not simply a provenance chain. The obvious default for a chain is that all links in the chain must be valid in order for the chain itself to be valid, or more precisely for the tail of the chain to be valid. If any links between the head and the tail are broken (invalid) then the tail is not valid. This default logic may not be so useful in all cases when a given ACDC is the tail of multiple parallel chains (i.e., a branching node in a tree of chains). Therefore, provided herein is the syntax for exactly specifying the operations to perform on each edge and groups of edge-groups in its edge section.
-
-##### Label types 
-
-There are three types of labels in edge sub-blocks :
-
-[//]: # (format as table)
-
-Reserved field labels (Metadata).
-  `d` for SAID of block
-  `u` for UUID (salty nonce)
-  `n` for node SAID (far ACDC)
-  `s` for schema SAID ( far ACDC)
-  `o` for Operator
-  `w` for Weight
-
-Edge field map labels (single edges) - any value except reserved values above.
-
-Edge-group field map labels (aggregates of Edges) - any value except reserved values above.
-
-##### Block types
-
-There are two types of field maps or blocks that may appear as values of fields within an edge section, `e`, field either at the top level or nested:
-
-###### Edge-group 
-
-An edge-group must not have a node, `n`, metadata field. Its non-metadata field values may include other (sub) edge-group blocks, edge blocks or other properties.
-
-###### Edge
-
-An edge must have a node, `n`, metadata field. Its non-metadata field values must not include edge-group blocks or other edge blocks but may include other types of properties. From a graph perspective, _edge blocks terminate at their node, `n`, field and are not themselves nestable. An _edge block is a leaf with respect to any nested _edge-group_ blocks in which the edge appears. It is therefore also a leaf with respect to its enclosing top-level edge section, `e`, field.  The ACDC node that an edge points to may have its own edge-groups or edges in that node's own top-level edge section.
-
-The top-level edge section, `e`, field value is always an edge-group block.
-
-With respect to the granularity of a property graph consisting of ACDCs as nodes, nested edge-groups within a given top-level edge field, `e`, field of a given ACDC constitute a sub-graph whose nodes are edge-groups, not ACDCs. One of the attractive features of property graphs (PGs) is their support for different edge and node types which enables nested sub-graphs such as is being employed here to support the expression of complex logical or aggregative operations on groups of edges (as subnodes) within the top-level edge section, `e`, field of an ACDC (as supernode).
-
-###### Operator, `o`, field
-
-The meaning of the Operator, `o`, metadata field label depends on which type of block it appears in.
-
-When appearing in an edge-group block, then the operator, `o`, field value is an aggregating (m-ary) operator, such as, `OR`, `AND`, `AVG`, `NAND`, `NOR`, etc. Its operator applies to all the Edges or edge-groups that appear in that edge-group block.
-
-When appearing in an edge block, then the operator, `o`, field value is a unary operator like `NOT`.  When more than one unary operator applies to a given edge, then the value of the Operator, `o`, field is a list of those unary operators.
-
-###### Weight, `w`, field.
-
-Weighted directed edges represent degrees of confidence or likelihood. PGs with weighted directed edges are commonly used for machine learning or reasoning under uncertainty. The Weight, `w` field provides a reserved label for the primary weight. To elaborate, many aggregating operators used for automated reasoning such as the weighted average, `WAVG`, Operator or ranking aggregation operators, depend on each edge having a weight. To simplify the semantics for such operators, the Weight, `w`, field is the reserved field label for weighting. Other fields with other labels could provide other types of weights but having a default label, namely `w`, simplifies the default definitions of weighted operators.
-
+##### Example 
 The following example adds a weight property to the edge sub-block as indicated by the Weight, `w`, field.
 
 ```json
@@ -1145,47 +1120,133 @@ The following example adds a weight property to the edge sub-block as indicated 
   }
 }
 ```
+##### Edge sub-block example
 
-###### M-ary operators
+The following example shows an Edge section with a single edge sub-block labeled `boss` with all reserved fields.  
+```json
+{
+  "e":
+  {
+    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
+    "u": "0AwjaDAE0qHcgNghkDaG7OY1",
+    "o": "AND",
+    "boss":
+    {
+      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
+      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
+      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
+      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
+      "o": "NOT",
+      "w": "high"
+    }
+    "boss":
+    {
+      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
+      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
+      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
+      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
+    }
+  }
+}
+```
 
-There are two basic m-ary operators defined for ACDCs. These are:
 
-| M-ary Operator | Description | Type | Default|
-|:-:|:--|:--|:--|
-|`AND`| All edges or edge-groups in the edge-group must be valid for the edge-group to be valid  | Combination | Yes |
-|`OR`| Only one of the edges or edge-groups in the edge-group must be valid for the edge-group to be valid | Combination |  No |
 
-##### Special unary operators
+In the compact ACDC examples above, the edge section has been compacted into merely the SAID of that section. Suppose that the uncompacted value of the edge section denoted by the top-level edge, `e`, field is as follows,
 
-There are three special unary operators defined for ACDCs. These are:
 
-| Unary Operator | Description |Type | Default|
-|:-:|:--|:--|:--|
-|`I2I`| Issuee-To-Issuer, Issuer AID of this ACDC must Issuee AID of node the Edge points to  | Constraint | Yes |
-|`NI2I`| Not-Issuee-To-Issuer, Issuer AID if any of this ACDC may or may not be Issuee AID of node that the Edge points to | Constraint |  No |
-|`DI2I`| Delegated-Issuee-To-Issuer, Issuer AID of this ACDC must be either the Issuee AID or delegated AID of the Issuee AID of the node the edge points to | Constraint | No |
+with composed subschema below,
+```
+"e":
+{
+  "description": "edge section",
+  "oneOf":
+  [
+    {
+      "description": "edge section SAID",
+      "type": "string"
+    },
+    {
+      "description": "edge detail",
+      "type": "object",
+      "required":
+      [
+        "d",
+        "boss"
+      ],
+      "properties":
+      {
+        "d":
+        {
+          "description": "edge section SAID",
+          "type": "string"
+        },
+        "boss":
+        {
+          "description": "boss edge",
+          "type": "object",
+          "required":
+          [
+            "d",
+            "n",
+            "s",
+            "w"
+          ],
+          "properties":
+          {
+            "d":
+            {
+              "description": "edge SAID",
+              "type": "string"
+            },
+            "n":
+            {
+              "description": "far node SAID",
+              "type": "string"
+            },
+            "s":
+            {
+              "description": "far node schema SAID",
+              "type": "string",
+              "const": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
+            },
+            "w":
+            {
+              "description": "edge weight",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+},
+```
 
-Many ACDC chains use targeted ACDCs (i.e., have Issuees). A chain of Issuer-To-Issuee-To-Issuer targeted ACDCs in which each Issuee becomes the Issuer of the next ACDC in the chain can be used to provide a chain-of-authority. A common use case of a chain-of-authority is a delegation chain for authorization.
 
-The `I2I` unary operator when present means that the Issuer AID of the current ACDC in which the edge resides must be the Issuee AID of the node to which the edge points. This also means, therefore, that the ACDC node pointed to by the edge must also be a Targeted ACDC. This is the default value when none of `I2I`, `NI2I`, or `DI2I` is present.
+In the example above, `boss` is the edge label. 
+The edge section's top-level SAID, `d`, field is the SAID of the edge block and is the same SAID used as the compacted value of the ACDC's top-level edge, `e`, field. 
 
-The `NI2I` unary operator when present removes or nullifies any requirement expressed by the dual `I2I` operator described above. In other words, any requirement that the Issuer AID of the current ACDC in which the edge resides must be the Issuee AID, if any, of the node the edge points to is relaxed (not applicable). To clarify, when operative (present), the `NI2I` Operator means that both an Untargeted ACDC or Targeted ACDC as the node pointed to by the edge still may be valid even when untargeted or if targeted even when the Issuer of the ACDC in which the edge appears is not the Issuee AID, of that node to which the edge points.
 
-The `DI2I` unary Operator when present expands the class of allowed Issuer AIDs of the node the edge resides in to include not only the Issuee AID but also any delegated AIDS of the Issuee of the node to which the edge points.  This also means, therefore, that the ACDC node pointed to by the edge also must be a Targeted ACDC.
 
-If more than one of the `I2I`, `NI2I`, or `DI2I` Operators appear in an Operator, `o`, field list, then the last one appearing in the list is the operative one.
+```json
+{
+  "e":
+  {
+    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
+    "boss":
+    {
+      "d": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn",
+      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
+      "w": "high"
+    }
+  }
+}
+```
 
-##### Defaults for missing operators
-
-When the Operator, `o`, field is missing in an edge-group block, the default value for the Operator, `o`, field is `AND`.
-
-When the Operator, `o`, field is missing or empty in an edge block, or is present but does not include any of the `I2I`, `NI2I` or `DI2I` Operators then:
-
-If the node pointed to by the edge is a targeted ACDC, i.e., has an Issuee, by default it is assumed that the `I2I` Operator is appended to the Operator, `o`, field's effective list value.
-
-If the node pointed to by the edge block is a Untargeted ACDC i.e., does not have an Issuee, by default, it is assumed that the `NI2I` operator is appended to the Operator, `o`, field's effective list value.
-
-###### Examples
+##### Examples
 
 Defaults:
 
@@ -1345,20 +1406,10 @@ In the following example: The top-level edge-block uses the default of `AND` and
 }
 ```
 
+##### Examples Summary
 
-This example provides a simple but highly expressive syntax for applying (m-ary) aggregating Operators to nestable groups of edges and unary Operators to edges individually within those groups. This is a general approach with high expressive power. It satisfies many business logic requirements similar to that of SGL.
+As the examples above have shown, the Edge Section syntax enables the composable and extensible but efficient expression of aggregating (m-ary) and unary operators both singly and in combination as applied to nestable groups of edges.  The intelligent defaults for the Operator, `o`, field, namely, `AND` for m-ary operators and `I2I` for unary operators, means that in many use cases, the Operator, `o`, field, does not even need to be present. This syntax is sufficiently general in scope to satisfy the contemplated use cases, including those with more advanced business logic. 
 
-Certainly, an even more expressive syntax could be developed. The proposed syntax, however, is relatively simple and compact. It has intelligent defaults and is sufficiently general in scope to satisfy all the currently contemplated use cases.
-
-The intelligent defaults for the Operator, `o`, field, including the default application of the `I2I` or `NI2I` unary operator, means that in most current use cases, the Operator, `o`, field, does not even need to be present.
-
-###### Node discovery
-
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/26
-:::
-
-In general, the discovery of the details of an ACDC referenced as a node, `n` field value, in an edge sub-block begins with the node SAID or the SAID of the associated edge sub-block. Because a SAID is a cryptographic digest with high collision resistance, it provides a universally unique identifier to the referenced ACDC as a node. The discovery of a service endpoint URL that provides database access to a copy of the ACDC may be bootstrapped via an OOBI (Out-Of-Band-Introduction) that links the service endpoint URL to the SAID of the ACDC [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at the time of issuance a copy of the referenced ACDC. In either case, after a successful exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced ACDCs as nodes in the edge sections of all ACDCs so chained. That Issuee will then have everything it needs to make a successful disclosure to some other Disclosee. This is the essence of Percolated discovery.
 
 ### Rule Section  
 
