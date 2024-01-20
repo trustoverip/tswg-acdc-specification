@@ -885,7 +885,7 @@ The Edge Section, `e` field appears as a top-level block within the ACDC.  The E
 
 #### Block types
 
-There are two types of field maps or blocks that may appear as values of fields within the Edge Section, `e` field either at the top level of the Edge block itself or nested. These are Edges or Edge-groups. Edges may only appear as locally unique labeled (using non-reserved labels)  blocks nested within an Edge Group. 
+There are two types of field maps or blocks that may appear as values of fields within the Edge Section, `e` field either at the top level of the Edge block itself or nested. These are Edges or Edge-groups. Edges may only appear as locally unique labeled (using non-reserved labels)  blocks nested within an Edge Group. There are two exceptions for Edges, compact and simple compact form. In these two forms the Edge field value is not a block but a string. These exceptions are defined below.
 
 The Edge Section is the top-level Edge-group. 
 
@@ -926,10 +926,10 @@ When present, the order of appearance of these fields is as follows: `[d, u, o, 
 An Edge-group shall not have a node, `n`, field. 
 
 ##### SAID, `d` field
-The SAID, `d` field is required and shall appear as the first field in the Edge-group block. The value of this field shall be the SAID of its enclosing block.
+The SAID, `d` field is optional but when it appears it shall appear as the first field in the Edge-group block. The value of this field shall be the SAID of its enclosing block.
 
 ##### UUID, `u` field
-The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge-group block. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge-group block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
 
 ##### Operator, `o` field
 The Operator, `o` field must appear immediately following the SAID, `d` field,  and UUID, `u` field (when present) in the Edge-group block. The Operator field in an Edge-group block is an aggregating (m-ary) operator on all the nested labeled Edges or Edge-groups that appear in its block. This differs from the Operator, `o` field in an Edge block (see below).
@@ -947,11 +947,11 @@ The m-ary operators are defined in the table below:
 
 When the Operator, `o`, field is missing in an edge-group block, the default value for the Operator, `o`, field shall be the `AND` operator.
 
-The actual logic for interpreting the validity of a set of chained or treed ACDCs is EGF dependent.  But as a default, one may interpret a set of chained (treed) ACDCs as a provenance chain (tree) with the default logic explained below.
+The actual logic for interpreting the validity of a set of chained or treed ACDCs is EGF-dependent.  But as a default, at least at the time of issuance, one may interpret a set of chained (treed) ACDCs as a provenance chain (tree) with the default logic explained below. ACDCs in a provenance chain or branch that have expiration dates or are dynamically revocable add a timeliness property to the validation logic in the event that the chain was unbroken at issuance but becomes broken later. The timeliness logic is EGF-dependent. 
 
-When the top-level Edge-group, the Edge Section includes only one Edge, the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of the connected far node ACDC pointed to by that edge may be considered a link in a provenance chain.  When any node in a provenance chain is invalid, then an edge that points to that node is also invalid. If a node has an invalid Edge, then the node is invalid.  To elaborate, a chain of nodes with edges has a head and a tail. The edges are directed from the head to the tail. All links from the node at the head at one end of a chain to the tail at the other end must be valid in order for the node (head) to be valid. If any links between the head and the tail are broken (invalid), then the head is itself invalid. The unary operators (defined below) for edges enable modulation of the validation logic of a given edge/node in a chain of ACDCs.
+When the top-level Edge-group, the Edge Section includes only one Edge, the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of the connected far node ACDC pointed to by that edge may be considered a link in a provenance chain.  When any node in a provenance chain is invalid, an edge pointing to that node is also invalid. If a node has an invalid Edge, then the node is invalid.  To elaborate, a chain of nodes with edges has a head and a tail. The edges are directed from the head to the tail. All links from the node at the head at one end of a chain to the tail at the other end must be valid in order for the node (head) to be valid. If any links between the head and the tail are broken (invalid), then the head is itself invalid. The unary operators (defined below) for edges enable modulation of the validation logic of a given edge/node in a chain of ACDCs.
 
-When the top-level Edge-group, the Edge Section includes more than one Edge directly or indirectly (as nested Edge(s) in nested Edge-group), then the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of all the connected far node ACDCs pointed to by those edges may be a provenance tree.  Now, instead of a single chain from the head to a single tail, we have a tree with the truck at the head and branches as chains of directed edges that each point to a branch tail (leaf) node. To clarify, each branch is a chain from head to branch tail.  All branches from the head must be valid for the head node to be valid. The m-ary operators (defined above) in combination with the unary operators (defined below) allow modulation of the validation aggregation logic of groups of edges/nodes at each branch in a tree of ACDCs.
+When the top-level Edge-group, the Edge Section includes more than one Edge directly or indirectly (as nested Edge(s) in nested Edge-group), then the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of all the connected far node ACDCs pointed to by those edges may be a provenance tree.  Instead of a single chain from the head to a single tail, we have a tree with the truck at the head and branches as chains of directed edges that each point to a branch tail (leaf) node. To clarify, each branch is a chain from head to branch tail.  All branches from the head must be valid for the head node to be valid. The m-ary operators (defined above), in combination with the unary operators (defined below), allow modulation of the validation aggregation logic of groups of edges/nodes at each branch in a tree of ACDCs.
 
 ##### Weight, `w` field
 The Weight, `w` field must appear immediately following all of the SAID, `d` field,  UUID, `u` field (when present), and Operator, `o` field  (when present) in the Edge-group block. The Weight field enables weighted averages with operators that perform some type of weighted average, such as the `WAVG` operator. The top-level Edge-group shall not have a weight, `w` field, because it is not a member of another Edge-group.
@@ -970,7 +970,9 @@ A main distinguishing feature of a property graph (PG) is that both nodes and ed
 
 #### Edge
 
-The reserved field labels within an Edge sub-block are defined in the table below.
+An Edge is typically represented as a block (field map). There are two exceptions, however, compact edge form and simple compact edge form. These are define below. The edge subschema is used to differentiate these two compact forms from the block form.
+
+The reserved field labels within an Edge block are defined in the table below.
 
 | Label | Title | Description |
 |:-:|:--|:--|
@@ -983,17 +985,18 @@ The reserved field labels within an Edge sub-block are defined in the table belo
 
 An Edge block shall have a node, `n`, field. This differentiates an Edge block from an Edge-group block.  The SAID, `d`, UUID, `u`, schema, `s`, operator, `o`, and weight, `w`  fields are optional. To clarify, each Edge block shall have a node, `n`, field and  may have any combination of SAID, `d`, UUID, `u`, schema, `s`, operator, `o`, or weight, `w` fields. When present the order of appearance of these fields is as follows: `[d, u, n, s, o, w]'.
 
+
 ##### SAID, `d` field
 
 The SAID, `d` field is optional but, when present, shall appear as the first field in the Edge block. The value of this field shall be the SAID of its enclosing block.
 
 ###### Compact edge
 
-Given that an individual edge's property block includes a SAID, `d`, field, a compact representation of the edge's property block is provided by replacing it with its SAID. This may be useful for complex edges with many properties. This is called a compact edge. The schema for that edge's label shall indicate that the edge value is the edge block SAID.
+Given that an individual edge's property block includes a SAID, `d`, field, a compact representation of the edge's property block is provided by replacing it with its SAID. This is called a compact edge. The schema for that edge's label shall indicate that the edge value is the edge block SAID by using a `oneOf` composition of the compact form and the expanded form. This may be useful for compacting complex edges with many properties and then expanding them later. When the edge block also includes a UUID, `u` field then compating also hides the edge properties for later disclosure. A compact edge without a UUID, `u` field is a public compact edge.  A compact edge with a UUID, `u` field is a private compact edge. 
 
 ##### UUID, `u` field
 
-The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge block. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
 
 The absence of the UUID, `u` field in an Edge block makes that edge a Public Edge. 
 The presence of the UUID, `u` field in an Edge block makes that Edge a Private Edge.  A Private Edge in compact form, i.e., a Compact Private Edge, enables a presenter of that ACDC to make a verifiable commitment to the ACDC attached to the edge without disclosing any details of that ACDC, including the ACDC's SAID. Private ACDCs (nodes) and Private Edges may be combined to better protect the privacy of the information in a distributed property graph.
@@ -1010,8 +1013,7 @@ In order for a given Edge to be valid, at the very least, a Validator shall conf
 
 ###### Simple compact edge
 
-When an Edge sub-block has only one field, that is, its node, `n` field, i.e., it has no other properties, then the edge block may use an alternate simplified, compact form where the labeled edge field value is the value of its node, `n,` field. The schema for that edge's label shall indicate that the edge value is a node SAID and not the edge block SAID, as would be the case for the normal compact form shown above. The edge is, therefore, public.  This enables the very compact expression of simple public edges.
-
+When an Edge sub-block has only one field, that is, its node, `n` field, i.e., it has no other properties, then the edge block may use an alternate simplified, compact form where the labeled edge field value is the value of its node, `n,` field. The edge is, therefore, public.  This enables the very compact expression of simple public edges. The schema for that edge's label shall indicate that the edge value is a far node SAID string and use a `oneOF` composition whose expanded block has only a Node, `n` field with the far node SAID as its value. 
 
 ##### Schema, `s` field
 
@@ -1047,7 +1049,7 @@ The `DI2I` unary Operator, when present, expands the class of allowed Issuer AID
 
 The `NOT` unary Operator, when present, inverts the validation truthiness of the node pointed to by this Edge. If this Edge's far node ACDC is invalid, then the presence of the `NOT` operator makes this Edge valid. Conversely, if this Edge's far node ACDC is valid, then the presence of the `NOT` operator makes this Edge invalid.   
 
-###### Weight, `w`, field.
+###### Weight, `w` field.
 
 The Weight, `w` field must appear immediately following the SAID, `d` field, UUID, `u` field, Node, `n` field, Schema, `s` field, or Operator, `o` field  (when present) in the Edge block. The Weight field enables weighted direct edges. The weighted directed edges within an enclosing Edge-group may be aggregated when that Edge-group's operator performs some type of weighted average.
 
@@ -1061,102 +1063,339 @@ Edge property fields appear as labeled fields whose labels are not any of the re
 
 #### Edge Section Examples
 
-Examples of an Edge section with schema are shown below.
+Consider four different ACDCs in compact form (see below). The Issuer of the first is named Amy with AID, `EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM`, the Issuer of the second is named Bob with AID, `EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK`, the Issuer of the third is named Cat with AID, `EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E`, and the Issuer of the fourth is named Dug with AID, `EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr`. Notice that the AID of each Issuer appears in the Issuer, `i` field of its respective ACDC below.
 
- This is shown as follows,
+Issued by Amy:
 
 ```json
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn"
-  }
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
+  "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
+  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
+  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
+  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
 }
 ```
 
-This alternate compact form is shown below.
+Issued by Bob:
 
 ```json
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA"
-  }
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
+  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
+  "i":  "EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqG",
+  "a":  "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9",
+  "r":  "EMORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3"
 }
 ```
 
+Issued by Cat:
+
 ```json
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "d": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn",
-      "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "w": "high"
-    }
-  }
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
+  "u":  "0ADAE0qHcgNghkDaG7OY1wja",
+  "i":  "EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
+  "a":  "EIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwL",
+  "r":  "EBe71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOL"
+}
+```
+
+Issued by Dug:
+
+```json
+{
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
+  "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4re",
+  "a":  "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
+  "r":  "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR"
 }
 ```
 
 
-##### Example 
-The following example adds a weight property to the edge sub-block as indicated by the Weight, `w`, field.
+
+##### Two edges
+
+Suppose that the Edge Section of the ACDC issued by Amy, when expanded, has two edges labeled `poe` for proof-of-entitlement and `data`.  The `poe` edge links back to the ACDC issued by Bob's AID and the `data` edge links back to the ACDC issued by Cat's AID. 
+
+Edge section expanded:
 
 ```json
 {
   "e":
   {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "w": "high"
-    }
-  }
-}
-```
-##### Edge sub-block example
-
-The following example shows an Edge section with a single edge sub-block labeled `boss` with all reserved fields.  
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
+    "d": "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
     "u": "0AwjaDAE0qHcgNghkDaG7OY1",
-    "o": "AND",
-    "boss":
+    "poe":
     {
       "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
       "u": "0ANghkDaG7OY1wjaDAE0qHcg",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
+      "n": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
       "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
-      "o": "NOT",
-      "w": "high"
-    }
-    "boss":
+    },
+    "data":
     {
-      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
-      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
+      "d": "ELxUdYerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOc",
+      "u": "0ADAE0qHcgNghkDaG7OY1wja",
+      "n": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
+      "s": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+      "o": "NI2I"
     }
   }
 }
 ```
 
+Edge section (compact private edges):
 
-
-In the compact ACDC examples above, the edge section has been compacted into merely the SAID of that section. Suppose that the uncompacted value of the edge section denoted by the top-level edge, `e`, field is as follows,
-
-
-with composed subschema below,
+```json
+{
+  "e":
+  {
+    "d": "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
+    "u": "0AwjaDAE0qHcgNghkDaG7OY1",
+    "poe": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
+    "data": "ELxUdYerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOc"
+  }
+}
 ```
+
+Edge section sub-schema:
+
+```json
+"e":
+{
+  "description": "edge section",
+  "oneOf":
+  [
+    {
+      "description": "edge section SAID",
+      "type": "string"
+    },
+    {
+      "description": "edge section detail",
+      "type": "object",
+      "required":
+      [
+        "d",
+        "u",
+        "poe",
+        "data"
+      ],
+      "properties":
+      {
+        "d":
+        {
+          "description": "edge section SAID",
+          "type": "string"
+        },
+        "u":
+        {
+          "description": "edge section UUID",
+          "type": "string"
+        },
+        "poe":
+        {
+          "description": "proof of entitlement edge",
+          "oneOf":
+          [
+            {
+              "description": "compact form edge detail SAID",
+              "type": "string"
+            },
+            {
+              "description": "edge detail",
+              "type": "object",
+              "required":
+              [
+                "d",
+                "u",
+                "n",
+                "s"
+              ],
+              "properties":
+              {
+                "d":
+                {
+                  "description": "edge SAID",
+                  "type": "string"
+                },
+                "u":
+                {
+                  "description": "edge UUID",
+                  "type": "string"
+                },
+                "n":
+                {
+                  "description": "far node SAID",
+                  "type": "string"
+                },
+                "s":
+                {
+                  "description": "far node schema SAID",
+                  "type": "string",
+                  "const": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "data":
+        {
+          "description": "data edge",
+          "oneOf":
+          [
+            {
+              "description": "compact form edge detail SAID",
+              "type": "string"
+            },
+            {
+              "description": "data edge detail",
+              "type": "object",
+              "required":
+              [
+                "d",
+                "u",
+                "n",
+                "s",
+                "o"
+              ],
+              "properties":
+              {
+                "d":
+                {
+                  "description": "edge SAID",
+                  "type": "string"
+                },
+                "u":
+                {
+                  "description": "edge UUID",
+                  "type": "string"
+                },
+                "n":
+                {
+                  "description": "far node SAID",
+                  "type": "string"
+                },
+                "s":
+                {
+                  "description": "far node schema SAID",
+                  "type": "string",
+                  "const": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+                },
+                "o":
+                {
+                  "description": "unary edge operator",
+                  "type": "string"
+                },
+              },
+              "additionalProperties": false
+            },
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}
+```
+
+Notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the Node, `n` field value of the `bob` edge block is the value of the SAID, `d` field of the ACDC issued by Bob, and the Node, `n` field value of the `cat` edge block is the value of the SAID, `d` field of the ACDC issued by Cat. Further, notice that the top-level Edge-group of the ACDC issued by Amy has no operator field. This means that the default m-ary operator `AND` is applied. Therefore Amy's ACDC is invalid unless both the linked ACDCs issued by Bob and Cat are valid. Moreover, notice that the Edge block labeled `poe` in Amy's ACDC has no operator, `o` field. This means that the default unary operator `I2I` is applied. This means that Bob's ACDC must designate Amy's AID as the Issuee in order for this edge to be valid. Finally, notice that the Edge block labeled `data` in Amy's ACDC has an operator, `o` field value of `NI2I`. This means that there is no requirement that Cat's ACDC designates Amy's AID as the Issuee in order for this edge to be valid. If it does, fine; if not, also fine.
+
+Suppose that the expanded Attribute section of the ACDC issued by Bob is as follows:
+
+```json
+"a":
+{
+  "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "u": "0ADAE0qHcgNghkDaG7OY1wja",
+  "i": "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+}
+```
+
+Because the value of the Issuee, `i`, field in Bob's attribute section is Amy's AID, the default `I2I` operator on Amy's edge labeled `poe` is satisfied. Thus, Amy's ACDC validates with respect to its edges.
+
+Both Edges can be individually compacted and private because they include both `d` and `u` fields. The schema allows this compact edge form with a `oneOf` composition on each of the edges. Notice that in the compact edge form the value of each labeled edge field is the SAID, `d` field value of its expanded form.  To elaborate, the Edge section can be expressed in one of three forms. These are:
+- compact private form, as a whole, because its schema uses the `oneOf` composition.
+- partially expanded form with compact private edges because each edge's sub-schema uses the `oneOf` composition.
+- fully expanded form with fully expanded edge blocks because of the combination of `oneOf` compositions at both the section and edge levels.
+
+##### Nested edge group
+ 
+In contrast to the previous example, this example shows a nested Edge-group in the ACDC issued by Amy. Amy's Edge Section when expanded, has three edges labeled `poe`, `sewer`, and `gas` as shown below, where each of these labeled edges links back to the ACDCs issued respectively by Bob's, Cat's, and Dug's AIDs. The nested Edge-group has label `poa` for proof-of-address. Some of the field values in the compact version of the ACDC issued by Amy must change because the edge section and schema are both different.
+
+Issued by Amy:
+
+```json
+{
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EHdSXCJnBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3g",
+  "u":  "0ADaG7OY1wjaDAE0qHcgNghk",
+  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
+  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "e":  "EJtQIYPvAu6DZIl3MOARH3dCdoFOLe71iheqcywJcnjt",
+  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
+}
+```
+
+
+Edge section:
+```json
+{
+  "e":
+  {
+    "d": "EJtQIYPvAu6DZIl3MOARH3dCdoFOLe71iheqcywJcnjt",
+    "u": "0AwjaDAE0qHcgNghkDaG7OY1",
+    "poe":
+    {
+      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
+      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
+      "n": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
+      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
+    },
+    "poa":
+    {
+      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
+      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
+      "o": "OR",
+      "sewer":
+      {
+        "d": "ELxUdYerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOc",
+        "u": "0ADAE0qHcgNghkDaG7OY1wja",
+        "n": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
+        "s": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+      },
+      "gas":
+      {
+        "d": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+        "u": "0AAE0qHcgNghkDaG7OY1wjaD",
+        "n": "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+        "s": "EFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lk",
+      }
+    }
+  }
+}
+```
+
+Edge section sub-schema:
+
+```json
 "e":
 {
   "description": "edge section",
@@ -1172,7 +1411,9 @@ with composed subschema below,
       "required":
       [
         "d",
-        "boss"
+        "u",
+        "poe",
+        "poa"
       ],
       "properties":
       {
@@ -1181,22 +1422,32 @@ with composed subschema below,
           "description": "edge section SAID",
           "type": "string"
         },
-        "boss":
+        "u":
         {
-          "description": "boss edge",
+          "description": "edge section UUID",
+          "type": "string"
+        },
+        "poe":
+        {
+          "description": "entitlement edge",
           "type": "object",
           "required":
           [
             "d",
+            "u",
             "n",
-            "s",
-            "w"
+            "s"
           ],
           "properties":
           {
             "d":
             {
               "description": "edge SAID",
+              "type": "string"
+            },
+            "u":
+            {
+              "description": "edge UUID",
               "type": "string"
             },
             "n":
@@ -1208,203 +1459,313 @@ with composed subschema below,
             {
               "description": "far node schema SAID",
               "type": "string",
-              "const": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
-            },
-            "w":
-            {
-              "description": "edge weight",
-              "type": "string"
+              "const": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
             }
           },
           "additionalProperties": false
-        }
+        },
+        "poa":
+        {
+          "description": "proof of address group",
+          "type": "object",
+          "required":
+          [
+            "d",
+            "u",
+            "o",
+            "sewer",
+            "gas"
+          ],
+          "properties":
+          {
+            "d":
+            {
+              "description": "edge SAID",
+              "type": "string"
+            },
+            "u":
+            {
+              "description": "edge UUID",
+              "type": "string"
+            },
+            "o":
+            {
+              "description": "m-ary group operator",
+              "type": "string",
+              "const": "OR"
+            },
+            "sewer":
+            {
+              "description": "sewer address edge",
+              "type": "object",
+              "required":
+              [
+                "d",
+                "u",
+                "n",
+                "s"
+              ],
+              "properties":
+              {
+                "d":
+                {
+                  "description": "edge SAID",
+                  "type": "string"
+                },
+                "u":
+                {
+                  "description": "edge UUID",
+                  "type": "string"
+                },
+                "n":
+                {
+                  "description": "far node SAID",
+                  "type": "string"
+                },
+                "s":
+                {
+                  "description": "far node schema SAID",
+                  "type": "string",
+                  "const": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+                },
+              },
+              "additionalProperties": false
+            },
+            "gas":
+            {
+              "description": "gas address edge",
+              "type": "object",
+              "required":
+              [
+                "d",
+                "u",
+                "n",
+                "s"
+              ],
+              "properties":
+              {
+                "d":
+                {
+                  "description": "edge SAID",
+                  "type": "string"
+                },
+                "u":
+                {
+                  "description": "edge UUID",
+                  "type": "string"
+                },
+                "n":
+                {
+                  "description": "far node SAID",
+                  "type": "string"
+                },
+                "s":
+                {
+                  "description": "far node schema SAID",
+                  "type": "string",
+                  "const": "EFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lk",
+                },
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
       },
       "additionalProperties": false
     }
   ]
-},
-```
-
-
-In the example above, `boss` is the edge label. 
-The edge section's top-level SAID, `d`, field is the SAID of the edge block and is the same SAID used as the compacted value of the ACDC's top-level edge, `e`, field. 
-
-
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "d": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "w": "high"
-    }
-  }
 }
 ```
 
-##### Examples
+Notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the Node, `n` field value of the `poe` edge block is the value of the SAID, `d` field of the ACDC issued by Bob, the Node, `n` field value of the `sewer` edge block is the value of the SAID, `d` field of the ACDC issued by Cat, and the Node, `n` field value of the `gas` edge block is the value of the SAID, `d` field of the ACDC issued by Dug. Further, notice that the top-level Edge-group of the ACDC issued by Amy has no operator field. This means that the default m-ary operator `AND` is applied. This top-level Edge-group includes one Edge labeled `poe` and a nested Edge-group labeled `poa`. This nested edge group has two Edges labeled `sewer` and `gas`. The Edge-group's Operator, `o` field value is `OR`. This means that the Edge-group is valid if either of its edges is valid. The unary operators on the `poe`, `sewer`, and `gas` edges are the default `I2I` because the Operator, `o` field is missing in each of the associated Edge blocks. This means that each of the ACDCs issued by Bob, Cat, and Dug must designate Amy's AID as the Issuee in order for the associated edge to be valid. But as long as the `poe` edge is valid, only one of the edges, `sewer` or `gas`, must be valid for Amy's ACDC to be valid with respect to its edges.
 
-Defaults:
+To clarify, with this version of the Edge Section,  Amy's ACDC is valid with respect to its edges if the ACDC issued by Bob is valid, and either Cat's or Dug's ACDCs are valid.  Amy's Edge section with nested Edge-group provides a sub-graph with an `AND-OR` logic tree on its three edges. This is suitable for many types of business logic, such as KYC, for example, where the combination of a proof of entitlement (`poe`) and a proof of one of two types of addresses (`sewer` or `gas`) is required.
+
+The three Edges and the nested Edge-group could each be individually compacted and private because they include both `d` and `u` fields. To simplify the example, however, the `oneOF` componsition was not applied to the individual edges and nested edge group. Therefore the simplified schema only allows the expanded form of the individual edges and nested edge group.  Nonetheless, the Edge section, as a whole can be expressed in compact private form because its schema uses the `oneOf` composition. 
+
+##### Compact public edge section example
+
+Suppose instead Amy is not concerned about privacy at either the section or the individual edge and edge group level. Amy therefore could benefit from using an expanded Edge Section that is more compact. Furthermore  Amy's ACDC may not benefit from specifying a different schema constraint on the far nodes of its edges. Therefore, compared to the example above, several fields could be eliminated. These include all the `u` fields, all but the top-level Edge Section `d` field, and all the `s` fields.
+
+
+Issued by Amy:
 
 ```json
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "power": "high"
-    },
-   "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "power": "low"
-    }
-  }
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
+  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
+  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
+  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
+  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
 }
 ```
 
-Explicit AND:
 
+Edge section (simple compact edges):
 ```json
 {
   "e":
   {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "o": "AND",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "power": "high"
-    },
-   "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "NOT",
-      "power": "low"
-    }
-  }
-}
-```
-
-Unary I2I:
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "o": "AND",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-       "power": "high"
-    },
-    "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "I2I",
-      "power": "low"
-    }
-  }
-}
-```
-
-Unary NI2I:
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "o": "OR",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "o": "NI2I",
-      "power": "high"
-    },
-    "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "I2I",
-      "power": "low"
-    }
-  }
-}
-```
-
-Nested edge-group:
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "o": "AND",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "o": ["NI2I", "NOT"],
-      "power": "high"
-    },
-    "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "I2I",
-      "power": "low"
-    },
-    "food":
+    "d": "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
+    "poe": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
+    "poa":
     {
       "o": "OR",
-      "power": "med",
-      "plum":
-      {
-        "n": "EQIYPvAu6DZAIl3AORH3dCdoFOLe71iheqcywJcnjtJt",
-        "o": "NI2I"
-      },
-      "pear":
-      {
-        "n": "EJtQIYPvAu6DZAIl3AORH3dCdoFOLe71iheqcywJcnjt",
-        "o": "NI2I"
-      }
+      "sewer": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
+      "gas": "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B"
     }
   }
 }
 ```
 
-###### Default AND example
-
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/24
-:::
-
-When an ECR vLEI is issued by the QVI, it is not chained, Issuer-to-Issuee, via the Legal Entity (LE) vLEI credential. A more accurate way of expressing the chaining would be to use the `AND` Operator to include both the LE and QVI vLEI credentials as edges in the ECR and also to apply the unary `NI2I` to the LE vLEI instead of only chaining the ECR vLEI to the Legal Entity vLEI and not chaining to ECR vLEI to the QVI vLEI at all.
-
-In the following example: The top-level edge-block uses the default of `AND` and the `qvi` edge uses the default of `I2I` because it points to a Targeted ACDC.  The `le` edge, on the other hand, points to a Targeted ACDC. It uses the unary Operator, `NI2I` in its operator, `o`, field so that it will be accepted it even though its targeted Issuee is not the Issuer of the current credential.
+Edge section sub-schema:
 
 ```json
+"e":
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "qvi":
+  "description": "edge section",
+  "oneOf":
+  [
     {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA"
+      "description": "edge section SAID",
+      "type": "string"
     },
-    "le":
     {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "NI2I"
+      "description": "edge detail",
+      "type": "object",
+      "required":
+      [
+        "d",
+        "poe",
+        "poa"
+      ],
+      "properties":
+      {
+        "d":
+        {
+          "description": "edge section SAID",
+          "type": "string"
+        },
+        "poe":
+        {
+          "description": "entitlement edge",
+          "oneOf":
+          [
+            {
+              "description": "simple compact form far node SAID",
+              "type": "string"
+            },
+            {
+              "description": "edge detail",
+              "type": "object",
+              "required":
+              [
+                "n",
+              ],
+              "properties":
+              {
+                "n":
+                {
+                  "description": "far node SAID",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "poa":
+        {
+          "description": "proof of address group",
+          "type": "object",
+          "required":
+          [
+            "o",
+            "sewer",
+            "gas"
+          ],
+          "properties":
+          {
+            "o":
+            {
+              "description": "m-ary group operator",
+              "type": "string",
+              "const": "OR"
+            },
+            "sewer":
+            {
+              "description": "sewer address edge",
+              "oneOf":
+              [
+                {
+                  "description": "simple compact form far node SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "edge detail",
+                  "type": "object",
+                  "required":
+                  [
+                    "n",
+                  ],
+                  "properties":
+                  {
+                    "n":
+                    {
+                      "description": "far node SAID",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "gas":
+            {
+              "description": "gas address edge",
+              "oneOf":
+              [
+                {
+                  "description": "simple compact form far node SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "edge detail",
+                  "type": "object",
+                  "required":
+                  [
+                    "n",
+                  ],
+                  "properties":
+                  {
+                    "n":
+                    {
+                      "description": "far node SAID",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+      },
+      "additionalProperties": false
     }
-  }
+  ]
 }
 ```
+Notice how much more compact is the edge section in partially expanded form. As before, notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the value of the `poe` field is the value of the SAID, `d` field of the ACDC issued by Bob. This is the simple compact form of an edge described above. Likewise for the `sewer` field value and the `gas` field value which are respectively the value of the SAID, `d` field of the ACDCs issued by Cat and Dug. All the Edges and nested Edge-groups are public because they do include a `u` field. The schema uses the `oneOf` composition operator on all three edges. This indicates that the compact form is simple compact form because their expanded block form only includes a Node, `n` field and not a SAID, `d` field.
+
+Otherwise, this example's semantics are the same as the previous example, just more compact.
+
 
 ##### Examples Summary
 
@@ -1413,89 +1774,99 @@ As the examples above have shown, the Edge Section syntax enables the composable
 
 ### Rule Section  
 
-In the compact ACDC examples above, the rule section has been compacted into merely the SAID of that section. Suppose that the uncompacted value of the rule section denoted by the top-level rule, `r`, field is as follows,
+The purpose of the rule section is to provide a set of rules or conditions as a Ricardian Contract [@RC]. The important features of a Ricardian contract are that it be both human and machine-readable and referenceable by a cryptographic digest. A JSON-encoded document or block, such as the Rule section block, is a practical example of both a human and machine-readable document.  The rule section's top-level SAID, `d` field provides the digest.  This provision supports the bow-tie model of RC. 
 
-```json
-{
-  "r":
-  {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
-    "warrantyDisclaimer":
-    {
-      "l": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
-    },
-    "liabilityDisclaimer":
-    {
-      "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
-    }
-  }
-}
-```
+The Rule Section includes labeled nested blocks called rules that provide the legal language (terms , conditions, definitions etc). The labeled clauses can be structured hierarchically, where each rule, in turn, can include nested labeled rules. The labels on the rules may follow a structured naming or numbering convention. These provisions enable the rule section to satisfy the features of an RC. 
 
-The purpose of the rule section is to provide a Ricardian Contract [@RC]. The important features of a Ricardian contract are that it be both human and machine-readable and referenceable by a cryptographic digest. A JSON encoded document or block such as the rule section block is a practical example of both a human and machine-readable document.  The rule section's top-level SAID, `d`, field provides the digest.  This provision supports the bow-tie model of RC. Ricardian legal contracts may be structured hierarchically into sections and subsections with named or numbered clauses in each section. The labels on the clauses may follow such a hierarchical structure using nested maps or blocks. These provisions enable the rule section to satisfy the features of a RC.
+#### Block types
 
-To elaborate, the rule section's top-level SAID, `d`, field is the SAID of that block and is the same SAID used as the compacted value of the rule section, `r`, field that appears at the top level of the ACDC. Each clause in the rule section gets its own field. Each clause also has its own local label.
+There are two types of field maps or blocks that may appear as values of fields within the Rule Section, `r` field either at the top level of the Rule block itself or nested. These are Rules or Rule-groups. Rules may only appear as locally unique labeled (using non-reserved labels)  blocks nested within an Rule-Group. There are two exceptional forms for Rules, compact and simple compact form. In these two forms, the labeled Rule field value is not a block but a string. These exceptions are defined below.
 
-The legal, `l`, field in each block provides the associated legal language.
+The Rule Section is the top-level Rule-group. 
 
-Note there are no type fields in the rule section. The type of a contract and the type of each clause is provided by the schema vis-a-vis the label of that clause. This follows the ACDC design principle that may be succinctly expressed as "type-is-schema".
+Nested Rule-groups may only appear as locally unique labeled blocks nested within another Rule-group. The block type, Rule or Rule-group, is indicated by its corresponding labeled sub-schema, with the exception of the top-level Rule-group, which is the Rule Section and is indicated by the Rule Section sub-schema. A Rule-group is indicated by the presence of one or more non-reserved labeled fields whose value represents a nested Rule or Rule-Groups. 
 
-Each rule section clause may also have its own clause SAID, `d`, field. Clause SAIDs enable reference to individual clauses, not merely the whole contract as given by the rule section's top-level SAID, `d`, field.
+#### Rule discovery 
 
-An example rule section with clause SAIDs is provided below.
+In compact form, the discovery of either the Rule section as a whole or a given Rule or Rule-group begins with the provided SAID. Because the SAID, `d`, field of any block is a cryptographic digest with high collision resistance, it provides a universally unique identifier to the referenced block details (whole rule section or individual rule). The discovery of a service endpoint URL that provides database access to a copy of the rule section or to any of its rules or rule-groups may be bootstrapped via an OOBI that links the service endpoint URL to the SAID of the respective block [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at issuance a copy of the referenced contract associated with the whole rule section or any rule. In either case, after a successful issuance exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced contracts in whole or in part of all ACDCs so issued. That Issuee will then have everything subsequently needed to make a successful presentation or disclosure to a Disclosee. This is the essence of percolated discovery.
 
-```json
-{
-  "r":
-  {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
-    "warrantyDisclaimer":
-    {
-      "d": "EXgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
-      "l": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
-    },
-    "liabilityDisclaimer":
-    {
-      "d": "EY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
-      "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
-    }
-  }
-}
-```
 
-#### Compact clause
 
-The use of clause SAIDS enables a compact form of a set of clauses where each clause value is the SAID of the corresponding clause. For example,
+#### Rule-group
 
-```json
-{
-  "r":
-  {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
-    "warrantyDisclaimer":  "EXgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
-    "liabilityDisclaimer": "EY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw"
-  }
-}
-```
+The reserved field labels for Rule-groups are detailed in the table below. 
 
-#### Simple compact clause
+| Label | Title | Description |
+|:-:|:--|:--|
+|`d`| Digest (SAID) | Optional Self-referential fully qualified cryptographic digest of enclosing block. |
+|`u`| UUID | Optional random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
+|`l`| Legal Language| Optional legal language for the Rule-group.|
 
-An alternate simplified compact form uses the value of the legal, `l`, field as the value of the clause field label. The schema for a specific clause label will indicate that the field value, for a given clause label is the legal language itself and not the clause block's SAID, `d`, field as is the normal compact form shown above. This alternate simple compact form is shown below. In this form, individual clauses are not compactifiable and are fully self-contained.
+When present, the order of appearance of these fields is as follows: `[d, u, l]`.
 
-```json
-{
-  "r":
-  {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
-    "warrantyDisclaimer": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE",
-    "liabilityDisclaimer": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
-  }
-}
-```
+A Rule-group may have a Legal, `l`, field and may have a SAID, `d` field. When the Rule-group has a SAID, `d` field it may also have a UUID, `u` field. A Rule-group may have one or more other labeled fields whose values represent nested Rules or Rule-groups. In this sense, a Rule-group is an intermediate node in a sub-graph of Rule-groups and Rules.
 
-#### Private clause
+##### SAID, `d` field
+The SAID, `d` field is optional but when it appears it shall appear as the first field in the Rule-group block. The value of this field shall be the SAID of its enclosing block. To elaborate, when the Rule-group is the top-level Rule Section its SAID is the same SAID used as the compacted value of the Rule Section, `r` field that appears at the top level of the ACDC. When not the top-level Rule-group, a given nested Rule-group's SAID, `d` field enables a verifiable globally unique reference to that nested Rule-group, not merely the whole contract as given by the Rule section's top-level SAID, `d`, field.
+
+##### UUID, `u` field
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Rule-group block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+
+##### Labeled nested rule and rule-group fields
+
+Rules and Rule-group nested within a Rule-group appear as labeled fields whose labels are not any of the reserved field labels for a Rule-group, namely , `[d, u, l]`. Labeled nested Rule or Rule-group fields must appear after all of any fields with a reserved field label. 
+
+To elaborate, each nested Rule or Rule-group block shall be labeled with a locally unique non-reserved field label that indicates the type of the nested block. To clarify, each nested block gets its own field with its own local (to the ACDC Rule Section) label. The field's value may be either the Rule or Rule-group block or, in compact form, a string. The compact forms are defined below.
+
+Note that each nested block shall not include a type field. The type of each block is provided by that associated nested sub-schema with a matching label. This is in accordance with the design principle of ACDCs that may be succinctly expressed as "type-is-schema." This approach varies somewhat from other types of property graphs, which often do not have a schema [@PGM][@Dots][@KG]. Because ACDCs have a schema, they leverage it to provide property graph types with a cleaner separation of concerns.   
+
+A main distinguishing feature of a property graph (PG) is that both nodes and edges may have a set of properties [@PGM][@Dots][@KG].  Each Rule-group's block provides its additional properties vis-a-vis a property graph as labeled fields. Additional properties may be inferred from the properties of an enclosing Rule-group block. Each labeled rule type is defined by the sub-schema designated by its label. 
+
+
+#### Rule
+
+The reserved field labels for a Rule block are detailed in the table below.
+
+| Label | Title | Description |
+|:-:|:--|:--|
+|`d`| Digest (SAID) | Optional self-referential fully qualified cryptographic digest of enclosing block. |
+|`u`| UUID | Optional random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
+|`l`| Legal Language| The actual legal language for the clause.|
+
+When present, the order of appearance of these fields is as follows: `[d, u, l]`.
+
+A Rule shall have a Legal, `l`, field. And may have a SAID, `d` field. When the Rule has a SAID, `d` field it may also have a UUID, `u` field. A Rule shall not have any other fields. In this sense, a Rule is a terminal node in a sub-graph of Rule-groups and Rules.
+
+##### SAID, `d` field
+The SAID, `d` field is optional, but when it appears, it shall appear as the first field in the Clause block. The value of this field shall be the SAID of its enclosing block. A Rule's SAID enables a verifiable globally unique reference to that rule, not merely the whole contract as given by the Rule section's top-level SAID, `d`, field.
+
+##### Compact rule
+
+Given that an individual Rule block includes a SAID, `d` field, a compact representation of the Rule's block is provided by replacing it with its SAID. This is called a compact rule. The schema for that clause's label shall indicate that the clause field value is the clause block SAID by using a `oneOf` composition of the compact form and the expanded form. This may be useful for compacting lengthy clauses and then expanding them later. When the clause block also includes a UUID, `u` field, then compacting also hides the clause's legal language for later disclosure. A compact clause without a UUID, `u` field is a public compact clause.  A compact clause with a UUID, `u` field is a private compact clause. 
+
+
+##### UUID, `u` field
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Rule Section block following the SAID, `d` field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+
+##### Legal, `l` field
+
+The legal language, `l`, field in each clause block provides the associated legal language as a string.
+
+
+##### Simple compact rule
+
+When a Rule block has only one field, that is, its legal, `l` field, i.e., it has no other properties, then the rule block may use an alternate simplified, compact form where the labeled rule field value is the value of its legal, `l` field. The rule is, therefore, public.  This enables the very compact expression of simple public rules. The schema for that rule's label shall indicate that the rule's compact value is the value of its Legal, `l` field in expanded form and use a `oneOF` composition whose expanded block has only a Legal, `l` field. 
+
+
+
+#### Rule section examples
+
+
+##### Private rule
 
 The disclosure of some clauses may be pre-conditioned on acceptance of Chain-link confidentiality. In this case, some clauses may benefit from Partial disclosure. Thus, clauses may be blinded by their SAID, `d`, field when the clause block includes a sufficiently high entropy UUID, `u`, field. The use of a clause UUID enables the Compact form of a clause not to be discoverable merely from the schema for the clause and its SAID via rainbow table attack [@RB][@DRB]. Therefore such a clause may be partially disclosable. These are called private clauses. A private clause example is shown below.
+
+Rule section:
 
 ```json
 {
@@ -1518,9 +1889,79 @@ The disclosure of some clauses may be pre-conditioned on acceptance of Chain-lin
 }
 ```
 
-#### Clause discovery 
+Rule section schema:
 
-In compact form, the discovery of either the rule section as a whole or a given clause begins with the provided SAID. Because the SAID, `d`, field of any block is a cryptographic digest with high collision resistance, it provides a universally unique identifier to the referenced block details (whole rule section or individual clause). The discovery of a service endpoint URL that provides database access to a copy of the rule section or to any of its clauses may be bootstrapped via an OOBI that links the service endpoint URL to the SAID of the respective block [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at issuance a copy of the referenced contract associated with the whole rule section or any clause. In either case, after a successful issuance exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced contracts in whole or in part of all ACDCs so issued. That Issuee will then have everything subsequently needed to make a successful presentation or disclosure to a Disclosee. This is the essence of percolated discovery.
+
+
+```json
+{
+  "r":
+  {
+    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
+    "warrantyDisclaimer":
+    {
+      "l": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
+    },
+    "liabilityDisclaimer":
+    {
+      "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
+    }
+  }
+}
+```
+
+
+An example rule section with clause SAIDs is provided below.
+
+```json
+{
+  "r":
+  {
+    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
+    "warrantyDisclaimer":
+    {
+      "d": "EXgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
+      "l": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
+    },
+    "liabilityDisclaimer":
+    {
+      "d": "EY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
+      "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
+    }
+  }
+}
+```
+
+#### Compact rule
+
+The use of clause SAIDS enables a compact form of a set of clauses where each clause value is the SAID of the corresponding clause. For example,
+
+```json
+{
+  "r":
+  {
+    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
+    "warrantyDisclaimer":  "EXgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
+    "liabilityDisclaimer": "EY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw"
+  }
+}
+```
+
+#### Simple compact rule
+
+An alternate simplified compact form uses the value of the legal, `l`, field as the value of the clause field label. The schema for a specific clause label will indicate that the field value, for a given clause label is the legal language itself and not the clause block's SAID, `d`, field as is the normal compact form shown above. This alternate simple compact form is shown below. In this form, individual clauses are not compactifiable and are fully self-contained.
+
+```json
+{
+  "r":
+  {
+    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
+    "warrantyDisclaimer": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE",
+    "liabilityDisclaimer": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
+  }
+}
+```
+
 
 
 ## Disclosure mechanisms and exploitation protection
