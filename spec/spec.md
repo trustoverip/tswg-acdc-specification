@@ -947,11 +947,11 @@ The m-ary operators are defined in the table below:
 
 When the Operator, `o`, field is missing in an edge-group block, the default value for the Operator, `o`, field shall be the `AND` operator.
 
-The actual logic for interpreting the validity of a set of chained or treed ACDCs is EGF dependent.  But as a default, one may interpret a set of chained (treed) ACDCs as a provenance chain (tree) with the default logic explained below.
+The actual logic for interpreting the validity of a set of chained or treed ACDCs is EGF-dependent.  But as a default, at least at the time of issuance, one may interpret a set of chained (treed) ACDCs as a provenance chain (tree) with the default logic explained below. ACDCs in a provenance chain or branch that have expiration dates or are dynamically revocable add a timeliness property to the validation logic in the event that the chain was unbroken at issuance but becomes broken later. The timeliness logic is EGF-dependent. 
 
-When the top-level Edge-group, the Edge Section includes only one Edge, the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of the connected far node ACDC pointed to by that edge may be considered a link in a provenance chain.  When any node in a provenance chain is invalid, then an edge that points to that node is also invalid. If a node has an invalid Edge, then the node is invalid.  To elaborate, a chain of nodes with edges has a head and a tail. The edges are directed from the head to the tail. All links from the node at the head at one end of a chain to the tail at the other end must be valid in order for the node (head) to be valid. If any links between the head and the tail are broken (invalid), then the head is itself invalid. The unary operators (defined below) for edges enable modulation of the validation logic of a given edge/node in a chain of ACDCs.
+When the top-level Edge-group, the Edge Section includes only one Edge, the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of the connected far node ACDC pointed to by that edge may be considered a link in a provenance chain.  When any node in a provenance chain is invalid, an edge pointing to that node is also invalid. If a node has an invalid Edge, then the node is invalid.  To elaborate, a chain of nodes with edges has a head and a tail. The edges are directed from the head to the tail. All links from the node at the head at one end of a chain to the tail at the other end must be valid in order for the node (head) to be valid. If any links between the head and the tail are broken (invalid), then the head is itself invalid. The unary operators (defined below) for edges enable modulation of the validation logic of a given edge/node in a chain of ACDCs.
 
-When the top-level Edge-group, the Edge Section includes more than one Edge directly or indirectly (as nested Edge(s) in nested Edge-group), then the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of all the connected far node ACDCs pointed to by those edges may be a provenance tree.  Now, instead of a single chain from the head to a single tail, we have a tree with the truck at the head and branches as chains of directed edges that each point to a branch tail (leaf) node. To clarify, each branch is a chain from head to branch tail.  All branches from the head must be valid for the head node to be valid. The m-ary operators (defined above) in combination with the unary operators (defined below) allow modulation of the validation aggregation logic of groups of edges/nodes at each branch in a tree of ACDCs.
+When the top-level Edge-group, the Edge Section includes more than one Edge directly or indirectly (as nested Edge(s) in nested Edge-group), then the logic for evaluating the validity of the enclosing ACDC (near node) with respect to the validity of all the connected far node ACDCs pointed to by those edges may be a provenance tree.  Instead of a single chain from the head to a single tail, we have a tree with the truck at the head and branches as chains of directed edges that each point to a branch tail (leaf) node. To clarify, each branch is a chain from head to branch tail.  All branches from the head must be valid for the head node to be valid. The m-ary operators (defined above), in combination with the unary operators (defined below), allow modulation of the validation aggregation logic of groups of edges/nodes at each branch in a tree of ACDCs.
 
 ##### Weight, `w` field
 The Weight, `w` field must appear immediately following all of the SAID, `d` field,  UUID, `u` field (when present), and Operator, `o` field  (when present) in the Edge-group block. The Weight field enables weighted averages with operators that perform some type of weighted average, such as the `WAVG` operator. The top-level Edge-group shall not have a weight, `w` field, because it is not a member of another Edge-group.
@@ -1047,7 +1047,7 @@ The `DI2I` unary Operator, when present, expands the class of allowed Issuer AID
 
 The `NOT` unary Operator, when present, inverts the validation truthiness of the node pointed to by this Edge. If this Edge's far node ACDC is invalid, then the presence of the `NOT` operator makes this Edge valid. Conversely, if this Edge's far node ACDC is valid, then the presence of the `NOT` operator makes this Edge invalid.   
 
-###### Weight, `w`, field.
+###### Weight, `w` field.
 
 The Weight, `w` field must appear immediately following the SAID, `d` field, UUID, `u` field, Node, `n` field, Schema, `s` field, or Operator, `o` field  (when present) in the Edge block. The Weight field enables weighted direct edges. The weighted directed edges within an enclosing Edge-group may be aggregated when that Edge-group's operator performs some type of weighted average.
 
@@ -1061,102 +1061,106 @@ Edge property fields appear as labeled fields whose labels are not any of the re
 
 #### Edge Section Examples
 
-Examples of an Edge section with schema are shown below.
+Consider four different ACDCs in compact form (see below). The Issuer of the first is named Amy with AID, `EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM`, the Issuer of the second is named Bob with AID, `EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK`, the Issuer of the third is named Cat with AID, `EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E`, and the Issuer of the fourth is named Dug with AID, `EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr`. Notice that the AID of each Issuer appears in the Issuer, `i` field of its respective ACDC below.
 
- This is shown as follows,
+Issued by Amy:
 
 ```json
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn"
-  }
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
+  "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
+  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
+  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
+  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
 }
 ```
 
-This alternate compact form is shown below.
+Issued by Bob:
 
 ```json
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA"
-  }
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
+  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
+  "i":  "EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqG",
+  "a":  "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9",
+  "e":  "ECdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3d",
+  "r":  "EMORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3"
 }
 ```
 
+Issued by Cat:
+
 ```json
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "d": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn",
-      "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "w": "high"
-    }
-  }
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
+  "u":  "0ADAE0qHcgNghkDaG7OY1wja",
+  "i":  "EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
+  "a":  "EIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwL",
+  "e":  "EAu6DZIl3MOARH3dCdoFOLe71iheqcywJcnjtJtQIYPv",
+  "r":  "EBe71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOL"
+}
+```
+
+Issued by Dug:
+
+```json
+{
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
+  "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4re",
+  "a":  "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
+  "e":  "ECdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3d",
+  "r":  "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR"
 }
 ```
 
 
-##### Example 
-The following example adds a weight property to the edge sub-block as indicated by the Weight, `w`, field.
+
+##### Two edges with default operators
+
+Suppose that the Edge Section of the ACDC issued by Amy, when expanded, has two edges labeled `bob` and `cat` as shown below, where each of these eponymously labeled edges links back to the ACDC issued by Bob's AID and the ACDC issued by Cat's AID.
 
 ```json
 {
   "e":
   {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "w": "high"
-    }
-  }
-}
-```
-##### Edge sub-block example
-
-The following example shows an Edge section with a single edge sub-block labeled `boss` with all reserved fields.  
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
+    "d": "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
     "u": "0AwjaDAE0qHcgNghkDaG7OY1",
-    "o": "AND",
-    "boss":
+    "bob":
     {
       "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
       "u": "0ANghkDaG7OY1wjaDAE0qHcg",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
+      "n": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
       "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
-      "o": "NOT",
-      "w": "high"
-    }
-    "boss":
+    },
+    "cat":
     {
-      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
-      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
+      "d": "ELxUdYerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOc",
+      "u": "0ADAE0qHcgNghkDaG7OY1wja",
+      "n": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
+      "s": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+      "o": "NI2I"
     }
   }
 }
 ```
 
+The sub-schema for this Edge section is shown below.
 
-
-In the compact ACDC examples above, the edge section has been compacted into merely the SAID of that section. Suppose that the uncompacted value of the edge section denoted by the top-level edge, `e`, field is as follows,
-
-
-with composed subschema below,
-```
+```json
 "e":
 {
   "description": "edge section",
@@ -1172,7 +1176,9 @@ with composed subschema below,
       "required":
       [
         "d",
-        "boss"
+        "u",
+        "boss",
+        "baby"
       ],
       "properties":
       {
@@ -1181,22 +1187,32 @@ with composed subschema below,
           "description": "edge section SAID",
           "type": "string"
         },
-        "boss":
+        "u":
         {
-          "description": "boss edge",
+          "description": "edge section UUID",
+          "type": "string"
+        },
+        "bob":
+        {
+          "description": "bob edge",
           "type": "object",
           "required":
           [
             "d",
+            "u",
             "n",
-            "s",
-            "w"
+            "s"
           ],
           "properties":
           {
             "d":
             {
               "description": "edge SAID",
+              "type": "string"
+            },
+            "u":
+            {
+              "description": "edge UUID",
               "type": "string"
             },
             "n":
@@ -1208,203 +1224,122 @@ with composed subschema below,
             {
               "description": "far node schema SAID",
               "type": "string",
-              "const": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
-            },
-            "w":
-            {
-              "description": "edge weight",
-              "type": "string"
+              "const": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
             }
           },
           "additionalProperties": false
-        }
+        },
+        "cat":
+        {
+          "description": "cat edge",
+          "type": "object",
+          "required":
+          [
+            "d",
+            "u",
+            "n",
+            "s",
+            "o"
+          ],
+          "properties":
+          {
+            "d":
+            {
+              "description": "edge SAID",
+              "type": "string"
+            },
+            "u":
+            {
+              "description": "edge UUID",
+              "type": "string"
+            },
+            "n":
+            {
+              "description": "far node SAID",
+              "type": "string"
+            },
+            "s":
+            {
+              "description": "far node schema SAID",
+              "type": "string",
+              "const": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+            },
+            "o":
+            {
+              "description": "unary edge operator",
+              "type": "string"
+            },
+          },
+          "additionalProperties": false
+        },
       },
       "additionalProperties": false
     }
   ]
-},
-```
-
-
-In the example above, `boss` is the edge label. 
-The edge section's top-level SAID, `d`, field is the SAID of the edge block and is the same SAID used as the compacted value of the ACDC's top-level edge, `e`, field. 
-
-
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "d": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "w": "high"
-    }
-  }
 }
 ```
 
-##### Examples
+Notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the Node, `n` field value of the `bob` edge block is the value of the SAID, `d` field of the ACDC issued by Bob, and the Node, `n` field value of the `cat` edge block is the value of the SAID, `d` field of the ACDC issued by Cat. Further, notice that the top-level Edge-group of the ACDC issued by Amy has no operator field. This means that the default m-ary operator `AND` is applied. Therefore Amy's ACDC is invalid unless both the linked ACDCs issued by Bob and Cat are valid. Moreover, notice that the Edge block labeled `bob` in Amy's ACDC has no operator, `o` field. This means that the default unary operator `I2I` is applied. This means that Bob's ACDC must designate Amy's AID as the Issuee in order for this edge to be valid. Finally, notice that the Edge block labeled `cat` in Amy's ACDC has an operator, `o` field value of `NI2I`. This means that there is no requirement that Cat's ACDC designates Amy's AID as the Issuee in order for this edge to be valid. If it does, fine; if not, also fine.
 
-Defaults:
+Suppose that the expanded Attribute section of the ACDC issued by Bob is as follows:
 
 ```json
+"a":
 {
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "power": "high"
-    },
-   "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "power": "low"
-    }
-  }
+  "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "u": "0ADAE0qHcgNghkDaG7OY1wja",
+  "i": "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
 }
 ```
 
-Explicit AND:
+Because the value of the Issuee, `i`, field in Bob's attribute section is Amy's AID, the default `I2I` operator on Amy's edge labeled `bob` is satisfied. Thus, Amy's ACDC validates with respect to its edges.
+
+##### Nested edge group
+ 
+This example shows a nested Edge-group. In contrast to the previous example, suppose instead that the Edge Section of the ACDC issued by Amy, when expanded, has three edges labeled `bob`, `cat`, and `dug` as shown below, where each of these eponymously labeled edges links back to the ACDC's issued respectively by Bob's, Cat's, and Dug's AIDs.
 
 ```json
 {
   "e":
   {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "o": "AND",
-    "boss":
+    "d": "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
+    "u": "0AwjaDAE0qHcgNghkDaG7OY1",
+    "bob":
     {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "power": "high"
+      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
+      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
+      "n": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
+      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
     },
-   "baby":
+    "catordug":
     {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "NOT",
-      "power": "low"
-    }
-  }
-}
-```
-
-Unary I2I:
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "o": "AND",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-       "power": "high"
-    },
-    "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "I2I",
-      "power": "low"
-    }
-  }
-}
-```
-
-Unary NI2I:
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "o": "OR",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "o": "NI2I",
-      "power": "high"
-    },
-    "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "I2I",
-      "power": "low"
-    }
-  }
-}
-```
-
-Nested edge-group:
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "o": "AND",
-    "boss":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "o": ["NI2I", "NOT"],
-      "power": "high"
-    },
-    "baby":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "I2I",
-      "power": "low"
-    },
-    "food":
-    {
+      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
+      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
       "o": "OR",
-      "power": "med",
-      "plum":
+      "cat":
       {
-        "n": "EQIYPvAu6DZAIl3AORH3dCdoFOLe71iheqcywJcnjtJt",
-        "o": "NI2I"
+        "d": "ELxUdYerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOc",
+        "u": "0ADAE0qHcgNghkDaG7OY1wja",
+        "n": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
+        "s": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
       },
-      "pear":
+      "dug":
       {
-        "n": "EJtQIYPvAu6DZAIl3AORH3dCdoFOLe71iheqcywJcnjt",
-        "o": "NI2I"
+        "d": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
+        "u": "0AAE0qHcgNghkDaG7OY1wjaD",
+        "n": "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+        "s": "EFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lk",
       }
     }
   }
 }
 ```
 
-###### Default AND example
+Notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the Node, `n` field value of the `bob` edge block is the value of the SAID, `d` field of the ACDC issued by Bob, the Node, `n` field value of the `cat` edge block is the value of the SAID, `d` field of the ACDC issued by Cat, and the Node, `n` field value of the `dug` edge block is the value of the SAID, `d` field of the ACDC issued by Dug. Further, notice that the top-level Edge-group of the ACDC issued by Amy has no operator field. This means that the default m-ary operator `AND` is applied. This top-level Edge-group includes one Edge labeled `bob` and a nested Edge-group labeled `catordug`. This nested edge group has two Edges labeled `cat` and `dug`. The Edge-group's Operator, `o` field value is `OR`. This means that the Edge-group is valid if either of its edges is valid. The unary operators on all the `bob`, `cat`, `dug` edges are the default `I2I` because the Operator, `o` field is missing in each of the Edge blocks. This means that each of the ACDCs issued by Bob, Cat, and Dug must designate Amy's AID as the Issuee in order for the associated edge to be valid. But as long as the `bob` edge is valid, only one of the edges, `cat` or `dug`, must be valid for Amy's ACDC to be valid with respect to its edges.
 
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/24
-:::
+To clarify, with this version of the Edge Section,  Amy's ACDC is valid with respect to its edges if the ACDC issued by Bob is valid, and either Cat's or Dug's ACDCs are valid.  Amy's Edge section with nested Edge-group provides a sub-graph with an `AND-OR` logic tree on its three edges. This is suitable for many types of business logic, such as KYC, for example, where the combination of a proof of entitlement (`bob`) and a proof of one of two types of addresses (`cat` or `dug`) is required.
 
-When an ECR vLEI is issued by the QVI, it is not chained, Issuer-to-Issuee, via the Legal Entity (LE) vLEI credential. A more accurate way of expressing the chaining would be to use the `AND` Operator to include both the LE and QVI vLEI credentials as edges in the ECR and also to apply the unary `NI2I` to the LE vLEI instead of only chaining the ECR vLEI to the Legal Entity vLEI and not chaining to ECR vLEI to the QVI vLEI at all.
-
-In the following example: The top-level edge-block uses the default of `AND` and the `qvi` edge uses the default of `I2I` because it points to a Targeted ACDC.  The `le` edge, on the other hand, points to a Targeted ACDC. It uses the unary Operator, `NI2I` in its operator, `o`, field so that it will be accepted it even though its targeted Issuee is not the Issuer of the current credential.
-
-```json
-{
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLx,UdY",
-    "qvi":
-    {
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA"
-    },
-    "le":
-    {
-      "n": "EORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZAIl3A",
-      "o": "NI2I"
-    }
-  }
-}
-```
+All the Edges and nested Edge-groups are private because they include both `d` and `u` fields. For a public ACDC that benefits from a more compact expansion, all the `u` fields could be eliminated, and all but the top-level Edge Section `d` field could be eliminated as well.
 
 ##### Examples Summary
 
