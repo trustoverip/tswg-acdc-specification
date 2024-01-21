@@ -168,11 +168,11 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/36
 
 [[def: Discloser]] 
 
-~ a role of an entity that discloses an ACDC. An Discloser may or may not be the Issuer of the disclosed ACDC.
+~ a role of an entity that discloses an ACDC. A Discloser may or may not be the Issuer of the disclosed ACDC.
 
 [[def: Disclosee]]
 
-~ a role of an entity that is a recipient to which an ACDC is disclosed. An Disclosee may or may not be the Issuee of the disclosed ACDC.
+~ a role of an entity that is a recipient to which an ACDC is disclosed. A Disclosee may or may not be the Issuee of the disclosed ACDC.
 
 [[def: Issuer]]
 
