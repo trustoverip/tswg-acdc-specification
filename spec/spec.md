@@ -1762,6 +1762,7 @@ Edge section sub-schema:
   ]
 }
 ```
+
 Notice how much more compact is the edge section in partially expanded form. As before, notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the value of the `poe` field is the value of the SAID, `d` field of the ACDC issued by Bob. This is the simple compact form of an edge described above. Likewise for the `sewer` field value and the `gas` field value which are respectively the value of the SAID, `d` field of the ACDCs issued by Cat and Dug. All the Edges and nested Edge-groups are public because they do include a `u` field. The schema uses the `oneOf` composition operator on all three edges. This indicates that the compact form is simple compact form because their expanded block form only includes a Node, `n` field and not a SAID, `d` field.
 
 Otherwise, this example's semantics are the same as the previous example, just more compact.
@@ -1790,8 +1791,6 @@ Nested Rule-groups may only appear as locally unique labeled blocks nested withi
 
 In compact form, the discovery of either the Rule section as a whole or a given Rule or Rule-group begins with the provided SAID. Because the SAID, `d`, field of any block is a cryptographic digest with high collision resistance, it provides a universally unique identifier to the referenced block details (whole rule section or individual rule). The discovery of a service endpoint URL that provides database access to a copy of the rule section or to any of its rules or rule-groups may be bootstrapped via an OOBI that links the service endpoint URL to the SAID of the respective block [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at issuance a copy of the referenced contract associated with the whole rule section or any rule. In either case, after a successful issuance exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced contracts in whole or in part of all ACDCs so issued. That Issuee will then have everything subsequently needed to make a successful presentation or disclosure to a Disclosee. This is the essence of percolated discovery.
 
-
-
 #### Rule-group
 
 The reserved field labels for Rule-groups are detailed in the table below. 
@@ -1814,7 +1813,7 @@ The UUID, `u` field is optional, but when it appears, it shall appear as the sec
 
 ##### Labeled nested rule and rule-group fields
 
-Rules and Rule-group nested within a Rule-group appear as labeled fields whose labels are not any of the reserved field labels for a Rule-group, namely , `[d, u, l]`. Labeled nested Rule or Rule-group fields must appear after all of any fields with a reserved field label. 
+Rules and Rule-group nested within a Rule-group appear as labeled fields whose labels are not any of the reserved field labels for a Rule-group, namely, `[d, u, l]`. Labeled nested Rule or Rule-group fields must appear after all of any fields with a reserved field label. 
 
 To elaborate, each nested Rule or Rule-group block shall be labeled with a locally unique non-reserved field label that indicates the type of the nested block. To clarify, each nested block gets its own field with its own local (to the ACDC Rule Section) label. The field's value may be either the Rule or Rule-group block or, in compact form, a string. The compact forms are defined below.
 
@@ -1829,13 +1828,13 @@ The reserved field labels for a Rule block are detailed in the table below.
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`d`| Digest (SAID) | Optional self-referential fully qualified cryptographic digest of enclosing block. |
-|`u`| UUID | Optional random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
-|`l`| Legal Language| The actual legal language for the clause.|
+| `d` | Digest (SAID) | Optional self-referential fully qualified cryptographic digest of enclosing block. |
+| `u` | UUID | Optional random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
+| `l` | Legal Language| The actual legal language for the clause.|
 
 When present, the order of appearance of these fields is as follows: `[d, u, l]`.
 
-A Rule shall have a Legal, `l`, field. And may have a SAID, `d` field. When the Rule has a SAID, `d` field it may also have a UUID, `u` field. A Rule shall not have any other fields. In this sense, a Rule is a terminal node in a sub-graph of Rule-groups and Rules.
+A Rule shall have a Legal, `l`, field. And may have a SAID, `d` field. When the Rule has a SAID, `d` field, it may also have a UUID, `u` field. A Rule shall not have any other fields. In this sense, a Rule is a terminal node in a sub-graph of Rule-groups and Rules.
 
 ##### SAID, `d` field
 The SAID, `d` field is optional, but when it appears, it shall appear as the first field in the Clause block. The value of this field shall be the SAID of its enclosing block. A Rule's SAID enables a verifiable globally unique reference to that rule, not merely the whole contract as given by the Rule section's top-level SAID, `d`, field.
@@ -1862,105 +1861,465 @@ When a Rule block has only one field, that is, its legal, `l` field, i.e., it ha
 #### Rule section examples
 
 
-##### Private rule
+##### Private rules
 
-The disclosure of some clauses may be pre-conditioned on acceptance of Chain-link confidentiality. In this case, some clauses may benefit from Partial disclosure. Thus, clauses may be blinded by their SAID, `d`, field when the clause block includes a sufficiently high entropy UUID, `u`, field. The use of a clause UUID enables the Compact form of a clause not to be discoverable merely from the schema for the clause and its SAID via rainbow table attack [@RB][@DRB]. Therefore such a clause may be partially disclosable. These are called private clauses. A private clause example is shown below.
+Some Rules and Rule-groups, as opposed to the Rule Section as a whole, may benefit from confidential disclosure. Recall that individual Rule and Rule-group blocks may have their own SAID, `d`, field and UUID, `u,` field. To clarify, a Rule or Rule-group block with both a SAID, `d`, and UUID, `u` fields, where that UUID has sufficiently high entropy, protects the compact form of that block from discovery via a rainbow table attack merely from its SAID and sub-schema [@RB][@DRB]. Therefore, such a Rule or Rule-group may kept hidden until later disclosure. These are called private Rules or Rule-groups. The following example has an independently hidable Rule-group and Rules.
 
-Rule section:
+Issued by Amy:
 
 ```json
 {
-  "r":
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
+  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
+  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
+  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
+  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
+}
+```
+
+Rule section expanded:
+
+```json
+"r":
+{
+  "d": "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB",
+  "u": "0ADaG7OaDAE0qHcgY1Nghkwj",
+  "disclaimers":
   {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
+    "d": "ELIr9Bf7V_NAwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
+    "u": "0AHcgY1NghkwjDaG7OaDAE0q",
+    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
     "warrantyDisclaimer":
     {
-      "d": "EXgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
+      "d": "EBgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
       "u": "0AG7OY1wjaDAE0qHcgNghkDa",
-      "l": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
+      "l": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
     },
     "liabilityDisclaimer":
     {
-      "d": "EY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
+      "d": "ED1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
       "u": "0AHcgNghkDaG7OY1wjaDAE0q",
       "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
     }
+  },
+  "permittedUse":
+  {
+    "d": "EEgOcLxUdYerzwLFrn9y2PgveY4-9Ir9Bf7V_NAwY1lk",
+    "u": "0ADaG7OY1wjaDAE0qHcgNghk",
+    "l": "The person or legal entity identified by the ACDC's Issuee AID (Issuee) agrees to only use the information contained in this ACDC for non-commercial purposes."
   }
 }
 ```
+
+Rule section compact private rules:
+
+```json
+"r":
+{
+  "d": "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB",
+  "u": "0ADaG7OaDAE0qHcgY1Nghkwj",
+  "disclaimers":
+  {
+    "d": "ELIr9Bf7V_NAwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
+    "u": "0AHcgY1NghkwjDaG7OaDAE0q",
+    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
+    "warrantyDisclaimer": "EBgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
+    "liabilityDisclaimer": "ED1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
+  },
+  "permittedUse": "EEgOcLxUdYerzwLFrn9y2PgveY4-9Ir9Bf7V_NAwY1lk"
+}
+```
+
 
 Rule section schema:
 
+```json
+"r":
+{
+  "description": "rule section",
+  "oneOf":
+  [
+    {
+      "description": "rule section SAID",
+      "type": "string"
+    },
+    {
+      "description": "rule detail",
+      "type": "object",
+      "required":
+      [
+        "d",
+        "u",
+        "disclaimers",
+        "permittedUse"
+      ],
+      "properties":
+      {
+        "d":
+        {
+          "description": "rule section SAID",
+          "type": "string"
+        },
+        "u":
+        {
+          "description": "rule section UUID",
+          "type": "string"
+        },
+        "disclaimers":
+        {
+          "description": "rule group",
+          "type": "object",
+          "required":
+          [
+            "d",
+            "u",
+            "l",
+            "warrantyDisclaimer",
+            "liabilityDisclaimer"
+          ],
+          "properties":
+          {
+            "d":
+            {
+              "description": "rule group SAID",
+              "type": "string"
+            },
+            "u":
+            {
+              "description": "rule group UUID",
+              "type": "string"
+            },
+            "warrantyDisclaimer":
+            {
+              "description": "rule",
+              "oneOf":
+              [
+                {
+                  "description": "compact form",
+                  "type": "string"
+                },
+                {
+                  "description": "rule detail",
+                  "type": "object",
+                  "required":
+                  [
+                    "d",
+                    "u",
+                    "l",
+                  ],
+                  "properties":
+                  {
+                    "d":
+                    {
+                      "description": "rule SAID",
+                      "type": "string"
+                    },
+                    "u":
+                    {
+                      "description": "rule UUID",
+                      "type": "string"
+                    },
+                    "l":
+                    {
+                      "description": "legal language",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "liabilityDisclaimer":
+            {
+              "description": "rule",
+              "oneOf":
+              [
+                {
+                  "description": "compact form",
+                  "type": "string"
+                },
+                {
+                  "description": "rule detail",
+                  "type": "object",
+                  "required":
+                  [
+                    "d",
+                    "u",
+                    "l",
+                  ],
+                  "properties":
+                  {
+                    "d":
+                    {
+                      "description": "rule SAID",
+                      "type": "string"
+                    },
+                    "u":
+                    {
+                      "description": "rule UUID",
+                      "type": "string"
+                    },
+                    "l":
+                    {
+                      "description": "legal language",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "permittedUse":
+        {
+          "description": "rule",
+          "oneOf":
+          [
+            {
+              "description": "compact form",
+              "type": "string"
+            },
+            {
+              "description": "rule detail",
+              "type": "object",
+              "required":
+              [
+                "d",
+                "u",
+                "l",
+              ],
+              "properties":
+              {
+                "d":
+                {
+                  "description": "rule SAID",
+                  "type": "string"
+                },
+                "u":
+                {
+                  "description": "rule UUID",
+                  "type": "string"
+                },
+                "l":
+                {
+                  "description": "legal language",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+      },
+      "additionalProperties": false
+    }
+  ]
+}
+```
+Notice that the value of the Rule Section's UUID, `d` field matches the value of the Rule, `r` field in the ACDC issued by Amy. Furthermore, notice that in the compact private rule form the value of the labeled rules is the value of the SAID, `d` field from the expanded form.
 
+#### Simple compact public rules
+
+When there is no benefit to a private Rule section, then its UUID fields are not needed. Moreover for the rules themselves do not benefit from a dedicated SAID, `d` field. Given this change, we can express the Rule section in a compact form with simple compact rules. Recall that in simple, compact form, each rule block shall not have any fields besides the Legal, `l` field. This field value then becomes the value of the labeled Rule block.
+
+Issued by Amy:
 
 ```json
 {
-  "r":
+  "v":  "ACDCCAAJSONAACD_",
+  "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
+  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
+  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
+  "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
+  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
+  "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
+  "r":  "EDZIl3MORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6"
+}
+```
+
+Rule section expanded:
+
+```json
+"r":
+{
+  "d": "EDZIl3MORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6",
+  "disclaimers":
   {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
+    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
     "warrantyDisclaimer":
     {
-      "l": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
+      "l": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
     },
     "liabilityDisclaimer":
     {
       "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
     }
+  },
+  "permittedUse":
+  {
+    "l": "The person or legal entity identified by the ACDC's Issuee AID (Issuee) agrees to only use the information contained in this ACDC for non-commercial purposes."
   }
 }
 ```
 
-
-An example rule section with clause SAIDs is provided below.
-
-```json
-{
-  "r":
-  {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
-    "warrantyDisclaimer":
-    {
-      "d": "EXgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
-      "l": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
-    },
-    "liabilityDisclaimer":
-    {
-      "d": "EY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
-      "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
-    }
-  }
-}
-```
-
-#### Compact rule
-
-The use of clause SAIDS enables a compact form of a set of clauses where each clause value is the SAID of the corresponding clause. For example,
+Rule section simple compact private rules:
 
 ```json
+"r":
 {
-  "r":
+  "d": "EDZIl3MORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6",
+  "disclaimers":
   {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
-    "warrantyDisclaimer":  "EXgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
-    "liabilityDisclaimer": "EY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw"
-  }
-}
-```
-
-#### Simple compact rule
-
-An alternate simplified compact form uses the value of the legal, `l`, field as the value of the clause field label. The schema for a specific clause label will indicate that the field value, for a given clause label is the legal language itself and not the clause block's SAID, `d`, field as is the normal compact form shown above. This alternate simple compact form is shown below. In this form, individual clauses are not compactifiable and are fully self-contained.
-
-```json
-{
-  "r":
-  {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
-    "warrantyDisclaimer": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE",
+    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
+    "warrantyDisclaimer": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE",
     "liabilityDisclaimer": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
-  }
+  },
+  "permittedUse": "The person or legal entity identified by the ACDC's Issuee AID (Issuee) agrees to only use the information contained in this ACDC for non-commercial purposes."
 }
 ```
+
+
+Rule section schema:
+
+```json
+"r":
+{
+  "description": "rule section",
+  "oneOf":
+  [
+    {
+      "description": "rule section SAID",
+      "type": "string"
+    },
+    {
+      "description": "rule detail",
+      "type": "object",
+      "required":
+      [
+        "d",
+        "disclaimers",
+        "permittedUse"
+      ],
+      "properties":
+      {
+        "d":
+        {
+          "description": "rule section SAID",
+          "type": "string"
+        },
+        "disclaimers":
+        {
+          "description": "rule group",
+          "type": "object",
+          "required":
+          [
+            "l",
+            "warrantyDisclaimer",
+            "liabilityDisclaimer"
+          ],
+          "properties":
+          {
+            "warrantyDisclaimer":
+            {
+              "description": "rule",
+              "oneOf":
+              [
+                {
+                  "description": "simple compact form",
+                  "type": "string"
+                },
+                {
+                  "description": "rule detail",
+                  "type": "object",
+                  "required":
+                  [
+                    "l",
+                  ],
+                  "properties":
+                  {
+                    "l":
+                    {
+                      "description": "legal language",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "liabilityDisclaimer":
+            {
+              "description": "rule",
+              "oneOf":
+              [
+                {
+                  "description": "simple compact form",
+                  "type": "string"
+                },
+                {
+                  "description": "rule detail",
+                  "type": "object",
+                  "required":
+                  [
+                    "l",
+                  ],
+                  "properties":
+                  {
+                    "l":
+                    {
+                      "description": "legal language",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "permittedUse":
+        {
+          "description": "rule",
+          "oneOf":
+          [
+            {
+              "description": "simple compact form",
+              "type": "string"
+            },
+            {
+              "description": "rule detail",
+              "type": "object",
+              "required":
+              [
+                "l",
+              ],
+              "properties":
+              {
+                "l":
+                {
+                  "description": "legal language",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+      },
+      "additionalProperties": false
+    }
+  ]
+}
+```
+
 
 
 
