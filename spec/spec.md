@@ -2632,285 +2632,57 @@ This IPEX [@IPEX-ID] protocol leverages important features of ACDCs and ancillar
 |`grant`|  | Y | full or selective disclosure ACDC, signature on `grant` or its SAID  | includes attribute values, CESR-Proof signature |
 || `admit` | N | signature on `grant` or its SAID  | CESR-Proof signature |
 
-#### Discussion
+#### Commitments via SAID
 
-All the variants of an ACDC have various degrees of expansion of the compact variant. Therefore, an Issuer commitment via a signature to any variant of ACDC (compact, partial, full, selective, etc)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top-level section field is either the SAD or the SAID of the SAD of the associated section. Both a SAD and its SAID, when signed, each provide a verifiable commitment to the SAD. In the former, the signature verification is directly against the SAD itself. In the latter, the SAID as digest must first be verified against its SAD, and then the signature on the SAID may be verified. This indirect verifiability assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top-level structure as the compact variant, then a signature on any variant may be used to verify the Issuer's commitment to any other variant either directly or indirectly, in whole or in part on a top-level section by top-level section basis. This cross-variant Issuer commitment verifiability is an essential property that supports graduated disclosure by the Disclosee of any or all variants, whether full, compact, metadata, partial, selective, bulk issued, or contractually protected.
+All the variants of an ACDC have various degrees of expansion of the compact variant. Therefore, an Issuer commitment via a signature (direct) or KEL anchored seal (indirect) to any variant of ACDC (metadata, compact, partial, nested partial, full, selective, etc)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top-level section field is either the SAD (self-addressed data) or the SAID (self-addressed identifier) of the SAD of the associated section. Both a SAD and its SAID, when signed or sealed, each provide a verifiable commitment to the SAD. In the former, the signature or seal verification is directly against the SAD itself. In the latter, the SAID as digest must first be verified against its SAD, and then the signature or seal on the SAID may be verified. This indirect verifiability (one or multiple levels of commitment via cryptographic digests) assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top-level structure as the compact variant, then a signature on any variant may be used to verify the Issuer's commitment to any other variant either directly or indirectly, in whole or in part on a top-level section by top-level section basis. This cross-variant Issuer commitment verifiability is an essential property that supports graduated disclosure by the Disclosee of any or all variants, whether full, compact, metadata, partial, selective etc.
 
-To elaborate, the SAID of a given variant is useful even when it is not the SAID of the variant the Issuer signed because during graduated disclosure the Discloser MAY choose to sign that given variant to fullfill a given step in an IPEX graduated disclosure transaction. The Discloser thereby can make a verifiable disclosure in a given step of the SAD of a given variant that fulfills a commitment made in a prior step via its signature on merely the SAID of the SAD of the variant so disclosed.
+To elaborate, the SAID of a given variant is useful even when it is not the SAID of the variant the Issuer signed because, during graduated disclosure, the Discloser MAY choose to sign or seal that given variant to fulfill a given step in an IPEX graduated disclosure transaction. The Discloser thereby can make a verifiable disclosure in a given step of the SAD of a given variant that fulfills a commitment made in a prior step via its signature or seal on merely the SAID of the SAD of the variant so disclosed.
 
-For example, the Metadata variant of an ACDC will have a different SAID than the Compact variant because some of the top-level field values may be empty in the Metadata variant. One can think of the The metadata variant as a partial manifest that only includes those top level sections that the Discloser is committing to disclose in order to induce the Disclosee to agree to the contractual terms of use when disclosed. The IPEX transaction is between the Discloser and Disclosee, who both may make non-repudiable commitments via signing to each other. Typically this means that the Discloser will eventually need to fulfull its commitment with a proof of disclosure to the Disclosee. This proof may be satisfied with either directly against the Discloser's signature on the the actual disclosed SAD or indirectly agaisnt the Discloser's signature on the SAID of the actual disclosed SAD. In addition, the Disclosee will typically require a proof of issuance via a non-repudiable signature by the Issuer on a variant of the disclosed SAD that is verifiable (directly or indirectly) against the variant that is the disclosed SAD.
+For example, the Metadata variant of an ACDC will have a different SAID than the Compact variant because some of the top-level field values may be empty in the Metadata variant. One can think of the Metadata variant as a partial manifest that only includes those top-level sections that the Discloser is committing to disclose in order to induce the Disclosee to agree to the contractual terms of use when disclosed. 
 
-To summarize, when the Issuer commits to the composed schema of an ACDC it is committing to all the variants so composed. As described above, the top level field values in the compact variant enable verification against a disclosure of any of the other Issuer committed variants because they all share the same top level structure. This applies even to the metadata variant in spite of it only providing values for some top level sections and not others. The verifiablity of a top level section is separable.
+To elaborate, an IPEX transaction is between the Discloser and Disclosee, who both may make non-repudiable commitments to each other via signing or sealing variants of the ACDC to be disclosed. Typically, this means that the Discloser will eventually need to fulfill its commitment with proof of disclosure to the Disclosee. This proof may be satisfied either against the Discloser's signature or seal on the actual disclosed SAD or against the Discloser's signature or seal on the SAID of the actual disclosed SAD. In addition, the Disclosee will typically require proof of issuance via a non-repudiable signature or seal by the Issuer on a variant of the disclosed SAD that is verifiable (directly or indirectly) against the variant that is the disclosed SAD.
 
-Consequently, the IPEX protocol must specify how a validator does validation of any variant in a graduated disclosure. To restate there are two proofs that a Discloser must provide. The first is proof of issuance and the second is proof of disclosure. In the former, the Discloser provide the variant via its SAD that was actually signed (as SAD or SAID of SAD) by the Issuer in order for the Disclosee to verify authentic issuance via the signature on that variant.  In the latter, the Discloser must disclose any other Issuer enabled (via schema composition) variants that the Discloser offered to disclose as part of the graduated disclosure process.
+To summarize, when the Issuer commits to the composed schema of an ACDC it is committing to all the variants so composed. As described above, the top-level field values in the compact variant enable verification against disclosure of any of the other Issuer committed variants because they all share the same top-level structure. This applies even to the metadata variant in spite of it only providing values for some top-level sections and not others. The verifiablity of a top-level section is separable.
+
+Consequently, the IPEX protocol must specify how a validator does validation of any variant in a graduated disclosure. To restate, there are two proofs that a Discloser must provide. The first is proof of issuance (PoI), and the second is proof of disclosure (PoD). In the former, the Discloser provides the variant via its SAD that was actually signed or seal (as SAD or SAID of SAD) by the Issuer in order for the Disclosee to verify authentic issuance via the signature on that variant.  In the latter, the Discloser must disclose the Issuer-enabled (via schema composition) variant that the Discloser offered to disclose as part of the graduated disclosure process.
 
 #### IPEX Validation
 
 The goal is to define a validation process (set of rules) that works for all variants of an ACDC and for all types of graduated disclosure of that ACDC.
 
-For example, in the bulk issuance of an ACDC, the Issuer only signs the blinded SAID of the SAD that is the Compact variant of the ACDC not the SAD itself. This enable a Discloser to make a proof of inclusion of the ACDC in a bulk issuance set by unblinding the signature on the blinded SAID without leaking correlation to anything but the blinded SAID itself. To clarify, the Disclosee can verify the signature on the SAID without to prove set inclusion with needing the disclosure of any other information about the ACDC. Issuer signing of the SAID not the SAD also has the side benefit of minimizing the computation of large numbers of bulk issued signatures.
+For example, in the bulk issuance of an ACDC (see bulk issued ACDCs in the Annex), the Issuer only signs or seals the blinded SAID of the SAD, which is the Compact variant of the ACDC, not the SAD itself. This enables a Discloser to make a proof of inclusion of the ACDC in a bulk issuance set by unblinding the signature on the blinded SAID without leaking correlation to anything but the blinded SAID itself. To clarify, the Disclosee can verify the commitment to the SAID via set inclusion without disclosing any other information about the ACDC. Issuer signing or sealing of the SAID, not the SAD, also has the side benefit of minimizing the computation of large numbers of bulk-issued commitments.
 
-##### Issuer Signing Rules
+##### Issuer Commitment Rules
 
-The Issuer MUST provide a signature on the SAID of the most compact variant defined by the schema of the ACDC. When more than one variant is defined by the schema via the oneOf composition operator for any top-level field, the most compact variant MUST appear as the first entry in the oneOf list. When only one variant of each top-level field is defined by the schema, that variant is therefore by defintion the most compact variant.
+The Issuer MUST provide a signature or seal on the SAID of the most compact form variant defined by the schema of the ACDC (see the "most compact form" algorithm above. 
 
-The different variants of an ACDC form a hash tree (using SAIDs) that is analogous to a Merkle Tree.
-Signing the top-level SAID of the compact version of the ACDC is equivalent to signing the Merkle Root of a Merkle Tree.
-Different variants of an ACDC (SADs with SAIDs) correspond to different paths through a Merkle tree.
-The process of verifying that  a SAD via its SAID of a section is included in a schema authorized variant down from the  top-level SAID is equivalent to a Merkle Tree proof of inclusion along a path in the Merkel Tree down from its Root.
-This allows a single signature to provide proof of Issuance of the presentation of any schema authorized variants of the ACDC.
+The different variants of an ACDC form a hash tree (using SAIDs).
+A commitment to the top-level SAID of the compact version of the ACDC is equivalent to a commitment to the hash tree root (trunk). This makes a verifiable commitment to all expansions of that tree.
+Different variants of an ACDC (SADs with SAIDs) correspond to different paths through the hash tree.
+The process of verifying a nested block SAD against its SAID is essentially verifying proof of inclusion of the branch of the hash tree that includes that nested block. This allows a single commitment (signature or seal) to provide Proof of Issuance (PoI) of the presentation of any schema-authorized variants of the ACDC.
 
-An Issuer MAY provide signatures of the SAIDS of other variants, as well as signatures of the SADs of other variants.
+An Issuer MAY provide signatures or seals on the SAIDS of other variants, as well as signatures or seals on the SADs of other variants.
 
-Proof of issuance is provided by disclosing the SAID of the most compact variant and the signature by the Issuer on that SAID.
+To summarize.
 
-Proof of disclosure is provided by disclosing the SAD of the most compact variant and then recursively disclosing the nested SADs of each of the top level sections of the most compact variant as needed for the promised disclosure.
+Proof of Issuance (PoI) is provided by disclosing the SAID of the most compact variant and the verifiable commitment (signature or seal) by the Issuer on that SAID.
 
-Thus for any disclosed variant of an ACDC, the Disclosee need only verify only one proof of issuance as defined above and may need to verify a different proof of disclosure for each disclosed variant as defined above.
+Proof of Disclosure (PoD) is provided by disclosing the SAD of the most compact variant and then recursively disclosing (expanding) the nested SADs of each of the blocks of the most compact variant as needed for the promised disclosure.
 
-### Example Most Compact Variant
-
-The following JSON field map serialization satisfies the rules for most compact variant of the schema above:
-
-```json
-{
-  "v":  "ACDC10JSON00011c_",
-  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "did:keri:EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
-  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
-```
-
-The Issuer signs the SAID, `d` field value of the field map above.
-
-
-
-The following schema supports a compact variant:
-
-```json
-{
-  "$id": "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Public ACDC",
-  "description": "Example JSON Schema Public ACDC.",
-  "credentialType": "PublicACDCExample",
-  "type": "object",
-  "required": [
-    "v",
-    "d",
-    "i",
-    "ri",
-    "s",
-    "a",
-    "e",
-    "r"
-  ],
-  "properties": {
-    "v": {
-      "description": "ACDC version string",
-      "type": "string"
-    },
-    "d": {
-      "description": "ACDC SAID",
-      "type": "string"
-    },
-    "i": {
-      "description": "Issuer AID",
-      "type": "string"
-    },
-    "ri": {
-      "description": "credential status registry AID",
-      "type": "string"
-    },
-    "s": {
-      "description": "schema section",
-      "oneOf": [
-        {
-          "description": "schema section SAID",
-          "type": "string"
-        },
-        {
-          "description": "schema detail",
-          "type": "object"
-        }
-      ]
-    },
-    "a": {
-      "description": "attribute section",
-      "oneOf": [
-        {
-          "description": "attribute section SAID",
-          "type": "string"
-        },
-        {
-          "description": "attribute detail",
-          "type": "object",
-          "required": [
-            "d",
-            "i",
-            "score",
-            "name"
-          ],
-          "properties": {
-            "d": {
-              "description": "attribute section SAID",
-              "type": "string"
-            },
-            "i": {
-              "description": "Issuee AID",
-              "type": "string"
-            },
-            "score": {
-              "description": "test score",
-              "type": "integer"
-            },
-            "name": {
-              "description": "test taker full name",
-              "type": "string"
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    },
-    "e": {
-      "description": "edge section",
-      "oneOf": [
-        {
-          "description": "edge section SAID",
-          "type": "string"
-        },
-        {
-          "description": "edge detail",
-          "type": "object",
-          "required": [
-            "d",
-            "boss"
-          ],
-          "properties": {
-            "d": {
-              "description": "edge section SAID",
-              "type": "string"
-            },
-            "boss": {
-              "description": "boss edge",
-              "type": "object",
-              "required": [
-                "d",
-                "n",
-                "s",
-                "w"
-              ],
-              "properties": {
-                "d": {
-                  "description": "edge SAID",
-                  "type": "string"
-                },
-                "n": {
-                  "description": "far node SAID",
-                  "type": "string"
-                },
-                "s": {
-                  "description": "far node schema SAID",
-                  "type": "string",
-                  "const": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
-                },
-                "w": {
-                  "description": "edge weight",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    },
-    "r": {
-      "description": "rule section",
-      "oneOf": [
-        {
-          "description": "rule section SAID",
-          "type": "string"
-        },
-        {
-          "description": "rule detail",
-          "type": "object",
-          "required": [
-            "d",
-            "warrantyDisclaimer",
-            "liabilityDisclaimer"
-          ],
-          "properties": {
-            "d": {
-              "description": "edge section SAID",
-              "type": "string"
-            },
-            "warrantyDisclaimer": {
-              "description": "warranty disclaimer clause",
-              "type": "object",
-              "required": [
-                "d",
-                "l"
-              ],
-              "properties": {
-                "d": {
-                  "description": "clause SAID",
-                  "type": "string"
-                },
-                "l": {
-                  "description": "legal language",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            },
-            "liabilityDisclaimer": {
-              "description": "liability disclaimer clause",
-              "type": "object",
-              "required": [
-                "d",
-                "l"
-              ],
-              "properties": {
-                "d": {
-                  "description": "clause SAID",
-                  "type": "string"
-                },
-                "l": {
-                  "description": "legal language",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    }
-  },
-  "additionalProperties": false
-}
-```
+Thus, for any disclosed variant of an ACDC, the Disclosee need only verify one Proof of Issuance (PoI) as defined above and may need to verify a specific Proof of Disclosure (PoD) for a given disclosed variant as defined above.
 
 
 ### Disclosure-specific (bespoke) issued ACDCs
 
-Chaining two or more ACDCs via edges enables disclosure-specific issuance of bespoke issued ACDCs. A given Discloser of an ACDC issued by some Issuer may want to augment the disclosure with additional contractual obligations or additional information sourced by the Discloser where those augmentations are specific to a given context, such as a specific Disclosee. A given Discloser issues its own bespoke ACDC that references via an edge in the bespoke ACDC some other ACDC. This means that the normal validation logic and tooling for a chained ACDC can be applied without complicating the presentation exchange logic. Furthermore, attributes in other ACDCs pointed to by edges in the bespoke ACDC may be addressed by attributes in the bespoke ACDC using JSON Pointer or CESR-Proof SAD Path references that are relative to the node SAID in the edge [@RFC6901][@Proof_ID].
+Chaining two or more ACDCs via edges enables disclosure-specific issuance of bespoke issued ACDCs. A given Discloser of an ACDC issued by some Issuer may want to augment the disclosure with additional contractual obligations or additional information sourced by the Discloser where those augmentations are specific to a given context, such as a specific Disclosee. A given Discloser issues its own bespoke ACDC referencing some other ACDC via an Edge. This means that the normal validation logic and tooling for a chained ACDC can be applied without complicating the presentation exchange logic. Furthermore, attributes in other ACDCs pointed to by edges in the bespoke ACDC may be addressed by attributes in the bespoke ACDC using JSON Pointer or CESR-SAD-Path proof references that are relative to the node SAID in the edge [@RFC6901][@Proof_ID].
 
-For example, this approach enables the bespoke ACDC to identify (name) the Disclosee directly as the Issuee of the bespoke ACDC. This enables contractual legal language in the rule section of the bespoke ACDC that references the Issuee of that ACDC as a named party. Signing the agreement to the offer of that bespoke ACDC consummates a contract between named Issuer and named Issuee. This approach means that custom or bespoke presentations do not need additional complexity or extensions. Extensibility comes from reusing the tooling for issuing ACDCs to issue a bespoke or disclosure-specific ACDC. When the only purpose of the bespoke ACDC is to augment the contractual obligations associated with the disclosure, then the Attribute section, `a`, field value of the bespoke ACD may be empty or it may include properties whose only purpose is to support the bespoke contractual language.
+For example, this approach enables the bespoke ACDC to identify (name) the Disclosee directly as the Issuee of the bespoke ACDC. This enables contractual legal language in the rule section of the bespoke ACDC that references the Issuee of that ACDC as a named party. Signing the agreement to the offer of that bespoke ACDC consummates a contract between the named Issuer and the named Issuee. This approach means that custom or bespoke presentations do not need additional complexity or extensions. Extensibility comes from reusing the tooling for issuing ACDCs to issue a bespoke or disclosure-specific ACDC. When the only purpose of the bespoke ACDC is to augment the contractual obligations associated with the disclosure, then the Attribute section, `a`, field value of the bespoke ACD may be empty, or it may include properties whose only purpose is to support the bespoke contractual language.
 
 Similarly, this approach effectively enables a type of rich presentation or combined disclosure where multiple ACDCs may be referenced by edges in the bespoke ACDC that each contributes some attribute(s) to the effective set of attributes referenced in the bespoke ACDC. The bespoke ACDC enables the equivalent of a rich presentation without requiring any new tooling [@Abuse].
 
 #### Example of a bespoke issued ACDC
 
-Consider the following disclosure-specific ACDC. The Issuer is the Discloser, the Issuee is the Disclosee. The rule section includes a context-specific (anti) assimilation clause that limits the use of the information to a single one-time usage purpose, that is in this case, admittance to a restaurant.  The ACDC includes an edge that references some other ACDC that may for example be a coupon or gift card. The attribute section includes the date and place of admittance.
+Consider the following disclosure-specific ACDC. The Issuer is the Discloser, the Issuee is the Disclosee. The rule section includes a context-specific anti-assimilation clause that limits the use of the information to a single one-time usage purpose, in this case, admittance to a restaurant.  The ACDC includes an edge that references some other ACDC that may, for example, be a coupon or gift card. The attribute section includes the date and place of admittance.
 
 ```json
 {
@@ -2952,20 +2724,6 @@ Consider the following disclosure-specific ACDC. The Issuer is the Discloser, th
 ```
 
 
-
-####
-
-May want somewhere else
-
-Partial disclosure is an essential mechanism needed to support both performant exchange of information and Contractually protected disclosure such as Chain-link confidentiality on exchanged information [@CLC]. The exchange of only the SAID of a given field map is a type of Partial disclosure. Another type of Partial disclosure is the disclosure of validatable metadata about a detailed field map e.g., the schema of a field map.
-
-The SAID of a field map provides a compact cryptographically equivalent commitment to the yet to be undisclosed field map details.  A later exchange of the uncompacted field map detail provides full disclosure. Any later Full disclosure is verifiable to an earlier Partial disclosure. Partial disclosure via compact SAIDs enables the scalable repeated verifiable exchange of SAID references to cached Full disclosures. Multiple SAID references to cached fully disclosed field maps may be transmitted compactly without redundant retransmission of the full details each time a new reference is transmitted. 
-
-Likewise, Partial disclosure via SAIDs also supports the bow-tie model of Ricardian contracts [@RC]. Similarly, the schema of a field map is metadata about the structure of the field map this is validatable given the Full disclosure of the field mp. The details of compact and/or confidential exchange mechanisms that leverage Partial disclosure are explained later. When the field map includes sufficient cryptographic entropy such as through a UUID field (salty nonce), then the SAID of that field map effectively blinds the contents of the field map. This enables the field map contents identified by its SAID and characterized by its schema (i.e., Partial disclosure) to remain private until later Full disclosure.
-
-Selective disclosure, on the other hand, is an essential mechanism needed to unbundle in a correlation minimizing way a single commitment by an Issuer to a bundle of fields (i.e., a nested array or list or tuple of fields) as a whole. This allows separating a stew (bundle) of ingredients (attributes) into its constituent ingredients (attributes) without correlating the constituents via the Issuer's commitment to the stew (bundle) as a whole.
-
-Another variant of disclosure that is application specific is Disclosure-specific (bespoke) issued ACDCs which is described section 11.4.
 
 
 [//]: # (examples annex citation)
