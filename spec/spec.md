@@ -991,7 +991,7 @@ Attribute section subschema:
                 "type": "string"
               },
               {
-                "description": "grades detail",
+                "description": "block detail",
                 "type": "object",
                 "required":
                 [
@@ -1059,7 +1059,7 @@ Partially disclosed attribute section:
 }
 ```
 
-Notice that the compact form of the `grades` subblock has as the field value of the `grades` field the value of the SAID, `d` field in the expanded version (see above). These means that when the subblock detail is provided, a validator can verify it against the SAID provided in the compact (partially disclosed) form.
+Notice that the compact form of the `grades` subblock has as the field value of the `grades` field the value of the SAID, `d` field in the expanded version (see above). This means that when the subblock detail is provided, a validator can verify it against the SAID provided in the compact (partially disclosed) form.
 
 ### Edge section  
 
