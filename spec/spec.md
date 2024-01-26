@@ -2733,13 +2733,12 @@ Informative examples of fully-featured variants of ACDCs can be found in Annex C
 
 ## Transaction event log (TEL)
 
-The _Transaction Event Log_ (TEL) is a hash linked data structure of transactions that can be used to track state. A
-_Public Verifiable Credential Registry_ can be represented in several TELs to establish issuance or revocation state of
-a Verifiable Credential (VC). The KEL is used to establish control authority over the keys used to commit to the events
-of the TEL and sign the VC. The events of the TEL are used to establish the issuance or revocation state of the VCs
-issued by the controller of the identifier represented by the KEL. This document specifies a design for _public_
-VCs only. The use of a hash digest of the VC contents as the identifier of that VC or an attribute in a TEL event allows
-for correlation of uses of the VC.
+A Transaction Event Log (TEL) is a hash linked sealed data structure of transactions that can be used to track transaction state. Events in the  TEL are sealed (anchored) in a KEL using seals. A seal includes the SAID of the transaction event. This seal, therefore, makes a cryptographically verifiable commitment to the transaction event by the controller of the KEL. Because key events in a KEL are non-repudiably signed by its controller, a transaction event seal provides a verifiable non-repudiable commitment to the transaction event by the KEL controller. This makes TELs bound to KELs securely attributable to the KEL controller.  This provides extensibility to KEL semantics. Any number of transaction event types can be constructed for different applications that may be securely attributed but without complicating KEL semantics. 
+
+Importantly, the process of sealing transaction events in a KEL binds the key state at the sealing (anchoring) key event to the transaction state. This enables one beneficial property of TELs, that is, the verifiability of transaction events in the TEL persists in spite of changes to key state. In other words, transaction events do not have to be reissued when the key state changes; they are still verifiable to the key state at the point of issuance. An example of a transaction state that benefits from this property is the issuance and revocation state of dynamically revocable ACDCs. In the case where a given Issuer (KEL/TEL controller) wishes to manage transaction state for multiple instances of a given ACDC type, a special type of TEL can be employed, which is a Registry of TELs for ACDC instances.
+
+Transaction state can be public or private depending on how the transaction events are structured. Similar disclosure mechanisms to those supported by ACDCs may be applied to transaction events. 
+
 
 ### Public TEL (PTEL)
 
@@ -2747,22 +2746,23 @@ for correlation of uses of the VC.
 https://github.com/trustoverip/tswg-acdc-specification/issues/31
 :::
 
-A KERI KEL can control a TEL by anchoring the TEL to key events of the KEL with the following:
+This section defines a public TEL and public TEL Registry.
 
-1. Create the inception event for the TEL with the TEL specific unique identifier.
-1. Generate a hash digest of the serialized content of the TEL inception event.
-1. Attach anchoring seals from the KEL events to the TEL events they are authorizing.
-1. Sign the KEL event as usual to commit to the digest of the serialized TEL event.
+As described above, a KEL can control a TEL by sealing (anchoring) transaction-specific events from the TEL inside key events in the KEL. 
+The steps to this process are defined as follows:
 
-Any validator can cryptographically verify the authoritative state by validating the signatures of the referenced KEL.
-The TEL events do not have to be signed as the commitment to the event is in the form of the digest in the seal in the
-anchoring KEL event and the signatures on that event. Like KEL events, all TEL events have the fields `i`, `s`, and
-`t`. However, the `s` or sequence number field in TEL events represents the "clock" for that transaction set. Each
-transaction set can have its own "clock" (e.g. bitcoin block height, wall clock, etc) and is independent of the sequence
-number of the KEL events. In the case of the Verifiable Credential Registry, the `s` field is simply a monotonically
-increasing integer.
+1. Create the transaction-specific event for the TEL with the TEL-specific unique identifier.
+1. Generate a seal that includes the cryptographic digest (SAID) of the serialized content of the transaction event.
+1. Include the seal of that transaction event in a key event in the controlling KEL.
+1. Have the sealing key event accepted (appended) into its KEL. This means at least signing by the KEL controller and may include witnessing and or delegating the event. Such acceptance makes a verifiable, nonrepudiable commitment to the  seal (digest) of the serialized transaction event.
 
-The events are anchored back to the KEL using Event Source Seals whose JSON representation is as follows.
+Any validator can cryptographically verify the authoritative state of the transaction by validating presence of the seal in the referenced KEL. The TEL events themselves do not have to be signed because the signed commitment to the event in the form of the digest in the seal in the KEL is cryptographically equivalent to signing the transaction event itself.
+
+Like KEL events, all TEL events have an identifier field, `i`, a sequence number field, `s`, and event type field, `t`. The value of the sequence number field, `s` in TEL events, represents the "clock" for that TEL. Each
+transaction thereby can have its own "clock" (e.g. bitcoin block height, wall clock, etc) that is independent of the sequence
+number of the KEL events that seal (anchor) the transaction events that belong to a given transaction. In the case of the Verifiable Credential Registry (see below), the sequence number field, `s` field value is simply a monotonically increasing integer.
+
+The events are anchored back to the KEL using Event Source Seals, whose JSON representation is as follows.
 
 ```json
 {
@@ -2775,37 +2775,30 @@ For TEL events, this seal back to the KEL will be delivered as an attachment of 
 (s, d).
 
 ```
--GAB
+-RAB
 0AAAAAAAAAAAAAAAAAAAAAAw
 ELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
 ```
 
 #### Verifiable Credential Registry
 
-A _Public Verifiable Credential Registry_ (Registry) is a form of a _Verifiable Data Registry_ that tracks the
-issuance/revocation state of credentials issued by the controller of the KEL. Two types of TELs will be used for this
-purpose. The first type of TEL is the management TEL and will signal the creation of the Registry and track the list of
-Registrars that will act as Backers for the individual TELs for each VC. The second type of TEL is the VC TEL which will
-track the issued or revoked state of each VC and will contain a reference to it's corresponding management TEL.
+A Public Verifiable Credential Registry (VCR) is a form of a Verifiable Data Registry (VDR) that tracks the
+issuance/revocation state of Verifiable Credentials (VC) issued by the controller of the KEL. Without loss of specificity, in this section, a VCR is simply denoted as a Registry. These VCs are expressed as ACDCs and denote simply as a Credential. Two types of TELs will be used for this purpose. The first type of TEL is the management TEL, i.e., a Registry TEL, and will manage the creation of its associated Registry and track the list of Registrars that act as Backers for the individual TELs for each Credential (ACDC VC). The second type of TEL is the Credential (ACDC) TEL, which will track the issued or revoked state of each Credential and will contain a reference to its corresponding management TEL.
 
-The following events will be used to create and maintain the TELs for the Registry.
+The following events will be used to create and maintain both the Registry and Credential TELs. The second column indicates to which TEL, Registry, or Credential the event belongs.
 
 |Ilk|TEL|Name|Description|
 |---|---|---|---|
-|vcp| Management |Registry Inception Event | Inception statement for the Registry |
-|vrt| Management |Registry Rotation Event | Rotation event for updating Backers |
-|iss| VC | Simple Credential Issuance Event | Issue credential with no Backers |
-|rev| VC | Simple Credential Revocation Event | Revoke previously issued credential with no Backers |
-|bis| VC | Credential Issuance Event | Issue credential |
-|brv| VC | Credential Revocation Event | Revoke previously issued credential |
-|iis| VC | Simple Credential Issuance Event with VC Hash| Issue credential with no Backers, VC Hash as separate field |
-|irv| VC | Simple Credential Revocation Event with VC Hash| Revoke previously issued credential with no Backers, VC Hash as separate field |
-|ibs| VC | Credential Issuance Event with VC Hash | Issue credential, VC Hash as separate field |
-|ibr| VC | Credential Revocation Event with VC Hash | Revoke previously issued credential, VC Hash as separate field |
+|vcp| Registry |Registry Inception Event | Inception statement for the Registry |
+|vrt| Registry |Registry Rotation Event | Rotation event for updating Backers |
+|iss| Credential | Simple Credential Issuance Event | Issue credential with no Backers |
+|rev| Credential | Simple Credential Revocation Event | Revoke previously issued credential with no Backers |
+|bis| Credential | Credential Issuance Event | Issue credential |
+|brv| Credential | Credential Revocation Event | Revoke previously issued credential |
 
 Event source seal attachment example (line feeds added for readability)
 
-#### Management TEL
+#### Registry TEL
 
 The state tracked by the Management TEL will be the list of Registrar identifiers that serve as backers for each TEL
 under its provenance. This list of Registrars can be rotated with events specific to this type of TEL. In this way,
@@ -2840,6 +2833,23 @@ credentials to be issued.
 |ba| list of backers to add (ordered backer set) | |
 |br| list of backers to remove (ordered backer set) | |
 
+The value value of several fields either is or includes a SAID. The SAID protocol is defined in the CESR specification. 
+
+`i` or `ri`  registry identifier field is self-addressing wrt the registry inception event
+`i` credential identifier is self-addressing wrt to the credential itself. 
+
+Either of these fields can be namespaced using DID syntax. In this case the identifier, `i` or `ri` field value is the method-specific identifier of the full DID (See {{DID}} protocol). For informational purposes, the fully qualified DID can be included as an attachment to the TEL events.
+
+`ii` issuer identifier is the controller's identifier prefix (AID)
+
+The value of one of the fields is or includes an AID. (Can `ii` be a DID?) In this case, the Issuer Identifer, `ii` field value is the method-specific identifier of the full DID (See {{DID}} protocol). For informational purposes, the fully qualified DID can be included as an attachment to the TEL events.
+
+
+The list of backers needed to sign each VC TEL event is maintained by the Registry TEL. Since that list can change
+over time with the `vrt` management events listed above, the non-simple credential events (`bis`, `brv`) must be anchored to the event in the Registry TEL at the point when the Credential event. This way, the backer
+signatures can be indexed into the proper list of backers at the time of issuance or revocation.
+
+
 ##### Configuration
 
 The simplest (and most common) case for Registries relies on the witnesses of the controlling KEL and their receipts of
@@ -2848,30 +2858,17 @@ management TEL inception event with the configuration option `NB`  to specify th
 configured in the management TEL. In this case, there will only be one event in the management TEL for this Registry and
 the simple events `iss`
 and `rev` will be used for "simple issue" and "simple revoke" respectively in the VC specific TELs. For these events,
-the `ri` field will be the simple identifier referencing the management TEL.
+the `i` field will be the simple identifier referencing the Registry TEL.
 
 |Option|Description|Notes|
 |---|---|---|
 |NB| No Backers | No registry specific backers will be configured for this Registry |
 
-##### Registry Inception Event
 
-```json
-{
- "v" : "KERI10JSON00011c_",
- "i" : "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
- "ii": "EJJR2nmwyYAfSVPzhzS6b5CMZAoTNZH3ULvaU6Z-i0d8",
- "s" : "0",
- "t" : "vcp",
- "b" : ["BbIg_3-11d3PYxSInLN-Q9_T2axD6kkXd3XRgbGZTm6s"],
- "c" : []
- "a" : {
-     "d": "EEBp64Aw2rsjdJpAR0e2qCq3jX7q7gLld3LjAwZgaLXU"
-  }
-}-GAB0AAAAAAAAAAAAAAAAAAAAABwEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
-```
 
-Registry inception event for establishing the list of Backers:
+#### Registry inception event
+
+Backerless: 
 
 ```json
 {
@@ -2885,9 +2882,27 @@ Registry inception event for establishing the list of Backers:
 }-GAB0AAAAAAAAAAAAAAAAAAAAABwEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
 ```
 
-Registry inception event for "backer-less" configuration.
+Backered:
+
+```json
+{
+ "v" : "KERI10JSON00011c_",
+ "i" : "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
+ "ii": "EJJR2nmwyYAfSVPzhzS6b5CMZAoTNZH3ULvaU6Z-i0d8",
+ "s" : "0",
+ "t" : "vcp",
+ "b" : ["BbIg_3-11d3PYxSInLN-Q9_T2axD6kkXd3XRgbGZTm6s"],
+ "c" : ["]
+ "a" : {
+     "d": "EEBp64Aw2rsjdJpAR0e2qCq3jX7q7gLld3LjAwZgaLXU"
+  }
+}-GAB0AAAAAAAAAAAAAAAAAAAAABwEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
+```
 
 ##### Registry Rotation Event
+
+Shown is an example with backers. Registrar rotation event updates the list of Backers. A backerless variant is not needed since there are no backers to rotate.  The set of backers is changed by adding backers with the backer add list in the `ba` field and removing backers with the backer remove list in the `br` field.
+
 
 ```json
 {
@@ -2901,79 +2916,19 @@ Registry inception event for "backer-less" configuration.
 }-GAB0AAAAAAAAAAAAAAAAAAAAACQEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
 ```
 
-Registrar rotation event updates the list of Backers.
-
-#### Verifiable Credential TELs
+#### Credential TELs
 
 The binary state (issued or revoked) of each verifiable credential (VC) will be tracked in individual TELs associated
-with each VC. The state changes will be represented by 4 sets of 2 events: `iss` for simple VC issuance and `rev`
-for simple revocation, `bis` for the issuance of the VCs with backers and `brv` for revocation of the VCs with backers
-and corresponding events `iis`, `irv` and `ibs`, `ibr` to be used when the identifier of the VC is not the
-self-addressing identifier of the VC and that identifier must be included is the separate `vi` field in the event. The
-events will be anchored to the KEL with an event seal triple attachment signified by the grouping counter `-e##`.
+with each VC. The state changes will be represented by either of two sets of two events each: 
 
-##### Self Addressing Identifiers
+`iss` and `rev` for simple VC issuance and revocation respectively
+`bis` and `brv` for backered issuance and revocation respectively
 
-The advantage of a content addressable identifier is that it is cryptographically bound to the contents. It provides a
-secure root-of-trust. Any cryptographic commitment to a content addressable identifier is functionally equivalent (given
-comparable cryptographic strength) to a cryptographic commitment to the content itself.
+The events will be anchored to the KEL with an event seal triple attachment signified by the grouping counter `-R##`.
 
-A self-addressing identifier is a special class content-addressable identifier that is also self-referential. The
-special class is distinguished by a special derivation method or process to generate the self-addressing identifier.
-This derivation method is determined by the combination of both a derivation code prefix included in the identifier and
-the context in which the identifier appears. The reason for a special derivation method is that a naive cryptographic
-content addressable identifier must not be self-referential, i.e. the identifier must not appear within the contents
-that it is identifying. This is because the naive cryptographic derivation process of a content addressable identifier
-is a cryptographic digest of the serialized content. Changing one bit of the serialization content will result in a
-different digest. A special derivation method or process is required.
+#### SAIDs in a TEL
 
-##### Derivation Process
 
-This process is as follows:
-
-- replace the value of the id field in the content that will hold the self-addressing identifier with a dummy string of
-  the same length as the eventually derived self-addressing identifier
-- compute the digest of the content with the dummy value for the id field
-- prepend the derivation code to the digest and encode appropriately to create the final derived self-addressing
-  identifier replace the dummy value with the self-addressing identifier
-
-As long as any verifier recognizes the derivation method, the 'self-addressing` identifier is a cryptographically secure
-commitment to the contents in which it is embedded. It is a cryptographically verifiable self-referential content
-addressable identifier.
-
-Because a self-addressing identifier is both self-referential and cryptographically bound to the contents it identifies,
-anyone can validate this binding if they follow the binding protocol outlined above.
-
-To elaborate, this approach of deriving self-referential identifiers from the contents they identify, we call
-self-addressing. It allows a verifier to verify or re-derive the self-referential identifier given the contents it
-identifies. To clarify, a self-addressing identifier is different from a standard content address or content addressable
-identifier in that a standard content addressable identifier may not be included inside the contents it addresses. The
-standard content addressable identifier is computed on the finished immutable contents and therefore is not
-self-referential.
-
-#### Self-Addressing Identifiers in a TEL
-
-`ii` issuer identifier is the controller prefix is self-certifying and may be also self-addressing (but may not be) wrt
-to its inception event  (For GLEIF TELS the issuer identifier must be self-addressing)
-
-`ri`, `i` registry identifier is self-addressing wrt the registry inception event `i` VC identifier is self-addressing
-wrt to the VC itself
-
-There are two options for including a cryptographic commitment to the VC in the TEL VC events. The identifier of the VC
-can self-addressing using the same technique KERI uses for self-addressing identifiers. The VC identifier can be created
-by padding the VC `id` field and taking a hash digest of the serialized contents of the VC. This form of self-addressing
-identifier can be used as the `i` field in the TEL `iss`, `rev`, `bis` and `brv` events and no other reference to the VC
-is required. When the identifier of the VC is derived from some other method, the TEL events `iis`, `irv`, `ibs` and
-`ibr` are used, and a hash digest of the contents of the VC is placed in the `vi` field.
-
-The VC identifier can be namespaced using DID syntax. In this case, the VC identifier in the TEL events would be the
-method specific identifier of the full DID. For informational purposes, the fully qualified DID can be included as an
-attachment to the TEL events.
-
-The list of backers needed to sign each VC TEL event is maintained by the management TEL. Since that list can change
-over time with the `rot` management events listed above, the non-simple VC events (`bis`, `brv`) must be anchored to the
-event in the management TEL at the point when the VC event is published with the `ra` field. This way, the backer
-signatures can be indexed into the proper list of backers at the time of issuance or revocation.
 
 #### Credential Issuance/Revocation TEL
 
@@ -2985,8 +2940,8 @@ signatures can be indexed into the proper list of backers at the time of issuanc
 |t| message type  of event |  |
 |dt| issuer system data/time in iso format | |
 |p| prior event digest | |
-|ri| registry identifier from management TEL | |
-|ra| registry anchor to management TEL | |
+|ri| registry identifier from registry TEL | |
+|ra| registry anchor to registry TEL | |
 
 ##### Simple Credential Issuance Event
 
@@ -3049,25 +3004,8 @@ signatures can be indexed into the proper list of backers at the time of issuanc
 }-GAB0AAAAAAAAAAAAAAAAAAAAABAELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
 ```
 
-#### Use Case
-
-The _Verifiable Legal Entity Identifier_ (vLEI) provides a lightweight, easy to understand use case for a _Transaction
-Event Log_ as a _Verifiable Credential Registry_. Issuing a VC has been described above. Verification of a VC will start
-with the presentation of a vLEI VC as proof (all vLEI VCs are public and therefore proof presentation will include the
-entire vLEI VC). The verifier will extract the DID of the issuer from the VC, and calculate the hash digest of the
-serialized contents of the VC. By parsing the namespaced identifier of the VC, the verifier will perform the following
-steps:
-
-1. Retrieve the key state from the KERI did method (or appropriate DID method tunnel) using the controller identifier
-   embedded in the VC identifier
-1. Retrieve and verify the KEL against the key state of the issuer
-1. Retrieve the management TEL using the Registry identifier embedded in the VC identifier and determine the Registrars
-   to use to retrieve the VC TEL.
-1. Retrieve the VC TEL and calculate the issuance/revocation state of the VC from the events in the TEL.
-1. Using the keys from the KERI event to which the `iss` event is anchored, verify the signature on the VC.
 
 
-## FIX ME
 ### Blindable state TEL 
 
 ::: issue
@@ -3092,11 +3030,11 @@ Blindable state TEL top-Level fields:
 |d| event digest | SAID |
 |s| sequence number of event |  |
 |t| message type  of event | `upd`  |
-|dt| issuer system data/time in iso format | |
+|dt| issuer system date/time in iso format | |
 |p| prior event digest | SAID |
-|ri| registry identifier from management TEL | |
-|ra| registry anchor to management TEL | |
-|a| state attributed digest | SAID |
+|rd| registry SAID identifier of Registry TEL | |
+|rs| registry seal to sealing event in Registry TEL| |
+|a| state attribute block SAID| SAID |
 
 Blindable state TEL attribute (state) fields: 
 
@@ -3104,37 +3042,16 @@ Blindable state TEL attribute (state) fields:
 |---|---|---|
 |d| attribute digest | SAID |
 |u| salty nonce blinding factor | UUID |
-|i| namespaced identifier of VC or aggregate when bulk-issued | SAID or Aggregate |
+|cd| namespaced credential SAID identifier of VC or aggregate when bulk-issued | SAID or Aggregate |
 |s| state value | `issued` or `revoked` |
+
+
 
 ### Transfer registry TEL
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/34
 :::
-
-### Independent TEL bulk-issued ACDCs
-
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/33
-:::
-
-Recall that the purpose of using the aggregate ‘B for a bulk-issued set from which the TEL identifier is derived is to enable a set of bulk-issued ACDCs to share a single public TEL and/or a single anchoring seal in the Issuer's KEL without enabling unpermissioned correlation to any other members of the bulk set by virtue of the shared aggregate ‘B’ used for either the TEL or anchoring seal in the KEL. When using a TEL, this enables the issuance/revocation/transfer state of all copies of a set of bulk-issued ACDCs to be provided by a single TEL which minimizes the storage and compute requirements on the TEL registry while providing Selective disclosure to prevent unpermissioned correlation via the public TEL. When using an anchoring seal, this enables one signature to provide proof of inclusion in the bulk-issued aggregate ‘B’.
-
-However, in some applications where Chain-link confidentiality does not sufficiently deter malicious provable correlation by Disclosees (Second-party Verifiers), an Issuee may benefit from using ACDC with independent TELs or independent aggregates ‘B’ but that are still bulk-issued.
-
-In this case, the bulk issuance process must be augmented so that each uniquely identified copy of the ACDC gets its own TEL entry (or equivalently its own aggregate ‘B’) in the registry. Each Disclosee (Verifier) of a full presentation/disclosure of a given copy of the ACDC only receives proof of one uniquely identified TEL and cannot provably correlate the TEL state of one presentation to any other presentation because the ACDC SAID, the TEL identifier, and the signature of the Issuer on each aggregate ‘B’ will be different for each copy. There is, therefore, no point of provable correlation, permissioned or otherwise. For example, this approach could be modulated by having a set of smaller bulk issued sets that are more contextualized than one large bulk-issued set.
-
-The obvious drawbacks of this approach (independent unique TELs for each private ACDC) are that the size of the registry database increases as a multiple of the number of copies of each bulk-issued ACDC and every time an Issuer must change the TEL state of a given set of copies it must change the state of multiple TELs in the registry. This imposes both a storage and computation burden on the registry. The primary advantage of this approach, however, is that each copy of a private ACDC has a uniquely identified TEL. This minimizes unpermissioned Third-party exploitation via provable correlation of TEL identifiers even with colluding Second-party Verifiers. They are limited to statistical correlation techniques.
-
-In this case, the set of private ACDCs may or may not share the same Issuee AID because for all intents and purposes each copy appears to be a different ACDC even when issued to the same Issuee. Nonetheless, using unique Issuee AIDs may further reduce correlation by malicious Disclosees (Second-party verifiers) beyond using independent TELs.
-
-To summarize the main benefit of this approach, in spite of its storage and compute burden, is that in some applications Chain-link confidentiality does not sufficiently deter unpermissioned malicious collusion. Therefore, completely independent bulk-issued ACDCs may be used.
-
-
-[//]: # (\backmatter)
-
-[//]: # (Performance and Scalability {#sec:annexA .informative})
 
 ## Annex
 
@@ -3555,31 +3472,35 @@ One potential point of provable but unpermissioned correlation among any group o
 
 One solution to this problem is for the Issuee to use a unique AID for the copy of a bulk-issued ACDC presented to each Disclosee in a given context. This requires that each ACDC copy in the bulk-issued set use a unique Issuee AID. This would enable the Issuee in a given context to minimize provable correlation by malicious Disclosees against any given Issuee AID. In this case, the bulk issuance process may be augmented to include the derivation of a unique Issuee AID in each copy of the bulk-issued ACDC by including in the Inception event that defines a given Issuee's self-addressing AID, a digest seal derived from the shared salt and copy index ‘k’. The derivation path for the digest seal is ‘k/0.’, where ‘k’ is the index of the ACDC. To clarify ‘k/0.’ specifies the path to generate the UUID to be included in the Inception event that generates the Issuee AID for the ACDC at index ‘k’. This can be generated on-demand by the Issuee. Each unique Issuee AID also would need its own KEL. But generation and publication of the associated KEL can be delayed until the bulk-issued ACDC is actually used. This approach completely isolates a given Issuee AID to a given context with respect to the use of a bulk-issued private ACDC. This protects against even the unpermissioned correlation among a group of malicious Disclosees (Second-parties) via the Issuee AID.
 
+
+### Independent TEL bulk-issued ACDCs
+
+::: issue
+https://github.com/trustoverip/tswg-acdc-specification/issues/33
+:::
+
+Recall that the purpose of using the aggregate ‘B for a bulk-issued set from which the TEL identifier is derived is to enable a set of bulk-issued ACDCs to share a single public TEL and/or a single anchoring seal in the Issuer's KEL without enabling unpermissioned correlation to any other members of the bulk set by virtue of the shared aggregate ‘B’ used for either the TEL or anchoring seal in the KEL. When using a TEL, this enables the issuance/revocation/transfer state of all copies of a set of bulk-issued ACDCs to be provided by a single TEL which minimizes the storage and compute requirements on the TEL registry while providing Selective disclosure to prevent unpermissioned correlation via the public TEL. When using an anchoring seal, this enables one signature to provide proof of inclusion in the bulk-issued aggregate ‘B’.
+
+However, in some applications where Chain-link confidentiality does not sufficiently deter malicious provable correlation by Disclosees (Second-party Verifiers), an Issuee may benefit from using ACDC with independent TELs or independent aggregates ‘B’ but that are still bulk-issued.
+
+In this case, the bulk issuance process must be augmented so that each uniquely identified copy of the ACDC gets its own TEL entry (or equivalently its own aggregate ‘B’) in the registry. Each Disclosee (Verifier) of a full presentation/disclosure of a given copy of the ACDC only receives proof of one uniquely identified TEL and cannot provably correlate the TEL state of one presentation to any other presentation because the ACDC SAID, the TEL identifier, and the signature of the Issuer on each aggregate ‘B’ will be different for each copy. There is, therefore, no point of provable correlation, permissioned or otherwise. For example, this approach could be modulated by having a set of smaller bulk issued sets that are more contextualized than one large bulk-issued set.
+
+The obvious drawbacks of this approach (independent unique TELs for each private ACDC) are that the size of the registry database increases as a multiple of the number of copies of each bulk-issued ACDC and every time an Issuer must change the TEL state of a given set of copies it must change the state of multiple TELs in the registry. This imposes both a storage and computation burden on the registry. The primary advantage of this approach, however, is that each copy of a private ACDC has a uniquely identified TEL. This minimizes unpermissioned Third-party exploitation via provable correlation of TEL identifiers even with colluding Second-party Verifiers. They are limited to statistical correlation techniques.
+
+In this case, the set of private ACDCs may or may not share the same Issuee AID because for all intents and purposes each copy appears to be a different ACDC even when issued to the same Issuee. Nonetheless, using unique Issuee AIDs may further reduce correlation by malicious Disclosees (Second-party verifiers) beyond using independent TELs.
+
+To summarize the main benefit of this approach, in spite of its storage and compute burden, is that in some applications Chain-link confidentiality does not sufficiently deter unpermissioned malicious collusion. Therefore, completely independent bulk-issued ACDCs may be used.
+
+
 ### Extensibility
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/35
 :::
 
-Append-only verifiable data structures have strong security properties that simplify end-verifiability and foster decentralization.
+The ACDC design leverages append-only verifiable data structures, namels KELs and TELs that have strong security properties that simplify end-verifiability and foster decentralization. Append-only verifiable data structures provide permission-less extensibility by issuers, presenters, and/or verifiers. By permission-less, it means that there is no shared governance over these data structures. This is completely decentralized and zero-trust. The fact that each ACDC has both a universally unique content-based identifier and a universally unique content-based schema identifier that determines its type, enables permission-less ACDC type registries. Because attributes, claims, properties may be conveyed by verifiable graphs of ACDCs linked by their edges whose edges may also have properties, ACDCs may be modeled as labeled property graphs. Thus enables extensibility of pre-existing already Issued ACDCs by appending additional attributes via application specifc ACDCs or bespoke ACDCs. In other words, custom attributes or properties are appended via chaining via one or more custom ACDCs defined by custom schema (type-is-schema), not modifying in place pre-issued credential types.
 
-Append-only provides permission-less extensibility by downstream issuers, presenters, and/or verifiers
-
-Each ACDC has a universally-unique content-based identifier with a universally-unique content-based schema identifier.
-
-Fully decentralized name-spacing.
-
-Custom fields are appended via chaining via one or more custom ACDCs defined by custom schema (type-is-schema).
-
-No need for centralized permissioned name-space registries to resolve name-space collisions.
-
-The purposes of a registry now become merely schema discovery or schema blessing for a given context or ecosystem.
-
-The reach of the registry is tuned to the reach of desired interoperability by the ecosystem participants.
-
-Human meaningful labels on SAIDs are local context only.
-
-Versioning is simplified because edges still verify if new schema are backwards compatible. (persistent data structure model).
+In essence, an ACDC is really just a verifiable property graph fragment of an extensible distributed property graph where each node may be sourced by a different issuer. This type of extensibility means there is no need for centralized permissioned name-space registries to resolve name-space collisions of attributes or properties. Each ACDC has a universally unique content address and a universally unique content addressable schema (type-is-schema) as ACDC type that defines the namespace. The function of an extensible registry of ACDC types now becomes merely schema discovery or schema blessing for a given context or ecosystem. The reach of such a registry of ACDC types can be tuned to the reach of desired interoperability by the ecosystem participants. Versioning is also simplified because edges may still verify if the new schema is backward compatible.
 
 
 
@@ -3902,6 +3823,11 @@ Composed schema that supports both public compact and uncompacted variants
   "additionalProperties": false
 }
 ```
+
+
+[//]: # (\backmatter)
+
+[//]: # (Performance and Scalability {#sec:annexA .informative})
 
 
 
