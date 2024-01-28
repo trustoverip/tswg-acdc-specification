@@ -222,7 +222,6 @@ The following table defines the top-level fields in an ACDC and their order of a
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
 |`i`| Issuer Identifier (AID)| Autonomic Identifier whose control authority is established via KERI verifiable key state. |
-|`ri`| Registry Identifier | Issuance and/or revoation, transfer, or retraction registry for ACDC derived from Issuer identifier. |
 |`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
 |`a`| Attribute| Either the SAID of a block of attributes or the block itself. |
 |`A`| Attribute Aggregate| Either the aggregate of a selectively disclosable block of attributes or the block itself. |
@@ -252,8 +251,7 @@ The primary field labels are compact in that they use only one or two characters
 
 ### Version string field
 
-
-The version string, `v`, field MUST be the first field in any top-level field map of any ACDC. It provides a regular expression target for determining a serialized field map's serialization format and size (character count) that constitutes an ACDC field map (message body). A stream parser may use the version string to extract and deserialize (deterministically) any serialized stream of ACDC fields maps in a set of ACDC field maps. Each field map in a stream may use a different serialization type.
+The version string, `v` field MUST be the first field in any top-level field map of any ACDC. It provides a regular expression target for determining a serialized field map's serialization format and size (character count) constituting an ACDC field map (message body). A stream parser may use the version string to extract and deserialize (deterministically) any serialized stream of ACDC field maps in a set of ACDC field maps. Each field map in a stream may use a different serialization type.
 
 The format of the version string is `ACDCVVVKKKKBBBB_`. It is 16 characters in length and is divided into five parts: protocol, version, serialization kind, serialization length, and terminator. The first four characters, `ACDC` indicate the protocol. The CESR encoding standard supports multiple protocols, `ACDC` being one of them.  The next three characters, `VVV`, provide in Base64 notation the major and minor version numbers of the version of the ACDC protocol specification. The first `V` character provides the major version number, and the final two `VV` characters provide the minor version number. For example, `CAA` indicates major version 2 and minor version 00 or in dotted-decimal notation, i.e., `2.00`. Likewise, `CAQ` indicates major version 2 and minor version decimal 16 or in dotted-decimal notation `1.16`. The version part supports up to 64 major versions with  4096 minor versions per major version. The next four characters, `KKKK` indicate the serialization kind in uppercase. The four supported serialization kinds are `JSON`, `CBOR`, `MGPK`, and `CESR` for the JSON, CBOR, MessagePack, and CESR serialization standards, respectively [[spec: RFC4627]] [[spec: RFC4627]] [[ref: CBOR]] [[ref: RFC8949]] [[ref: MGPK]] [[ref: CESR]]. The next six characters provide in Base64  notation the total length of the serialization, inclusive of the version string and any prefixed characters or bytes. This length is the total number of characters in the serialization of the ACDC field map. The maximum length of a given ACDC field map serialization is thereby constrained to be *2<sup>24</sup> = 16,777,216* characters in length. The final character `_` is the version string terminator. This enables later versions of ACDC to change the total version string size and thereby enable versioned changes to the composition of the fields in the version string while preserving deterministic regular expression extractability of the version string. 
 
@@ -290,11 +288,11 @@ A UUID, `u` field may optionally appear in any block (field map) at any level of
 https://github.com/trustoverip/tswg-acdc-specification/issues/15
 :::
 
-Some fields, such as the `i`, Issuer identifier field, must each have an AID as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [@KERI][@KERI_ID]. A related type of identifier field is the `ri`, registry identifier field. The `ri` field is cryptographically derived from the Issuer identifier field value so has securely attributable control authority via the AID from which it is derived.  A SCID is derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [@DSig]. Each AID has a set of one or more Controllers who each control a private key. By virtue of their private key(s), the set of Controllers may make statements on behalf of the associated AID that is backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then may verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is required. The verifiable key state for AIDs is established with the KERI protocol [@KERI][@KERI_ID]. The use of AIDS enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
+Some fields, such as the `i`, Issuer identifier field, must each have an AID as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [@KERI][@KERI_ID].  An AID is derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [@DSig]. Each AID has a set of one or more Controllers who each control a private key. By virtue of their private key(s), the set of Controllers may make statements on behalf of the associated AID that is backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then may verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is required. The verifiable key state for AIDs is established with the KERI protocol [@KERI][@KERI_ID]. The use of AIDS enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
 
 ### Namespaced AIDs
 
-Because KERI is agnostic about the namespace for any particular AID, different namespace standards may be used to express KERI AIDs or identifiers derived from AIDs as the value of these AID related fields in an ACDC. The examples below use the W3C DID namespace specification with the `did:keri` method [@DIDK_ID]. But the examples would have the same validity from a KERI perspective if some other supported namespace was used or no namespace was used at all. The latter case consists of a bare KERI AID (identifier prefix) expressed in CESR format [@CESR_ID].
+Because KERI is agnostic about the namespace for any particular AID, different namespace standards may be used to express KERI AIDs or identifiers derived from AIDs as the value of these AID related fields in an ACDC. Some of the examples below use the W3C DID namespace specification with the `did:keri` method [@DIDK_ID]. However, the examples would have the same validity from a KERI perspective if some other supported namespace was used or no namespace was used at all. The latter case consists of a bare KERI AID (identifier prefix) expressed in CESR format [@CESR_ID].
 
 ### Attribute field
 
@@ -315,7 +313,7 @@ The top-level rule section `r`, field value provides both human and machine read
 
 ### Field ordering
 
-The ordering of the top-level fields when present in an ACDC must be as follows, `v`, `d`, `u`, `i`, `ri`, `s`, `a`, `A`, `e`, `r`.
+The ordering of the top-level fields when present in an ACDC must be as follows, `v`, `d`, `u`, `i`, `s`, `a`, `A`, `e`, `r`.
 
 ## ACDC variants
 
@@ -385,7 +383,6 @@ An example of a fully compact public ACDC is shown below. The ACDC is public bec
   "v":  "ACDC10JSON00011c_",
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "did:keri:EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
@@ -410,7 +407,6 @@ The schema for the Compact public ACDC example above is provided below.
     "d",
     "u",
     "i",
-    "ri",
     "s",
     "a",
     "e",
@@ -433,24 +429,23 @@ The schema for the Compact public ACDC example above is provided below.
       "description": "Issuer AID",
       "type": "string"
     },
-    "ri":
+    "s": 
     {
-      "description": "credential status registry ID",
-      "type": "string"
-    },
-    "s": {
       "description": "schema SAID",
       "type": "string"
     },
-    "a": {
+    "a": 
+    {
       "description": "attribute SAID",
       "type": "string"
     },
-    "e": {
+    "e": 
+    {
       "description": "edge SAID",
       "type": "string"
     },
-    "r": {
+    "r": 
+    {
       "description": "rule SAID",
       "type": "string"
     }
@@ -474,7 +469,6 @@ An example of a fully compact private ACDC is shown below. The ACDC is private b
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
   "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "did:keri:EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
@@ -500,7 +494,6 @@ The schema for the Compact private ACDC example above is provided below.
     "d",
     "u",
     "i",
-    "ri",
     "s",
     "a",
     "e",
@@ -528,24 +521,23 @@ The schema for the Compact private ACDC example above is provided below.
       "description": "Issuer AID",
       "type": "string"
     },
-    "ri":
+    "s": 
     {
-      "description": "credential status registry ID",
-      "type": "string"
-    },
-    "s": {
       "description": "schema SAID",
       "type": "string"
     },
-    "a": {
+    "a": 
+    {
       "description": "attribute SAID",
       "type": "string"
     },
-    "e": {
+    "e": 
+    {
       "description": "edge SAID",
       "type": "string"
     },
-    "r": {
+    "r": 
+    {
       "description": "rule SAID",
       "type": "string"
     }
@@ -1255,7 +1247,6 @@ Issued by Amy:
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
@@ -1271,7 +1262,6 @@ Issued by Bob:
   "d":  "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK",
-  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "EGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqG",
   "a":  "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9",
   "r":  "EMORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3"
@@ -1286,7 +1276,6 @@ Issued by Cat:
   "d":  "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
   "u":  "0ADAE0qHcgNghkDaG7OY1wja",
   "i":  "EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E",
-  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
   "a":  "EIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwL",
   "r":  "EBe71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOL"
@@ -1301,7 +1290,6 @@ Issued by Dug:
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
   "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
-  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "EAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4re",
   "a":  "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
   "r":  "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR"
@@ -1528,7 +1516,6 @@ Issued by Amy:
   "d":  "EHdSXCJnBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3g",
   "u":  "0ADaG7OY1wjaDAE0qHcgNghk",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EJtQIYPvAu6DZIl3MOARH3dCdoFOLe71iheqcywJcnjt",
@@ -1779,7 +1766,6 @@ Issued by Amy:
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
@@ -2055,7 +2041,6 @@ Issued by Amy:
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
@@ -2318,7 +2303,6 @@ Issued by Amy:
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
@@ -2731,38 +2715,15 @@ Consider the following disclosure-specific ACDC. The Issuer is the Discloser, th
 Informative examples of fully-featured variants of ACDCs can be found in Annex C.
 
 
-## Transaction event log (TEL)
+## Transaction event logs (TELs)
 
-A Transaction Event Log (TEL) is a hash linked sealed data structure of transactions that can be used to track transaction state. Events in the  TEL are sealed (anchored) in a KEL using seals. A seal includes the SAID of the transaction event. This seal, therefore, makes a cryptographically verifiable commitment to the transaction event by the controller of the KEL. Because key events in a KEL are non-repudiably signed by its controller, a transaction event seal provides a verifiable non-repudiable commitment to the transaction event by the KEL controller. This makes TELs bound to KELs securely attributable to the KEL controller.  This provides extensibility to KEL semantics. Any number of transaction event types can be constructed for different applications that may be securely attributed but without complicating KEL semantics. 
+### Overview
 
-Importantly, the process of sealing transaction events in a KEL binds the key state at the sealing (anchoring) key event to the transaction state. This enables one beneficial property of TELs, that is, the verifiability of transaction events in the TEL persists in spite of changes to key state. In other words, transaction events do not have to be reissued when the key state changes; they are still verifiable to the key state at the point of issuance. An example of a transaction state that benefits from this property is the issuance and revocation state of dynamically revocable ACDCs. In the case where a given Issuer (KEL/TEL controller) wishes to manage transaction state for multiple instances of a given ACDC type, a special type of TEL can be employed, which is a Registry of TELs for ACDC instances.
+A Transaction Event Log (TEL) is a hash-chained data structure of sealed transaction events that can be used to track the transaction states (typically those associated with one or more ACDCs). Events in the  TEL are sealed (anchored) in a KEL using seals. A seal can be as simple as the event's SAID (cryptographic strength digest). A transaction event seal may also include the transaction event's sequence number to make it easier to look up and verify.  Because key events in a KEL are nonrepudiably signed by its controller, the appearance of a transaction event seal provides a verifiable non-repudiable commitment to the transaction event by the KEL controller. This makes TELs, which are thereby bound to KELs, also securely attributable to the KEL's controller.  This provides verifiable but decorrelatable extensibility to KEL semantics. Any number of transaction event types can be constructed for different applications that may be securely attributed without complicating KEL semantics. The seals need no semantics beyond their secure attributability to the AID of the KEL controller. The semantics of the transaction event's state may hidden by the transaction event SAID, which in turn may be protected from rainbow table attack by a cryptographic strength UUID in the transaction event. Therefore, the transaction state, as given by a sequence of transaction events, can be either public or private, depending on how the transaction events are structured. Similarly to ACDCs themselves, graduated disclosure mechanisms may be applied to transaction events. 
 
-Transaction state can be public or private depending on how the transaction events are structured. Similar disclosure mechanisms to those supported by ACDCs may be applied to transaction events. 
+Importantly, the process of sealing transaction events in a KEL binds the key state at the sealing (anchoring) key event to the transaction state. This enables an extremely beneficial property of TELs; that is, the verifiability of transaction events in the TEL persists in spite of changes to key states in the sealing KEL. In other words, the verifiability of transaction events persists in spite of changes in the key state. To clarify, sealed transaction events remain verifiably bound to the key state at the point of issuance of the sealing event. An example of a transaction state that benefits from this property is a TEL that tracks the issuance and revocation state of dynamically revocable ACDCs, i.e., a revocation registry. 
 
-
-### Public TEL (PTEL)
-
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/31
-:::
-
-This section defines a public TEL and public TEL Registry.
-
-As described above, a KEL can control a TEL by sealing (anchoring) transaction-specific events from the TEL inside key events in the KEL. 
-The steps to this process are defined as follows:
-
-1. Create the transaction-specific event for the TEL with the TEL-specific unique identifier.
-1. Generate a seal that includes the cryptographic digest (SAID) of the serialized content of the transaction event.
-1. Include the seal of that transaction event in a key event in the controlling KEL.
-1. Have the sealing key event accepted (appended) into its KEL. This means at least signing by the KEL controller and may include witnessing and or delegating the event. Such acceptance makes a verifiable, nonrepudiable commitment to the  seal (digest) of the serialized transaction event.
-
-Any validator can cryptographically verify the authoritative state of the transaction by validating presence of the seal in the referenced KEL. The TEL events themselves do not have to be signed because the signed commitment to the event in the form of the digest in the seal in the KEL is cryptographically equivalent to signing the transaction event itself.
-
-Like KEL events, all TEL events have an identifier field, `i`, a sequence number field, `s`, and event type field, `t`. The value of the sequence number field, `s` in TEL events, represents the "clock" for that TEL. Each
-transaction thereby can have its own "clock" (e.g. bitcoin block height, wall clock, etc) that is independent of the sequence
-number of the KEL events that seal (anchor) the transaction events that belong to a given transaction. In the case of the Verifiable Credential Registry (see below), the sequence number field, `s` field value is simply a monotonically increasing integer.
-
-The events are anchored back to the KEL using Event Source Seals, whose JSON representation is as follows.
+The transaction events shall be sealed (anchored or bound) in a KEL using Transaction Event Seals, whose JSON representation is as follows.
 
 ```json
 {
@@ -2771,283 +2732,332 @@ The events are anchored back to the KEL using Event Source Seals, whose JSON rep
 }
 ```
 
-For TEL events, this seal back to the KEL will be delivered as an attachment of event source seal triples in duple of
-(s, d).
-
-```
--RAB
-0AAAAAAAAAAAAAAAAAAAAAAw
-ELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
-```
-
-#### Verifiable Credential Registry
-
-A Public Verifiable Credential Registry (VCR) is a form of a Verifiable Data Registry (VDR) that tracks the
-issuance/revocation state of Verifiable Credentials (VC) issued by the controller of the KEL. Without loss of specificity, in this section, a VCR is simply denoted as a Registry. These VCs are expressed as ACDCs and denote simply as a Credential. Two types of TELs will be used for this purpose. The first type of TEL is the management TEL, i.e., a Registry TEL, and will manage the creation of its associated Registry and track the list of Registrars that act as Backers for the individual TELs for each Credential (ACDC VC). The second type of TEL is the Credential (ACDC) TEL, which will track the issued or revoked state of each Credential and will contain a reference to its corresponding management TEL.
-
-The following events will be used to create and maintain both the Registry and Credential TELs. The second column indicates to which TEL, Registry, or Credential the event belongs.
-
-|Ilk|TEL|Name|Description|
-|---|---|---|---|
-|vcp| Registry |Registry Inception Event | Inception statement for the Registry |
-|vrt| Registry |Registry Rotation Event | Rotation event for updating Backers |
-|iss| Credential | Simple Credential Issuance Event | Issue credential with no Backers |
-|rev| Credential | Simple Credential Revocation Event | Revoke previously issued credential with no Backers |
-|bis| Credential | Credential Issuance Event | Issue credential |
-|brv| Credential | Credential Revocation Event | Revoke previously issued credential |
-
-Event source seal attachment example (line feeds added for readability)
-
-#### Registry TEL
-
-The state tracked by the Management TEL will be the list of Registrar identifiers that serve as backers for each TEL
-under its provenance. This list of Registrars can be rotated with events specific to this type of TEL. In this way,
-Registrar lists are analogous to Backer lists in KERI KELs. Additional metadata can be tracked in this TEL, for example
-references to Schema. The Management TEL will have two events: `vcp` for Registry inception and `vrt`
-for rotation of the list or Registrars. The events will reference the controlling identifier in the `ii` field and be
-anchored to the KEL with an event seal triple attachment.
-
-The Registry specific identifier will be self-addressing (see [below](#self-addressing-identifiers)
-for definition) using its inception data for its derivation. This requires a commitment to the anchor in the controlling
-KEL and necessitates the event location seal be included in the event. The derived identifier is then set in the `i`
-field of the events in the management TEL.
-
-Though it is possible for a given identifier KEL to issue multiple types of credentials, it is anticipated that there
-will be relatively few (usually one) Management TELs anchored to a given KEL. A more scalable approach to issuing
-multiple credential types from a single identifier would be to use delegated identifiers for the different types of
-credentials to be issued.
-
-|Label|Description|Notes|
-|---|---|---|
-|v| version string | |
-|i| namespaced identifier of Registry | |
-|s| sequence number of event |  |
-|t| message type  of event |  |
-|p| prior event digest | |
-|c| list of Configuration Traits/Modes | allows for config of no backer registry |
-|a| digest seal of attachment meta-data for registry |
-|ii| issuer identifier | |
-|vi| hash digest of VC contents | |
-|b| list of backer identifiers for credentials associated with this registry | |
-|bt| backer threshold | |
-|ba| list of backers to add (ordered backer set) | |
-|br| list of backers to remove (ordered backer set) | |
-
-The value value of several fields either is or includes a SAID. The SAID protocol is defined in the CESR specification. 
-
-`i` or `ri`  registry identifier field is self-addressing wrt the registry inception event
-`i` credential identifier is self-addressing wrt to the credential itself. 
-
-Either of these fields can be namespaced using DID syntax. In this case the identifier, `i` or `ri` field value is the method-specific identifier of the full DID (See {{DID}} protocol). For informational purposes, the fully qualified DID can be included as an attachment to the TEL events.
-
-`ii` issuer identifier is the controller's identifier prefix (AID)
-
-The value of one of the fields is or includes an AID. (Can `ii` be a DID?) In this case, the Issuer Identifer, `ii` field value is the method-specific identifier of the full DID (See {{DID}} protocol). For informational purposes, the fully qualified DID can be included as an attachment to the TEL events.
+The CESR representation of the seal couple is given by  the count code `-0##` or `-0O#####`
 
 
-The list of backers needed to sign each VC TEL event is maintained by the Registry TEL. Since that list can change
-over time with the `vrt` management events listed above, the non-simple credential events (`bis`, `brv`) must be anchored to the event in the Registry TEL at the point when the Credential event. This way, the backer
-signatures can be indexed into the proper list of backers at the time of issuance or revocation.
+### Validating transaction events
+
+As described above, a KEL can control a TEL by sealing (anchoring) transaction-specific events from the TEL inside key events in the KEL. 
+The steps to this process are defined as follows:
+
+1. Assign each TEL a universally unique identifier (such as the SAID of an associated ACDC)
+2. Associate each TEL with the KEL's controller AID that seals the transaction events. This AID is the Issuer of the transaction event.
+3. Create the transaction-specific event with an event SAID.
+4. Generate a seal that includes the event SAID.
+5. Include the seal of that transaction event in a key event in the controlling KEL.
+6. Have the sealing key event accepted (appended) into its KEL by the KEL controller. This means at least signing the sealing key event and may include witnessing and or delegating the event. Such acceptance makes a verifiable, nonrepudiable commitment to the seal (digest) of the serialized transaction event.
+
+Any validator can cryptographically verify the authoritative state of the transaction by validating the presence of the seal in the associated KEL.  The TEL events themselves do not have to be signed because the signed commitment to the event in the form of the digest in the seal in the KEL is cryptographically equivalent to signing the transaction event itself. Typically, the Validator is given a reference to the sealing event via a key event seal reference that includes the Issuer (KEL controller) AID, the key event's sequence number, and its SAID. The Issuer of the transaction event can either directly attach the seal reference to the ACDC or can provide an API where transaction events or their seal references and their KEL seal references can be looked up by the SAID of the ACDC associated with the transaction event. Given a key event seal reference for a given transaction event, a validator can then look up and verify the presence of the seal in the KEL.
+
+### Verifiable Container/Credential Registry
+
+ACDCs may be rightly generically referred to as Verifiable Containers (VCs). Often, ACDCs are used as entitlements or credentials and, therefore, may also be rightly referred to as Verifiable Credentials (VCs). The abbreviation VC works in either case. An ACDC can more simply be denoted as a Container or a Credential. A Verifiable Container/Credential Registry (VCR) is a type of TEL. It is a form of a Verifiable Data Registry (VDR) that tracks the state of ACDCs issued by the controller of the KEL. Without loss of specificity, in this section, a TEL serving the purpose of a VCR may be simply denoted as a Registry. A Registry that tracks the dynamic issuance revocation state of an ACDC is called a Revocation Registry.
 
 
-##### Configuration
-
-The simplest (and most common) case for Registries relies on the witnesses of the controlling KEL and their receipts of
-the KEL events instead of Registry specific backers. To accommodate this case, the `c` element is added to the
-management TEL inception event with the configuration option `NB`  to specify that the Registry will never have backers
-configured in the management TEL. In this case, there will only be one event in the management TEL for this Registry and
-the simple events `iss`
-and `rev` will be used for "simple issue" and "simple revoke" respectively in the VC specific TELs. For these events,
-the `i` field will be the simple identifier referencing the Registry TEL.
-
-|Option|Description|Notes|
-|---|---|---|
-|NB| No Backers | No registry specific backers will be configured for this Registry |
-
-
-
-#### Registry inception event
-
-Backerless: 
-
-```json
-{
- "v" : "KERI10JSON00011c_",
- "i" : "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
- "ii": "EJJR2nmwyYAfSVPzhzS6b5CMZAoTNZH3ULvaU6Z-i0d8",
- "s" : "0",
- "t" : "vcp",
- "b" : [],
- "c" : ["NB"]
-}-GAB0AAAAAAAAAAAAAAAAAAAAABwEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
-```
-
-Backered:
-
-```json
-{
- "v" : "KERI10JSON00011c_",
- "i" : "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
- "ii": "EJJR2nmwyYAfSVPzhzS6b5CMZAoTNZH3ULvaU6Z-i0d8",
- "s" : "0",
- "t" : "vcp",
- "b" : ["BbIg_3-11d3PYxSInLN-Q9_T2axD6kkXd3XRgbGZTm6s"],
- "c" : ["]
- "a" : {
-     "d": "EEBp64Aw2rsjdJpAR0e2qCq3jX7q7gLld3LjAwZgaLXU"
-  }
-}-GAB0AAAAAAAAAAAAAAAAAAAAABwEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
-```
-
-##### Registry Rotation Event
-
-Shown is an example with backers. Registrar rotation event updates the list of Backers. A backerless variant is not needed since there are no backers to rotate.  The set of backers is changed by adding backers with the backer add list in the `ba` field and removing backers with the backer remove list in the `br` field.
-
-
-```json
-{
- "v" : "KERI10JSON00011c_",
- "i" : "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
- "p" : "EY2L3ycqK9645aEeQKP941xojSiuiHsw4Y6yTW-PmsBg",
- "s" : "1",
- "t" : "vrt",
- "ba" : ["BXhpfP_H41hw8f-LluTidLfXxmC4EPwaENHI6CuruE6g"],
- "br" : ["BbIg_3-11d3PYxSInLN-Q9_T2axD6kkXd3XRgbGZTm6s"]
-}-GAB0AAAAAAAAAAAAAAAAAAAAACQEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
-```
-
-#### Credential TELs
-
-The binary state (issued or revoked) of each verifiable credential (VC) will be tracked in individual TELs associated
-with each VC. The state changes will be represented by either of two sets of two events each: 
-
-`iss` and `rev` for simple VC issuance and revocation respectively
-`bis` and `brv` for backered issuance and revocation respectively
-
-The events will be anchored to the KEL with an event seal triple attachment signified by the grouping counter `-R##`.
-
-#### SAIDs in a TEL
-
-
-
-#### Credential Issuance/Revocation TEL
-
-|Label|Description|Notes|
-|---|---|---|
-|v| version string | |
-|i| namespaced identifier of VC | |
-|s| sequence number of event |  |
-|t| message type  of event |  |
-|dt| issuer system data/time in iso format | |
-|p| prior event digest | |
-|ri| registry identifier from registry TEL | |
-|ra| registry anchor to registry TEL | |
-
-##### Simple Credential Issuance Event
-
-```json
-{
- "v" : "KERI10JSON00011c_",
- "i" : "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4",
- "s" : "0",
- "t" : "iss",
- "dt": "2021-05-27T19:16:50.750302+00:00",
- "ri": "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A"
-}-GAB0AAAAAAAAAAAAAAAAAAAAAAwELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
-```
-
-##### Simple Credential Revocation Event
-
-```json
-{
- "v" : "KERI10JSON00011c_",
- "i" : "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4",
- "s" : "1",
- "t" : "rev",
- "dt": "2021-05-27T19:16:50.750302+00:00",
- "p" : "EY2L3ycqK9645aEeQKP941xojSiuiHsw4Y6yTW-PmsBg"
-}-GAB0AAAAAAAAAAAAAAAAAAAAABAELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
-```
-
-##### Credential Issuance Event
-
-```json
-{
- "v" : "KERI10JSON00011c_",
- "i" : "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4",
- "s" : "0",
- "t" : "bis",
- "dt": "2021-05-27T19:16:50.750302+00:00",
- "ra": {
-    "i": "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
-    "s": "2",
-    "d": "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4"
-  }
-}-GAB0AAAAAAAAAAAAAAAAAAAAAAwELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
-```
-
-##### Credential Revocation Event
-
-```json
-{
- "v" : "KERI10JSON00011c_",
- "i" : "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4",
- "s" : "1",
- "t" : "brv",
- "dt": "2021-05-27T19:16:50.750302+00:00",
- "p" : "EY2L3ycqK9645aEeQKP941xojSiuiHsw4Y6yTW-PmsBg",
- "ra": {
-    "i": "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
-    "s": "4",
-    "d": "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4"
-  }
-}-GAB0AAAAAAAAAAAAAAAAAAAAABAELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
-```
-
-
-
-### Blindable state TEL 
+### Blindable state registry
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/32
 :::
+#### Overview
 
-In some applications, it is desirable that the current state of a TEL be hidden or blinded such that the only way for a potential Verifier of the state to observe that state is when the Controller of a designated AID discloses it at the time of presentation. This designated AID is called the Discloser. Typically for ACDCs that have an Issuee, the Discloser is the Issuee, but the Issuer could designate any AID as the Discloser. Only the Discloser will be able to unblind the state to a potential Disclosee.
+In some applications, it is desirable that the current state of an ACDC be hidden or blinded such that the only way for a potential Validator of the state to observe that state is when the Controller of some AID, when acting as Discloser, discloses the state at the time of presentation of that ACDC. This makes the associated TEL a blindable state registry. This is a type of private registry. To clarify, the Issuer designates some AID as the Discloser. Typically, for ACDCs with an Issuee, the Discloser is the Issuee, but the Issuer could designate any AID as the Discloser. Only the Discloser can unblind the state to a potential Disclosee.
 
-In a blindable state TEL, the state disclosure is interactive. A Disclosee may observe the state only when unblinded via an interactive exchange with the Discloser. After disclosure, the Discloser may then request that the Issuer update the state with a new blinding factor (the blind). The Disclosee cannot then observe the current state of the TEL without yet another disclosure interaction with the Discloser.
+In a blindable state Registry, usually, disclosure of the state by Discloser to Disclosee is interactive. A Disclosee may only observe the state when first unblinded in an interactive exchange with the Discloser. After disclosure, the Discloser may then request that the Issuer update the state with a new blinding factor (the blind). The Disclosee cannot then observe the current state of the TEL without yet another disclosure interaction with the Discloser.
 
-The blind is derived from a secret salt shared between the Issuer and the designated Discloser. The current blind is derived from this salt, and the sequence number of the TEL event is so blinded. To elaborate, the derivation path for the blind is the sequence number of the TEL event, which in combination with the salt, produces a universally unique salty nonce for the blind. Only the Issuer and Discloser have a copy of the secret salt, so only they can derive the current blind. The Issuer provides a service endpoint to which the Discloser can make a signed request to update the blind.  Each new event in the TEL must change the blinding factor but may or may not change the actual blinded state. Only the Issuer can change the actual blinded state. Because each updated event in the TEL has a new blinding factor regardless of an actual change of state or not, an observer cannot correlate state changes to event updates as long as the Issuer regularly updates the blinding factor by issuing a new TEL event.
+The blind is derived from a secret salt shared between the Issuer and the designated Discloser. The current blind is deterministically derived from this salt and the sequence number of the transaction event. This is used to blind the state of the event. To elaborate, the hierarchically deterministic derivation path for the blind is the sequence number of the TEL event, which, combined with the salt, produces a universally unique salty nonce (UUID) to act as the blind. The Issuer publishes the transaction event with a blinded state so that a Validator can independently verify the Issuer's commitment to that state but without being able to determine the state via a seal in the Issuer's KEL with the SAID of that event. Only the Issuer can change the actual blinded state. Only the Issuer and Discloser have a copy of the secret salt, so only they can independently derive the current blind from the sequence number. Given the blind and a small finite number of possible values for the transaction state, the Discloser can verifiably discover and hence unblind the current transaction state from the published SAID of the current transaction event, its sequence number, and the shared secret salt. 
 
-Blindable state TEL events use a unique event type, `upd`. The event state is hidden in the `a` field, whose value is the blinded SAID of a field map that holds the TEL state. The field map's SAID is its `d` field. The blinding factor is provided in the field map's `u` field. The SAID of the associated ACDC is in the field map's `i` field or else the aggregate value for bulk-issued ACDCs. The actual state of the TEL for that ACDC is provided by other fields in the `a`, field map. A simple state could use the `s` field for state or status.
+The Issuer may provide an authenticated service endpoint for the Discloser to which the Discloser can make a signed request to update the blind.  Each new event published by the Issuer in the Registry shall increment the sequence number and hence the blinding factor but may or may not change the actual blinded state.  Because each updated event in the Registry has a new blinding factor regardless of an actual change of state or not, an observer cannot correlate state to event updates.
 
-When the `u` field is missing or empty, then the event is not blindable. When the `u` field has sufficient entropy, then the SAID of the enclosing field map effectively blinds the state provided by that map. The Discloser must disclose the field map to the Disclosee, who can verify that its SAID matches the SAID in the TEL.  A subsequent update event entered into that TEL will then re-blind the state of the TEL so that any prior Disclosees may no longer verify the current state of the TEL.
+A blindabe state Registry may be used in an unblinded fashion. The issuer could just publish the state unblinded. This makes is a public Registry. Consequently, a blindable state Registry is generic. It may be used in either a private or public manner.
 
-Blindable state TEL top-Level fields:  
+#### Message types
 
-|Label|Description|Notes|
+Blindable state registries have two types of events. Aside from their message type, they only differ in that the Init, `ini` event does not include a prior event SAID, `p` field because the first (zeroth) event can not have a prior event. These types are shown in the following table:
+
+|Ilk| Name | Description|
 |---|---|---|
-|v| version string | |
-|d| event digest | SAID |
-|s| sequence number of event |  |
-|t| message type  of event | `upd`  |
-|dt| issuer system date/time in iso format | |
-|p| prior event digest | SAID |
-|rd| registry SAID identifier of Registry TEL | |
-|rs| registry seal to sealing event in Registry TEL| |
-|a| state attribute block SAID| SAID |
+|`ini`| Init | transaction event state initialization |
+|`upd`| Update | transaction event state update |
 
-Blindable state TEL attribute (state) fields: 
+In some cases, the usage of the registry may provide correlatable information as would be the case where the first real transaction state is always the same or the final state results in disuse of the Registry. In that cases, the Issuer may choose to define a null state as a placeholder. The initializion of the Registry can therefore be published in advance of any real ACDC to which it may be later applied. Disuse of the registry can be hidden by continuing to update the state with null states for some time after the ACDC has been revoked or abandoned. 
 
-|Label|Description|Notes|
+#### Top-level fields
+
+The reserved field labels for the top-level of a blindable state registry transaction event are as follows:
+
+|Label|Description|
 |---|---|---|
-|d| attribute digest | SAID |
-|u| salty nonce blinding factor | UUID |
-|cd| namespaced credential SAID identifier of VC or aggregate when bulk-issued | SAID or Aggregate |
-|s| state value | `issued` or `revoked` |
+|v| version string |
+|t| message type |
+|d| event block SAID |
+|i| Issuer AID |
+|s| sequence number|
+|p| prior event SAID |
+|dt| issuer relative ISO date/time string |
+|a| state attribute block or attibute block SAID|
+
+The Init, `ini` event does not have a prior event SAID, `p` field and its message type, `t` field value is `ini`. The other field values are the same as the Update, `upd` event. The Init event fields, as given by their labels, shall appear in the following order,  `[v, t, d, i, s, dt, a]`, and are all required.
+
+The Update, `upd` event does have a prior event SAID, `p` field (in contradistinction to the Init, `ini` event) and its message type, `t` field value is `upd`. The other field values are the same as the Init, `ini` event. The Init event fields, as given by their labels, shall appear in the following order,  `[v, t, d, i, s, p, dt, a]`, and are all required.
+
+##### Version string, `v` field
+
+The version string, `v` field value uses the same format as an ACDC version string {{see above}}. The protocol type shall be `ACDC`.
+
+##### Message type, `t` field
+
+The message type, `t` field value shall be be one of the message types in the table above. The message types do not leak any state information. The first message in some types of registries such as an issuance revocation registry
+
+##### SAID, `d` field
+
+The SAID, `d` field value shall be the SAID of its enclosing block. A transaction event's SAID enables a verifiable globally unique reference to that event.
+
+##### Issuer, `i` field
+
+The Issuer, `i` field value shall be the AID of the Issuer. This makes the removes any ambiguity about the semantic of the appearance of a seal to the transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same, for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party not a nonrepudiable duplicity evident commitment by the Issuer to the transaction state.
+
+##### Sequence number, `s` field
+
+The sequence number, `s` field value shall be a hex encoded string with no leading zeros of a zero based strictly monotonically increasing integer. The first (zeroth) transaction event  in a given Registry (TEL) shall have a sequence number of 0 or `0` hex.
+
+##### Prior event SAID, `p` field
+
+The prior event SAID, `p` field value shall be the SAID, `d` field value of the immediately prior event in the TEL. The prior, `p` field backward chains together the events in a given TEL.
+
+##### Datetime, `dt` field
+
+The datetime, `dt` field value shall be the ISO-8601 datetime string with microseconds and UTC offset as per IETF RFC-3339. This shall be the datetime of the issuance of the transaction event relative to the clock of the issuer. An example datetime string in this format is as follows:
+
+`2020-08-22T17:50:09.988921+00:00`
+
+##### Attribute, `a` field
+
+The attribute, `a` field value shall be the SAID of the blinded attribute block when used in blinded (private) fashion. Alternatively, when used in an unblinded (publich) fashion, attribute, `a` field value shall be the fully expanded attribute block (field map). See below for a description of the expanded attribute block.
+
+#### Expanded attribute block
+
+The expanded attribute block has the following fields:
+
+|Label|Description|
+|---|---|---|
+|d| attribute block SAID |
+|u| UUID salty nonce blinding factor, random or HD generated |
+|cd| container/credential SAID of ACDC or ACDC bulk aggregate when bulk-issued | 
+|ts| transaction state value string | 
+
+The fields shall appear in the following order `[d, u, cd, ts]` and are all required.
+
+##### SAID, `d` field
+
+The SAID, `d` field value shall be the SAID of its enclosing block. An attribute section's SAID enables a verifiable globally unique reference to that state contined in the block but without necessarily disclosing that state.
+
+##### UUID, `u` field
+The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
+
+When the UUID, `u`, is derived from a shared secret salt and a public path such as the sequence number using a hierarchically deterministic derivation algorithm, and given that the possible state values are finite small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event.
+
+##### Container SAID, `cd` field
+
+The container SAID, `cd` field value shall be the SAID of the associated ACDC or the SAID of the bulk aggregate of a bulk-issued set of ACDCs (whichever applies). The container SAID, `cd` field value binds an ACDC or bulk-issued set of ACDCs to the Registry state.  
+
+##### Transaction state, `ts` field
+
+The transaction state, `ts` field value shall be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
+
+
+#### Blindable state registry example
+
+Consider blindable state revocation registry for ACDCs. The transaction state can be one of three values, `null`, `issued`, or `revoked`.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "ini",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "0",
+ "dt": "2024-05-27T19:16:50.750302+00:00",
+ "a": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec"
+}
+```
+
+The associated expanded attribute block is as follows:
+
+```json
+{
+ "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "u": "ZHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "cd": "EDJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "ts": "null"
+}
+```
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. In this case, the value of the container SAID, `cd` field is just a random placeholder value and does not correspond to any real ACDC. This transaction state of this placeholder may be updated any number of times prior to its first use as the true state of a real ACDC. This makes the first use of the registry uncorrelated to the actual issuance of the real ACDC. 
+
+Sometime later, for real ACDC indicated by its top-level SAID, `d` field value `EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI` issues an ACDC with SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. Suppose the associated Update event occurs at sequence number 5. The published transaction event is as follows:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "upd",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "5",
+ "p": "EM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIG",
+ "dt": "2024-06-01T05:01:42.660407+00:00",
+ "a": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-"
+}
+```
+
+The associated expanded attribute block is as follows: 
+
+```json
+{
+ "d": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-",
+ "u": "ZIZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL",
+ "cd": `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`,
+ "ts": "issued"
+}
+```
+
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Notice further that in this case, the value of the container SAID, `cd` field is the real value of the ACDC, and the value of the transaction state, `ts` field is `issued`.  Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows which ACDC it wishes to disclose so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for each one of of the three possible state values, namely, `null`, `issued`, `revoked` to find the one that matches the published transaction event attribute, `a` field value. The Discloser can then disclose the matching expanded attribute block to the Disclosee who can verify it against the published transaction event.
+
+The Discloser can then instruct the Issuer to issue one or more updates with new blinding factors so that the initial Disclosee may no longer validate the state of the ACDC without another interactive disclosure by the Discloser.
+
+Suppose at some later time, a validator requires that the Discloser provide continuing proof of issuance. In that case the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state. Suppose this is at sequence number 9 as follows:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "upd",
+ "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "9",
+ "p": "EH4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1",
+ "dt": "2024-07-04T05:01:42.660407+00:00",
+ "a": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI"
+}
+```
+
+The associated expanded attribute block is as follows: 
+
+```json
+{
+ "d": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI",
+ "u": "ZNoRxCJp2wIGM9u2Edk-PLIZ1H4zpq06UecHwzy-K9Fp",
+ "cd": `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`,
+ "ts": "revoked"
+}
+```
 
 
 
-### Transfer registry TEL
+### Simple Public Issuance/Revocation Registry
+
+One very simple type of Registry is a TEL that tracks the public issued or revoked state of a given ACDC. This is called a Simple Public Revocation Registry (SPRR).
+
+Is has the following transaction event types. 
+
+|Ilk|Name|Description|
+|---|---|---|
+|iss| Issue | Issue ACDC |
+|rev| Revoke | Revoke previously issued ACDC|
+
+The state is given by the message type, that is, `iss` for Issued and `rev` for Revoked.
+
+#### Transaction Event Fields
+
+The reserved field labels are as follows:
+
+|Label|Description|
+|---|---|
+|v| version string |
+|t| message type |
+|d| transaction event SAID |
+|i| issuer AID|
+|s| sequence number |
+|p| prior event digest |
+|dt| datetime in iso format |
+|cd| container/credential SAID of ACDC | 
+
+The Issue, `iss` event does not have a prior event SAID, `p` field and its message type, `t` field value is `iss`. The other field values are the same as the Revoke, `rev` event. The Issue event fields, as given by their labels, shall appear in the following order,  `[v, t, d, i, s, dt, cd]`, and are all required.
+
+The Revode, `rev` event does have a prior event SAID, `p` field (in contradistinction to the Issue, `iss` event) and its message type, `t` field value is `rev`. The other field values are the same as the Issue, `iss` event. The Issue event fields, as given by their labels, shall appear in the following order,  `[v, t, d, i, s, p, dt, cd]`, and are all required.
+
+##### Version string, `v` field
+
+The version string, `v` field value uses the same format as an ACDC version string {{see above}}. The protocol type shall be `ACDC`.
+
+##### Message type, `t` field
+
+The message type, `t` field value shall be be one of the message types in the table above. The message types do not leak any state information. The first message in some types of registries such as an issuance revocation registry
+
+##### SAID, `d` field
+
+The SAID, `d` field value shall be the SAID of its enclosing block. A transaction event's SAID enables a verifiable globally unique reference to that event.
+
+##### Issuer, `i` field
+
+The Issuer, `i` field value shall be the AID of the Issuer. This makes the removes any ambiguity about the semantic of the appearance of a seal to the transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same, for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party not a nonrepudiable duplicity evident commitment by the Issuer to the transaction state.
+
+
+##### Sequence number, `s` field
+
+The sequence number, `s` field value shall be a hex encoded string with no leading zeros of a zero based strictly monotonically increasing integer. The first (zeroth) transaction event  in a given Registry (TEL) shall have a sequence number of 0 or `0` hex.
+
+
+
+##### Prior event SAID, `p` field
+
+The prior event SAID, `p` field value shall be the SAID, `d` field value of the immediately prior event in the TEL. The prior, `p` field backward chains together the events in a given TEL.
+
+##### Datetime, `dt` field
+
+The datetime, `dt` field value shall be the ISO-8601 datetime string with microseconds and UTC offset as per IETF RFC-3339. This shall be the datetime of the issuance of the transaction event relative to the clock of the issuer. An example datetime string in this format is as follows:
+
+`2020-08-22T17:50:09.988921+00:00`
+
+##### Container SAID, `cd` field
+
+The container SAID, `cd` field value shall be the SAID of the associated ACDC . The container SAID, `cd` field value binds an ACDC to the Registry state.  
+
+
+
+#### Simple Public Issuance/Revocation Registry Example
+
+The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` creates the registry with its Issue event.
+
+Issuance event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "iss",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "0",
+ "dt": "2024-05-27T19:16:50.750302+00:00",
+ "cd": "EM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIG"
+}
+```
+
+Revocation event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "rev",
+ "d": "EEdk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "1",
+ "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp"
+ "dt": "2024-06-27T19:16:50.750302+00:00",
+ "cd": "EM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIG"
+}
+```
+
+
+### Transfer Registry
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/34
@@ -3138,7 +3148,7 @@ The Issuee attribute block is absent from an uncompacted untargeted selectively 
 }
 ```
 
-The Issuee attribute block is present in an uncompacted untargeted selectively disclosable ACDC as follows:
+The Issuee attribute block is present in an uncompacted targeted selectively disclosable ACDC as follows:
 
 ```json
 {
@@ -3384,7 +3394,7 @@ In some applications, Chain-link-confidentiality is insufficient to deter unperm
 
 It is important to note that any group of colluding malicious Verifiers always may make a statistical correlation between presentations despite technical barriers to cryptographically provable correlation. This is called contextual linkability. In general, there is no cryptographic mechanism that precludes statistical correlation among a set of colluding Verifiers because they may make cryptographically unverifiable or unprovable assertions about information presented to them that may be proven as likely true using merely statistical correlation techniques. Linkability, due the context of the disclosure itself, may defeat any unlinkability guarantees of a cryptographic technique. Thus, without contractually protected disclosure, contextual linkability in spite of cryptographic unlinkability may make the complexity of using advanced cryptographic mechanisms to provide unlinkability an exercise in diminishing returns.
 
-#### Basic bulk issuance
+#### Basic bulk issuance proceedure
 
 The amount of data transferred between the Issuer and Issuee (or recipient of an untargeted ACDC) at issuance of a set of bulk issued ACDCs may be minimized by using a hierarchical deterministic derivation function to derive the value of the UUID, `u`, fields from a shared secret salt [@Salt].
 
@@ -3473,13 +3483,13 @@ One potential point of provable but unpermissioned correlation among any group o
 One solution to this problem is for the Issuee to use a unique AID for the copy of a bulk-issued ACDC presented to each Disclosee in a given context. This requires that each ACDC copy in the bulk-issued set use a unique Issuee AID. This would enable the Issuee in a given context to minimize provable correlation by malicious Disclosees against any given Issuee AID. In this case, the bulk issuance process may be augmented to include the derivation of a unique Issuee AID in each copy of the bulk-issued ACDC by including in the Inception event that defines a given Issuee's self-addressing AID, a digest seal derived from the shared salt and copy index ‘k’. The derivation path for the digest seal is ‘k/0.’, where ‘k’ is the index of the ACDC. To clarify ‘k/0.’ specifies the path to generate the UUID to be included in the Inception event that generates the Issuee AID for the ACDC at index ‘k’. This can be generated on-demand by the Issuee. Each unique Issuee AID also would need its own KEL. But generation and publication of the associated KEL can be delayed until the bulk-issued ACDC is actually used. This approach completely isolates a given Issuee AID to a given context with respect to the use of a bulk-issued private ACDC. This protects against even the unpermissioned correlation among a group of malicious Disclosees (Second-parties) via the Issuee AID.
 
 
-### Independent TEL bulk-issued ACDCs
+### Independent Registry bulk-issued ACDCs
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/33
 :::
 
-Recall that the purpose of using the aggregate ‘B for a bulk-issued set from which the TEL identifier is derived is to enable a set of bulk-issued ACDCs to share a single public TEL and/or a single anchoring seal in the Issuer's KEL without enabling unpermissioned correlation to any other members of the bulk set by virtue of the shared aggregate ‘B’ used for either the TEL or anchoring seal in the KEL. When using a TEL, this enables the issuance/revocation/transfer state of all copies of a set of bulk-issued ACDCs to be provided by a single TEL which minimizes the storage and compute requirements on the TEL registry while providing Selective disclosure to prevent unpermissioned correlation via the public TEL. When using an anchoring seal, this enables one signature to provide proof of inclusion in the bulk-issued aggregate ‘B’.
+Recall that the purpose of using the aggregate ‘B for a bulk-issued set from which the Registry identifier is derived is to enable a set of bulk-issued ACDCs to share a single public Registry and/or a single anchoring seal in the Issuer's KEL without enabling unpermissioned correlation to any other members of the bulk set by virtue of the shared aggregate ‘B’ used for either the TEL or anchoring seal in the KEL. When using a TEL as Registry, this enables the issuance/revocation/transfer state of all copies of a set of bulk-issued ACDCs to be provided by a single Registry which minimizes the storage and compute requirements on the Registry while providing Selective disclosure to prevent unpermissioned correlation via the public TEL Registry. When using an anchoring seal, this enables one signature to provide proof of inclusion in the bulk-issued aggregate ‘B’.
 
 However, in some applications where Chain-link confidentiality does not sufficiently deter malicious provable correlation by Disclosees (Second-party Verifiers), an Issuee may benefit from using ACDC with independent TELs or independent aggregates ‘B’ but that are still bulk-issued.
 
@@ -3519,7 +3529,6 @@ Public compact variant
   "v":  "ACDC10JSON00011c_",
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "did:keri:EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
@@ -3534,7 +3543,6 @@ Public uncompacted variant
   "v":  "ACDC10JSON00011c_",
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "ri": "did:keri:EymRy7xMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggt",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":
   {
@@ -3586,7 +3594,6 @@ Composed schema that supports both public compact and uncompacted variants
     "v",
     "d",
     "i",
-    "ri",
     "s",
     "a",
     "e",
@@ -3607,11 +3614,6 @@ Composed schema that supports both public compact and uncompacted variants
     "i":
     {
       "description": "Issuer AID",
-      "type": "string"
-    },
-    "ri":
-    {
-      "description": "credential status registry ID",
       "type": "string"
     },
     "s":
