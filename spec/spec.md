@@ -2780,7 +2780,7 @@ Blindable state registries have two types of events. Aside from their message ty
 |`ini`| Init | transaction event state initialization |
 |`upd`| Update | transaction event state update |
 
-In some cases, the usage of the registry may provide correlatable information as would be the case where the first real transaction state is always the same or the final state results in disuse of the Registry. In that cases, the Issuer may choose to define a null state as a placeholder. The initializion of the Registry can therefore be published in advance of any real ACDC to which it may be later applied. Disuse of the registry can be hidden by continuing to update the state with null states for some time after the ACDC has been revoked or abandoned. 
+In some cases, the usage of the registry may provide correlatable information, as would be the case where the first real transaction state is always the same or the final state results in the disuse of the Registry. In those cases, the Issuer may choose to define an empty (null) state and an empty (null) ACDC SAID as known placeholder values. The initialization event of the Registry can, therefore, be published in advance of any real ACDC to which it may be later applied. Disuse of the registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned. 
 
 #### Top-level fields
 
@@ -2868,7 +2868,7 @@ The transaction state, `ts` field value shall be a string from a small finite se
 
 #### Blindable state registry example
 
-Consider blindable state revocation registry for ACDCs. The transaction state can be one of three values, `null`, `issued`, or `revoked`.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+Consider blindable state revocation registry for ACDCs. The transaction state can be one of two values, `issued`, or `revoked`. In this case, placeholder values of the empty, `` string for transaction state, `ts` and container SAID, `cd` fields is also employed to decorrelate the initialization.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
 
 ```json
 {
@@ -2888,11 +2888,14 @@ The associated expanded attribute block is as follows:
 {
  "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
  "u": "ZHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "cd": "EDJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
- "ts": "null"
+ "cd": "",
+ "ts": ""
 }
 ```
-Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. In this case, the value of the container SAID, `cd` field is just a random placeholder value and does not correspond to any real ACDC. This transaction state of this placeholder may be updated any number of times prior to its first use as the true state of a real ACDC. This makes the first use of the registry uncorrelated to the actual issuance of the real ACDC. 
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. In this case, the value of the container SAID, `cd` field, and transaction state, `ts` fields are just empty strings as placeholder values. The transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. This makes the first use(s) of the registry uncorrelated to the actual issuance of the real ACDC. 
+
+Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `d` field must be either the empty string placeholder or the real ACDC SAID. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
+
 
 Sometime later, for real ACDC indicated by its top-level SAID, `d` field value `EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI` issues an ACDC with SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. Suppose the associated Update event occurs at sequence number 5. The published transaction event is as follows:
 
@@ -2920,11 +2923,11 @@ The associated expanded attribute block is as follows:
 }
 ```
 
-Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Notice further that in this case, the value of the container SAID, `cd` field is the real value of the ACDC, and the value of the transaction state, `ts` field is `issued`.  Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows which ACDC it wishes to disclose so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for each one of of the three possible state values, namely, `null`, `issued`, `revoked` to find the one that matches the published transaction event attribute, `a` field value. The Discloser can then disclose the matching expanded attribute block to the Disclosee who can verify it against the published transaction event.
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Notice further that in this case, the value of the container SAID, `cd` field is the real value of the ACDC, and the value of the transaction state, `ts` field is `issued` (not placeholder).  Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows which ACDC it wishes to disclose so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then disclose the matching expanded attribute block to the Disclosee, who can verify it against the published transaction event.
 
 The Discloser can then instruct the Issuer to issue one or more updates with new blinding factors so that the initial Disclosee may no longer validate the state of the ACDC without another interactive disclosure by the Discloser.
 
-Suppose at some later time, a validator requires that the Discloser provide continuing proof of issuance. In that case the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state. Suppose this is at sequence number 9 as follows:
+Suppose at some later time, a validator requires that the Discloser provide continuing proof of issuance. In that case, the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state. Suppose this is at sequence number 9 as follows:
 
 ```json
 {
@@ -2950,6 +2953,7 @@ The associated expanded attribute block is as follows:
 }
 ```
 
+The Discloser could continue to have the blind updated periodically. This would generate new transaction events with new values for its attribute, `a` field, but without changing the transaction state field value. This decorrelates the time of revocation with respect to the latest event in the Registry.
 
 
 ### Simple Public Issuance/Revocation Registry
