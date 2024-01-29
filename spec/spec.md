@@ -214,26 +214,32 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/13
 
 The following table defines the top-level fields in an ACDC and their order of appearance. Some fields are optional but all fields that appear must appear in a defined order.
 
-
-
 | Label | Title | Description |
 |:-:|:--|:--|
 |`v`| Version String| Regexable format: ACDCvvSSSShhhhhh_ that provides protocol type, version, serialization type, size, and terminator. |
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
 |`i`| Issuer Identifier (AID)| Autonomic Identifier whose control authority is established via KERI verifiable key state. |
+|`rd`| Registry Digest (SAID) | Issuance and/or revocation, transfer, or retraction registry for ACDC |
 |`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
 |`a`| Attribute| Either the SAID of a block of attributes or the block itself. |
 |`A`| Attribute Aggregate| Either the aggregate of a selectively disclosable block of attributes or the block itself. |
 |`e`| Edge| Either the SAID of a block of edges or the block itself.|
 |`r`| Rule | Either the SAID a block of rules or the block itself. |
 
+#### Field ordering
+
+When present, the top-level fields shall appear in the following order: `[v, d, u, i, rd, s, a, A, e, r]`. 
+
+#### Required fields
+
+The following fields are required `[v, d, i, s]`. One and only one of the following two fields is also required: `[a, A]`.
+
 
 ### Other reserved fields
 
 The following table defines non-top-level fields whose labels are reserved. 
 These appear at other levels besides the top-level of an ACDC. 
-
 
 | Label | Title | Description |
 |:-:|:--|:--|
@@ -270,11 +276,16 @@ The format of the version string for ACDC 1.XX is `ACDCvvKKKKllllll_`. It is 16 
 https://github.com/trustoverip/tswg-acdc-specification/issues/14
 :::
 
-Some fields in ACDCs may have for their value either a field map or a SAID. A SAID follows the SAID protocol [@SAID_ID]. Essentially a SAID is a Self-addressing identifier (self-referential content addressable). A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-addressed data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) may be compacted into its SAID. The uncompacted blocks for each associated SAID may be attached or cached to optimize bandwidth and availability without decreasing security.
+Some fields in ACDCs may have for their value either a field map or a SAID. A SAID follows the SAID protocol [@SAID_ID]. Essentially, a SAID is a Self-addressing identifier (self-referential content addressable). A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-addressed data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) may be compacted into its SAID. The uncompacted blocks for each associated SAID may be attached or cached to optimize bandwidth and availability without decreasing security.
 
-Several top-level ACDC fields may have for their value either a serialized field map or the SAID of that field map. Each SAID provides a stable universal cryptographically verifiable and agile reference to its encapsulating block (serialized field map). Specifically, the value of top-level `s`, `a`, `e`, and `r` fields may be replaced by the SAID of their associated field map. When replaced by their SAID, these top-level sections are in compact form.
+Several top-level ACDC fields may have for their value either a serialized field map or the SAID of that field map. Each SAID provides a stable, universal, cryptographically verifiable, and agile reference to its encapsulating block (serialized field map). These include the `d`, and `rd` fields. Moreover, the value of top-level `s`, `a`, `e`, and `r` fields may be replaced by the SAID of their associated field map. When replaced by their SAID, these top-level sections are in compact form.
 
-Recall that a cryptographic commitment (such as a digital signature or cryptographic digest) on a given digest with sufficient cryptographic strength including collision resistance [@HCR][@QCHC] is equivalent to a commitment to the block from which the given digest was derived.  Specifically, a digital signature on a SAID makes a verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. This enables reasoning about ACDCs in whole or in part via their SAIDS in a fully interoperable, verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts [@RC]. This includes reasoning about the whole ACDC given by its top-level SAID, `d`, field as well as reasoning about any nested sections using their SAIDS.
+Recall that a cryptographic commitment (such as a digital signature or cryptographic digest) on a given digest with sufficient cryptographic strength, including collision resistance [@HCR][@QCHC], is equivalent to a commitment to the block from which the given digest was derived.  Specifically, a digital signature on a SAID makes a verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. This enables reasoning about ACDCs in whole or in part via their SAIDS in a fully interoperable, verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts [@RC]. This includes reasoning about the whole ACDC given by its top-level SAID, `d`, field, as well as reasoning about any nested sections using their SAIDS.
+
+### Registry SAID field
+
+When present, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. 
+
 
 ### Universally unique identifier (UUID) fields
 
@@ -282,13 +293,13 @@ The purpose of the UUID, `u`, field in any block is to provide sufficient entrop
 
 A UUID, `u` field may optionally appear in any block (field map) at any level of an ACDC. Whenever a block in an ACDC includes a UUID, `u`, field then its associated SAID, `d`, field makes a blinded commitment to the contents of that block. The UUID, `u`, field is the blinding factor. This makes that block securely partially disclosable or even selectively disclosable notwithstanding disclosure of the associated schema of the block. The block contents can only be discovered given disclosure of the included UUID field. Likewise, when a UUID, `u`, field appears at the top level of an ACDC then that top-level SAID, `d`, field makes a blinded commitment to the contents of the whole ACDC itself. Thus, the whole ACDC, not merely some block within the ACDC, may be disclosed in a privacy-preserving (correlation minimizing) 
 
-### Autonomic identifier (AID) and Derived identifier fields
+### Autonomic identifier (AID) fields
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/15
 :::
 
-Some fields, such as the `i`, Issuer identifier field, must each have an AID as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [@KERI][@KERI_ID].  An AID is derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [@DSig]. Each AID has a set of one or more Controllers who each control a private key. By virtue of their private key(s), the set of Controllers may make statements on behalf of the associated AID that is backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then may verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is required. The verifiable key state for AIDs is established with the KERI protocol [@KERI][@KERI_ID]. The use of AIDS enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
+Some fields, such as the `i`, Issuer identifier field, must each have an AID as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [@KERI][@KERI_ID].  An AID is derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [@DSig]. Each AID has a set of one or more Controllers who each control a private key. By virtue of their private key(s), the Controllers may make statements on behalf of the associated AID backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then may verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is required. The verifiable key state for AIDs is established with the KERI protocol [@KERI][@KERI_ID]. The use of AIDS enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
 
 ### Namespaced AIDs
 
@@ -304,7 +315,7 @@ The top-level selectively disclosable attribute aggregate section, `A`, field va
 
 ### Edge field
 
-The top-level edge section `e`, field value makes cryptographically verifiable commitment to other ACDCs via references to their SAIDs. The `e` field syntax is described in more detail below.
+The top-level edge section `e` field value makes a cryptographically verifiable commitment to other ACDCs via references to their SAIDs. The `e` field syntax is described in more detail below.
 
 ### Rule field
 
@@ -313,7 +324,7 @@ The top-level rule section `r`, field value provides both human and machine read
 
 ### Field ordering
 
-The ordering of the top-level fields when present in an ACDC must be as follows, `v`, `d`, `u`, `i`, `s`, `a`, `A`, `e`, `r`.
+The ordering of the top-level fields when present in an ACDC must be as follows, `v`, `d`, `u`, `i`, `rd`, `s`, `a`, `A`, `e`, `r`.
 
 ## ACDC variants
 
@@ -362,8 +373,6 @@ Given that there is no top-level UUID, `u`, field in an ACDC, then knowledge of 
 
 Given a top-level UUID, `u`, field, whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of an ACDC may provide a secure cryptographic digest that blinds the contents of the ACDC [@Hash]. An adversary when given both the schema of the ACDC and the top-level SAID, `d`, field, is not able to discover the remaining contents of the ACDC in a computationally feasible manner such as through a rainbow table attack [@RB][@DRB]. Therefore, the top-level, UUID, `u`, field may be used to securely blind the contents of the ACDC notwithstanding knowledge of the schema and top-level, SAID, `d`, field.  Moreover, a cryptographic commitment to that that top-level SAID, `d`, field does not provide a fixed point of correlation to the other ACDC field values themselves unless and until there has been a disclosure of those field values. Thus, an ACDC with a sufficiently high entropy top-level UUID, `u`, field may be considered a private (confidential) ACDC. enables a verifiable commitment to the top-level SAID of a private ACDC to be made prior to the disclosure of the details of the ACDC itself without leaking those contents. This is called Partial disclosure. Furthermore, the inclusion of a UUID, `u`, field in a block also enables Selective disclosure mechanisms described later in the section on Selective disclosure.
 
-
-
 ### Metadata ACDC 
 
 An empty, top-level UUID, `u`, field appearing in an ACDC indicates that the ACDC is a metadata ACDC. The purpose of a metadata ACDC is to provide a mechanism for a Discloser to make cryptographic commitments to the metadata of a yet to be disclosed private ACDC without providing any point of correlation to the actual top-level SAID, `d`, field of that yet to be disclosed ACDC. The top-level SAID, `d`, field, of the metadata ACDC, is cryptographically derived from an ACDC with an empty top-level UUID, `u`, field so its value will necessarily be different from that of an ACDC with a high entropy top-level UUID, `u`, field value. Nonetheless, the Discloser may make a non-repudiable cryptographic commitment to the metadata SAID in order to initiate a contractually protected exchange without leaking correlation to the actual ACDC to be disclosed [@CLC]. A Disclosee may verify the other metadata information in the metadata ACDC before agreeing to any restrictions imposed by the future disclosure. The metadata includes the Issuer, the schema, the provenancing edges, and the rules (terms-of-use). The top-level attribute section, `a`, field value, or the top-level attribute aggregate, `A` field value of a metadata ACDC may be empty so that its value is not correlatable across disclosures (presentations). Should the potential Disclosee refuse to agree to the rules, then the Discloser has not leaked the SAID of the actual ACDC or the SAID of the Attribute block that would have been disclosed.
@@ -382,7 +391,8 @@ An example of a fully compact public ACDC is shown below. The ACDC is public bec
 {
   "v":  "ACDC10JSON00011c_",
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "i":  "EFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPMmkPreYpZf",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
@@ -407,6 +417,7 @@ The schema for the Compact public ACDC example above is provided below.
     "d",
     "u",
     "i",
+    "rd",
     "s",
     "a",
     "e",
@@ -427,6 +438,11 @@ The schema for the Compact public ACDC example above is provided below.
     "i":
     {
       "description": "Issuer AID",
+      "type": "string"
+    },
+    "rd":
+    {
+      "description": "Registry SAID",
       "type": "string"
     },
     "s": 
@@ -469,6 +485,7 @@ An example of a fully compact private ACDC is shown below. The ACDC is private b
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
   "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
@@ -494,6 +511,7 @@ The schema for the Compact private ACDC example above is provided below.
     "d",
     "u",
     "i",
+    "rd",
     "s",
     "a",
     "e",
@@ -519,6 +537,11 @@ The schema for the Compact private ACDC example above is provided below.
     "i":
     {
       "description": "Issuer AID",
+      "type": "string"
+    },
+    "rd":
+    {
+      "description": "Registry SAID",
       "type": "string"
     },
     "s": 
@@ -1247,6 +1270,7 @@ Issued by Amy:
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
@@ -1262,6 +1286,7 @@ Issued by Bob:
   "d":  "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "EGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqG",
   "a":  "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9",
   "r":  "EMORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3"
@@ -1276,6 +1301,7 @@ Issued by Cat:
   "d":  "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
   "u":  "0ADAE0qHcgNghkDaG7OY1wja",
   "i":  "EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
   "a":  "EIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwL",
   "r":  "EBe71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOL"
@@ -1290,6 +1316,7 @@ Issued by Dug:
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
   "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "EAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4re",
   "a":  "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
   "r":  "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR"
@@ -1516,6 +1543,7 @@ Issued by Amy:
   "d":  "EHdSXCJnBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3g",
   "u":  "0ADaG7OY1wjaDAE0qHcgNghk",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EJtQIYPvAu6DZIl3MOARH3dCdoFOLe71iheqcywJcnjt",
@@ -1766,6 +1794,7 @@ Issued by Amy:
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
@@ -2041,6 +2070,7 @@ Issued by Amy:
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
@@ -2303,6 +2333,7 @@ Issued by Amy:
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
@@ -2773,33 +2804,43 @@ A blindabe state Registry may be used in an unblinded fashion. The issuer could 
 
 #### Message types
 
-Blindable state registries have two types of events. Aside from their message type, they only differ in that the Init, `ini` event does not include a prior event SAID, `p` field because the first (zeroth) event can not have a prior event. These types are shown in the following table:
+Blindable state registries have two types of events. These types are shown in the following table:
 
 |Ilk| Name | Description|
 |---|---|---|
 |`ini`| Init | transaction event state initialization |
 |`upd`| Update | transaction event state update |
 
-In some cases, the usage of the registry may provide correlatable information, as would be the case where the first real transaction state is always the same or the final state results in the disuse of the Registry. In those cases, the Issuer may choose to define an empty (null) state and an empty (null) ACDC SAID as known placeholder values. The initialization event of the Registry can, therefore, be published in advance of any real ACDC to which it may be later applied. Disuse of the registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned. 
+In some cases, the usage of the registry may provide correlatable information, as would be the case where the first real transaction state is always the same or the final state results in the disuse of the Registry. In those cases, the Issuer may choose to define an empty (null) state and an empty (null) ACDC SAID as known placeholder values. The first transaction state update event in the Registry can, therefore, be published before any real ACDC has been created, to which it may be later applied. Disuse of the registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned. 
+
 
 #### Top-level fields
 
-The reserved field labels for the top-level of a blindable state registry transaction event are as follows:
+The reserved field labels for the top level of a blindable state registry transaction event are as follows:
 
 |Label|Description|
 |---|---|---|
 |v| version string |
 |t| message type |
 |d| event block SAID |
+|u| UUID salty nonce |
 |i| Issuer AID |
+|rd| Registry SAID|
 |s| sequence number|
 |p| prior event SAID |
 |dt| issuer relative ISO date/time string |
 |a| state attribute block or attibute block SAID|
 
-The Init, `ini` event does not have a prior event SAID, `p` field and its message type, `t` field value is `ini`. The other field values are the same as the Update, `upd` event. The Init event fields, as given by their labels, shall appear in the following order,  `[v, t, d, i, s, dt, a]`, and are all required.
 
-The Update, `upd` event does have a prior event SAID, `p` field (in contradistinction to the Init, `ini` event) and its message type, `t` field value is `upd`. The other field values are the same as the Init, `ini` event. The Init event fields, as given by their labels, shall appear in the following order,  `[v, t, d, i, s, p, dt, a]`, and are all required.
+#### Init event fields
+
+The fields for the Init, `ini` event , given by their labels, shall appear in the following order, `[v, t, d, u, i, s, dt]`. All are required. The value of the message type, `t` field shall be `ini`. The value of the sequence number field, `s` shall be the hex encoded string for the integer 0. 
+
+#### Update event fields
+
+The fields for the Update, `upd` event , given by their labels, shall appear in the following order, `[v, t, d, rd, s, p, dt, a]`. All are required. The value of the message type, `t` field shall be `upd`. 
+
+#### Field descriptions
 
 ##### Version string, `v` field
 
@@ -2813,13 +2854,20 @@ The message type, `t` field value shall be be one of the message types in the ta
 
 The SAID, `d` field value shall be the SAID of its enclosing block. A transaction event's SAID enables a verifiable globally unique reference to that event.
 
+##### UUID, `u` field
+The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
+
 ##### Issuer, `i` field
 
-The Issuer, `i` field value shall be the AID of the Issuer. This makes the removes any ambiguity about the semantic of the appearance of a seal to the transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same, for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party not a nonrepudiable duplicity evident commitment by the Issuer to the transaction state. This may appear to be redundant because the Issuer AID also appears in the ACDC. In a blinded state Registry, however, the ACDC SAID only appears in the blinded attribute block, likewise in a yet-to-be-disclosed private ACDC the Issuer is also blinded, so a Registry observer that hosts a copy of the Registry that is not also a Disclosee of either the expanded transaction event and/or the associated ADCD would not be able to confirm that commitment and may thereby be subject to a DDoS attack without the presence of the Issuer, `i` field in the transaction event's public top-level fields.
+The Issuer, `i` field value shall be the AID of the Issuer. This removes any ambiguity about the semantics of a seal of a transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party, not a duplicity-evident nonrepudiable commitment by the Issuer to the transaction state. This may appear to be redundant because the Issuer AID also appears in the ACDC. In a blinded state Registry, however, the ACDC SAID only appears in the blinded attribute block likewise in a yet-to-be-disclosed private ACDC, the Issuer is also blinded, so a Registry observer that hosts a copy of the Registry that is not also a Disclosee of either the expanded transaction event and/or the associated ADCD would not be able to confirm that commitment and may thereby be subject to a DDoS attack without the presence of the Issuer, `i` field in the Registy initialization event's public top-level fields.
+
+##### Registry SAID, `rd` field
+
+The Registry SAID, `rd` field value shall be the value of the SAID, `d` field of the Init, `ini` event. Because the Issuer, `i` field appears in the `ini` event, the Registry SAID, `rd` field value cryptographically binds the Registry to the Issuer AID. The Registry SAID enables a verifiable globally unique reference to the Registry (TEL). Update events shall include the Registry SAID, `rd` field so that they can be easily associated with the Registry (TEL). The ACDC managed by the Registry also includes a reference to the Registry SAID, `rd` field value, thereby binding the ACDC to the Registry. 
 
 ##### Sequence number, `s` field
 
-The sequence number, `s` field value shall be a hex encoded string with no leading zeros of a zero based strictly monotonically increasing integer. The first (zeroth) transaction event  in a given Registry (TEL) shall have a sequence number of 0 or `0` hex.
+The sequence number, `s` field value shall be a hex-encoded string with no leading zeros of a zero-based strictly monotonically increasing integer. The first (zeroth) transaction event in a given Registry (TEL) shall have a sequence number of 0 or `0` hex.
 
 ##### Prior event SAID, `p` field
 
@@ -2853,6 +2901,7 @@ The fields shall appear in the following order `[d, u, cd, ts]` and are all requ
 The SAID, `d` field value shall be the SAID of its enclosing block. An attribute section's SAID enables a verifiable globally unique reference to that state contined in the block but without necessarily disclosing that state.
 
 ##### UUID, `u` field
+
 The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
 
 When the UUID, `u`, is derived from a shared secret salt and a public path such as the sequence number using a hierarchically deterministic derivation algorithm, and given that the possible state values are finite small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event.
@@ -2875,10 +2924,27 @@ Consider blindable state revocation registry for ACDCs. The transaction state ca
  "v": "ACDCCAAJSONAACQ_",
  "t": "ini",
  "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "u": "0AHcgNghkDaG7OY1wjaDAE0q",
  "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
  "s": "0",
- "dt": "2024-05-27T19:16:50.750302+00:00",
- "a": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec"
+ "dt": "2024-05-27T19:16:50.750302+00:00"
+}
+```
+
+Given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere as the registry SAID, `rd` field. The `rd` field value is derived from the Issuer AID, binding the Registry to the Issuer AID.
+
+The state is initialized with decorrelated placeholder values with the issuance of the following placeholder update event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "upd",
+ "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "1",
+ "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "dt": "2024-06-01T05:01:42.660407+00:00",
+ "a": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-"
 }
 ```
 
@@ -2897,16 +2963,18 @@ Notice that the value of the attribute, `a` field in the transaction event, matc
 Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `d` field must be either the empty string placeholder or the real ACDC SAID. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
 
 
-Sometime later, for real ACDC indicated by its top-level SAID, `d` field value `EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI` issues an ACDC with SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. Suppose the associated Update event occurs at sequence number 5. The published transaction event is as follows:
+Sometime later, for real ACDC indicated by its top-level SAID, `d` field value `EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI` issues an ACDC with SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the init, `ini` event. 
+
+Suppose the associated Update event occurs at sequence number 5. The published transaction event is as follows:
 
 ```json
 {
  "v": "ACDCCAAJSONAACQ_",
  "t": "upd",
- "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
  "s": "5",
- "p": "EM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIG",
+ "p": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
  "dt": "2024-06-01T05:01:42.660407+00:00",
  "a": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-"
 }
@@ -2934,9 +3002,9 @@ Suppose at some later time, a validator requires that the Discloser provide cont
  "v": "ACDCCAAJSONAACQ_",
  "t": "upd",
  "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
- "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
  "s": "9",
- "p": "EH4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1",
+ "p": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
  "dt": "2024-07-04T05:01:42.660407+00:00",
  "a": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI"
 }
@@ -2964,6 +3032,7 @@ Is has the following transaction event types.
 
 |Ilk|Name|Description|
 |---|---|---|
+|rip| Registry Inception | Incept Registry |
 |iss| Issue | Issue ACDC |
 |rev| Revoke | Revoke previously issued ACDC|
 
@@ -2978,7 +3047,9 @@ The reserved field labels are as follows:
 |v| version string |
 |t| message type |
 |d| transaction event SAID |
+|u| UUID salty nonce |
 |i| issuer AID|
+|rd| Registry SAID|
 |s| sequence number |
 |p| prior event digest |
 |dt| datetime in iso format |
@@ -3000,16 +3071,20 @@ The message type, `t` field value shall be be one of the message types in the ta
 
 The SAID, `d` field value shall be the SAID of its enclosing block. A transaction event's SAID enables a verifiable globally unique reference to that event.
 
+##### UUID, `u` field
+The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
+
 ##### Issuer, `i` field
 
-The Issuer, `i` field value shall be the AID of the Issuer. This makes the removes any ambiguity about the semantic of the appearance of a seal to the transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same, for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party not a nonrepudiable duplicity evident commitment by the Issuer to the transaction state.
+The Issuer, `i` field value shall be the AID of the Issuer. This removes any ambiguity about the semantic of the appearance of a seal to the transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party, not a duplicity-evident nonrepudiable commitment by the Issuer to the Registry.
 
+##### Registry SAID, `rd` field
+
+The Registry SAID, `rd` field value shall be the value of the SAID, `d` field of the registry inception, `rip` event. Because the Issuer, `i` field appears in the `rip` event, the Registry SAID, `rd` field value cryptographically binds the Registry to the Issuer AID. The Registry SAID enables a verifiable globally unique reference to the Registry (TEL). The ACDC managed by the Registry also includes a reference to the Registry SAID, `rd` field value, thereby binding the ACDC to the Registry. 
 
 ##### Sequence number, `s` field
 
-The sequence number, `s` field value shall be a hex encoded string with no leading zeros of a zero based strictly monotonically increasing integer. The first (zeroth) transaction event  in a given Registry (TEL) shall have a sequence number of 0 or `0` hex.
-
-
+The sequence number, `s` field value shall be a hex-encoded string with no leading zeros of a zero-based strictly monotonically increasing integer. The first (zeroth) transaction event in a given Registry (TEL) shall have a sequence number of 0 or `0` hex.
 
 ##### Prior event SAID, `p` field
 
@@ -3029,17 +3104,32 @@ The container SAID, `cd` field value shall be the SAID of the associated ACDC . 
 
 #### Simple Public Issuance/Revocation Registry Example
 
-The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` creates the registry with its Issue event.
+The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` creates the registry with its registry inception, `rip` event. This generates the Registry SAID as the value of the SAID, `d` field of the registry inception event. This value can then be inserted into the `rd` field of the ACDC to be issued. The ACDC can then be created and issued with the `iss` event. Later the ACDC can be revoked with the `rev` event.
+
+Registry inception event:
+
+```json
+{
+ "v": "KERI10JSON00011c_",
+ "t": "rip",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "u": "0AHcgNghkDaG7OY1wjaDAE0q",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "0"
+}
+```
+
 
 Issuance event:
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
- "t": "iss",
- "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
- "s": "0",
+ "v" : "ACDCCAAJSONAACQ_",
+ "t" : "iss",
+ "d" : "EMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s" : "1",
+ "p" : "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp"
  "dt": "2024-05-27T19:16:50.750302+00:00",
  "cd": "EM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIG"
 }
@@ -3049,12 +3139,12 @@ Revocation event:
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
- "t": "rev",
- "d": "EEdk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2",
- "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
- "s": "1",
- "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp"
+ "v" : "ACDCCAAJSONAACQ_",
+ "t" : "rev",
+ "d" : "EEdk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s" : "2",
+ "p" : "EMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL"
  "dt": "2024-06-27T19:16:50.750302+00:00",
  "cd": "EM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIG"
 }
@@ -3527,6 +3617,7 @@ CESR support for the ACDC protocol includes conveying sections of an ACDC as CES
 |     |      | Registry TEL Message Types|
 | ini | Init | Initialize blindable state ACDC registry |
 | upd | Update | Update blindable state ACDC registry |
+| rip | Registry Inception | Incept simple publice ACDC registry |
 | iss | Issue | Set state to issued in simple public ACDC registry |
 | rev | Revoke | Set state to revoked in simple public ACDC registry |
 |     |        | ACDC Message |
@@ -3552,6 +3643,7 @@ The following table defines the top-level fields in an ACDC with a message type 
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
 |`i`| Issuer Identifier (AID)| Autonomic Identifier whose control authority is established via KERI verifiable key state. |
+|`rd`| Registry Digest (SAID) | Issuance and/or revocation, transfer, or retraction registry for ACDC |
 |`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
 |`a`| Attribute| Either the SAID of a block of attributes or the block itself. |
 |`A`| Attribute Aggregate| Either the aggregate of a selectively disclosable block of attributes or the block itself. |
@@ -3570,6 +3662,7 @@ Python dict of compact ACDC with message type, `t` field.
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
   "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "EAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4re",
   "a":  "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
   "e":  "ECdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3d",
@@ -3627,7 +3720,7 @@ The attribute, `a` field value is the expanded attribute section from the associ
 }
 ```
 
-## Aggregated Attribute Message
+#### Aggregated Attribute Message
 
 The attribute aggregate, `A` field value is the expanded attribute aggregate section from the associated ACDC.
 
@@ -3641,7 +3734,7 @@ The attribute aggregate, `A` field value is the expanded attribute aggregate sec
 }
 ```
 
-## Edge Message
+#### Edge Message
 The edge, `e` field value is the expanded edge section from the associated ACDC.
 
 
@@ -3654,7 +3747,7 @@ The edge, `e` field value is the expanded edge section from the associated ACDC.
 }
 ```
 
-## Rule Message
+#### Rule Message
 The rule, `r` field value is the expanded rule section from the associated ACDC.
 ```json
 {
@@ -3684,6 +3777,7 @@ Public compact variant
   "v":  "ACDC10JSON00011c_",
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
   "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
@@ -3698,6 +3792,7 @@ Public uncompacted variant
   "v":  "ACDC10JSON00011c_",
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
   "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
   "a":
   {
@@ -3749,6 +3844,7 @@ Composed schema that supports both public compact and uncompacted variants
     "v",
     "d",
     "i",
+    "rd",
     "s",
     "a",
     "e",
@@ -3769,6 +3865,11 @@ Composed schema that supports both public compact and uncompacted variants
     "i":
     {
       "description": "Issuer AID",
+      "type": "string"
+    },
+    "rd":
+    {
+      "description": "Registry SAID",
       "type": "string"
     },
     "s":
