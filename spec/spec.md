@@ -2746,7 +2746,7 @@ Consider the following disclosure-specific ACDC. The Issuer is the Discloser, th
 Informative examples of fully-featured variants of ACDCs can be found in Annex C.
 
 
-## Transaction event logs (TELs)
+## Registries as transaction event logs (TELs)
 
 ### Overview
 
@@ -2808,7 +2808,7 @@ Blindable state registries have two types of events. These types are shown in th
 
 |Ilk| Name | Description|
 |---|---|---|
-|`ini`| Init | transaction event state initialization |
+|`rip`| Registry Inception | registry initialization |
 |`upd`| Update | transaction event state update |
 
 In some cases, the usage of the registry may provide correlatable information, as would be the case where the first real transaction state is always the same or the final state results in the disuse of the Registry. In those cases, the Issuer may choose to define an empty (null) state and an empty (null) ACDC SAID as known placeholder values. The first transaction state update event in the Registry can, therefore, be published before any real ACDC has been created, to which it may be later applied. Disuse of the registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned. 
@@ -2834,7 +2834,7 @@ The reserved field labels for the top level of a blindable state registry transa
 
 #### Init event fields
 
-The fields for the Init, `ini` event , given by their labels, shall appear in the following order, `[v, t, d, u, i, s, dt]`. All are required. The value of the message type, `t` field shall be `ini`. The value of the sequence number field, `s` shall be the hex encoded string for the integer 0. 
+The fields for the Init, `rip` event , given by their labels, shall appear in the following order, `[v, t, d, u, i, s, dt]`. All are required. The value of the message type, `t` field shall be `rip`. The value of the sequence number field, `s` shall be the hex encoded string for the integer 0. 
 
 #### Update event fields
 
@@ -2863,7 +2863,7 @@ The Issuer, `i` field value shall be the AID of the Issuer. This removes any amb
 
 ##### Registry SAID, `rd` field
 
-The Registry SAID, `rd` field value shall be the value of the SAID, `d` field of the Init, `ini` event. Because the Issuer, `i` field appears in the `ini` event, the Registry SAID, `rd` field value cryptographically binds the Registry to the Issuer AID. The Registry SAID enables a verifiable globally unique reference to the Registry (TEL). Update events shall include the Registry SAID, `rd` field so that they can be easily associated with the Registry (TEL). The ACDC managed by the Registry also includes a reference to the Registry SAID, `rd` field value, thereby binding the ACDC to the Registry. 
+The Registry SAID, `rd` field value shall be the value of the SAID, `d` field of the Registry Inception, `rip` event. Because the Issuer, `i` field appears in the `rip` event, the Registry SAID, `rd` field value cryptographically binds the Registry to the Issuer AID. The Registry SAID enables a verifiable globally unique reference to the Registry (TEL). Update events shall include the Registry SAID, `rd` field so that they can be easily associated with the Registry (TEL). The ACDC managed by the Registry also includes a reference to the Registry SAID, `rd` field value, thereby binding the ACDC to the Registry. 
 
 ##### Sequence number, `s` field
 
@@ -2922,7 +2922,7 @@ Consider blindable state revocation registry for ACDCs. The transaction state ca
 ```json
 {
  "v": "ACDCCAAJSONAACQ_",
- "t": "ini",
+ "t": "rip",
  "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
  "u": "0AHcgNghkDaG7OY1wjaDAE0q",
  "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
@@ -2963,7 +2963,7 @@ Notice that the value of the attribute, `a` field in the transaction event, matc
 Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `d` field must be either the empty string placeholder or the real ACDC SAID. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
 
 
-Sometime later, for real ACDC indicated by its top-level SAID, `d` field value `EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI` issues an ACDC with SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the init, `ini` event. 
+Sometime later, for real ACDC indicated by its top-level SAID, `d` field value `EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI` issues an ACDC with SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the registry inception, `dip` event. 
 
 Suppose the associated Update event occurs at sequence number 5. The published transaction event is as follows:
 
@@ -2986,7 +2986,7 @@ The associated expanded attribute block is as follows:
 {
  "d": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-",
  "u": "ZIZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL",
- "cd": `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`,
+ "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
  "ts": "issued"
 }
 ```
@@ -3016,140 +3016,12 @@ The associated expanded attribute block is as follows:
 {
  "d": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI",
  "u": "ZNoRxCJp2wIGM9u2Edk-PLIZ1H4zpq06UecHwzy-K9Fp",
- "cd": `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`,
+ "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
  "ts": "revoked"
 }
 ```
 
 The Discloser could continue to have the blind updated periodically. This would generate new transaction events with new values for its attribute, `a` field, but without changing the transaction state field value. This decorrelates the time of revocation with respect to the latest event in the Registry.
-
-
-### Simple Public Issuance/Revocation Registry
-
-One very simple type of Registry is a TEL that tracks the public issued or revoked state of a given ACDC. This is called a Simple Public Revocation Registry (SPRR).
-
-Is has the following transaction event types. 
-
-|Ilk|Name|Description|
-|---|---|---|
-|rip| Registry Inception | Incept Registry |
-|iss| Issue | Issue ACDC |
-|rev| Revoke | Revoke previously issued ACDC|
-
-The state is given by the message type, that is, `iss` for Issued and `rev` for Revoked.
-
-#### Transaction Event Fields
-
-The reserved field labels are as follows:
-
-|Label|Description|
-|---|---|
-|v| version string |
-|t| message type |
-|d| transaction event SAID |
-|u| UUID salty nonce |
-|i| issuer AID|
-|rd| Registry SAID|
-|s| sequence number |
-|p| prior event digest |
-|dt| datetime in iso format |
-|cd| container/credential SAID of ACDC | 
-
-The Issue, `iss` event does not have a prior event SAID, `p` field and its message type, `t` field value is `iss`. The other field values are the same as the Revoke, `rev` event. The Issue event fields, as given by their labels, shall appear in the following order,  `[v, t, d, i, s, dt, cd]`, and are all required.
-
-The Revode, `rev` event does have a prior event SAID, `p` field (in contradistinction to the Issue, `iss` event) and its message type, `t` field value is `rev`. The other field values are the same as the Issue, `iss` event. The Issue event fields, as given by their labels, shall appear in the following order,  `[v, t, d, i, s, p, dt, cd]`, and are all required.
-
-##### Version string, `v` field
-
-The version string, `v` field value uses the same format as an ACDC version string {{see above}}. The protocol type shall be `ACDC`.
-
-##### Message type, `t` field
-
-The message type, `t` field value shall be be one of the message types in the table above. The message types do not leak any state information. The first message in some types of registries such as an issuance revocation registry
-
-##### SAID, `d` field
-
-The SAID, `d` field value shall be the SAID of its enclosing block. A transaction event's SAID enables a verifiable globally unique reference to that event.
-
-##### UUID, `u` field
-The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
-
-##### Issuer, `i` field
-
-The Issuer, `i` field value shall be the AID of the Issuer. This removes any ambiguity about the semantic of the appearance of a seal to the transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party, not a duplicity-evident nonrepudiable commitment by the Issuer to the Registry.
-
-##### Registry SAID, `rd` field
-
-The Registry SAID, `rd` field value shall be the value of the SAID, `d` field of the registry inception, `rip` event. Because the Issuer, `i` field appears in the `rip` event, the Registry SAID, `rd` field value cryptographically binds the Registry to the Issuer AID. The Registry SAID enables a verifiable globally unique reference to the Registry (TEL). The ACDC managed by the Registry also includes a reference to the Registry SAID, `rd` field value, thereby binding the ACDC to the Registry. 
-
-##### Sequence number, `s` field
-
-The sequence number, `s` field value shall be a hex-encoded string with no leading zeros of a zero-based strictly monotonically increasing integer. The first (zeroth) transaction event in a given Registry (TEL) shall have a sequence number of 0 or `0` hex.
-
-##### Prior event SAID, `p` field
-
-The prior event SAID, `p` field value shall be the SAID, `d` field value of the immediately prior event in the TEL. The prior, `p` field backward chains together the events in a given TEL.
-
-##### Datetime, `dt` field
-
-The datetime, `dt` field value shall be the ISO-8601 datetime string with microseconds and UTC offset as per IETF RFC-3339. This shall be the datetime of the issuance of the transaction event relative to the clock of the issuer. An example datetime string in this format is as follows:
-
-`2020-08-22T17:50:09.988921+00:00`
-
-##### Container SAID, `cd` field
-
-The container SAID, `cd` field value shall be the SAID of the associated ACDC . The container SAID, `cd` field value binds an ACDC to the Registry state.  
-
-
-
-#### Simple Public Issuance/Revocation Registry Example
-
-The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` creates the registry with its registry inception, `rip` event. This generates the Registry SAID as the value of the SAID, `d` field of the registry inception event. This value can then be inserted into the `rd` field of the ACDC to be issued. The ACDC can then be created and issued with the `iss` event. Later the ACDC can be revoked with the `rev` event.
-
-Registry inception event:
-
-```json
-{
- "v": "KERI10JSON00011c_",
- "t": "rip",
- "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "u": "0AHcgNghkDaG7OY1wjaDAE0q",
- "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
- "s": "0"
-}
-```
-
-
-Issuance event:
-
-```json
-{
- "v" : "ACDCCAAJSONAACQ_",
- "t" : "iss",
- "d" : "EMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL",
- "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "s" : "1",
- "p" : "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp"
- "dt": "2024-05-27T19:16:50.750302+00:00",
- "cd": "EM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIG"
-}
-```
-
-Revocation event:
-
-```json
-{
- "v" : "ACDCCAAJSONAACQ_",
- "t" : "rev",
- "d" : "EEdk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2",
- "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "s" : "2",
- "p" : "EMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL"
- "dt": "2024-06-27T19:16:50.750302+00:00",
- "cd": "EM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIG"
-}
-```
-
 
 ### Transfer Registry
 
@@ -3615,11 +3487,8 @@ CESR support for the ACDC protocol includes conveying sections of an ACDC as CES
 |Ilk|Name|Description|
 |---|---|---|
 |     |      | Registry TEL Message Types|
-| ini | Init | Initialize blindable state ACDC registry |
-| upd | Update | Update blindable state ACDC registry |
-| rip | Registry Inception | Incept simple publice ACDC registry |
-| iss | Issue | Set state to issued in simple public ACDC registry |
-| rev | Revoke | Set state to revoked in simple public ACDC registry |
+| rip | Registry Inception | Initialize blindable state ACDC registry |
+| upd | Update | Update transaction state of blindable state ACDC registry |
 |     |        | ACDC Message |
 |     | ACDC | Default ACDC without message type (ilk), `t` field |
 | acd | ACDC | With message type (ilk), `t` field |
@@ -3693,36 +3562,143 @@ The remaining field is the appropriate section field for the message type, as fo
 - edge, `e` field for the edge, `edg` message
 - rule, `r` field for the rule, `rul` message
 
+For the following messages, except for the attribute aggregate variant, assume that the associated compact ACDC is as follows:
+Compact form with attribute section:
+
+```json
+{
+  "v":  "ACDCCAAJSONAACD_",
+  "t":  "acd",
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
+  "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
+  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
+  "s":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
+  "a":  "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
+  "e":  "ECdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3d",
+  "r":  "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR"
+}
+```
+For the the attribute aggregate variant below, assume that the associated compact ACDC is as follows:
+
+Compact form with attribute aggregate section:
+
+```json
+{
+  "v":  "ACDCCAAJSONAACD_",
+  "t":  "acd",
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
+  "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
+  "rd": "EAMPAI6FkekwlOjkggtymRy7xMwsxUelUauaXtMxTfP",
+  "s":  "EAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4re",
+  "A":  "ELIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzw",
+  "e":  "ECdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3d",
+  "r":  "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR"
+}
+```
 
 #### Schema section message
 
-The schema, `s` field value is the expanded schema section from the associated ACDC.
+The schema, `s` field value is the expanded schema section from the associated ACDC. Notice that the value of the `$id` field within the schema subblock matches the value of the schema, `s` field in the associated ACDC above.
 
 ```json
 {
   "v": "ACDCCAAJSONAACD_",
   "t": "sch", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
-  "s": { }
+  "s": 
+  {
+    "$id": "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Compact Public ACDC",
+    "description": "Example JSON Schema for a Compact private ACDC.",
+    "credentialType": "CompactPublicACDCExample",
+    "version": "1.0.0",
+    "type": "object",
+    "required":
+    [
+      "v",
+      "d",
+      "u",
+      "i",
+      "rd",
+      "s",
+      "a",
+      "e",
+      "r"
+    ],
+    "properties":
+    {
+      "v":
+      {
+        "description": "ACDC version string",
+        "type": "string"
+      },
+      "d":
+      {
+        "description": "ACDC SAID",
+        "type": "string"
+      },
+      "i":
+      {
+        "description": "Issuer AID",
+        "type": "string"
+      },
+      "rd":
+      {
+        "description": "Registry SAID",
+        "type": "string"
+      },
+      "s": 
+      {
+        "description": "schema SAID",
+        "type": "string"
+      },
+      "a": 
+      {
+        "description": "attribute SAID",
+        "type": "string"
+      },
+      "e": 
+      {
+        "description": "edge SAID",
+        "type": "string"
+      },
+      "r": 
+      {
+        "description": "rule SAID",
+        "type": "string"
+      }
+    },
+    "additionalProperties": false
+  }
 }
 ```
 
 #### Attribute section message
 
-The attribute, `a` field value is the expanded attribute section from the associated ACDC.
+The attribute, `a` field value is the expanded attribute section from the associated ACDC. Notice that the value of the `d` field within the attribute subblock matches the value of the attribute, `a` field in the associated ACDC above.
 
 ```json
 {
   "v": "ACDCCAAJSONAACD_",
   "t": "att", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
-  "a": {}
+  "a": 
+  {
+    "d": "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
+    "i": "EKAn2EDIPmkPreYApZfFk66jpf3uFv7vklXKhzBrAqjs",
+    "temp": 45,
+    "lat": "N40.3433",
+    "lon": "W111.7208"
+  }
 }
 ```
 
 #### Aggregated Attribute Message
 
-The attribute aggregate, `A` field value is the expanded attribute aggregate section from the associated ACDC.
+The attribute aggregate, `A` field value is the expanded attribute aggregate section from the associated ACDC. Notice that the value of the attribute aggregate, `A` field in the associated ACDC above, is computed as the digest of concatenated digests of the elements of the selectively disclosable Array (see the Annex on selective disclosure).
 
 
 ```json
@@ -3730,12 +3706,29 @@ The attribute aggregate, `A` field value is the expanded attribute aggregate sec
   "v": "ACDCCAAJSONAACD_",
   "t": "agg", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
-  "A": []
+  "A":
+  [
+    {
+      "d": "ErzwLIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUde",
+      "u": "0AqHcgNghkDaG7OY1wjaDAE0",
+      "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA"
+    },
+    {
+      "d": "ELIr9Bf7V_NHwY1lkgveY4-Frn9y2PY9XgOcLxUderzw",
+      "u": "0AG7OY1wjaDAE0qHcgNghkDa",
+      "score": 96
+    },
+    {
+      "d": "E9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PYgveY4-",
+      "u": "0AghkDaG7OY1wjaDAE0qHcgN",
+      "name": "Jane Doe"
+    }
+  ]
 }
 ```
 
 #### Edge Message
-The edge, `e` field value is the expanded edge section from the associated ACDC.
+The edge, `e` field value is the expanded edge section from the associated ACDC. Notice that the value of the `d` field within the edge subblock matches the value of the edge, `e` field in the associated ACDC above.
 
 
 ```json
@@ -3743,26 +3736,44 @@ The edge, `e` field value is the expanded edge section from the associated ACDC.
   "v": "ACDCCAAJSONAACD_",
   "t": "edg", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
-  "e": {}
+  "e": 
+  {
+    "d": "ECdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3d",
+    "poe": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
+    "poa":
+    {
+      "o": "OR",
+      "sewer": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
+      "gas": "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B"
+    }
+  }
 }
 ```
 
 #### Rule Message
-The rule, `r` field value is the expanded rule section from the associated ACDC.
+The rule, `r` field value is the expanded rule section from the associated ACDC. Notice that the value of the `d` field within the rule subblock matches the value of the rule, `r` field in the associated ACDC above.
+
 ```json
 {
   "v": "ACDCCAAJSONAACD_",
   "t": "rul", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
-  "r": {}
+  "r": 
+  {
+    "d": "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR",
+    "disclaimers":
+    {
+      "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
+      "warrantyDisclaimer": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE",
+      "liabilityDisclaimer": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
+    },
+    "permittedUse": "The person or legal entity identified by the ACDC's Issuee AID (Issuee) agrees to only use the information contained in this ACDC for non-commercial purposes."
+  }
 }
 ```
-  
 
 
-
-
-### Examples 
+### ACDC Examples 
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/27
