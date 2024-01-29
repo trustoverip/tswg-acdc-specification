@@ -2780,7 +2780,7 @@ Blindable state registries have two types of events. Aside from their message ty
 |`ini`| Init | transaction event state initialization |
 |`upd`| Update | transaction event state update |
 
-In some cases, the usage of the registry may provide correlatable information as would be the case where the first real transaction state is always the same or the final state results in disuse of the Registry. In that cases, the Issuer may choose to define a null state as a placeholder. The initializion of the Registry can therefore be published in advance of any real ACDC to which it may be later applied. Disuse of the registry can be hidden by continuing to update the state with null states for some time after the ACDC has been revoked or abandoned. 
+In some cases, the usage of the registry may provide correlatable information, as would be the case where the first real transaction state is always the same or the final state results in the disuse of the Registry. In those cases, the Issuer may choose to define an empty (null) state and an empty (null) ACDC SAID as known placeholder values. The initialization event of the Registry can, therefore, be published in advance of any real ACDC to which it may be later applied. Disuse of the registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned. 
 
 #### Top-level fields
 
@@ -2815,7 +2815,7 @@ The SAID, `d` field value shall be the SAID of its enclosing block. A transactio
 
 ##### Issuer, `i` field
 
-The Issuer, `i` field value shall be the AID of the Issuer. This makes the removes any ambiguity about the semantic of the appearance of a seal to the transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same, for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party not a nonrepudiable duplicity evident commitment by the Issuer to the transaction state.
+The Issuer, `i` field value shall be the AID of the Issuer. This makes the removes any ambiguity about the semantic of the appearance of a seal to the transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same, for a transaction event seal that appears in a given KEL, then the KEL controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different controller AID is merely a nonrepudiable endorsement of the transaction state by some other party not a nonrepudiable duplicity evident commitment by the Issuer to the transaction state. This may appear to be redundant because the Issuer AID also appears in the ACDC. In a blinded state Registry, however, the ACDC SAID only appears in the blinded attribute block, likewise in a yet-to-be-disclosed private ACDC the Issuer is also blinded, so a Registry observer that hosts a copy of the Registry that is not also a Disclosee of either the expanded transaction event and/or the associated ADCD would not be able to confirm that commitment and may thereby be subject to a DDoS attack without the presence of the Issuer, `i` field in the transaction event's public top-level fields.
 
 ##### Sequence number, `s` field
 
@@ -2868,7 +2868,7 @@ The transaction state, `ts` field value shall be a string from a small finite se
 
 #### Blindable state registry example
 
-Consider blindable state revocation registry for ACDCs. The transaction state can be one of three values, `null`, `issued`, or `revoked`.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+Consider blindable state revocation registry for ACDCs. The transaction state can be one of two values, `issued`, or `revoked`. In this case, placeholder values of the empty, `` string for transaction state, `ts` and container SAID, `cd` fields is also employed to decorrelate the initialization.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
 
 ```json
 {
@@ -2888,11 +2888,14 @@ The associated expanded attribute block is as follows:
 {
  "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
  "u": "ZHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "cd": "EDJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
- "ts": "null"
+ "cd": "",
+ "ts": ""
 }
 ```
-Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. In this case, the value of the container SAID, `cd` field is just a random placeholder value and does not correspond to any real ACDC. This transaction state of this placeholder may be updated any number of times prior to its first use as the true state of a real ACDC. This makes the first use of the registry uncorrelated to the actual issuance of the real ACDC. 
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. In this case, the value of the container SAID, `cd` field, and transaction state, `ts` fields are just empty strings as placeholder values. The transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. This makes the first use(s) of the registry uncorrelated to the actual issuance of the real ACDC. 
+
+Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `d` field must be either the empty string placeholder or the real ACDC SAID. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
+
 
 Sometime later, for real ACDC indicated by its top-level SAID, `d` field value `EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI` issues an ACDC with SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. Suppose the associated Update event occurs at sequence number 5. The published transaction event is as follows:
 
@@ -2920,11 +2923,11 @@ The associated expanded attribute block is as follows:
 }
 ```
 
-Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Notice further that in this case, the value of the container SAID, `cd` field is the real value of the ACDC, and the value of the transaction state, `ts` field is `issued`.  Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows which ACDC it wishes to disclose so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for each one of of the three possible state values, namely, `null`, `issued`, `revoked` to find the one that matches the published transaction event attribute, `a` field value. The Discloser can then disclose the matching expanded attribute block to the Disclosee who can verify it against the published transaction event.
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Notice further that in this case, the value of the container SAID, `cd` field is the real value of the ACDC, and the value of the transaction state, `ts` field is `issued` (not placeholder).  Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows which ACDC it wishes to disclose so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then disclose the matching expanded attribute block to the Disclosee, who can verify it against the published transaction event.
 
 The Discloser can then instruct the Issuer to issue one or more updates with new blinding factors so that the initial Disclosee may no longer validate the state of the ACDC without another interactive disclosure by the Discloser.
 
-Suppose at some later time, a validator requires that the Discloser provide continuing proof of issuance. In that case the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state. Suppose this is at sequence number 9 as follows:
+Suppose at some later time, a validator requires that the Discloser provide continuing proof of issuance. In that case, the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state. Suppose this is at sequence number 9 as follows:
 
 ```json
 {
@@ -2950,6 +2953,7 @@ The associated expanded attribute block is as follows:
 }
 ```
 
+The Discloser could continue to have the blind updated periodically. This would generate new transaction events with new values for its attribute, `a` field, but without changing the transaction state field value. This decorrelates the time of revocation with respect to the latest event in the Registry.
 
 
 ### Simple Public Issuance/Revocation Registry
@@ -3511,6 +3515,157 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/35
 The ACDC design leverages append-only verifiable data structures, namels KELs and TELs that have strong security properties that simplify end-verifiability and foster decentralization. Append-only verifiable data structures provide permission-less extensibility by issuers, presenters, and/or verifiers. By permission-less, it means that there is no shared governance over these data structures. This is completely decentralized and zero-trust. The fact that each ACDC has both a universally unique content-based identifier and a universally unique content-based schema identifier that determines its type, enables permission-less ACDC type registries. Because attributes, claims, properties may be conveyed by verifiable graphs of ACDCs linked by their edges whose edges may also have properties, ACDCs may be modeled as labeled property graphs. Thus enables extensibility of pre-existing already Issued ACDCs by appending additional attributes via application specifc ACDCs or bespoke ACDCs. In other words, custom attributes or properties are appended via chaining via one or more custom ACDCs defined by custom schema (type-is-schema), not modifying in place pre-issued credential types.
 
 In essence, an ACDC is really just a verifiable property graph fragment of an extensible distributed property graph where each node may be sourced by a different issuer. This type of extensibility means there is no need for centralized permissioned name-space registries to resolve name-space collisions of attributes or properties. Each ACDC has a universally unique content address and a universally unique content addressable schema (type-is-schema) as ACDC type that defines the namespace. The function of an extensible registry of ACDC types now becomes merely schema discovery or schema blessing for a given context or ecosystem. The reach of such a registry of ACDC types can be tuned to the reach of desired interoperability by the ecosystem participants. Versioning is also simplified because edges may still verify if the new schema is backward compatible.
+
+### ACDC protocol message types
+
+CESR support for the ACDC protocol includes conveying sections of an ACDC as CESR-compatible messages (packets). These messages can be part of a CESR stream or part of the attachment group to an ACDC. This is useful for sending the ACDC in its compact form and then attaching the section details as individual message packets. This enables one to cache sections so that they do not have to be transmitted repeatedly or reuse sections that are the same for multiple ACDC instances, which is often the case for the schema and rule sections. An ACDC message itself may have as an option a message type field. This allows CESR native versions of ACDCs. The default is that absent a message type field, an ACDC protocol message given by the version string field is an ACDC. All other message types shall have the message type field. The following table provides all the message types (ilks) for the ACDC protocol. The message type (ilk) field label is `t` and shall appear at the top-level immediately following the version string, `v` field.
+
+#### Message type table
+
+|Ilk|Name|Description|
+|---|---|---|
+|     |      | Registry TEL Message Types|
+| ini | Init | Initialize blindable state ACDC registry |
+| upd | Update | Update blindable state ACDC registry |
+| iss | Issue | Set state to issued in simple public ACDC registry |
+| rev | Revoke | Set state to revoked in simple public ACDC registry |
+|     |        | ACDC Message |
+|     | ACDC | Default ACDC without message type (ilk), `t` field |
+| acd | ACDC | With message type (ilk), `t` field |
+|     |        | ACDC Section message types |
+| sch | Schema | Schema section message |
+| att | Attribute | Attribute section message |
+| agg | Aggregate | Attribute aggregate section message |
+| edg | Edge | Edge section message |
+| rul | Rule | Rule section message |
+
+
+
+#### ACDC message with message type field
+
+The following table defines the top-level fields in an ACDC with a message type field and their order of appearance. Some fields are optional, but all fields that appear shall appear in this order, `[v, t, d, u, i, s, a, A, e, r]`.
+
+| Label | Title | Description |
+|:-:|:--|:--|
+|`v`| Version String| Regexable format: ACDCvvSSSShhhhhh_ that provides protocol type, version, serialization type, size, and terminator. |
+|`t`| Message Type| Three character message type |
+|`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
+|`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
+|`i`| Issuer Identifier (AID)| Autonomic Identifier whose control authority is established via KERI verifiable key state. |
+|`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
+|`a`| Attribute| Either the SAID of a block of attributes or the block itself. |
+|`A`| Attribute Aggregate| Either the aggregate of a selectively disclosable block of attributes or the block itself. |
+|`e`| Edge| Either the SAID of a block of edges or the block itself.|
+|`r`| Rule | Either the SAID a block of rules or the block itself. |
+
+
+The message type field enables fixed fields at the top level for an even more compact ACDC. The SAD of an ACDC is a labeled field map, such as an object in Javascript, or a dict in Python. The over-the-wire serialization could be CESR with fixed fields. Shown below is the labeled SAD as a Python dict(not the over-the-wire JSON or CESR).  The message type, `t` field for ACDCs is an optional field for JSON, CBOR, MGPK, and CESR field maps but is required for CESR fixed fields. This enables  more than one type of CESR fixed field top-level ACDC CESR serialization that is unambiguously parseable. This seems to violate the schema-is-type convention in order to enable a parser to correctly parse a fixed field message type.
+
+Python dict of compact ACDC with message type, `t` field.
+
+```python
+{
+  "v":  "ACDCCAAJSONAACD_",
+  "t":  "acd",
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
+  "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
+  "s":  "EAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4re",
+  "a":  "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
+  "e":  "ECdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3d",
+  "r":  "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR"
+}
+```
+
+#### Section message fields
+
+| Label | Title | Description |
+|:-:|:--|:--|
+|`v`| Version String| Regexable format: ACDCvvSSSShhhhhh_ that provides protocol type, version, serialization type, size, and terminator. |
+|`t`| Message Type| Three character message type |
+|`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
+|`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
+|`a`| Attribute| Either the SAID of a block of attributes or the block itself. |
+|`A`| Attribute Aggregate| Either the aggregate of a selectively disclosable block of attributes or the block itself. |
+|`e`| Edge| Either the SAID of a block of edges or the block itself.|
+|`r`| Rule | Either the SAID a block of rules or the block itself. |
+
+Each section message must have version string, `v`, message type, `t`,  and SAID, `d` fields in that order. The value of the SAID, `d` field is the said of the message block itself not the SAID of the embedded section field value. The embedded section block's SAID, `d` field should match the section field value in the associated compact ACDC.
+
+The remaining field is the appropriate section field for the message type, as follows: 
+
+- schema, `s` field for the schema, `sch` message
+- attribute, `a` field for the attribute, `att` message
+- attribute aggregate, `A` field for the aggregate, `agg` message
+- edge, `e` field for the edge, `edg` message
+- rule, `r` field for the rule, `rul` message
+
+
+#### Schema section message
+
+The schema, `s` field value is the expanded schema section from the associated ACDC.
+
+```json
+{
+  "v": "ACDCCAAJSONAACD_",
+  "t": "sch", 
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "s": { }
+}
+```
+
+#### Attribute section message
+
+The attribute, `a` field value is the expanded attribute section from the associated ACDC.
+
+```json
+{
+  "v": "ACDCCAAJSONAACD_",
+  "t": "att", 
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "a": {}
+}
+```
+
+## Aggregated Attribute Message
+
+The attribute aggregate, `A` field value is the expanded attribute aggregate section from the associated ACDC.
+
+
+```json
+{
+  "v": "ACDCCAAJSONAACD_",
+  "t": "agg", 
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "A": []
+}
+```
+
+## Edge Message
+The edge, `e` field value is the expanded edge section from the associated ACDC.
+
+
+```json
+{
+  "v": "ACDCCAAJSONAACD_",
+  "t": "edg", 
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "e": {}
+}
+```
+
+## Rule Message
+The rule, `r` field value is the expanded rule section from the associated ACDC.
+```json
+{
+  "v": "ACDCCAAJSONAACD_",
+  "t": "rul", 
+  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
+  "r": {}
+}
+```
+  
+
 
 
 
