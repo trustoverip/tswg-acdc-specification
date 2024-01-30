@@ -267,7 +267,7 @@ Although a given ACDC field map serialization kind may have characters or bytes 
 
 Compliant ACDC version 2.XX implementations shall support the old ACDC version 1.XX version string format to properly verify ACDCs created with 1.XX format events.
 
-The format of the version string for ACDC 1.XX is `ACDCvvKKKKllllll_`. It is 16 characters in length and is divided into five parts: protocol, version, serialization kind, serialization length, and terminator. The first four characters, `ACDC` indicate the protocol. The CESR encoding standard supports multiple protocols, `ACDC` being one of them.  The next two characters, `vv` provide the major and minor version numbers of the version of the ACDC protocol specification in lowercase hexadecimal notation. The first `v` provides the major version number, and the second `v` provides the minor version number. For example, `01` indicates major version 0 and minor version 1 or in dotted-decimal notation `0.1`. Likewise, `1c` indicates major version 1 and minor version decimal 12 or in dotted-decimal notation `1.12`. The next four characters, `KKKK` indicate the serialization kind in uppercase. The four supported serialization kinds are `JSON`, `CBOR`, `MGPK`, and `CESR` for the JSON, CBOR, MessagePack, and CESR serialization standards, respectively [[spec: RFC4627]] [[spec: RFC4627]] [[ref: CBOR]] [[ref: RFC8949]] [[ref: MGPK]] [[ref: CESR]]. The next six characters provide in lowercase hexadecimal notation the total length of the serialization, inclusive of the version string and any prefixed characters or bytes. This length is the total number of characters in the serialization of the ACDC field map. The maximum length of a given ACDC field map serialization is thereby constrained to be *2<sup>24</sup> = 16,777,216* characters in length. For example, when the length of serialization is 384 decimal characters/bytes, the length part of the version string has the value `000180`. The final character `_` is the version string terminator. This enables later versions of ACDC to change the total version string size and thereby enable versioned changes to the composition of the fields in the version string while preserving deterministic regular expression extractability of the version string. 
+The format of the version string for ACDC 1.XX is `ACDCvvKKKKllllll_`. It is 17 characters in length and is divided into five parts: protocol, version, serialization kind, serialization length, and terminator. The first four characters, `ACDC` indicate the protocol. The CESR encoding standard supports multiple protocols, `ACDC` being one of them.  The next two characters, `vv` provide the major and minor version numbers of the version of the ACDC protocol specification in lowercase hexadecimal notation. The first `v` provides the major version number, and the second `v` provides the minor version number. For example, `01` indicates major version 0 and minor version 1 or in dotted-decimal notation `0.1`. Likewise, `1c` indicates major version 1 and minor version decimal 12 or in dotted-decimal notation `1.12`. The next four characters, `KKKK` indicate the serialization kind in uppercase. The four supported serialization kinds are `JSON`, `CBOR`, `MGPK`, and `CESR` for the JSON, CBOR, MessagePack, and CESR serialization standards, respectively [[spec: RFC4627]] [[spec: RFC4627]] [[ref: CBOR]] [[ref: RFC8949]] [[ref: MGPK]] [[ref: CESR]]. The next six characters provide in lowercase hexadecimal notation the total length of the serialization, inclusive of the version string and any prefixed characters or bytes. This length is the total number of characters in the serialization of the ACDC field map. The maximum length of a given ACDC field map serialization is thereby constrained to be *2<sup>24</sup> = 16,777,216* characters in length. For example, when the length of serialization is 384 decimal characters/bytes, the length part of the version string has the value `000180`. The final character `_` is the version string terminator. This enables later versions of ACDC to change the total version string size and thereby enable versioned changes to the composition of the fields in the version string while preserving deterministic regular expression extractability of the version string. 
 
 
 ### Self-addressing identifier (SAID) fields
@@ -2881,7 +2881,7 @@ The datetime, `dt` field value shall be the ISO-8601 datetime string with micros
 
 ##### Attribute, `a` field
 
-The attribute, `a` field value shall be the SAID of the blinded attribute block when used in blinded (private) fashion. Alternatively, when used in an unblinded (publich) fashion, attribute, `a` field value shall be the fully expanded attribute block (field map). See below for a description of the expanded attribute block.
+The attribute, `a` field value shall be the SAID of the blinded attribute block when used in a blinded (private) fashion. Alternatively, when used in an unblinded (public) fashion, the attribute, `a` field value shall be either the fully expanded attribute block (field map) or the SAID of the attribute block but without its UUID, `u` field. See below for a description of the expanded attribute block.
 
 #### Expanded attribute block
 
@@ -2894,7 +2894,7 @@ The expanded attribute block has the following fields:
 |cd| container/credential SAID of ACDC or ACDC bulk aggregate when bulk-issued | 
 |ts| transaction state value string | 
 
-The fields shall appear in the following order `[d, u, cd, ts]` and are all required.
+The fields shall appear in the following order `[d, u, cd, ts]`. When used in private (blinded) mode, all are required. When used in public (unblinded) mode, the SAID, `d` field is optional, the UUID, `u` field is not allowed, but both the container SAID, `cd` and transaction state, `ts` fields are required.
 
 ##### SAID, `d` field
 
@@ -2915,9 +2915,9 @@ The container SAID, `cd` field value shall be the SAID of the associated ACDC or
 The transaction state, `ts` field value shall be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
 
 
-#### Blindable state registry example
+#### Private (blinded) state registry example
 
-Consider blindable state revocation registry for ACDCs. The transaction state can be one of two values, `issued`, or `revoked`. In this case, placeholder values of the empty, `` string for transaction state, `ts` and container SAID, `cd` fields is also employed to decorrelate the initialization.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+Consider a blindable state revocation registry for ACDCs operated in blinded (private) mode. The transaction state can be one of two values, `issued`, or `revoked`. In this case, placeholder values of the empty, `` string for transaction state, `ts` and container SAID, `cd` fields are also employed to decorrelate the initialization.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
 
 ```json
 {
@@ -2963,7 +2963,7 @@ Notice that the value of the attribute, `a` field in the transaction event, matc
 Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `d` field must be either the empty string placeholder or the real ACDC SAID. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
 
 
-Sometime later, for real ACDC indicated by its top-level SAID, `d` field value `EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI` issues an ACDC with SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the registry inception, `dip` event. 
+Sometime later, the real ACDC is issued as indicated by its SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the registry inception, `dip` event. 
 
 Suppose the associated Update event occurs at sequence number 5. The published transaction event is as follows:
 
@@ -3022,6 +3022,139 @@ The associated expanded attribute block is as follows:
 ```
 
 The Discloser could continue to have the blind updated periodically. This would generate new transaction events with new values for its attribute, `a` field, but without changing the transaction state field value. This decorrelates the time of revocation with respect to the latest event in the Registry.
+
+#### Public (unblinded) state registry example 
+
+Consider a blindable state revocation registry for ACDCs operated in an unblinded (public) mode. The transaction state can be one of two values, `issued`, or `revoked`. The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "rip",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "u": "0AHcgNghkDaG7OY1wjaDAE0q",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "0",
+ "dt": "2024-05-27T19:16:50.750302+00:00"
+}
+```
+
+Given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere as the registry SAID, `rd` field. The `rd` field value is derived from the Issuer AID, binding the Registry to the Issuer AID. 
+
+Sometime later, the real ACDC is issued as indicated by its SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the registry inception, `dip` event. 
+
+The state is initialized with the following update event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "upd",
+ "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "1",
+ "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "dt": "2024-06-01T05:01:42.660407+00:00",
+ "a": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-"
+}
+```
+
+The associated expanded attribute block is as follows:
+
+```json
+{
+ "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
+ "ts": "issued"
+}
+```
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Further notice that the UUID, `u` field is missing. This makes the attribute block unblinded. The Issuer may provide an API that allows a Validator to query the attributed block for any given transaction event in the registry, or knowing that its unblinded, a Validator can try the two different state value possibilities to discover which one generates a SAID, `d` field value that matches the attribute, `a` field value in the event.
+
+
+Sometime later with the ACDC is revoked with the publication by the Issuer of the following event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "upd",
+ "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "2",
+ "p": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "dt": "2024-07-04T05:01:42.660407+00:00",
+ "a": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI"
+}
+```
+
+The associated expanded attribute block is as follows: 
+
+```json
+{
+ "d": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI",
+ "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
+ "ts": "revoked"
+}
+```
+
+#### Simple public (unblinded) state registry example 
+
+Consider a blindable state revocation registry for ACDCs operated in an unblinded (public) mode. The transaction state can be one of two values, `issued`, or `revoked`. The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "rip",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "u": "0AHcgNghkDaG7OY1wjaDAE0q",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "0",
+ "dt": "2024-05-27T19:16:50.750302+00:00"
+}
+```
+
+Given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere as the registry SAID, `rd` field. The `rd` field value is derived from the Issuer AID, binding the Registry to the Issuer AID. 
+
+Sometime later, the real ACDC is issued as indicated by its SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the registry inception, `dip` event. 
+
+The state is initialized with the following simple update event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "upd",
+ "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "1",
+ "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "dt": "2024-06-01T05:01:42.660407+00:00",
+ "a": 
+ {
+   "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
+   "ts": "issued"
+  }
+}
+```
+
+Notice that the value of the attribute, `a` field in the transaction event, is now a field map block, not a SAID string. Further notice that both the SAID, `d`, and UUID, `u` fields are missing as they are now superfluous.
+
+Sometime later, the ACDC is revoked with the publication by the Issuer of the following simple update event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ_",
+ "t": "upd",
+ "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
+ "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "2",
+ "p": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "dt": "2024-07-04T05:01:42.660407+00:00",
+ "a": 
+ {
+   "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
+   "ts": "revoked"
+ }
+}
+```
+
 
 ### Transfer Registry
 
