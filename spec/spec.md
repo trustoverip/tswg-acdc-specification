@@ -138,14 +138,50 @@ Secret splitting [@SSplt] a type of secret sharing [@SShr] that uses the same te
 https://github.com/trustoverip/tswg-acdc-specification/issues/36
 :::
 
-Selective disclosure
-Graduated disclosure
-Partial disclosure
-Full disclosure
-Contractually protected disclosure
-Chain-link confidential disclosure
-Discloser/Disclosee
-Issuer/Issuee
+[[def: Compact disclosure]]
+
+~ a disclosure of an ACDC that discloses only the SAID(s) of some or all of its field maps. Both partial and selective disclosure rely on compact disclosure.
+
+[[def: Partial disclosure]]
+
+~ a disclosure of an ACDC that partially discloses its field maps using compact disclosure. The compact disclosure provides a cryptographically equivalent commitment to the yet-to-be-disclosed content, and later exchange of the uncompacted content is verifiable to an earlier partial disclosure. Unlike Selective disclosure, a partially disclosable field becomes correlatable to its encompassing block after its Full disclosure.
+
+[[def: Selective disclosure]]
+
+~ a disclosure of an ACDC that selectively discloses its attributes using compact disclosure. The set of selectively disclosable attributes is provided as an array of blinded blocks where each attribute in the set has its own dedicated blinded block. Unlike Partial disclosure, the selectively disclosed fields are not correlatable to the so far undisclosed but selectively disclosable fields in the same encompassing block.
+
+[[def: Full disclosure]]
+
+~ a disclosure of an ACDC that discloses the full details of some or all of its field maps. In the context of Selective disclosure, Full disclosure means detailed disclosure of the selectively disclosed attributes, not the detailed disclosure of all selectively disclosable attributes. In the context of Partial disclosure, Full disclosure means detailed disclosure of the field map that was so far only partially disclosed.
+
+[[def: Graduated disclosure]]
+
+~ a disclosure of an ACDC that does not to reveal its entire content in the initial interaction with the recipient and, instead, partially or selectively reveal only the information contained within the ACDC that is necessary to further a transaction with the recipient. A Graduated disclosure may invole multiple steps where more information is prgressively revealed as the recipient satisfy the conditions set by the discloser. Compact disclosure, Partial disclosure, Selective disclosure and Full disclosure are all Graduated disclosure mechanisms. 
+
+[[def: Contractually protected disclosure]]
+
+~ a discloser of an ACDC that leverages a Graduated disclosure so that contractual protections can be put into place to minimize the leakage of information that can be correlated. A Contractually protected disclosure partially or selectively reveal the information contained within the ACDC in the initial interaction with the recipient and disclose further information only after the recipient agrees to the terms established by the discloser. More information may be progressively revealed as the recipient agrees to additional terms.
+
+[[def: Chain-link confidential disclosure]]
+
+~ contractual restrictions and liability imposed on a recipient of a disclosed ACDC that contractually link the obligations to protect the disclosure of the information contained within the ACDC to all subsequent recipients as the information moves downstream. The Chain-link confidential disclosure provides a mechanism for protecting against unpermissioned exploitation of the data disclosed via an ACDC.
+
+[[def: Discloser]] 
+
+~ a role of an entity that discloses an ACDC. A Discloser may or may not be the Issuer of the disclosed ACDC.
+
+[[def: Disclosee]]
+
+~ a role of an entity that is a recipient to which an ACDC is disclosed. A Disclosee may or may not be the Issuee of the disclosed ACDC.
+
+[[def: Issuer]]
+
+~ a role of an entity that asserts claims and creates an ACDC from these claims. 
+
+[[def: Issuee]]
+
+~ a role of an entity to which the cliams of an ACDC are asserted.
+
 Controller
 Verifier
 Validator
