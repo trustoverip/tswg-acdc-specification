@@ -182,28 +182,81 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/36
 
 ~ a role of an entity to which the cliams of an ACDC are asserted.
 
-Controller
-Verifier
-Validator
-Key state
-Rotation/Rotation event
-Interaction event
-Inception event
-Verifiable data registry
-Duplicity
-Attribute 
-Targeted (Issueed) and Untargeted (Unissueed) ACDCs
-Operator
-Weight
+[[def: Controller]]
 
+~ an entity that can cryptographically prove the control authority over an AID and make changes on the associated KEL. A controller of a multi-sig AID may consist of multiple controlling entities. See [controller](https://trustoverip.github.io/tswg-keri-specification/#term:controller).
 
-TBD
+[[def: Verifier]]
 
-Permissioned correlation
-Percolated discovery
-Rules 
-Edge
-Schema
+~ any entity or agent that cryptographically verifies the signature(s) and/or digests on an event Message. See [verifier](https://trustoverip.github.io/tswg-keri-specification/#term:verifier).
+
+[[def: Validator]]
+
+~ any entity or agent that evaluates whether or not a given signed statement as attributed to an identifier is valid at the time of its issuance. See [validator](https://trustoverip.github.io/tswg-keri-specification/#term:validator).
+
+[[def: Key-state]]
+
+~ a set of currently authoritative keypairs for an AID and any other information necessary to secure or establish control authority over an AID. This includes current keys, prior next key digests, current thresholds, prior next thresholds, witnesses, witness thresholds, and configurations. A key-state of an AID is first established through an inception event and may be altered by subsequent rotation events. See [validator](https://trustoverip.github.io/tswg-keri-specification/#term:key-state).
+
+[[def: Rotation event]]
+
+~ an Establishment Event that provides the information needed to change the Key state which includes a change to the set of authoritative keypairs for an AID. See [rotation event](https://trustoverip.github.io/tswg-keri-specification/#term:rotation-event).
+
+[[def: Interaction event]]
+
+~ a Non-establishment event that anchors external data to the Key state as established by the most recent prior Establishment event. See [interaction event](https://trustoverip.github.io/tswg-keri-specification/#term:interaction-event).
+
+[[def: Inception event]]
+
+~ an Establishment event that provides the incepting information needed to derive an AID and establish its initial Key state. See [inception event](https://trustoverip.github.io/tswg-keri-specification/#term:inception-event).
+
+[[def: Verifiable data registry]]
+
+~ A role a system might perform by mediating issuance and verification of ACDCs. See [verifiable data registry](https://www.w3.org/TR/vc-data-model-2.0/#dfn-verifiable-data-registries).
+
+[[def: Duplicity]]
+
+~ the existence of more than one Version of a Verifiable KEL for a given AID. See [duplicity](https://trustoverip.github.io/tswg-keri-specification/#term:duplicity).
+
+[[def: Attribute]]
+
+~ a top-level field map within an ACDC that provides a property of an entity that is inherent or assigned to the entity.
+ 
+[[def: Targeted ACDC]]
+
+~ an ACDC with the presence of the Issuee field in the attribute or attribute aggregate sections.
+
+[[def: Untargeted ACDC]]
+
+~ an ACDC without the presence of the Issuee field in the attribute or attribute aggregate sections.
+
+[[def: Operator]]
+
+~ an optional field map in the Edge section that enables expression of the edge logic on edge subgraph as either a unary operator on the edge itself or an m-ary operator on the edge-group.
+
+[[def: Weight]]
+
+~ an optional field map in the Edge section that provides edge weight property that enables directed weighted edges and operators that use weights.
+
+[[def: Unpermissioned correlation]]
+
+~ a correlation established between two or more disclosed ACDCs whereby the discloser of the ACDCs does not permit the disclosee to establish such a correlation.
+
+[[def: Percolated discovery]]
+
+~ a discovery mechanism for information associated with an AID or a SAID, which is based on Invasion Percolation Theory. Once an entity has discovered such information, it may in turn share what it discovers with other entities. Since the information so discovered is end-verifiable, the percolation mechanism and percolating intermediaries do not need to be trusted.
+
+[[def: Rules]]
+
+~ a top-level field map within an ACDC that provides a legal language as a Ricardian Contract [@RC], which is both human and machine-readable and referenceable by a cryptographic digest. 
+
+[[def: Edge]]
+
+~ a top-level field map within an ACDC that provides edges that connect to other ACDCs, forming a labeled property graph (LPG).
+
+[[def: Schema]]
+
+~ the SAID of a JSON schema that is used to issue and verify an ACDC.
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/16
@@ -2562,18 +2615,22 @@ An important design goal of ACDCs is to support the sharing of provably authenti
 
 ### Data privacy
 
-Information or data privacy is defined as the relationship between the collection and dissemination of data, technology, the public expectation of privacy, contextual information norms, and the legal and political issues surrounding them [Information privacy](https://en.wikipedia.org/wiki/Information_privacy). Data privacy is challenging since it attempts to allow the use of data by 2nd and 3rd parties while protecting personal (1st party) privacy preferences and personally identifiable information (PII). The fields of computer security, data security, and information security all design and use software, hardware, and human resources to address this issue. This definition is consistent with privacy viewed from the perspective of 1st party data rights and the role of 2nd parties in the three-party exploitation model defined below. The Trust over IP (ToIP) foundation’s architecture specification phrases privacy protection as answering the question: Privacy: will the expectations of each party with respect to the usage of shared information be honored by the other parties?
+Information or data privacy is defined as the relationship between the collection and dissemination of data, technology, the public expectation of privacy, contextual information norms, and the legal and political issues surrounding them [Information privacy](https://en.wikipedia.org/wiki/Information_privacy). Data privacy is challenging since it attempts to allow the use of data by 2nd and 3rd parties while protecting personal (1st party) privacy preferences and personally identifiable information (PII). The fields of computer security, data security, and information security all design and use software, hardware, and human resources to address this issue. This definition is consistent with privacy viewed from the perspective of 1st party data rights and the role of 2nd parties in the three-party exploitation model defined below. The Trust over IP (ToIP) foundation’s architecture specification phrases privacy protection as answering the question:
+ Privacy: will the expectations of each party with respect to the usage of shared information be honored by the other parties?
  
  [Trust over IP (ToIP) Technology Architecture Specification](https://github.com/trustoverip/TechArch/blob/main/spec.md#61-design-goals)
 
 ### Three-party exploitation model 
 
 Sustainable privacy is based on a three-party exploitation model [Sustainable Privacy](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/SustainablePrivacy.pdf). Fundamentally, the goal is to protect the person (data subject) from exploitation via their personal data. In common usage, exploitation is selfishly taking advantage of someone to profit from them or otherwise benefit oneself. So, any unintended usage by any party is potentially exploitive. Intent is with respect to the person (data subject).
-In this model, the 1st party is the person (data subject) of the original data. Their data is 1st party data. A 2nd party is the direct recipient of 1st party data as an intended recipient by the 1st party. A 3rd party is any other party who obtains or observes 1st party data but who is not the intended recipient. 
+
+In this model, the 1st party is the person (data subject) of the original data. Their data is 1st party data. A 2nd party is the direct recipient of 1st party data as an intended recipient by the 1st party. A 3rd party is any other party who obtains or observes 1st party data but who is not the intended recipient. 
 
 There are two main avenues of exploitation of 1st party data. These are any 2nd party who uses the data in any way not intended by the 1st party and any 3rd party who uses 1st party data. To clarify, any unintended (unpermissioned) use of 1st party data by any 2nd party is naturally exploitive. 
-Moreover, because a 3rd party is defined as an unintended recipient, any use of 1st party data by a 3rd party is likewise, by definition, exploitive. 
-Furthermore, 1st party data may be conveyed by one 2nd party to another 2nd party (i.e. shared) in a non-exploitive manner when such conveyance and eventual use by the other 2nd party is intended (permitted) by the 1st party.
+
+Moreover, because a 3rd party is defined as an unintended recipient, any use of 1st party data by a 3rd party is likewise, by definition, exploitive. 
+
+Furthermore, 1st party data may be conveyed by one 2nd party to another 2nd party (i.e. shared) in a non-exploitive manner when such conveyance and eventual use by the other 2nd party is intended (permitted) by the 1st party.
 
 To elaborate, exploitation based on disclosure is characterized by a Three-party model. The three parties are as follows:
 
@@ -2583,7 +2640,9 @@ To elaborate, exploitation based on disclosure is characterized by a Three-party
 
 Typically, protection from direct 3rd-party (Observer) exploitation without the collusion of the 2nd-party (Disclosee) of disclosed data may be provided by encrypting that data such that only the 2nd-party (Disclosee) may decrypt that data. Encryption is one effective mechanism for protecting the confidentiality of disclosed data from non-collusive 3rd-party observation. The detailed description of such mechanisms that are compatible with ACDCs is beyond the scope of this specification. See [SPAC](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/SPAC_Message.pdf) and {{TSP}} compatible encryption protocols. 
 
-The primary mechanisms by which 2nd parties (Disclosees) erode the data privacy rights of disclosed data are as follows:	•	Exploitive use of 1st-party (Discloser) data by 2nd parties (Disclosees).	•	Sharing of 1st-party (Discloser) data by 2nd parties (Disclosees) with 3rd parties (Observers) either overtly (collusive) or inadvertently (leakage).
+The primary mechanisms by which 2nd parties (Disclosees) erode the data privacy rights of disclosed data are as follows:
+	•	Exploitive use of 1st-party (Discloser) data by 2nd parties (Disclosees).
+	•	Sharing of 1st-party (Discloser) data by 2nd parties (Disclosees) with 3rd parties (Observers) either overtly (collusive) or inadvertently (leakage).
 
 
 This model is diagrammed below. 
