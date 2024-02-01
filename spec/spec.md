@@ -37,7 +37,7 @@ Authentic Chained Data Containers (ACDC)
 https://github.com/trustoverip/tswg-acdc-specification/issues/8
 :::
 
-An Authentic chained data container (ACDC) specification [@ACDC_ID][@ACDC_WP][@VCEnh] is being incubated at the ToIP (Trust over IP) Foundation [@TOIP][@ACDC_TF].  An ACDC is a compliant external proof format of the W3C VC 2.0 specification.  The ACDC specification supports the use of KERI-based (Key Event Receipt Infrastructure) DID methods such as did:KERI and did:webs as primary identifiers  (W3C DID (Decentralized Identifier) specification [@W3C_DID]. A major use case for the ACDC specification is the use of ACDCs as vLEIs (verifiable Legal Entity Identifiers) within the ecosystem and infrastructure developed by[@vLEI][@GLEIF_vLEI][@GLEIF_KERI]. the Global Legal Entity Identifier Foundation [@GLEIF]. An ISO standard for vLEIs currently is under development at the International Organization for Standardization (ISO).  ACDCs are dependent on a suite of related specifications along with the KERI [@KERI_ID][@KERI] specification. These include CESR [@CESR_ID], SAID [@SAID_ID], did:keri [@DIDK_ID], and OOBI [@OOBI_ID]. Some of the major distinguishing features of ACDCs include normative support for chaining, use of composable JSON Schema [@JSch][@JSchCp], multiple serialization formats, namely, JSON [@JSON][@RFC4627], CBOR [@CBOR][@RFC8949], MGPK [@MGPK], and CESR [@CESR_ID], support for Ricardian contracts [@RC],  support for chain-link confidentiality [@CLC], a well-defined security model derived from KERI [@KERI][@KERI_ID],Compact formats for resource constrained applications, simple Partial disclosure mechanisms and simple Selective disclosure mechanisms. ACDCs provision data using a synergy of provenance, protection, and performance.
+An Authentic chained data container (ACDC) specification [[ref: ACDC]] [[ref: ACDC_WP]] [[ref: VCEnh]] is being incubated at the ToIP (Trust over IP) Foundation [[ref: TOIP]] [[ref: ACDC_TF]].  An ACDC is a compliant external proof format of the W3C VC 2.0 specification.  The ACDC specification supports the use of KERI-based (Key Event Receipt Infrastructure) DID methods such as did:KERI and did:webs as primary identifiers W3C DID (Decentralized Identifier) specification [[ref: W3C_DID]]. A major use case for the ACDC specification is the use of ACDCs as vLEIs (verifiable Legal Entity Identifiers) within the ecosystem and infrastructure developed by[[ref: vLEI]] [[ref: GLEIF_vLEI]] [[ref: GLEIF_KERI]]. the Global Legal Entity Identifier Foundation [[ref: GLEIF]]. An ISO standard for vLEIs currently is under development at the International Organization for Standardization (ISO).  ACDCs are dependent on a suite of related specifications along with the KERI [[ref: KERI]] specification. These include CESR [[ref: CESR]], SAID [[ref: SAID_ID]], did:keri [[ref: DIDK_ID]], and OOBI [[ref: OOBI]]. Some of the major distinguishing features of ACDCs include normative support for chaining, use of composable JSON Schema [[ref: JSch]] [[ref: JSchCp]], multiple serialization formats, namely, JSON [[ref: JSON]] [[ref: RFC4627]], CBOR [[ref: CBOR]] [[ref: RFC8949]], MGPK [[ref: MGPK]], and CESR [[ref: CESR]], support for Ricardian contracts [[ref: RC]],  support for chain-link confidentiality [[ref: CLC]], a well-defined security model derived from KERI [[ref: KERI]],Compact formats for resource constrained applications, simple Partial disclosure mechanisms and simple Selective disclosure mechanisms. ACDCs provision data using a synergy of provenance, protection, and performance.
 
 
 [//]: # (:::)
@@ -58,11 +58,11 @@ With a little additional syntactic sugar, this primary facility of chained (tree
 
 To elaborate, the dictionary definition of credential is "evidence of authority, status, rights, entitlement to privileges, etc."  Appropriately structured ACDCs may be used as credentials when their semantics provide verifiable evidence of authority. Chained ACDCs may provide delegated credentials.
 
-Chains of ACDCs that merely provide proof-of-authorship (authenticity) of data may be appended to chains of ACDCs that provide proof-of-authority (delegation) to enable verifiable delegated authorized authorship of data.  This is also a vital facility for authentic data supply chains. Furthermore, any physical supply chain may be measured, monitored, regulated, audited, and/or archived by a data supply chain acting as a digital twin [@Twin]. Therefore, ACDCs provide the critical enabling facility for an authentic data economy and, by association, an authentic real (twinned) economy.
+Chains of ACDCs that merely provide proof-of-authorship (authenticity) of data may be appended to chains of ACDCs that provide proof-of-authority (delegation) to enable verifiable delegated authorized authorship of data.  This is also a vital facility for authentic data supply chains. Furthermore, any physical supply chain may be measured, monitored, regulated, audited, and/or archived by a data supply chain acting as a digital twin [[ref: Twin]]. Therefore, ACDCs provide the critical enabling facility for an authentic data economy and, by association, an authentic real (twinned) economy.
 
-ACDCs act as securely attributed (authentic) fragments of a distributed property graph (PG) [@PGM][@Dots]. Thus, ACDCs may be used to construct knowledge graphs expressed as property graphs [@KG]. ACDCs enable securely-attributed and privacy-protecting knowledge graphs. Semantically modulated verifiable provenanceable graphs enable authenticatable, delegable, attenuable, and aggregable authorizations and attributions.
+ACDCs act as securely attributed (authentic) fragments of a distributed property graph (PG) [[ref: PGM]] [[ref: Dots]]. Thus, ACDCs may be used to construct knowledge graphs expressed as property graphs [[ref: KG]]. ACDCs enable securely-attributed and privacy-protecting knowledge graphs. Semantically modulated verifiable provenanceable graphs enable authenticatable, delegable, attenuable, and aggregable authorizations and attributions.
 
-The ACDC specification (including its disclosure mechanisms) leverages two primary cryptographic operations, namely digests and digital signatures [@Hash][@DSig]. These operations, when used in an ACDC, must have a security level, cryptographic strength, or entropy of approximately 128 bits [@Level]. (See the Annex A for a discussion of cryptographic strength and security)
+The ACDC specification (including its disclosure mechanisms) leverages two primary cryptographic operations, namely digests and digital signatures [[ref: Hash]] [[ref: DSig]]. These operations, when used in an ACDC, must have a security level, cryptographic strength, or entropy of approximately 128 bits [[ref: Level]]. (See the Annex A for a discussion of cryptographic strength and security)
 
 An important property of high-strength cryptographic digests is that a verifiable cryptographic commitment (such as a digital signature) to the digest of some data is equivalent to a commitment to the data itself. The digest enables confidentiality because secure attribution of the commitment to the digest may be verified without disclosing the digested data. Later, confidential disclosure of the digested data can be verified against the digest. ACDCs leverage this property to enable compact chains of ACDCs that commit to (anchor or seal) data via digests. The data actually contained in an ACDC, therefore, may be merely its digest. The digested data may thereby be equivalently but more compactly and confidentially authenticated and authorized by the chain of ACDCs.
 
@@ -129,10 +129,10 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 - `SAID` - Self-Addressing Identifier - any identifier which is deterministically generated out of the content, digest of the content
 
 Additional definitions needed for this section 
-Information theoretic security [@ITPS] The highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key).
-Perfect security – a special case of Information theoretic security [@ITPS]
-One-time-pad (OTP)(also called a Vernum Cipher OTP) [@VCphr]
-Secret splitting [@SSplt] a type of secret sharing [@SShr] that uses the same technique as an OTP.
+Information theoretic security [[ref: ITPS]] The highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key).
+Perfect security – a special case of Information theoretic security [[ref: ITPS]]
+One-time-pad (OTP)(also called a Vernum Cipher OTP) [[ref: VCphr]]
+Secret splitting [[ref: SSplt]] a type of secret sharing [[ref: SShr]] that uses the same technique as an OTP.
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/36
@@ -248,7 +248,7 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/36
 
 [[def: Rules]]
 
-~ a top-level field map within an ACDC that provides a legal language as a Ricardian Contract [@RC], which is both human and machine-readable and referenceable by a cryptographic digest. 
+~ a top-level field map within an ACDC that provides a legal language as a Ricardian Contract [[ref: RC]], which is both human and machine-readable and referenceable by a cryptographic digest. 
 
 [[def: Edge]]
 
@@ -288,7 +288,7 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/25
 
 An ACDC may be modeled abstractly as a nested `key: value` mapping. To avoid confusion with the cryptographic use of the term key,  the term field is used instead to refer to a mapping pair and the terms field label and field value for each member of a pair. These pairs can be represented by two tuples e.g., `(label, value)`. This terminology can be qualified, when necessary, by using the term field map to reference such a mapping. Field maps may be nested where a given field value is itself a reference to another field map. A nested set of fields is called a nested field map or simply a nested map for short. 
 
-A field may be represented by a Framing code or block delimited serialization.  In a block delimited serialization, such as JSON, each field map is represented by an object block with block delimiters such as `{}` [@RFC8259][@JSON][@RFC4627]. Given this equivalence, the term block or nested block also may be used as synonymous with field map or nested field map. In many programming languages, a field map is implemented as a dictionary or hash table in order to enable performant asynchronous lookup of a field value from its field label. Reproducible serialization of field maps requires a canonical ordering of those fields. One such canonical ordering is called insertion or field creation order. A list of `(field, value)` pairs provides an ordered representation of any field map. Most programming languages now support ordered dictionaries or hash tables that provide reproducible iteration over a list of ordered field `(label, value)` pairs where the ordering is the insertion or field creation order. This enables reproducible round-trip serialization/deserialization of field maps.  ACDCs depend on insertion ordered field maps for canonical serialization/deserialization. ACDCs support multiple serialization types, namely JSON, CBOR, MGPK, and CESR but for the sake of simplicity, JSON only will be used for examples [@RFC8259][@JSON]. The basic set of normative field labels in ACDC field maps is defined in the following table.
+A field may be represented by a Framing code or block delimited serialization.  In a block delimited serialization, such as JSON, each field map is represented by an object block with block delimiters such as `{}` [[ref: RFC8259]] [[ref: JSON]] [[ref: RFC4627]]. Given this equivalence, the term block or nested block also may be used as synonymous with field map or nested field map. In many programming languages, a field map is implemented as a dictionary or hash table in order to enable performant asynchronous lookup of a field value from its field label. Reproducible serialization of field maps requires a canonical ordering of those fields. One such canonical ordering is called insertion or field creation order. A list of `(field, value)` pairs provides an ordered representation of any field map. Most programming languages now support ordered dictionaries or hash tables that provide reproducible iteration over a list of ordered field `(label, value)` pairs where the ordering is the insertion or field creation order. This enables reproducible round-trip serialization/deserialization of field maps.  ACDCs depend on insertion ordered field maps for canonical serialization/deserialization. ACDCs support multiple serialization types, namely JSON, CBOR, MGPK, and CESR but for the sake of simplicity, JSON only will be used for examples [[ref: RFC8259]] [[ref: JSON]]. The basic set of normative field labels in ACDC field maps is defined in the following table.
 
 
 ### Top-Level fields
@@ -361,11 +361,11 @@ Compliant ACDC version 2.XX implementations shall support the old ACDC version 1
 https://github.com/trustoverip/tswg-acdc-specification/issues/14
 :::
 
-Some fields in ACDCs may have for their value either a field map or a SAID. A SAID follows the SAID protocol [@SAID_ID]. Essentially, a SAID is a Self-addressing identifier (self-referential content addressable). A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-addressed data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) may be compacted into its SAID. The uncompacted blocks for each associated SAID may be attached or cached to optimize bandwidth and availability without decreasing security.
+Some fields in ACDCs may have for their value either a field map or a SAID. A SAID follows the SAID protocol [[ref: SAID]]. Essentially, a SAID is a Self-addressing identifier (self-referential content addressable). A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-addressed data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) may be compacted into its SAID. The uncompacted blocks for each associated SAID may be attached or cached to optimize bandwidth and availability without decreasing security.
 
 Several top-level ACDC fields may have for their value either a serialized field map or the SAID of that field map. Each SAID provides a stable, universal, cryptographically verifiable, and agile reference to its encapsulating block (serialized field map). These include the `d`, and `rd` fields. Moreover, the value of top-level `s`, `a`, `e`, and `r` fields may be replaced by the SAID of their associated field map. When replaced by their SAID, these top-level sections are in compact form.
 
-Recall that a cryptographic commitment (such as a digital signature or cryptographic digest) on a given digest with sufficient cryptographic strength, including collision resistance [@HCR][@QCHC], is equivalent to a commitment to the block from which the given digest was derived.  Specifically, a digital signature on a SAID makes a verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. This enables reasoning about ACDCs in whole or in part via their SAIDS in a fully interoperable, verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts [@RC]. This includes reasoning about the whole ACDC given by its top-level SAID, `d`, field, as well as reasoning about any nested sections using their SAIDS.
+Recall that a cryptographic commitment (such as a digital signature or cryptographic digest) on a given digest with sufficient cryptographic strength, including collision resistance [[ref: HCR]] [[ref: QCHC]], is equivalent to a commitment to the block from which the given digest was derived.  Specifically, a digital signature on a SAID makes a verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. This enables reasoning about ACDCs in whole or in part via their SAIDS in a fully interoperable, verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts [[ref: RC]]. This includes reasoning about the whole ACDC given by its top-level SAID, `d`, field, as well as reasoning about any nested sections using their SAIDS.
 
 ### Registry SAID field
 
@@ -374,7 +374,7 @@ When present, the registry SAID, `rd` field value is the SAID of the initializin
 
 ### Universally unique identifier (UUID) fields
 
-The purpose of the UUID, `u`, field in any block is to provide sufficient entropy to the SAID, `d`, field of the associated block to make computationally infeasible any brute force attacks on that block that attempt to discover the block contents from the schema and the SAID. The UUID, `u`, field may be considered a salty nonce [@Salt]. Without the entropy provided the UUID, `u`, field, an adversary may be able to reconstruct the block contents merely from the SAID of the block and the schema of the block using a rainbow or dictionary attack on the set of field values allowed by the schema [@RB][@DRB]. The effective security level, entropy, or cryptographic strength of the schema-compliant field values may be much less than the cryptographic strength of the SAID digest. Another way of saying this is that the cardinality of the power set of all combinations of allowed field values may be much less than the cryptographic strength of the SAID. Thus, an adversary could successfully discover via brute force the exact block by creating digests of all the elements of the power set which may be small enough to be computationally feasible instead of inverting the SAID itself. Sufficient entropy in the `u` field ensures that the cardinality of the power set allowed by the schema is at least as great as the entropy of the SAID digest algorithm itself.
+The purpose of the UUID, `u`, field in any block is to provide sufficient entropy to the SAID, `d`, field of the associated block to make computationally infeasible any brute force attacks on that block that attempt to discover the block contents from the schema and the SAID. The UUID, `u`, field may be considered a salty nonce [[ref: Salt]]. Without the entropy provided the UUID, `u`, field, an adversary may be able to reconstruct the block contents merely from the SAID of the block and the schema of the block using a rainbow or dictionary attack on the set of field values allowed by the schema [[ref: RB]] ][[ref: DRB]]. The effective security level, entropy, or cryptographic strength of the schema-compliant field values may be much less than the cryptographic strength of the SAID digest. Another way of saying this is that the cardinality of the power set of all combinations of allowed field values may be much less than the cryptographic strength of the SAID. Thus, an adversary could successfully discover via brute force the exact block by creating digests of all the elements of the power set which may be small enough to be computationally feasible instead of inverting the SAID itself. Sufficient entropy in the `u` field ensures that the cardinality of the power set allowed by the schema is at least as great as the entropy of the SAID digest algorithm itself.
 
 A UUID, `u` field may optionally appear in any block (field map) at any level of an ACDC. Whenever a block in an ACDC includes a UUID, `u`, field then its associated SAID, `d`, field makes a blinded commitment to the contents of that block. The UUID, `u`, field is the blinding factor. This makes that block securely partially disclosable or even selectively disclosable notwithstanding disclosure of the associated schema of the block. The block contents can only be discovered given disclosure of the included UUID field. Likewise, when a UUID, `u`, field appears at the top level of an ACDC then that top-level SAID, `d`, field makes a blinded commitment to the contents of the whole ACDC itself. Thus, the whole ACDC, not merely some block within the ACDC, may be disclosed in a privacy-preserving (correlation minimizing) 
 
@@ -384,11 +384,11 @@ A UUID, `u` field may optionally appear in any block (field map) at any level of
 https://github.com/trustoverip/tswg-acdc-specification/issues/15
 :::
 
-Some fields, such as the `i`, Issuer identifier field, must each have an AID as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [@KERI][@KERI_ID].  An AID is derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [@DSig]. Each AID has a set of one or more Controllers who each control a private key. By virtue of their private key(s), the Controllers may make statements on behalf of the associated AID backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then may verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is required. The verifiable key state for AIDs is established with the KERI protocol [@KERI][@KERI_ID]. The use of AIDS enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
+Some fields, such as the `i`, Issuer identifier field, must each have an AID as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [[ref: KERI]] [[ref: KERI]].  An AID is derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [[ref: DSig]]. Each AID has a set of one or more Controllers who each control a private key. By virtue of their private key(s), the Controllers may make statements on behalf of the associated AID backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then may verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is required. The verifiable key state for AIDs is established with the KERI protocol [[ref: KERI]]. The use of AIDS enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
 
 ### Namespaced AIDs
 
-Because KERI is agnostic about the namespace for any particular AID, different namespace standards may be used to express KERI AIDs or identifiers derived from AIDs as the value of these AID related fields in an ACDC. Some of the examples below use the W3C DID namespace specification with the `did:keri` method [@DIDK_ID]. However, the examples would have the same validity from a KERI perspective if some other supported namespace was used or no namespace was used at all. The latter case consists of a bare KERI AID (identifier prefix) expressed in CESR format [@CESR_ID].
+Because KERI is agnostic about the namespace for any particular AID, different namespace standards may be used to express KERI AIDs or identifiers derived from AIDs as the value of these AID related fields in an ACDC. Some of the examples below use the W3C DID namespace specification with the `did:keri` method [[ref: DIDK_ID]. However, the examples would have the same validity from a KERI perspective if some other supported namespace was used or no namespace was used at all. The latter case consists of a bare KERI AID (identifier prefix) expressed in CESR format [[ref: CESR]].
 
 ### Attribute field
 
@@ -423,7 +423,7 @@ An overview of each variant is explained below.
 
 ### Most compact form SAID
 
-As defined in the Schema Section below, ACDC variants are defined by composable JSON Schema. The primary operator for such composition is `oneOf`. The use of the `oneOf` operator for an ACDC schema enables the use of any combination of compacted/uncompacted top-level sections as well as nested blocks. When compact, any section or nested block may be represented merely by its SAID [@JSch][@JSchCp].
+As defined in the Schema Section below, ACDC variants are defined by composable JSON Schema. The primary operator for such composition is `oneOf`. The use of the `oneOf` operator for an ACDC schema enables the use of any combination of compacted/uncompacted top-level sections as well as nested blocks. When compact, any section or nested block may be represented merely by its SAID [[ref: JSch]] [[ref: JSchCp]].
 
 However, for the sake of verifiability, each section or block that is compactable shall have only one SAID regardless of how many different variants its `oneOf` compositions allow. Therefore, there must be one and only one unambiguous way to compute the SAID of a compactifiable section or block with compactifiable nested blocks. This is called the "most compact form" SAID computation algorithm. The basis of the algorithm is that the SAID of a given block is verifiable against that block in expanded form but that SAID can be embedded in an enclosing block in compact form. The SAID of the enclosing block makes a verifiable commitment to the given block via the appearance of only the SAID of the given block. The SAID of the "most compact form" can be computed by a depth-first search.  First, compute the SAIDs of the expanded leaf nodes of the tree, then compact the leaves, then compute the SAIDs of their enclosing blocks, then compact those, and so on until the trunk has been reached.
 To verify the SAID, just reverse the process. First, expand a given block, verify its SAID, expand its enclosed blocks, verify their SAIDs, and so on as deep as needed or until the leaves are reached. The main advantage of "most compact form" SAID computation is that it enables verification of portions of a set of nested compactifiable subblocks against their SAIDs without requiring that the whole tree of subblocks be exposed. This is essential to graduated disclosure.
@@ -452,15 +452,15 @@ The top-level section field values of a Compact ACDC are the SAIDs of each uncom
 
 ### Public ACDC
 
-Given that there is no top-level UUID, `u`, field in an ACDC, then knowledge of both the schema of the ACDC and the top-level SAID, `d`, field may enable the discovery of the remaining contents of the ACDC via a rainbow table attack [@RB][@DRB]. Therefore, although the top-level, `d`, field is a cryptographic digest, it may not securely blind the contents of the ACDC when knowledge of the schema is available.  The field values may be discoverable. Consequently, any cryptographic commitment to the top-level SAID, `d`, field may provide a fixed point of correlation potentially to the ACDC field values themselves in spite of non-disclosure of those field values. Thus, an ACDC without a top-level UUID, `u`, field must be considered a public (non-confidential) ACDC.
+Given that there is no top-level UUID, `u`, field in an ACDC, then knowledge of both the schema of the ACDC and the top-level SAID, `d`, field may enable the discovery of the remaining contents of the ACDC via a rainbow table attack [[ref: RB]] [[ref: DRB]]. Therefore, although the top-level, `d`, field is a cryptographic digest, it may not securely blind the contents of the ACDC when knowledge of the schema is available.  The field values may be discoverable. Consequently, any cryptographic commitment to the top-level SAID, `d`, field may provide a fixed point of correlation potentially to the ACDC field values themselves in spite of non-disclosure of those field values. Thus, an ACDC without a top-level UUID, `u`, field must be considered a public (non-confidential) ACDC.
 
 ### Private ACDC
 
-Given a top-level UUID, `u`, field, whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of an ACDC may provide a secure cryptographic digest that blinds the contents of the ACDC [@Hash]. An adversary when given both the schema of the ACDC and the top-level SAID, `d`, field, is not able to discover the remaining contents of the ACDC in a computationally feasible manner such as through a rainbow table attack [@RB][@DRB]. Therefore, the top-level, UUID, `u`, field may be used to securely blind the contents of the ACDC notwithstanding knowledge of the schema and top-level, SAID, `d`, field.  Moreover, a cryptographic commitment to that that top-level SAID, `d`, field does not provide a fixed point of correlation to the other ACDC field values themselves unless and until there has been a disclosure of those field values. Thus, an ACDC with a sufficiently high entropy top-level UUID, `u`, field may be considered a private (confidential) ACDC. enables a verifiable commitment to the top-level SAID of a private ACDC to be made prior to the disclosure of the details of the ACDC itself without leaking those contents. This is called Partial disclosure. Furthermore, the inclusion of a UUID, `u`, field in a block also enables Selective disclosure mechanisms described later in the section on Selective disclosure.
+Given a top-level UUID, `u`, field, whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of an ACDC may provide a secure cryptographic digest that blinds the contents of the ACDC [[ref: Hash]]. An adversary when given both the schema of the ACDC and the top-level SAID, `d`, field, is not able to discover the remaining contents of the ACDC in a computationally feasible manner such as through a rainbow table attack [[ref: RB]] [[ref: DRB]]. Therefore, the top-level, UUID, `u`, field may be used to securely blind the contents of the ACDC notwithstanding knowledge of the schema and top-level, SAID, `d`, field.  Moreover, a cryptographic commitment to that that top-level SAID, `d`, field does not provide a fixed point of correlation to the other ACDC field values themselves unless and until there has been a disclosure of those field values. Thus, an ACDC with a sufficiently high entropy top-level UUID, `u`, field may be considered a private (confidential) ACDC. enables a verifiable commitment to the top-level SAID of a private ACDC to be made prior to the disclosure of the details of the ACDC itself without leaking those contents. This is called Partial disclosure. Furthermore, the inclusion of a UUID, `u`, field in a block also enables Selective disclosure mechanisms described later in the section on Selective disclosure.
 
 ### Metadata ACDC 
 
-An empty, top-level UUID, `u`, field appearing in an ACDC indicates that the ACDC is a metadata ACDC. The purpose of a metadata ACDC is to provide a mechanism for a Discloser to make cryptographic commitments to the metadata of a yet to be disclosed private ACDC without providing any point of correlation to the actual top-level SAID, `d`, field of that yet to be disclosed ACDC. The top-level SAID, `d`, field, of the metadata ACDC, is cryptographically derived from an ACDC with an empty top-level UUID, `u`, field so its value will necessarily be different from that of an ACDC with a high entropy top-level UUID, `u`, field value. Nonetheless, the Discloser may make a non-repudiable cryptographic commitment to the metadata SAID in order to initiate a contractually protected exchange without leaking correlation to the actual ACDC to be disclosed [@CLC]. A Disclosee may verify the other metadata information in the metadata ACDC before agreeing to any restrictions imposed by the future disclosure. The metadata includes the Issuer, the schema, the provenancing edges, and the rules (terms-of-use). The top-level attribute section, `a`, field value, or the top-level attribute aggregate, `A` field value of a metadata ACDC may be empty so that its value is not correlatable across disclosures (presentations). Should the potential Disclosee refuse to agree to the rules, then the Discloser has not leaked the SAID of the actual ACDC or the SAID of the Attribute block that would have been disclosed.
+An empty, top-level UUID, `u`, field appearing in an ACDC indicates that the ACDC is a metadata ACDC. The purpose of a metadata ACDC is to provide a mechanism for a Discloser to make cryptographic commitments to the metadata of a yet to be disclosed private ACDC without providing any point of correlation to the actual top-level SAID, `d`, field of that yet to be disclosed ACDC. The top-level SAID, `d`, field, of the metadata ACDC, is cryptographically derived from an ACDC with an empty top-level UUID, `u`, field so its value will necessarily be different from that of an ACDC with a high entropy top-level UUID, `u`, field value. Nonetheless, the Discloser may make a non-repudiable cryptographic commitment to the metadata SAID in order to initiate a contractually protected exchange without leaking correlation to the actual ACDC to be disclosed [[ref: CLC]]. A Disclosee may verify the other metadata information in the metadata ACDC before agreeing to any restrictions imposed by the future disclosure. The metadata includes the Issuer, the schema, the provenancing edges, and the rules (terms-of-use). The top-level attribute section, `a`, field value, or the top-level attribute aggregate, `A` field value of a metadata ACDC may be empty so that its value is not correlatable across disclosures (presentations). Should the potential Disclosee refuse to agree to the rules, then the Discloser has not leaked the SAID of the actual ACDC or the SAID of the Attribute block that would have been disclosed.
 
 Given the metadata ACDC, the potential Disclosee is able to verify the Issuer, the schema, the provenanced edges, and rules prior to agreeing to the rules.  Similarly, an Issuer may use a metadata ACDC to get agreement to a contractual waiver expressed in the rule section with a potential Issuee prior to issuance. Should the Issuee refuse to accept the terms of the waiver, then the Issuer has not leaked the SAID of the actual ACDC that would have been issued nor the SAID of its attributes block nor the attribute values themselves.
 
@@ -660,16 +660,16 @@ The schema for the Compact private ACDC example above is provided below.
 
 #### Type-is-schema
 
-Notable is the fact that no top-level type fields exist in an ACDC. This is because the schema, `s`, field itself is the type field for the ACDC and its parts. ACDCs follow the design principle of separation of concerns between a data container's actual payload information and the type information of that container's payload. In this sense, type information is metadata, not data. The schema dialect used by ACDCs is JSON Schema 2020-12 [@JSch][@JSch_202012]. JSON Schema supports composable schema (sub-schema), conditional schema (sub-schema), and regular expressions in the schema. Composability enables a Validator to ask and answer complex questions about the type of even optional payload elements while maintaining isolation between payload information and type (structure) information about the payload [@JSchCp][@JSchRE][@JSchId][@JSchCx]. A static but composed schema allows a verifiably immutable set of variants. Although the set is immutable, the variants enable graduated but secure disclosure. ACDC's use of JSON Schema must be in accordance with the ACDC defined profile as defined herein. The exceptions are defined below.
+Notable is the fact that no top-level type fields exist in an ACDC. This is because the schema, `s`, field itself is the type field for the ACDC and its parts. ACDCs follow the design principle of separation of concerns between a data container's actual payload information and the type information of that container's payload. In this sense, type information is metadata, not data. The schema dialect used by ACDCs is JSON Schema 2020-12 [[ref: JSch]] [[ref: JSch_202012]]. JSON Schema supports composable schema (sub-schema), conditional schema (sub-schema), and regular expressions in the schema. Composability enables a Validator to ask and answer complex questions about the type of even optional payload elements while maintaining isolation between payload information and type (structure) information about the payload [[ref: JSchCp]] [[ref: JSchRE]] [[ref: JSchId]] [[ref: JSchCx]]. A static but composed schema allows a verifiably immutable set of variants. Although the set is immutable, the variants enable graduated but secure disclosure. ACDC's use of JSON Schema must be in accordance with the ACDC defined profile as defined herein. The exceptions are defined below.
 
 #### Schema ID field label
 
-The usual field label for SAID fields in ACDCs is `d`. In the case of the schema section, however, the field label for the SAID of the schema section is `$id`. This repurposes the schema id field label, `$id` as defined by JSON Schema [@JSchId][@JSchCx].  The top-level id, `$id`, field value in a JSON Schema provides a unique identifier of the schema instance. In a non-ACDC schema, the value of the id, `$id`, field is expressed as a URI. This is called the Base URI of the schema. In an ACDC schema, however, the top-level id, `$id`, field value is repurposed. This field value must include the SAID of the schema. This ensures that the ACDC schema is static and verifiable to their SAIDS. A verifiably static schema satisfies one of the essential security properties of ACDCs as discussed below. There are several ACDC supported formats for the value of the top-level id, `$id`, field but all of the formats must include the SAID of the schema (see below). Correspondingly, the value of the top-level schema, `s`, field must be the SAID included in the schema's top-level `$id` field. The detailed schema is either attached or cached and maybe discovered via its SAIDified, id, `$id`, field value.
+The usual field label for SAID fields in ACDCs is `d`. In the case of the schema section, however, the field label for the SAID of the schema section is `$id`. This repurposes the schema id field label, `$id` as defined by JSON Schema [[ref: JSchId]] [[ref: JSchCx]].  The top-level id, `$id`, field value in a JSON Schema provides a unique identifier of the schema instance. In a non-ACDC schema, the value of the id, `$id`, field is expressed as a URI. This is called the Base URI of the schema. In an ACDC schema, however, the top-level id, `$id`, field value is repurposed. This field value must include the SAID of the schema. This ensures that the ACDC schema is static and verifiable to their SAIDS. A verifiably static schema satisfies one of the essential security properties of ACDCs as discussed below. There are several ACDC supported formats for the value of the top-level id, `$id`, field but all of the formats must include the SAID of the schema (see below). Correspondingly, the value of the top-level schema, `s`, field must be the SAID included in the schema's top-level `$id` field. The detailed schema is either attached or cached and maybe discovered via its SAIDified, id, `$id`, field value.
 
 The digest algorithm employed for generating schema SAIDS shall have an approximate cryptographic strength of 128 bits. The SAID MUST be generated in compliance with the ToIP SAID internet draft specification and MUST be encoded using CESR. The CESR encoding indicates the type of cryptographic digest used to generate the SAID. 
 
 
-When an id, '$id', field appears in a sub-schema, it indicates a bundled sub-schema called a schema resource [@JSchId][@JSchCx]. The value of the id, '$id', field in any ACDC bundled sub-schema resource must include the SAID of that sub-schema using one of the formats described below. The sub-schema so bundled must be verifiable against its referenced and embedded SAID value. This ensures secure bundling.
+When an id, '$id', field appears in a sub-schema, it indicates a bundled sub-schema called a schema resource [[ref: JSchId]] [[ref: JSchCx]]. The value of the id, '$id', field in any ACDC bundled sub-schema resource must include the SAID of that sub-schema using one of the formats described below. The sub-schema so bundled must be verifiable against its referenced and embedded SAID value. This ensures secure bundling.
 
 #### Static (immutable) schema
 
@@ -677,15 +677,15 @@ For security reasons, the full schema of an ACDC must be completely self-contain
 
 Should an adversary successfully attack the source that provides the dynamic schema resource and change the result provided by that reference, then the schema validation on any ACDC that uses that dynamic schema reference may fail. Such an attack effectively revokes all the ACDCs that use that dynamic schema reference, which is called a schema revocation attack.
 
-More insidiously, an attacker could shift the semantics of the dynamic schema in such a way that although the ACDC still passes its schema validation, the behavior of the downstream processing of that ACDC is changed by the semantic shift. This type of attack is called a semantic malleability attack which may be considered a new type of transaction malleability attack [@TMal].
+More insidiously, an attacker could shift the semantics of the dynamic schema in such a way that although the ACDC still passes its schema validation, the behavior of the downstream processing of that ACDC is changed by the semantic shift. This type of attack is called a semantic malleability attack which may be considered a new type of transaction malleability attack [[ref: TMal]].
 
 To prevent both forms of attack, all schema must be static, i.e., schema must be SADs and therefore verifiable against their SAIDs.
 
 To elaborate, the serialization of a static schema may be self-contained. A compact commitment to the detailed static schema may be provided by its SAID. In other words, the SAID of a static schema is a verifiable cryptographic identifier for its SAD. Therefore, all ACDC compliant schema must be SADs. In other words, the schema must therefore be SAIDified. The associated detailed static schema (uncompacted SAD) is bound cryptographically and verifiable to its SAID.
 
-The JSON Schema specification allows complex schema references that may include non-local URI references [@JSchId][@JSchCx][@RFC3986][@RFC8820]. These references may use the `$id` or `$ref` keywords. A relative URI reference provided by a `$ref` keyword is resolved against the Base URI provided by the top-level `$id` field. When this top-level Base URI is non-local, then all relative `$ref` references are therefore also non-local. A non-local URI reference provided by a `$ref` keyword may be resolved without reference to the Base URI.
+The JSON Schema specification allows complex schema references that may include non-local URI references [[ref: JSchId]] [[ref: JSchCx]] [[ref: RFC3986]] [[ref: RFC8820]]. These references may use the `$id` or `$ref` keywords. A relative URI reference provided by a `$ref` keyword is resolved against the Base URI provided by the top-level `$id` field. When this top-level Base URI is non-local, then all relative `$ref` references are therefore also non-local. A non-local URI reference provided by a `$ref` keyword may be resolved without reference to the Base URI.
 
-In general, schema indicated by non-local URI references (`$id` or `$ref`) must not be used because they are not cryptographically end-verifiable. The value of the underlying schema resource so referenced may change (mutate). To restate, a non-local URI schema resource is not end-verifiable to its URI reference because there is no cryptographic binding between URI and resource [@RFC3986][@RFC8820].
+In general, schema indicated by non-local URI references (`$id` or `$ref`) must not be used because they are not cryptographically end-verifiable. The value of the underlying schema resource so referenced may change (mutate). To restate, a non-local URI schema resource is not end-verifiable to its URI reference because there is no cryptographic binding between URI and resource [[ref: RFC3986]] [[ref: RFC8820]].
 
 This does not preclude the use of remotely cached SAIDified schema resources because those resources are end-verifiable to their embedded SAID references. Said another way, a SAIDified schema resource is itself a SAD  referenced by its SAID. A URI that includes a SAID may be used to securely reference a remote or distributed SAIDified schema resource because that resource is fixed (immutable, nonmalleable) and verifiable to both the SAID in the reference and the embedded SAID in the resource so referenced. To elaborate, a non-local URI reference that includes an embedded cryptographic commitment such as a SAID is verifiable to the underlying resource when that resource is a SAD. This applies to JSON Schema as a whole as well as bundled sub-schema resources.
 
@@ -695,14 +695,14 @@ Bare SAIDs may be used to refer to a SAIDified schema as long as the JSON schema
 
 -	The `sad:` URI scheme may be used to directly indicate a URI resource that safely returns a verifiable SAD. For example, `sad:SAID` where SAID* is replaced with the actual SAID of a SAD that provides a verifiable non-local reference to JSON Schema as indicated by the media-type of `schema+json`.
 
--	The KERI OOBI specification provides a URL syntax that references a SAD resource by its SAID at the service endpoint indicated by that URL [@OOBI_ID]. Such remote OOBI URLs are also safe because the provided SAD resource is verifiable against the SAID in the OOBI URL. Therefore, OOBI URLs are also acceptable non-local URI references for JSON Schema [@OOBI_ID][@RFC3986][@RFC8820].
+-	The KERI OOBI specification provides a URL syntax that references a SAD resource by its SAID at the service endpoint indicated by that URL [[ref: OOBI]]. Such remote OOBI URLs are also safe because the provided SAD resource is verifiable against the SAID in the OOBI URL. Therefore, OOBI URLs are also acceptable non-local URI references for JSON Schema [[ref: OOBI]] [[ref: RFC3986]] [[ref: RFC8820]].
 
--	The `did:` URI scheme may be used safely to prefix non-local URI references that act to namespace SAIDs expressed as DID URIs or DID URLs.  DID resolvers resolve DID URLs for a given DID method such as `did:keri` [@DIDK_ID] and may return DID docs or DID doc metadata with SAIDified schema or service endpoints that return SAIDified schema or OOBIs that return SAIDified schema [@RFC3986][@RFC8820][@OOBI_ID]. A verifiable non-local reference in the form of DID URL that includes the schema SAID is resolved safely when it dereferences to the SAD of that SAID. For example, the resolution result returns an ACDC JSON Schema whose id, `$id`, field includes the SAID and returns a resource with JSON Schema mime-type of `schema+json`.
+-	The `did:` URI scheme may be used safely to prefix non-local URI references that act to namespace SAIDs expressed as DID URIs or DID URLs.  DID resolvers resolve DID URLs for a given DID method such as `did:keri` [[ref: DIDK_ID]] and may return DID docs or DID doc metadata with SAIDified schema or service endpoints that return SAIDified schema or OOBIs that return SAIDified schema [[ref: RFC3986]] [[ref: RFC8820]] [[ref: OOBI]]. A verifiable non-local reference in the form of DID URL that includes the schema SAID is resolved safely when it dereferences to the SAD of that SAID. For example, the resolution result returns an ACDC JSON Schema whose id, `$id`, field includes the SAID and returns a resource with JSON Schema mime-type of `schema+json`.
 
 
-To clarify, ACDCs must not use complex JSON Schema references which allow dynamically generated schema resources to be obtained from online JSON Schema Libraries [@JSchId][@JSchCx]. The latter approach may be difficult or impossible to secure because a cryptographic commitment to the base schema that includes complex schema (non-relative URI-based) references only commits to the non-relative URI reference and not to the actual schema resource which may change (is dynamic, mutable, malleable). To restate, this approach is insecure because a cryptographic commitment to a complex (non-relative URI-based) reference is not equivalent to a commitment to the detailed associated schema resource so referenced if it may change.
+To clarify, ACDCs must not use complex JSON Schema references which allow dynamically generated schema resources to be obtained from online JSON Schema Libraries [[ref: JSchId]] [[ref: JSchCx]]. The latter approach may be difficult or impossible to secure because a cryptographic commitment to the base schema that includes complex schema (non-relative URI-based) references only commits to the non-relative URI reference and not to the actual schema resource which may change (is dynamic, mutable, malleable). To restate, this approach is insecure because a cryptographic commitment to a complex (non-relative URI-based) reference is not equivalent to a commitment to the detailed associated schema resource so referenced if it may change.
 
-ACDCs must use static JSON Schema (i.e., SAIDifiable schema). These may include internal relative references to other parts of a fully self-contained static (SAIDified) schema or references to static (SAIDified) external schema parts. As indicated above, these references may be bare SAIDs, DID URIs or URLs (`did:` scheme), SAD URIs (`sad:` scheme), or OOBI URLs [@OOBI_ID]. Recall that a commitment to a SAID with sufficient collision resistance makes an equivalent secure commitment to its encapsulating block SAD. Thus, static schema may be either fully self-contained or distributed in parts but the value of any reference to a part must be verifiably static (immutable, nonmalleable) by virtue of either being relative to the self-contained whole or being referenced by its SAID. The static schema in whole or in parts may be attached to the ACDC itself or provided via a highly available cache or data store. To restate, this approach is securely end-verifiable (zero-trust) because a cryptographic commitment to the SAID of a SAIDified schema is equivalent to a commitment to the detailed associated schema itself (SAD).
+ACDCs must use static JSON Schema (i.e., SAIDifiable schema). These may include internal relative references to other parts of a fully self-contained static (SAIDified) schema or references to static (SAIDified) external schema parts. As indicated above, these references may be bare SAIDs, DID URIs or URLs (`did:` scheme), SAD URIs (`sad:` scheme), or OOBI URLs [[ref: OOBI]]. Recall that a commitment to a SAID with sufficient collision resistance makes an equivalent secure commitment to its encapsulating block SAD. Thus, static schema may be either fully self-contained or distributed in parts but the value of any reference to a part must be verifiably static (immutable, nonmalleable) by virtue of either being relative to the self-contained whole or being referenced by its SAID. The static schema in whole or in parts may be attached to the ACDC itself or provided via a highly available cache or data store. To restate, this approach is securely end-verifiable (zero-trust) because a cryptographic commitment to the SAID of a SAIDified schema is equivalent to a commitment to the detailed associated schema itself (SAD).
 
 #### Schema dialect
 
@@ -710,7 +710,7 @@ ACDCs must use static JSON Schema (i.e., SAIDifiable schema). These may include 
 https://github.com/trustoverip/tswg-acdc-specification/issues/18
 :::
 
-The Schema dialect for ACDC 1.0 is JSON Schema 2020-12 and is indicated by the identifier `"https://json-schema.org/draft/2020-12/schema"`  [@JSch][@JSch_202012]. This is indicated in a JSON Schema via the value of the top-level `$schema` field. Although the value of `$schema` is expressed as a URI, de-referencing does not provide dynamically downloadable schema dialect validation code. This would be an attack vector. The Validator must control the tooling code dialect used for schema validation and hence the tooling dialect version actually used. A mismatch between the supported tooling code dialect version and the `$schema` string value should cause the validation to fail. The string is simply an identifier that communicates the intended dialect to be processed by the schema validation tool. When provided, the top-level `$schema` field value for ACDC version 1.0 must be "https://json-schema.org/draft/2020-12/schema".
+The Schema dialect for ACDC 1.0 is JSON Schema 2020-12 and is indicated by the identifier `"https://json-schema.org/draft/2020-12/schema"`  [[ref: JSch]] [[ref: JSch_202012]]. This is indicated in a JSON Schema via the value of the top-level `$schema` field. Although the value of `$schema` is expressed as a URI, de-referencing does not provide dynamically downloadable schema dialect validation code. This would be an attack vector. The Validator must control the tooling code dialect used for schema validation and hence the tooling dialect version actually used. A mismatch between the supported tooling code dialect version and the `$schema` string value should cause the validation to fail. The string is simply an identifier that communicates the intended dialect to be processed by the schema validation tool. When provided, the top-level `$schema` field value for ACDC version 1.0 must be "https://json-schema.org/draft/2020-12/schema".
 
 #### Schema versioning
 
@@ -736,7 +736,7 @@ The composed detailed (uncompacted) (bundled) static schema for an ACDC may be c
 
 #### Composable JSON Schema
 
-A composable JSON Schema enables the use of any combination of compacted/uncompacted attribute, edge, and rule sections in a provided ACDC. When compact, any one of these sections may be represented merely by its SAID [@JSch][@JSchCp]. When used for the top-level attribute, `a`, edge, `e`, or rule, `r`, section field values, the `oneOf` sub-schema composition operator provides both compact and uncompacted variants. The provided ACDC must validate against an allowed combination of the composed variants. The Validator determines what decomposed variants the provided ACDC must also validate against. Decomposed variants may be dependent on the type of Graduated disclosure. Essentially, a composable schema is a verifiable bundle of metadata (composed) about content that can then be verifiably unbundled (decomposed) later. The Issuer makes a single verifiable commitment to the bundle (composed schema), and a recipient may then safely unbundle (decompose) the schema to validate any of the Graduated disclosure variants allowed by the composition.
+A composable JSON Schema enables the use of any combination of compacted/uncompacted attribute, edge, and rule sections in a provided ACDC. When compact, any one of these sections may be represented merely by its SAID [[ref: JSch]] [[ref: JSchCp]]. When used for the top-level attribute, `a`, edge, `e`, or rule, `r`, section field values, the `oneOf` sub-schema composition operator provides both compact and uncompacted variants. The provided ACDC must validate against an allowed combination of the composed variants. The Validator determines what decomposed variants the provided ACDC must also validate against. Decomposed variants may be dependent on the type of Graduated disclosure. Essentially, a composable schema is a verifiable bundle of metadata (composed) about content that can then be verifiably unbundled (decomposed) later. The Issuer makes a single verifiable commitment to the bundle (composed schema), and a recipient may then safely unbundle (decompose) the schema to validate any of the Graduated disclosure variants allowed by the composition.
 
 Unlike the other compactifiable sections, it is impossible to define recursively the exact detailed schema as a variant of a `oneOf` composition operator contained in itself.  Nonetheless, the provided schema, whether self-contained, attached, or cached must validate as a SAD against its provided SAID. It also must validate against one of its specified `oneOf` variants. Typically, it's SAID or a generic object.
 
@@ -746,9 +746,9 @@ ACDC-specific schema compliance requirements usually are specified in the ecosys
 
 To elaborate, a Validator can confirm compliance of any non-schema section of the ACDC against its schema both before and after uncompacted disclosure of that section by using a composed base schema with `oneOf` pre-disclosure and a decomposed schema post-disclosure with the compact `oneOf` option removed. This capability provides a mechanism for secure schema validation of both Compact and uncompacted variants that require the Issuer to only commit to the composed schema and not to all the different schema variants for each combination of a given compact/uncompacted section in an ACDC.
 
-One of the most important features of ACDCs is support for Chain-link confidentiality [@CLC]. This provides a powerful mechanism for protecting against unpermissioned exploitation of the data disclosed via an ACDC. Essentially, an exchange of information compatible with Chain-link confidentiality starts with an offer by the Discloser to disclose confidential information to a potential Disclosee. This offer includes sufficient metadata about the information to be disclosed such that the Disclosee can agree to those terms. Specifically, the metadata includes both the schema of the information to be disclosed and the terms of use of that data once disclosed. Once the Disclosee has accepted the terms, then Full disclosure is made. A full disclosure that happens after contractual acceptance of the terms of use is called permissioned disclosure. The pre-acceptance disclosure of metadata is a form of Partial disclosure.
+One of the most important features of ACDCs is support for Chain-link confidentiality [[ref: CLC]]. This provides a powerful mechanism for protecting against unpermissioned exploitation of the data disclosed via an ACDC. Essentially, an exchange of information compatible with Chain-link confidentiality starts with an offer by the Discloser to disclose confidential information to a potential Disclosee. This offer includes sufficient metadata about the information to be disclosed such that the Disclosee can agree to those terms. Specifically, the metadata includes both the schema of the information to be disclosed and the terms of use of that data once disclosed. Once the Disclosee has accepted the terms, then Full disclosure is made. A full disclosure that happens after contractual acceptance of the terms of use is called permissioned disclosure. The pre-acceptance disclosure of metadata is a form of Partial disclosure.
 
-As is the case for Compact (uncompacted) ACDC disclosure, composable JSON schema enables the use of the same base schema for both the validation of the Partial disclosure of the offer metadata prior to contract acceptance and validation of full or detailed disclosure after contract acceptance [@JSch][@JSchCp]. A cryptographic commitment to the base schema securely specifies the allowable semantics for both Partial and Full disclosure. Decomposition of the base schema enables a Validator to impose more specific semantics at later stages of the exchange process. Specifically, the `oneOf` sub-schema composition operator validates against either the compact SAID of a block or the full block. Decomposing the schema to remove the optional Compact variant enables a Validator to ensure complaint Full disclosure. To clarify, a Validator can confirm schema compliance both before and after detailed disclosure by using a composed base schema pre-disclosure and a decomposed schema post-disclosure with the undisclosed options removed. These features provide a mechanism for secure schema-validated contractually-bound Partial (and/or Selective) disclosure of confidential data via ACDCs.
+As is the case for Compact (uncompacted) ACDC disclosure, composable JSON schema enables the use of the same base schema for both the validation of the Partial disclosure of the offer metadata prior to contract acceptance and validation of full or detailed disclosure after contract acceptance [[ref: JSch]][[ref: JSchCp]]. A cryptographic commitment to the base schema securely specifies the allowable semantics for both Partial and Full disclosure. Decomposition of the base schema enables a Validator to impose more specific semantics at later stages of the exchange process. Specifically, the `oneOf` sub-schema composition operator validates against either the compact SAID of a block or the full block. Decomposing the schema to remove the optional Compact variant enables a Validator to ensure complaint Full disclosure. To clarify, a Validator can confirm schema compliance both before and after detailed disclosure by using a composed base schema pre-disclosure and a decomposed schema post-disclosure with the undisclosed options removed. These features provide a mechanism for secure schema-validated contractually-bound Partial (and/or Selective) disclosure of confidential data via ACDCs.
 
 ### Attribute section
 
@@ -833,7 +833,7 @@ Consider the case where the Issuee, `i`, field is absent at the top level of the
 ```
 This ACDC has an Issuer but no Issuee. There is no provably controllable AID as a Target of the issuance, i.e., Untargeted. The data in the Attribute section may be considered an undirected verifiable attestation or observation by the Issuer.  One could say that the attestation is addressed "to whom it may concern." An untargeted ACDC enables verifiable authorship by the Issuer of the data in the Attributes section, but there is no specified counterparty and no verifiable mechanism for delegation of authority.  Consequently, the Rule section may provide only contractual obligations of implied counterparties.
 
-This form of an ACDC provides a container for authentic data only (not authentic data as authorization). But authentic data is still a very important use case. To clarify, an Untargeted ACDC enables verifiable authorship of data. An observer, such as a sensor that controls an AID, may make verifiable, nonrepudiable measurements and publish them as ACDCs. These may be chained together to provide provenance for or a chain-of-custody of any data.  Furthermore, A hybrid chain of one or more targeted ACDCs ending in a chain of one or more untargeted ACDCs enables delegated authorized attestations at the tail of that chain. These provenanceable chains of ACDCs could be used to provide a verifiable data supply chain for any compliance-regulated application. This provides a way to protect participants in a supply chain from imposters. Such data supply chains are also useful as a verifiable digital twin of a physical supply chain [@Twin].
+This form of an ACDC provides a container for authentic data only (not authentic data as authorization). But authentic data is still a very important use case. To clarify, an Untargeted ACDC enables verifiable authorship of data. An observer, such as a sensor that controls an AID, may make verifiable, nonrepudiable measurements and publish them as ACDCs. These may be chained together to provide provenance for or a chain-of-custody of any data.  Furthermore, A hybrid chain of one or more targeted ACDCs ending in a chain of one or more untargeted ACDCs enables delegated authorized attestations at the tail of that chain. These provenanceable chains of ACDCs could be used to provide a verifiable data supply chain for any compliance-regulated application. This provides a way to protect participants in a supply chain from imposters. Such data supply chains are also useful as a verifiable digital twin of a physical supply chain [[ref: Twin]].
 
 
 #### Targeted private-attribute section example
@@ -919,11 +919,11 @@ As described above in the Schema section of this specification, the `oneOf` sub-
 
 As discussed above, the presence of the `i` field at the top level of the attribute section block makes this a targeted attribute section. The AID given by the `i` field value is the target entity called the Issuee. The semantics of the Issuee maybe defined by the ACDC EGF (Ecosystem Governance Framework).
 
-Given the presence of a top-level UUID, `u`, field of the attribute block whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of the attribute block provides a secure cryptographic digest of the contents of the attribute block [@Hash]. An adversary when given both the schema of the attribute block and its SAID, `d`, field, is not able to discover the remaining contents of the attribute block in a computationally feasible manner such as a rainbow table attack [@RB][@DRB].  Therefore, the attribute block's UUID, `u`, field in a compact ACDC enables its attribute block's SAID, `d`, field to securely blind the contents of the attribute block notwithstanding knowledge of the attribute block's schema and SAID, `d` field.  Moreover, a cryptographic commitment to that attribute block's, SAID, `d`, field does not provide a fixed point of correlation to the attribute field values themselves unless and until there has been a disclosure of those field values.
+Given the presence of a top-level UUID, `u`, field of the attribute block whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of the attribute block provides a secure cryptographic digest of the contents of the attribute block [[ref: Hash]]. An adversary when given both the schema of the attribute block and its SAID, `d`, field, is not able to discover the remaining contents of the attribute block in a computationally feasible manner such as a rainbow table attack [[ref: RB]] ] [[ref: DRB]].  Therefore, the attribute block's UUID, `u`, field in a compact ACDC enables its attribute block's SAID, `d`, field to securely blind the contents of the attribute block notwithstanding knowledge of the attribute block's schema and SAID, `d` field.  Moreover, a cryptographic commitment to that attribute block's, SAID, `d`, field does not provide a fixed point of correlation to the attribute field values themselves unless and until there has been a disclosure of those field values.
 
 To elaborate, when an ACDC includes a sufficiently high entropy UUID, `u`, field at the top level of its attributes block then the ACDC may be considered a private-attributes ACDC when expressed in compact form, that is, the attribute block is represented by its SAID, `d`, field and the value of its top-level Attribute section, `a`, field is the value of the nested SAID, `d`, field from the uncompacted version of the attribute block. A verifiable commitment may be made to the compact form of the ACDC without leaking details of the attributes. Later disclosure of the uncompacted attribute block may be verified against its SAID, `d`, field that was provided in the compact form as the value of the top-level Attribute section, `a`, field.
 
-Because the Issuee AID is nested in the attribute block as that block's top-level, Issuee, `i`, field, a presentation exchange (disclosure) could be initiated on behalf of a different AID that has not yet been correlated to the Issuee AID and then only correlated to the Issuee AID after the Disclosee has agreed to the Chain-link confidentiality provisions in the rules section of the private-attributes ACDC [@CLC].
+Because the Issuee AID is nested in the attribute block as that block's top-level, Issuee, `i`, field, a presentation exchange (disclosure) could be initiated on behalf of a different AID that has not yet been correlated to the Issuee AID and then only correlated to the Issuee AID after the Disclosee has agreed to the Chain-link confidentiality provisions in the rules section of the private-attributes ACDC [[ref: CLC]].
 
 #### Targeted public-attribute section example
 
@@ -1005,7 +1005,7 @@ The SAID, `d`, field at the top level of the uncompacted attribute block is the 
 
 As discussed above, the presence of the `i` field at the top level of the attribute section block makes this a targeted attribute section. The AID given by the `i` field value is the Target or Issuee. The semantics of the issuance may be defined by the ACDC's EGF (Ecosystem Governance Framework).
 
-Given the absence of a `u` field at the top level of the attributes block, however, knowledge of both SAID, `d`, field at the top level of an attributes block and the schema of the attributes block may enable the discovery of the remaining contents of the attributes block via a rainbow table attack [@RB][@DRB]. Therefore, the SAID, `d`, field of the attributes block, although a cryptographic digest, does not securely blind the contents of the attributes block given knowledge of the schema. It only provides compactness, not privacy. Moreover, any cryptographic commitment to that SAID, `d`, field potentially provides a fixed correlation point to the attribute block field values despite the non-disclosure of those field values via a Compact Attribute section. Thus, an ACDC without a UUID, `u` field in its attributes block must be considered a Public-Attribute ACDC even when expressed in compact form.
+Given the absence of a `u` field at the top level of the attributes block, however, knowledge of both SAID, `d`, field at the top level of an attributes block and the schema of the attributes block may enable the discovery of the remaining contents of the attributes block via a rainbow table attack [[ref: RB]] ] [[ref: DRB]]. Therefore, the SAID, `d`, field of the attributes block, although a cryptographic digest, does not securely blind the contents of the attributes block given knowledge of the schema. It only provides compactness, not privacy. Moreover, any cryptographic commitment to that SAID, `d`, field potentially provides a fixed correlation point to the attribute block field values despite the non-disclosure of those field values via a Compact Attribute section. Thus, an ACDC without a UUID, `u` field in its attributes block must be considered a Public-Attribute ACDC even when expressed in compact form.
 
 #### Nested partially disclosable attribute section example
 
@@ -1175,15 +1175,15 @@ Nested Edge-groups may only appear as locally unique labeled blocks nested withi
 
 #### ACDCs as secure graph fragments of a globally distributed property graph (PG)
 
-A set of ACDCs as nodes connected by edges forms a labeled property graph (LPG) or property graph (PG) for short [@PGM][@Dots][@KG]. Property graphs have properties not only in the nodes but also in the edges. The properties of each node (ACDC) are provided essentially by its Attribute Section. The properties of each edge are provided by the combination of Edge blocks and Edge-group blocks. In this regard, the set of nested Edge-groups within a given top-level Edge Section, i.e., the `e` field block of a given ACDC, constitute a sub-graph of a super-graph of ACDCs where the nodes of the super-graph are ACDCs. The nodes of the sub-graph are the Edge-groups and Edges, not whole ACDCs. One of the attractive features of property graphs (PGs) is their support for different edge and node types, which enables nested sub-graphs that support the rich expression of complex logical or aggregative operations on groups of Edges and/or Edge-groups (as subnodes) within the top-level Edge Section, `e`, field of an ACDC (as supernode).
+A set of ACDCs as nodes connected by edges forms a labeled property graph (LPG) or property graph (PG) for short [[ref: PGM]] [[ref: Dots]] [[ref: KG]]. Property graphs have properties not only in the nodes but also in the edges. The properties of each node (ACDC) are provided essentially by its Attribute Section. The properties of each edge are provided by the combination of Edge blocks and Edge-group blocks. In this regard, the set of nested Edge-groups within a given top-level Edge Section, i.e., the `e` field block of a given ACDC, constitute a sub-graph of a super-graph of ACDCs where the nodes of the super-graph are ACDCs. The nodes of the sub-graph are the Edge-groups and Edges, not whole ACDCs. One of the attractive features of property graphs (PGs) is their support for different edge and node types, which enables nested sub-graphs that support the rich expression of complex logical or aggregative operations on groups of Edges and/or Edge-groups (as subnodes) within the top-level Edge Section, `e`, field of an ACDC (as supernode).
 
 To clarify, the Edge Section of an ACDC forms a sub-graph where each Edge block is a leaf of a branch in that sub-graph that terminates at the value of its node, `n`, field. Its node, `n` field, points to some other ACDC that is itself a sub-graph. The head of each sub-graph is the top level Edge-group, i.e. the Edge Section. Thus, an Edge block is a leaf with respect to the sub-graph formed by any nested Edge-group blocks in which the Edge appears.  
 
-Abstractly, an ACDC with one or more edges may be viewed as a fragment of a larger distributed property graph where each ACDC Edge Section is a sub-graph. Each node in this larger graph is universally uniquely identified by the SAID of its ACDC. Recall that a SAID is a cryptographic digest. The local labels on each Edge block or Edge-group block are not universally uniquely resolvable, so they are inappropriate as a verifiable hook for resolving the edges in a globally distributed property graph. This requires resolving both nodes and edges. To enable both the node and its connecting edge to be globally uniquely resolvable, each Edge's block must also have a SAID, `d`, field. Recall that a SAID is a cryptographic digest. Therefore, it will universally and uniquely identify an edge with a given set of properties [@Hash], including the node it points to. 
+Abstractly, an ACDC with one or more edges may be viewed as a fragment of a larger distributed property graph where each ACDC Edge Section is a sub-graph. Each node in this larger graph is universally uniquely identified by the SAID of its ACDC. Recall that a SAID is a cryptographic digest. The local labels on each Edge block or Edge-group block are not universally uniquely resolvable, so they are inappropriate as a verifiable hook for resolving the edges in a globally distributed property graph. This requires resolving both nodes and edges. To enable both the node and its connecting edge to be globally uniquely resolvable, each Edge's block must also have a SAID, `d`, field. Recall that a SAID is a cryptographic digest. Therefore, it will universally and uniquely identify an edge with a given set of properties [[ref: Hash]], including the node it points to. 
 
-Thus, a given ACDC with its edges may be universally uniquely resolvable as a graph fragment of a larger graph.  Moreover, because each ACDC with edges, i.e., a graph fragment, may be independently sourced and securely attributed, a distributed property graph can be securely assembled and verified fragment by fragment. To summarize, these features enable ACDCs to be used as securely attributed fragments of a globally distributed property graph (PG). This further enables such a property graph so assembled to serve as a global verifiable knowledge graph that crosses trust domains [@PGM][@Dots][@KG]. 
+Thus, a given ACDC with its edges may be universally uniquely resolvable as a graph fragment of a larger graph.  Moreover, because each ACDC with edges, i.e., a graph fragment, may be independently sourced and securely attributed, a distributed property graph can be securely assembled and verified fragment by fragment. To summarize, these features enable ACDCs to be used as securely attributed fragments of a globally distributed property graph (PG). This further enables such a property graph so assembled to serve as a global verifiable knowledge graph that crosses trust domains [[ref: PGM]] [[ref: Dots]] [[ref: KG]]. 
 
-The universal uniqueness of the ACDC SAIDs (nodes) and their Edge SAIDs enable the simplified discovery of ACDCs via service endpoints. The discovery of a service endpoint URL that provides database access to a copy of the ACDC may be bootstrapped via an OOBI (Out-Of-Band-Introduction) that links the service endpoint URL to the SAID of the ACDC or by the SAID of the Edge that points to the SAID of that ACDC [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at the time of issuance a copy of the referenced ACDC. In either case, after a successful exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced ACDCs as nodes in the edge sections of all referenced ACDCs. That Issuee will then have everything it needs to make a successful disclosure to some other Disclosee. This is the essence of Percolated discovery [@OOBI_ID].
+The universal uniqueness of the ACDC SAIDs (nodes) and their Edge SAIDs enable the simplified discovery of ACDCs via service endpoints. The discovery of a service endpoint URL that provides database access to a copy of the ACDC may be bootstrapped via an OOBI (Out-Of-Band-Introduction) that links the service endpoint URL to the SAID of the ACDC or by the SAID of the Edge that points to the SAID of that ACDC [[ref: OOBI]]. Alternatively, the Issuer may provide as an attachment at the time of issuance a copy of the referenced ACDC. In either case, after a successful exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced ACDCs as nodes in the edge sections of all referenced ACDCs. That Issuee will then have everything it needs to make a successful disclosure to some other Disclosee. This is the essence of Percolated discovery [[ref: OOBI]].
 
 ::: issue
 https://github.com/trustoverip/tswg-acdc-specification/issues/26
@@ -1211,7 +1211,7 @@ An Edge-group shall not have a node, `n`, field.
 The SAID, `d` field is optional but when it appears it shall appear as the first field in the Edge-group block. The value of this field shall be the SAID of its enclosing block.
 
 ##### UUID, `u` field
-The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge-group block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge-group block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[ref: Hash]]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [[ref: RB]] [[ref: DRB]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
 
 ##### Operator, `o` field
 The Operator, `o` field must appear immediately following the SAID, `d` field,  and UUID, `u` field (when present) in the Edge-group block. The Operator field in an Edge-group block is an aggregating (m-ary) operator on all the nested labeled Edges or Edge-groups that appear in its block. This differs from the Operator, `o` field in an Edge block (see below).
@@ -1246,9 +1246,9 @@ Edge-groups and Edges nested within a given Edge-group appear as labeled fields 
 
 Each nested Edge or Edge-group block within an Edge-group including the top-level Edge Section Edge-group shall be labeled with a locally unique non-reserved field label that indicates the type of the nested block. To clarify, each nested block in every Edge-group gets its own field with its own local (to the ACDC) label. The field's value may be either an edge sub-block or when in compact form, a string. The compact forms are defined below.
 
-Note that each nested block shall not include a type field. The type of each block is provided by that associated sub-schema in the Edge Section's sub-schema with a matching label. This is in accordance with the design principle of ACDCs that may be succinctly expressed as "type-is-schema." This approach varies somewhat from other types of property graphs, which often do not have a schema [@PGM][@Dots][@KG]. Because ACDCs have a schema, they leverage it to provide property graph edge types with a cleaner separation of concerns. Notwithstanding this separation, an Edge block may include a constraint on the type of the ACDC to which that Edge points by including the SAID of the schema of the pointed-to ACDC as a property of that edge (see below).  
+Note that each nested block shall not include a type field. The type of each block is provided by that associated sub-schema in the Edge Section's sub-schema with a matching label. This is in accordance with the design principle of ACDCs that may be succinctly expressed as "type-is-schema." This approach varies somewhat from other types of property graphs, which often do not have a schema [[ref: PGM]][[ref: Dots]][[ref: KG]]. Because ACDCs have a schema, they leverage it to provide property graph edge types with a cleaner separation of concerns. Notwithstanding this separation, an Edge block may include a constraint on the type of the ACDC to which that Edge points by including the SAID of the schema of the pointed-to ACDC as a property of that edge (see below).  
 
-A main distinguishing feature of a property graph (PG) is that both nodes and edges may have a set of properties [@PGM][@Dots][@KG]. These might include modifiers that influence how the connected node is to be combined or place a constraint on the allowed type(s) of connected nodes. Each Edge's block provides the Edge's properties vis-a-vis a property graph. Additional properties may be inferred from the properties of an enclosing Edge-group's block. Each labeled Edge and Edge-group type is defined by the sub-schema designated by its label. 
+A main distinguishing feature of a property graph (PG) is that both nodes and edges may have a set of properties [[ref: PGM]][[ref: Dots]][[ref: KG]]. These might include modifiers that influence how the connected node is to be combined or place a constraint on the allowed type(s) of connected nodes. Each Edge's block provides the Edge's properties vis-a-vis a property graph. Additional properties may be inferred from the properties of an enclosing Edge-group's block. Each labeled Edge and Edge-group type is defined by the sub-schema designated by its label. 
 
 #### Edge
 
@@ -1278,7 +1278,7 @@ Given that an individual edge's property block includes a SAID, `d`, field, a co
 
 ##### UUID, `u` field
 
-The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Edge block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[ref: Hash]]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [[ref: RB]] [[ref: DRB]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
 
 The absence of the UUID, `u` field in an Edge block makes that edge a Public Edge. 
 The presence of the UUID, `u` field in an Edge block makes that Edge a Private Edge.  A Private Edge in compact form, i.e., a Compact Private Edge, enables a presenter of that ACDC to make a verifiable commitment to the ACDC attached to the edge without disclosing any details of that ACDC, including the ACDC's SAID. Private ACDCs (nodes) and Private Edges may be combined to better protect the privacy of the information in a distributed property graph.
@@ -2057,7 +2057,7 @@ As the examples above have shown, the Edge Section syntax enables the composable
 
 ### Rule Section  
 
-The purpose of the rule section is to provide a set of rules or conditions as a Ricardian Contract [@RC]. The important features of a Ricardian contract are that it be both human and machine-readable and referenceable by a cryptographic digest. A JSON-encoded document or block, such as the Rule section block, is a practical example of both a human and machine-readable document.  The rule section's top-level SAID, `d` field provides the digest.  This provision supports the bow-tie model of RC. 
+The purpose of the rule section is to provide a set of rules or conditions as a Ricardian Contract [[ref: RC]]. The important features of a Ricardian contract are that it be both human and machine-readable and referenceable by a cryptographic digest. A JSON-encoded document or block, such as the Rule section block, is a practical example of both a human and machine-readable document.  The rule section's top-level SAID, `d` field provides the digest.  This provision supports the bow-tie model of RC. 
 
 The Rule Section includes labeled nested blocks called rules that provide the legal language (terms , conditions, definitions etc). The labeled clauses can be structured hierarchically, where each rule, in turn, can include nested labeled rules. The labels on the rules may follow a structured naming or numbering convention. These provisions enable the rule section to satisfy the features of an RC. 
 
@@ -2071,7 +2071,7 @@ Nested Rule-groups may only appear as locally unique labeled blocks nested withi
 
 #### Rule discovery 
 
-In compact form, the discovery of either the Rule section as a whole or a given Rule or Rule-group begins with the provided SAID. Because the SAID, `d`, field of any block is a cryptographic digest with high collision resistance, it provides a universally unique identifier to the referenced block details (whole rule section or individual rule). The discovery of a service endpoint URL that provides database access to a copy of the rule section or to any of its rules or rule-groups may be bootstrapped via an OOBI that links the service endpoint URL to the SAID of the respective block [@OOBI_ID]. Alternatively, the Issuer may provide as an attachment at issuance a copy of the referenced contract associated with the whole rule section or any rule. In either case, after a successful issuance exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced contracts in whole or in part of all ACDCs so issued. That Issuee will then have everything subsequently needed to make a successful presentation or disclosure to a Disclosee. This is the essence of percolated discovery.
+In compact form, the discovery of either the Rule section as a whole or a given Rule or Rule-group begins with the provided SAID. Because the SAID, `d`, field of any block is a cryptographic digest with high collision resistance, it provides a universally unique identifier to the referenced block details (whole rule section or individual rule). The discovery of a service endpoint URL that provides database access to a copy of the rule section or to any of its rules or rule-groups may be bootstrapped via an OOBI that links the service endpoint URL to the SAID of the respective block [[ref: OOBI]]. Alternatively, the Issuer may provide as an attachment at issuance a copy of the referenced contract associated with the whole rule section or any rule. In either case, after a successful issuance exchange, the Issuee of any ACDC will have either a copy or a means of obtaining a copy of any referenced contracts in whole or in part of all ACDCs so issued. That Issuee will then have everything subsequently needed to make a successful presentation or disclosure to a Disclosee. This is the essence of percolated discovery.
 
 #### Rule-group
 
@@ -2091,7 +2091,7 @@ A Rule-group may have a Legal, `l`, field and may have a SAID, `d` field. When t
 The SAID, `d` field is optional but when it appears it shall appear as the first field in the Rule-group block. The value of this field shall be the SAID of its enclosing block. To elaborate, when the Rule-group is the top-level Rule Section its SAID is the same SAID used as the compacted value of the Rule Section, `r` field that appears at the top level of the ACDC. When not the top-level Rule-group, a given nested Rule-group's SAID, `d` field enables a verifiable globally unique reference to that nested Rule-group, not merely the whole contract as given by the Rule section's top-level SAID, `d`, field.
 
 ##### UUID, `u` field
-The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Rule-group block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Rule-group block following the SAID, `d`, field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[ref: Hash]]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [[ref: RB]] [[ref: DRB]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
 
 ##### Labeled nested rule and rule-group fields
 
@@ -2099,9 +2099,9 @@ Rules and Rule-group nested within a Rule-group appear as labeled fields whose l
 
 To elaborate, each nested Rule or Rule-group block shall be labeled with a locally unique non-reserved field label that indicates the type of the nested block. To clarify, each nested block gets its own field with its own local (to the ACDC Rule Section) label. The field's value may be either the Rule or Rule-group block or, in compact form, a string. The compact forms are defined below.
 
-Note that each nested block shall not include a type field. The type of each block is provided by that associated nested sub-schema with a matching label. This is in accordance with the design principle of ACDCs that may be succinctly expressed as "type-is-schema." This approach varies somewhat from other types of property graphs, which often do not have a schema [@PGM][@Dots][@KG]. Because ACDCs have a schema, they leverage it to provide property graph types with a cleaner separation of concerns.   
+Note that each nested block shall not include a type field. The type of each block is provided by that associated nested sub-schema with a matching label. This is in accordance with the design principle of ACDCs that may be succinctly expressed as "type-is-schema." This approach varies somewhat from other types of property graphs, which often do not have a schema [[ref: PGM]][[ref: Dots]][[ref: KG]]. Because ACDCs have a schema, they leverage it to provide property graph types with a cleaner separation of concerns.   
 
-A main distinguishing feature of a property graph (PG) is that both nodes and edges may have a set of properties [@PGM][@Dots][@KG].  Each Rule-group's block provides its additional properties vis-a-vis a property graph as labeled fields. Additional properties may be inferred from the properties of an enclosing Rule-group block. Each labeled rule type is defined by the sub-schema designated by its label. 
+A main distinguishing feature of a property graph (PG) is that both nodes and edges may have a set of properties [[ref: PGM]][[ref: Dots]][[ref: KG]].  Each Rule-group's block provides its additional properties vis-a-vis a property graph as labeled fields. Additional properties may be inferred from the properties of an enclosing Rule-group block. Each labeled rule type is defined by the sub-schema designated by its label. 
 
 
 #### Rule
@@ -2127,7 +2127,7 @@ Given that an individual Rule block includes a SAID, `d` field, a compact repres
 
 
 ##### UUID, `u` field
-The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Rule Section block following the SAID, `d` field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
+The UUID, `u` field is optional, but when it appears, it shall appear as the second field in the Rule Section block following the SAID, `d` field. The value of this field shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[ref: Hash]]. An adversary, when given both the block's sub-schema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [[ref: RB]] [[ref: DRB]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's sub-schema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
 
 ##### Legal, `l` field
 
@@ -2145,7 +2145,7 @@ When a Rule block has only one field, that is, its legal, `l` field, i.e., it ha
 
 ##### Private rules
 
-Some Rules and Rule-groups, as opposed to the Rule Section as a whole, may benefit from confidential disclosure. Recall that individual Rule and Rule-group blocks may have their own SAID, `d`, field and UUID, `u,` field. To clarify, a Rule or Rule-group block with both a SAID, `d`, and UUID, `u` fields, where that UUID has sufficiently high entropy, protects the compact form of that block from discovery via a rainbow table attack merely from its SAID and sub-schema [@RB][@DRB]. Therefore, such a Rule or Rule-group may kept hidden until later disclosure. These are called private Rules or Rule-groups. The following example has an independently hidable Rule-group and Rules.
+Some Rules and Rule-groups, as opposed to the Rule Section as a whole, may benefit from confidential disclosure. Recall that individual Rule and Rule-group blocks may have their own SAID, `d`, field and UUID, `u,` field. To clarify, a Rule or Rule-group block with both a SAID, `d`, and UUID, `u` fields, where that UUID has sufficiently high entropy, protects the compact form of that block from discovery via a rainbow table attack merely from its SAID and sub-schema [[ref: RB]] [[ref: DRB]]. Therefore, such a Rule or Rule-group may kept hidden until later disclosure. These are called private Rules or Rule-groups. The following example has an independently hidable Rule-group and Rules.
 
 Issued by Amy:
 
@@ -2174,7 +2174,7 @@ Rule section expanded:
   {
     "d": "ELIr9Bf7V_NAwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
     "u": "0AHcgY1NghkwjDaG7OaDAE0q",
-    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
+    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
     "warrantyDisclaimer":
     {
       "d": "EBgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
@@ -2208,7 +2208,7 @@ Rule section compact private rules:
   {
     "d": "ELIr9Bf7V_NAwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
     "u": "0AHcgY1NghkwjDaG7OaDAE0q",
-    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
+    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
     "warrantyDisclaimer": "EBgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
     "liabilityDisclaimer": "ED1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
   },
@@ -2434,7 +2434,7 @@ Rule section expanded:
   "d": "EDZIl3MORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6",
   "disclaimers":
   {
-    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
+    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
     "warrantyDisclaimer":
     {
       "l": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
@@ -2459,7 +2459,7 @@ Rule section simple compact private rules:
   "d": "EDZIl3MORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6",
   "disclaimers":
   {
-    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:"
+    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
     "warrantyDisclaimer": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE",
     "liabilityDisclaimer": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
   },
@@ -2657,7 +2657,7 @@ This model is diagrammed below.
 ### Least disclosure
 ACDCs provide several mechanisms designed to help protect against the exploitation of disclosed data. These are based on the principle of least disclosure as follows:
 
-The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction and no more. [@IDSys]
+The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction and no more. [[ref: IDSys]]
 
 ### Graduated Disclosure
 
@@ -2710,19 +2710,19 @@ contractually protected disclosure mechanisms as follows:
 
 In a Contractually protected disclosure, the potential Discloser first makes an offer using the least (partial) disclosure of some information about other information to be disclosed (full disclosure) contingent on the potential Disclosee first agreeing to the contractual terms provided in the offer. The contractual terms could, for example, limit the disclosure to third parties of the yet to be disclosed information. But those contractual terms may also include provisions that protect against liability or other concerns, not merely disclosure to third parties. The process by which such least disclosures progress to full disclosure is described in the IPEX (Issuance and Exchange Protocol) section below.
 
-One special case of a Contractually protected disclosure is a Chain-link confidential disclosure [@CLC]. Chain-link confidentiality imposes conditions and limitations on the further disclosure and/or use of the disclosed data. These may be specific terms of use or other consensual constraints. These terms may be applied to subsequent disclosures by the Disclosee that follow the data (hence chain-link). Another way of viewing Chain-link confidential disclosure is that the disclosed data has "strings attached." The chaining, in this case, is different from the chaining of ACDCs via their edges, i.e., a DAG of ACDCs. Chain-link confidentiality, in contrast, chains together a sequence of Disclosees. Each Disclosee in the sequence, in turn, is the Discloser to the next Disclosee. The terms-of-use of the original disclosure as applied to the original Disclosee shall be applied by each subsequent Discloser to each subsequent Disclosee via each of the subsequent disclosures.  These terms of use are meant to contractually protect the data rights of the original Issuer or Issuee of the data being disclosed. These terms of use typically constrain disclosure to only approved parties, i.e., imbue the chain of disclosures with some degree of confidentiality.
+One special case of a Contractually protected disclosure is a Chain-link confidential disclosure [[ref: CLC]]. Chain-link confidentiality imposes conditions and limitations on the further disclosure and/or use of the disclosed data. These may be specific terms of use or other consensual constraints. These terms may be applied to subsequent disclosures by the Disclosee that follow the data (hence chain-link). Another way of viewing Chain-link confidential disclosure is that the disclosed data has "strings attached." The chaining, in this case, is different from the chaining of ACDCs via their edges, i.e., a DAG of ACDCs. Chain-link confidentiality, in contrast, chains together a sequence of Disclosees. Each Disclosee in the sequence, in turn, is the Discloser to the next Disclosee. The terms-of-use of the original disclosure as applied to the original Disclosee shall be applied by each subsequent Discloser to each subsequent Disclosee via each of the subsequent disclosures.  These terms of use are meant to contractually protect the data rights of the original Issuer or Issuee of the data being disclosed. These terms of use typically constrain disclosure to only approved parties, i.e., imbue the chain of disclosures with some degree of confidentiality.
 
 Another special case of Contractually protected disclosure is Contingent disclosure. In a Contingent disclosure, some contingency is specified in the rule section that places an obligation by some party to make a disclosure when the contingency is satisfied. This might be recourse given the breach of some other contract term. When that contingency is met, then the Contingent disclosure must be made by the party whose responsibility it is to satisfy that disclosure obligation. The responsible party may be the Discloser, or it may be some other party, such as an escrow agent. The Contingent disclosure clause may reference a cryptographic commitment to a private ACDC or private attribute ACDC (Partial disclosure) that satisfies via its Full disclosure the Contingent disclosure requirement. Contingent disclosure may be used to limit the actual disclosure of personally identifying information (PII) to a just-in-time, need-to-know basis (i.e., upon the contingency) and not a priori. As long as the Discloser and Disclosee trust the escrow agent and the verifiability of the commitment, there is no need to disclose PII about the Discloser in order to enable a transaction, but merely an agreement to the terms of the contingency. This enables something called latent accountability. Recourse via full disclosure of PII is latent in the Contingent disclosure but never realized (actualized) until the conditions of the contingency is satisfied. This minimizes inadvertent leakage while protecting both the Discloser and the Disclosee.
 
 
 ## Issuance and Presentation Exchange (IPEX)
 
-The Issuance and Presentation Exchange (IPEX) Protocol provides a uniform mechanism for the issuance and presentation of ACDCs [@ACDC-ID] in a securely attributable manner. A single protocol is able to work for both types of exchanges by recognizing
+The Issuance and Presentation Exchange (IPEX) Protocol provides a uniform mechanism for the issuance and presentation of ACDCs [[ref: ACDC]] in a securely attributable manner. A single protocol is able to work for both types of exchanges by recognizing
 that all exchanges (both issuance and presentation) may be modeled as the disclosure of information by a Discloser to a Disclosee. The difference between exchange types is the information disclosed, not the mechanism for disclosure.
 Furthermore, the chaining mechanism of ACDCs and support for both targeted and untargeted ACDCs provide sufficient variability to accommodate the differences in applications or use cases without requiring a difference in the exchange protocol itself. This greatly simplifies the exchange protocol. This simplification has two primary advantages. The first is enhanced security. A well-delimited protocol can be designed and analyzed to minimize and mitigate attack mechanisms.
 The second is convenience. A standard, simple protocol is easier to implement, support, update, understand, and adopt. The tooling is more consistent.
 
-This IPEX [@IPEX-ID] protocol leverages important features of ACDCs and ancillary protocols such as CESR [@CESR-ID], SAIDs [@SAID-ID], and CESR-Path proofs [@Proof-ID] as well as Ricardian contracts [@RC] and graduated disclosure (metadata, partial, selective, full) to enable contractually protected disclosure. Contractually protected disclosure includes both chain-link confidential [@CLC] and contingent disclosure [@ACDC-ID].
+This IPEX [[ref: IPEX]] protocol leverages important features of ACDCs and ancillary protocols such as CESR [[ref: CESR]], SAIDs [[ref: SAID]], and CESR-Path proofs [[ref: Proof-ID]] as well as Ricardian contracts [[ref: RC]] and graduated disclosure (metadata, partial, selective, full) to enable contractually protected disclosure. Contractually protected disclosure includes both chain-link confidential [[ref: CLC]] and contingent disclosure [[ref: ACDC]].
 
 
 ### Exchange Protocol
@@ -2760,7 +2760,7 @@ For example, in the bulk issuance of an ACDC (see bulk issued ACDCs in the Annex
 
 ##### Issuer Commitment Rules
 
-The Issuer MUST provide a signature or seal on the SAID of the most compact form variant defined by the schema of the ACDC (see the "most compact form" algorithm above. 
+The Issuer MUST provide a signature or seal on the SAID of the most compact form variant defined by the schema of the ACDC see the "most compact form" algorithm above. 
 
 The different variants of an ACDC form a hash tree (using SAIDs).
 A commitment to the top-level SAID of the compact version of the ACDC is equivalent to a commitment to the hash tree root (trunk). This makes a verifiable commitment to all expansions of that tree.
@@ -2780,11 +2780,11 @@ Thus, for any disclosed variant of an ACDC, the Disclosee need only verify one P
 
 ### Disclosure-specific (bespoke) issued ACDCs
 
-Chaining two or more ACDCs via edges enables disclosure-specific issuance of bespoke issued ACDCs. A given Discloser of an ACDC issued by some Issuer may want to augment the disclosure with additional contractual obligations or additional information sourced by the Discloser where those augmentations are specific to a given context, such as a specific Disclosee. A given Discloser issues its own bespoke ACDC referencing some other ACDC via an Edge. This means that the normal validation logic and tooling for a chained ACDC can be applied without complicating the presentation exchange logic. Furthermore, attributes in other ACDCs pointed to by edges in the bespoke ACDC may be addressed by attributes in the bespoke ACDC using JSON Pointer or CESR-SAD-Path proof references that are relative to the node SAID in the edge [@RFC6901][@Proof_ID].
+Chaining two or more ACDCs via edges enables disclosure-specific issuance of bespoke issued ACDCs. A given Discloser of an ACDC issued by some Issuer may want to augment the disclosure with additional contractual obligations or additional information sourced by the Discloser where those augmentations are specific to a given context, such as a specific Disclosee. A given Discloser issues its own bespoke ACDC referencing some other ACDC via an Edge. This means that the normal validation logic and tooling for a chained ACDC can be applied without complicating the presentation exchange logic. Furthermore, attributes in other ACDCs pointed to by edges in the bespoke ACDC may be addressed by attributes in the bespoke ACDC using JSON Pointer or CESR-SAD-Path proof references that are relative to the node SAID in the edge [[ref: RFC6901]] [[ref: Proof_ID]].
 
 For example, this approach enables the bespoke ACDC to identify (name) the Disclosee directly as the Issuee of the bespoke ACDC. This enables contractual legal language in the rule section of the bespoke ACDC that references the Issuee of that ACDC as a named party. Signing the agreement to the offer of that bespoke ACDC consummates a contract between the named Issuer and the named Issuee. This approach means that custom or bespoke presentations do not need additional complexity or extensions. Extensibility comes from reusing the tooling for issuing ACDCs to issue a bespoke or disclosure-specific ACDC. When the only purpose of the bespoke ACDC is to augment the contractual obligations associated with the disclosure, then the Attribute section, `a`, field value of the bespoke ACD may be empty, or it may include properties whose only purpose is to support the bespoke contractual language.
 
-Similarly, this approach effectively enables a type of rich presentation or combined disclosure where multiple ACDCs may be referenced by edges in the bespoke ACDC that each contributes some attribute(s) to the effective set of attributes referenced in the bespoke ACDC. The bespoke ACDC enables the equivalent of a rich presentation without requiring any new tooling [@Abuse].
+Similarly, this approach effectively enables a type of rich presentation or combined disclosure where multiple ACDCs may be referenced by edges in the bespoke ACDC that each contributes some attribute(s) to the effective set of attributes referenced in the bespoke ACDC. The bespoke ACDC enables the equivalent of a rich presentation without requiring any new tooling [[ref: Abuse]].
 
 #### Example of a bespoke issued ACDC
 
@@ -2946,7 +2946,7 @@ The message type, `t` field value shall be be one of the message types in the ta
 The SAID, `d` field value shall be the SAID of its enclosing block. A transaction event's SAID enables a verifiable globally unique reference to that event.
 
 ##### UUID, `u` field
-The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
+The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[ref: Hash]]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [[ref: RB]] [[ref: DRB]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
 
 ##### Issuer, `i` field
 
@@ -2993,7 +2993,7 @@ The SAID, `d` field value shall be the SAID of its enclosing block. An attribute
 
 ##### UUID, `u` field
 
-The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [@Hash]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
+The UUID, `u` field value shall be a cryptographic strength salty-nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[ref: Hash]]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [[ref: RB]] [[ref: DRB]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
 
 When the UUID, `u`, is derived from a shared secret salt and a public path such as the sequence number using a hierarchically deterministic derivation algorithm, and given that the possible state values are finite small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event.
 
@@ -3266,7 +3266,7 @@ Hierarchical decomposition of data into a distributed verifiable property graph,
 
 #### Cryptographic Strength
 
-For crypto-systems with perfect-security, the critical design parameter is the number of bits of entropy needed to resist any practical brute force attack. In other words, when a large random or pseudo-random number from a cryptographic strength pseudo-random number generator (CSPRNG) [@CSPRNG] expressed as a string of characters is used as a seed or private key to a cryptosystem with perfect-security, the critical design parameter is determined by the amount of random entropy in that string needed to withstand a brute force attack. Any subsequent cryptographic operations must preserve that minimum level of cryptographic strength. In information theory, [@IThry][@ITPS] the entropy of a message or string of characters is measured in bits. Another way of saying this is that the degree of randomness of a string of characters can be measured by the number of bits of entropy in that string.  Assuming conventional non-quantum computers, the conventional wisdom is that, for systems with information-theoretic or perfect-security, the seed/key needs to have on the order of 128 bits (16 bytes, 32 hex characters) of entropy to practically withstand any brute force attack. A cryptographic quality random or pseudo-random number expressed as a string of characters will have essentially as many bits of entropy as the number of bits in the number. For other crypto systems such as digital signatures that do not have perfect-security, the size of the seed/key may need to be much larger than 128 bits in order to maintain 128 bits of cryptographic strength.
+For crypto-systems with perfect-security, the critical design parameter is the number of bits of entropy needed to resist any practical brute force attack. In other words, when a large random or pseudo-random number from a cryptographic strength pseudo-random number generator (CSPRNG) [[ref: CSPRNG]] expressed as a string of characters is used as a seed or private key to a cryptosystem with perfect-security, the critical design parameter is determined by the amount of random entropy in that string needed to withstand a brute force attack. Any subsequent cryptographic operations must preserve that minimum level of cryptographic strength. In information theory, [[ref: IThry]] [[ref: ITPS]] the entropy of a message or string of characters is measured in bits. Another way of saying this is that the degree of randomness of a string of characters can be measured by the number of bits of entropy in that string.  Assuming conventional non-quantum computers, the conventional wisdom is that, for systems with information-theoretic or perfect-security, the seed/key needs to have on the order of 128 bits (16 bytes, 32 hex characters) of entropy to practically withstand any brute force attack. A cryptographic quality random or pseudo-random number expressed as a string of characters will have essentially as many bits of entropy as the number of bits in the number. For other crypto systems such as digital signatures that do not have perfect-security, the size of the seed/key may need to be much larger than 128 bits in order to maintain 128 bits of cryptographic strength.
 
 An N-bit long base-2 random number has 2<sup>N</sup> different possible values. Given that no other information is available to an attacker with Perfect security, the attacker may need to try every possible value before finding the correct one. Thus, the number of attempts that the attacker would have to try maybe as much as 2<sup>N-1</sup>.  Given available computing power, one can show easily that 128 is a large enough N to make brute force attack computationally infeasible.
 
@@ -3276,7 +3276,7 @@ There are about 3600 * 24 * 365 = 313,536,000 = 2<sup>log<sub>2</sub>313536000</
 
 #### Information theoretic Security and perfect-security
 
-The highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key) is called  information theoretic security[@ITPS]. A cryptosystem that has this level of security cannot be broken algorithmically even if the adversary has nearly unlimited computing power including quantum computing. The system must be broken by brute force if at all. Brute force means that in order to guarantee success, the adversary must search for every combination of key or seed. A special case of information-theoretic security is called *perfect-security* [@ITPS].  Perfect-security means that the ciphertext provides no information about the key. There are two well-known cryptosystems that exhibit *perfect-security. The first is a One-time-pad (OTP) or Vernum Cipher [@OTP][@VCphr], and the other is Secret splitting [@SSplt], a type of secret sharing [@SShr] that uses the same technique as an OTP.
+The highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key) is called  information theoretic security[[ref: ITPS]]. A cryptosystem that has this level of security cannot be broken algorithmically even if the adversary has nearly unlimited computing power including quantum computing. The system must be broken by brute force if at all. Brute force means that in order to guarantee success, the adversary must search for every combination of key or seed. A special case of information-theoretic security is called *perfect-security* [[ref: ITPS]].  Perfect-security means that the ciphertext provides no information about the key. There are two well-known cryptosystems that exhibit *perfect-security. The first is a One-time-pad (OTP) or Vernum Cipher [[ref: OTP]] [[ref: VCphr]], and the other is Secret splitting [[ref: SSplt]], a type of secret sharing [[ref: SShr]] that uses the same technique as an OTP.
 
 
 [//]: # (# Examples {#sec:annexC .informative} )
@@ -3289,7 +3289,7 @@ https://github.com/trustoverip/tswg-acdc-specification/issues/21
 
 As explained previously in section 5, the primary difference between Partial disclosure and Selective disclosure is determined by the correlatability with respect to its encompassing block after Full disclosure of the detailed field value. A partially disclosable field becomes correlatable to its encompassing block after its Full disclosure. Whereas a selectively disclosable field may be excluded from the Full disclosure of any other selectively disclosable fields in its encompassing block. After Selective disclosure, the selectively disclosed fields are not correlatable to the so far undisclosed but selectively disclosable fields in the same encompassing block. In this sense, Full disclosure means detailed disclosure of the selectively disclosed attributes not detailed disclosure of all selectively disclosable attributes.
 
-Recall that Partial disclosure is an essential mechanism needed to support Chain-link confidentiality [@CLC]. The Chain-link confidentiality exchange offer requires partial disclosure, and full disclosure only happens after acceptance of the offer. Selective disclosure, on the other hand, is an essential mechanism needed to unbundle in a correlation minimizing way a single commitment by an Issuer to a bundle of fields (i.e., a nested block or array of fields). This allows separating a "stew" of "ingredients" (attributes) into its constituent ingredients (attributes) without correlating the constituents via the stew.
+Recall that Partial disclosure is an essential mechanism needed to support Chain-link confidentiality [[ref: CLC]]. The Chain-link confidentiality exchange offer requires partial disclosure, and full disclosure only happens after acceptance of the offer. Selective disclosure, on the other hand, is an essential mechanism needed to unbundle in a correlation minimizing way a single commitment by an Issuer to a bundle of fields (i.e., a nested block or array of fields). This allows separating a "stew" of "ingredients" (attributes) into its constituent ingredients (attributes) without correlating the constituents via the stew.
 
 ACDCs, inherently benefit from a minimally sufficient approach to Selective disclosure that is simple enough to be universally implementable and adoptable. This does not preclude support for other more sophisticated but optional approaches. But the minimally sufficient approach should be universal so that at least one Selective disclosure mechanism be made available in all ACDC implementations. To clarify, not all instances of an ACDC must employ the minimal Selective disclosure mechanisms as described herein but all ACDC implementations must support any instance of an ACDC that employs the minimal Selective disclosure mechanisms as described above.
 
@@ -3307,9 +3307,9 @@ Finally, in the case where the correlation of activity of an Issuee across conte
 
 The basic Selective disclosure mechanism shared by all is comprised of a single aggregated blinded commitment to a list of blinded commitments to undisclosed values. Membership of any blinded commitment to a value in the list of aggregated blinded commitments may be proven without leaking (disclosing) the unblinded value belonging to any other blinded commitment in the list. This enables provable Selective disclosure of the unblinded values. When a non-repudiable digital signature is created on the aggregated blinded commitment then any disclosure of a given value belonging to a given blinded commitment in the list is also non-repudiable. This approach does not require any more complex cryptography than digests and digital signatures. This satisfies the design ethos of minimally sufficient means. The primary drawback of this approach is verbosity. It trades ease and simplicity and adoptability of implementation for size. Its verbosity may be mitigated by replacing the list of blinded commitments with a Merkle tree of those commitments where the Merkle tree root becomes the aggregated blinded commitment.
 
-Given sufficient cryptographic entropy of the blinding factors, collision resistance of the digests, and unforgeability of the digital signatures, either inclusion proof format (list or Merkle tree digest) prevents a potential Disclosee or adversary from discovering in a computationally feasible way the values of any undisclosed blinded value details from the combination of the schema of those value details and either the aggregated blinded commitment and/or the list of aggregated blinded commitments [@Hash][@HCR][@QCHC][@Mrkl][@TwoPI][@MTSec]. A potential Disclosee or adversary would also need both the blinding factor and the actual value details.
+Given sufficient cryptographic entropy of the blinding factors, collision resistance of the digests, and unforgeability of the digital signatures, either inclusion proof format (list or Merkle tree digest) prevents a potential Disclosee or adversary from discovering in a computationally feasible way the values of any undisclosed blinded value details from the combination of the schema of those value details and either the aggregated blinded commitment and/or the list of aggregated blinded commitments [[ref: Hash]] [[ref: HCR]] [[ref: QCHC]] [[ref: Mrkl]] [[ref: TwoPI]] [[ref: MTSec]]. A potential Disclosee or adversary would also need both the blinding factor and the actual value details.
 
-Selective disclosure in combination with Partial disclosure for Chain-link confidentiality provides comprehensive correlation minimization because a Discloser may use a non-disclosing metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain-link confidentiality expressed in the rule section [@CLC]. Thus, only malicious Disclosees who violate Chain-link confidentiality may correlate between independent disclosures of the value details of distinct members in the list of aggregated blinded commitments. Nonetheless, they are not able to discover any as-of-yet undisclosed (unblinded) value details.
+Selective disclosure in combination with Partial disclosure for Chain-link confidentiality provides comprehensive correlation minimization because a Discloser may use a non-disclosing metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain-link confidentiality expressed in the rule section [[ref: CLC]]. Thus, only malicious Disclosees who violate Chain-link confidentiality may correlate between independent disclosures of the value details of distinct members in the list of aggregated blinded commitments. Nonetheless, they are not able to discover any as-of-yet undisclosed (unblinded) value details.
 
 #### Selectively disclosable attribute ACDC
 
@@ -3364,7 +3364,7 @@ The Issuee attribute block is present in an uncompacted targeted selectively dis
 
 ##### Blinded attribute array
 
-Given that each attribute block's UUID, `u`, field has sufficient cryptographic entropy, then each attribute block's SAID, `d`, field provides a secure cryptographic digest of its contents that effectively blinds the attribute value from discovery given only its Schema and SAID. To clarify, the adversary despite being given both the schema of the attribute block and its SAID, `d`, field, is not able to discover the remaining contents of the attribute block in a computationally feasible manner such as a rainbow table attack [@RB][@DRB].  Therefore, the UUID, `u`, field of each attribute block enables the associated SAID, `d`, field to securely blind the block's contents notwithstanding knowledge of the block's schema and that SAID, `d`, field.  Moreover, a cryptographic commitment to that SAID, `d`, field does not provide a fixed point of correlation to the associated attribute (SAD) field values themselves unless and until there has been specific disclosure of those field values themselves.
+Given that each attribute block's UUID, `u`, field has sufficient cryptographic entropy, then each attribute block's SAID, `d`, field provides a secure cryptographic digest of its contents that effectively blinds the attribute value from discovery given only its Schema and SAID. To clarify, the adversary despite being given both the schema of the attribute block and its SAID, `d`, field, is not able to discover the remaining contents of the attribute block in a computationally feasible manner such as a rainbow table attack [[ref: RB]] [[ref: DRB]].  Therefore, the UUID, `u`, field of each attribute block enables the associated SAID, `d`, field to securely blind the block's contents notwithstanding knowledge of the block's schema and that SAID, `d`, field.  Moreover, a cryptographic commitment to that SAID, `d`, field does not provide a fixed point of correlation to the associated attribute (SAD) field values themselves unless and until there has been specific disclosure of those field values themselves.
 
 Given a total of ‘N’ elements in the attributes array, let a<sub>i</sub> represent the SAID, `d`, field of the attribute at zero-based index ‘’'. More precisely, the set of attributes is expressed as the ordered set,
 
@@ -3507,7 +3507,7 @@ Equivalently using ‘+’ as the infix concatenation operator, the aggregated d
 
 A = H(a<sub>0</sub> + a<sub>1</sub> + a<sub>2</sub>).
 
-Given sufficient collision resistance of the digest Operator, the digest of an ordered concatenation is not subject to a birthday attack on its concatenated elements [@BDC][@BDay][@QCHC][@HCR][@Hash].
+Given sufficient collision resistance of the digest Operator, the digest of an ordered concatenation is not subject to a birthday attack on its concatenated elements [[ref: BDC][[ref: BDay][[ref: QCHC][[ref: HCR][[ref: Hash]].
 
 In compact form, the value of the selectively disclosable top-level Attribute section, `A`, field is set to the aggregated value ‘A’. This aggregate ‘A’ makes a blinded cryptographic commitment to the all the ordered elements in the list,
 
@@ -3548,21 +3548,21 @@ verifying the provided signature(s) of the Issuee on the provided top-level SAID
 
 The last 3 steps that culminate with verifying the signature(s) require determining the Key state of the Issuer at the time of issuance.  Therefore, this may require additional verification steps as per the KERI, PTEL, and CESR-Proof protocols.
 
-A private selectively disclosable ACDC provides significant correlation minimization because a Discloser may use a metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain-link confidentiality expressed in the rule section [@CLC]. Thus, only malicious Disclosees who violate Chain-link confidentiality may correlate between presentations of a given private selectively disclosable ACDC. Nonetheless, the malicious Disclosees are not able to discover any undisclosed attributes.
+A private selectively disclosable ACDC provides significant correlation minimization because a Discloser may use a metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain-link confidentiality expressed in the rule section [[ref: CLC]]. Thus, only malicious Disclosees who violate Chain-link confidentiality may correlate between presentations of a given private selectively disclosable ACDC. Nonetheless, the malicious Disclosees are not able to discover any undisclosed attributes.
 
 #### Inclusion proof via Merkle tree root digest
 
-The inclusion proof via aggregated list may be somewhat verbose when there are a large number of attribute blocks in the selectively disclosable Attribute section. A more efficient approach is to create a Merkle tree of the attribute block digests and let the aggregate, ‘A’, be the Merkle tree root digest [@Mrkl]. Specifically, set the value of the top-level selectively disclosable attribute section, `A`, field to the aggregate, ‘A’ whose value is the Merkle tree root digest [@Mrkl].
+The inclusion proof via aggregated list may be somewhat verbose when there are a large number of attribute blocks in the selectively disclosable Attribute section. A more efficient approach is to create a Merkle tree of the attribute block digests and let the aggregate, ‘A’, be the Merkle tree root digest [[ref: Mrkl]. Specifically, set the value of the top-level selectively disclosable attribute section, `A`, field to the aggregate, ‘A’ whose value is the Merkle tree root digest [[ref: Mrkl].
 
-The Merkle tree needs to have appropriate second-pre-image attack protection of interior branch nodes [@TwoPI][@MTSec]. The Discloser then only needs to provide a subset of digests from the Merkle tree to prove that a given digest, a<sub>j</sub> contributed to the Merkle tree root digest, ‘A. For ACDCs with a small number of attributes, the added complexity of the Merkle tree approach may not be worth the savings in verbosity.
+The Merkle tree needs to have appropriate second-pre-image attack protection of interior branch nodes [[ref: TwoPI][[ref: MTSec]. The Discloser then only needs to provide a subset of digests from the Merkle tree to prove that a given digest, a<sub>j</sub> contributed to the Merkle tree root digest, ‘A. For ACDCs with a small number of attributes, the added complexity of the Merkle tree approach may not be worth the savings in verbosity.
 
 #### Hierarchical derivation at issuance of selectively disclosable attribute ACDCs
 
-The amount of data transferred between the Issuer and Issuee (or recipient in the case of an Untargeted ACDC) at issuance of a selectively disclosable attribute ACDC may be minimized by using a hierarchical deterministic derivation function to derive the value of the UUDI, `u`, fields from a shared secret salt [@Salt].
+The amount of data transferred between the Issuer and Issuee (or recipient in the case of an Untargeted ACDC) at issuance of a selectively disclosable attribute ACDC may be minimized by using a hierarchical deterministic derivation function to derive the value of the UUDI, `u`, fields from a shared secret salt [[ref: Salt].
 
-There are several ways that the Issuer may securely share that secret salt. Given that an Ed25519 key pair(s) controls each of the Issuer and Issuee AIDs, (or recipient AID in the case of an Untargeted ACDC), a corresponding X15519 asymmetric encryption Key pair(s) may be derived from each controlling Ed25519 key pair(s) [@EdSC][@PSEd][@TMEd][@SKEM]. An X25519 public key may be derived securely from an Ed25519 public key [@KeyEx][@SKEM]. Likewise, an X25519 private key may be derived securely from an Ed25519 private key [@KeyEx][@SKEM].
+There are several ways that the Issuer may securely share that secret salt. Given that an Ed25519 key pair(s) controls each of the Issuer and Issuee AIDs, (or recipient AID in the case of an Untargeted ACDC), a corresponding X15519 asymmetric encryption Key pair(s) may be derived from each controlling Ed25519 key pair(s) [[ref: EdSC][[ref: PSEd][[ref: TMEd][[ref: SKEM]. An X25519 public key may be derived securely from an Ed25519 public key [[ref: KeyEx][[ref: SKEM]. Likewise, an X25519 private key may be derived securely from an Ed25519 private key [[ref: KeyEx][[ref: SKEM].
 
-In an interactive approach, the Issuer derives a public asymmetric X25519 encryption key from the Issuee's published Ed25519 public key and the Issuee derives a public asymmetric X25519 encryption key from the Issuer's published Ed25519 public key. The two then interact via a Diffie-Hellman (DH) key exchange to create a shared symmetric encryption key [@KeyEx][@DHKE]. The shared symmetric encryption key may be used to encrypt the secret salt or the shared symmetric encryption key itself may be used has high entropy cryptographic material from which the secret salt may be derived.
+In an interactive approach, the Issuer derives a public asymmetric X25519 encryption key from the Issuee's published Ed25519 public key and the Issuee derives a public asymmetric X25519 encryption key from the Issuer's published Ed25519 public key. The two then interact via a Diffie-Hellman (DH) key exchange to create a shared symmetric encryption key [[ref: KeyEx][[ref: DHKE]. The shared symmetric encryption key may be used to encrypt the secret salt or the shared symmetric encryption key itself may be used has high entropy cryptographic material from which the secret salt may be derived.
 
 In a non-interactive approach, the Issuer derives an X25519 asymmetric public encryption key from the Issuee's (recipient's) public Ed25519 public key. The Issuer then encrypts the secret salt with that public asymmetric encryption key and signs the encryption with the Issuer's private Ed25519 signing key. This is transmitted to the Issuee, who verifies the signature and decrypts the secret salt using the private X25519 decryption key derived from the Issuee's private Ed25519 key. This non-interactive approach is more scalable for AIDs that are controlled with a multi-sig group of signing keys. The Issuer can broadcast to all members of the Issuee's (or recipient's) multi-sig signing group individually asymmetrically encrypted and signed copies of then may be derived. Likewise, both compact and uncompacted versions of the ACDC then may be generated. The derivation path for the top-level UUID, `u`, field (for private ACDCS), is the string "0" and derivation path the zeroth indexed attribute in the attributes array is the string ‘0/0’. Likewise, the next attribute's derivation path is the string ‘0/1’ and so forth.
 
@@ -3579,17 +3579,17 @@ For example, the Issuee could use one copy of a bulk-issued private ACDC per pre
 This is about permissioned correlation. Any Verifier that has received a complete presentation of a private ACDC has access to all the fields disclosed by the presentation but the terms of the Chain-link confidentiality agreement may forbid sharing those field values outside a given context. Thus, an Issuee may use a combination of bulk-issued ACDCs with Chain-link confidentiality to control permissioned correlation of the contents of an ACDC while allowing the SAID of the ACDC to be more public. The SAID of a private ACDC does not expose the ACDC contents to an unpermissioned Third-party. Unique SAIDs belonging to bulk issued ACDCs prevent Third-parties from making a provable correlation between ACDCs via their SAIDs in spite of those SAIDs being public. This does not stop malicious Verifiers (as Second-
 -parties) from colluding and correlating against the disclosed fields, but it does limit provable correlation to the information disclosed to a given group of malicious colluding Verifiers. To restate, unique SAIDs per copy of a set of private bulk issued ACDC prevent unpermissioned Third-parties from making provable correlations, in spite of those SAIDs being public, unless they collude with malicious Verifiers (Second-parties).
 
-In some applications, Chain-link-confidentiality is insufficient to deter unpermissioned correlation. Some Verifiers may be malicious with sufficient malicious incentives to overcome whatever counter incentives the terms of the contractual Chain-link confidentiality may impose. In these cases, more aggressive technological anti-correlation mechanisms such as bulk issued ACDCs may be useful. To elaborate, in spite of the fact that Chain-link confidentiality terms of use may forbid such malicious correlation, making such correlation more difficult technically may provide better protection than Chain-link confidentiality alone [@CLC].
+In some applications, Chain-link-confidentiality is insufficient to deter unpermissioned correlation. Some Verifiers may be malicious with sufficient malicious incentives to overcome whatever counter incentives the terms of the contractual Chain-link confidentiality may impose. In these cases, more aggressive technological anti-correlation mechanisms such as bulk issued ACDCs may be useful. To elaborate, in spite of the fact that Chain-link confidentiality terms of use may forbid such malicious correlation, making such correlation more difficult technically may provide better protection than Chain-link confidentiality alone [[ref: CLC]].
 
 It is important to note that any group of colluding malicious Verifiers always may make a statistical correlation between presentations despite technical barriers to cryptographically provable correlation. This is called contextual linkability. In general, there is no cryptographic mechanism that precludes statistical correlation among a set of colluding Verifiers because they may make cryptographically unverifiable or unprovable assertions about information presented to them that may be proven as likely true using merely statistical correlation techniques. Linkability, due the context of the disclosure itself, may defeat any unlinkability guarantees of a cryptographic technique. Thus, without contractually protected disclosure, contextual linkability in spite of cryptographic unlinkability may make the complexity of using advanced cryptographic mechanisms to provide unlinkability an exercise in diminishing returns.
 
 #### Basic bulk issuance proceedure
 
-The amount of data transferred between the Issuer and Issuee (or recipient of an untargeted ACDC) at issuance of a set of bulk issued ACDCs may be minimized by using a hierarchical deterministic derivation function to derive the value of the UUID, `u`, fields from a shared secret salt [@Salt].
+The amount of data transferred between the Issuer and Issuee (or recipient of an untargeted ACDC) at issuance of a set of bulk issued ACDCs may be minimized by using a hierarchical deterministic derivation function to derive the value of the UUID, `u`, fields from a shared secret salt [[ref: Salt]].
 
-As described above, there are several ways that the Issuer may share a secret salt securely. Given that the Issuer and Issuee (or recipient for Untargeted ACDCs) AIDs are each controlled by an Ed25519 key pair(s), a corresponding X15519 asymmetric encryption key pair(s) may be derived from the controlling Ed25519 key pair(s) [@EdSC][@PSEd][@TMEd]. An X25519 public key may be securely derived from an Ed25519 public key [@KeyEx][@SKEM]. Likewise, an X25519 private key may be securely derived from an Ed25519 private key [@KeyEx][@SKEM].
+As described above, there are several ways that the Issuer may share a secret salt securely. Given that the Issuer and Issuee (or recipient for Untargeted ACDCs) AIDs are each controlled by an Ed25519 key pair(s), a corresponding X15519 asymmetric encryption key pair(s) may be derived from the controlling Ed25519 key pair(s) [[ref: EdSC]][[ref: PSEd]][[ref: TMEd]]. An X25519 public key may be securely derived from an Ed25519 public key [[ref: KeyEx]][[ref: SKEM]]. Likewise, an X25519 private key may be securely derived from an Ed25519 private key [[ref: KeyEx]][[ref: SKEM]].
 
-In an interactive approach, the Issuer derives a public asymmetric X25519 encryption key from the Issuee's published Ed25519 public key and the Issuee derives a public asymmetric X25519 encryption key from the Issuer's published Ed25519 public key. The two then interact via a Diffie-Hellman (DH) key exchange to create a shared symmetric encryption key [@KeyEx][@DHKE]. The shared symmetric encryption key may be used to encrypt the secret salt or the shared symmetric encryption key itself may be used has high entropy cryptographic material from which the secret salt may be derived.
+In an interactive approach, the Issuer derives a public asymmetric X25519 encryption key from the Issuee's published Ed25519 public key and the Issuee derives a public asymmetric X25519 encryption key from the Issuer's published Ed25519 public key. The two then interact via a Diffie-Hellman (DH) key exchange to create a shared symmetric encryption key [[ref: KeyEx]][[ref: DHKE]]. The shared symmetric encryption key may be used to encrypt the secret salt or the shared symmetric encryption key itself may be used has high entropy cryptographic material from which the secret salt may be derived.
 
 In a non-interactive approach, the Issuer derives an X25519 asymmetric public encryption key from the Issuee's (or recipient's) public Ed25519 public key. The Issuer then encrypts the secret salt with that public asymmetric encryption key and signs the encryption with the Issuer's private Ed25519 signing key. This is transmitted to the Issuee, who verifies the signature and decrypts the secret salt using the private X25519 decryption key derived from the Issuee's private Ed25519 key. This non-interactive approach is more scalable for AIDs that are controlled with a multi-sig group of signing keys. The Issuer can broadcast to all members of the Issuee's (or recipient's) multi-sig signing group individually asymmetrically encrypted and signed copies of the secret salt.
 
@@ -3610,7 +3610,7 @@ Suppose there are ‘M’ ACDCs in a bulk issued set. Using zero-based indexing 
 Let c<sub>k</sub> = v<sub>k</sub> + d<sub>k</sub> denote the blinding concatenation where ‘+’ is the infix concatenation operator.
 Then the blinded digest, b<sub>k</sub>, is given by,
 b<sub>k</sub> = H(c<sub>k</sub>) = H(v<sub>k</sub> + d<sub>k</sub>),
-where H is the digest operator. Blinding is performed by a digest of the concatenation of the binding factor, v<sub>k</sub>, with the SAID, d<sub>k</sub> instead of XORing the two. An XOR of two elements whose bit count is much greater than 2 is not vulnerable to a birthday table attack [@BDay][@DRB][@BDC]. In order to XOR, however, the two must be of the same length. Different SAIDs MAY be of different lengths, however, and therefore, may require different length blinding factors. Because concatenation is length independent it is simpler to implement.
+where H is the digest operator. Blinding is performed by a digest of the concatenation of the binding factor, v<sub>k</sub>, with the SAID, d<sub>k</sub> instead of XORing the two. An XOR of two elements whose bit count is much greater than 2 is not vulnerable to a birthday table attack [[ref: BDay]] [[ref: DRB]] [[ref: BDC]]. In order to XOR, however, the two must be of the same length. Different SAIDs MAY be of different lengths, however, and therefore, may require different length blinding factors. Because concatenation is length independent it is simpler to implement.
 
 The aggregation of blinded digests, ‘B’, is given by,
 B = H(C(b<sub>k</sub> for all k in \{0, ..., M-1\})),
@@ -3618,7 +3618,7 @@ where ‘C’ is the concatenation Operator and ‘H’ is the digest Operator. 
 
 The aggregate, ‘B’, makes a blinded cryptographic commitment to the ordered elements in the li’t \[b<sub>0</sub>, b<sub>1</sub>, ...., b<sub>M-1</sub>\] A commitment to ‘B’ is a commitment to all the b<sub>k</sub> and hence all the d<sub>k</sub>.
 
-Given sufficient collision resistance of the digest Operator, the digest of an ordered concatenation is not subject to a birthday attack on its concatenated elements [@BDC][@BDay][@QCHC][@HCR][@Hash].
+Given sufficient collision resistance of the digest Operator, the digest of an ordered concatenation is not subject to a birthday attack on its concatenated elements [[ref: BDC]][[ref: BDay]][[ref: QCHC]][[ref: HCR]][[ref: Hash]].
 
 Disclosure of any given b<sub>k</sub> element does not expose or disclose any discoverable information detail about either the SAID of its associated ACDC or any other ACDC's SAID. Therefore, the full list of b<sub>k</sub> elements can be disclosed safely without exposing the blinded bulk issued SAID values, d<sub>k</sub>.
 
@@ -3661,9 +3661,9 @@ The requirement of an anchored issuance proof seal of the aggregate ‘B’ mean
 
 #### Inclusion proof via Merkle tree 
 
-The inclusion proof via aggregated list may be somewhat verbose when there are a very large number of bulk-issued ACDCs in a given set. A more efficient approach is to create a Merkle tree of the blinded SAID digests, b<sub>k</sub> and set the aggregate ‘B’ value as the Merkle tree root digest [@Mrkl].
+The inclusion proof via aggregated list may be somewhat verbose when there are a very large number of bulk-issued ACDCs in a given set. A more efficient approach is to create a Merkle tree of the blinded SAID digests, b<sub>k</sub> and set the aggregate ‘B’ value as the Merkle tree root digest [[ref: Mrkl]].
 
-The Merkle tree needs to have appropriate second-pre-image attack protection of interior branch nodes [@TwoPI][@MTSec]. The Discloser then only needs to provide a subset of digests from the Merkle tree to prove that a given digest, b<sub>k</sub> contributed to the Merkle tree root digest. For a small-numbered bulk-issued set of ACDCs, the added complexity of the Merkle tree approach may not be worth the savings in verbosity.
+The Merkle tree needs to have appropriate second-pre-image attack protection of interior branch nodes [[ref: TwoPI]][[ref: MTSec]]. The Discloser then only needs to provide a subset of digests from the Merkle tree to prove that a given digest, b<sub>k</sub> contributed to the Merkle tree root digest. For a small-numbered bulk-issued set of ACDCs, the added complexity of the Merkle tree approach may not be worth the savings in verbosity.
 
 #### Bulk issuance of private ACDCs with unique issuee AIDs 
 
@@ -4321,10 +4321,286 @@ Composed schema that supports both public compact and uncompacted variants
 
 [//]: # (Performance and Scalability {#sec:annexA .informative})
 
-
-
 [//]: # (\newpage)
 
 [//]: # (\makebibliography)
 
 [//]: # (# Bibliography)
+
+[[def: Composable Event Streaming Representation, CESR]]
+
+~ https://github.com/trustoverip/tswg-acdc-specification
+
+[[def: Key Event Receipt Infrastructure, KERI]]
+
+~ https://github.com/trustoverip/tswg-keri-specification
+
+[[def: Self-Addressing IDentifier, SAID]]
+
+~ https://github.com/trustoverip/tswg-cesr-specification
+
+[[def: Out-Of-Band-Introduction, OOBI]]
+
+~ https://github.com/trustoverip/tswg-keri-specification
+
+[[def: DIDK_ID, IETF DID-KERI Internet Draft]]
+
+~ https://github.com/WebOfTrust/ietf-did-keri
+
+[[def: RFC6901, JavaScript Object Notation (JSON) Pointer]]
+
+~ https://datatracker.ietf.org/doc/html/rfc6901
+
+[[def: JSON, JavaScript Object Notation Delimeters]]
+
+~ https://www.json.org/json-en.html
+
+[[def: RFC8259, JSON (JavaScript Object Notation)]]
+
+~ https://datatracker.ietf.org/doc/html/rfc8259
+
+[[def: RFC4627, The application/json Media Type for JavaScript Object Notation (JSON)]]
+
+~ https://datatracker.ietf.org/doc/rfc4627/
+
+[[def: JSch, JSON Schema]]
+
+~ https://json-schema.org
+
+[[def: JSch_202012, JSON Schema 2020-12]]
+
+~ https://json-schema.org/draft/2020-12/release-notes.html
+
+[[def: CBOR, CBOR Mapping Object Codes]]
+
+~ https://en.wikipedia.org/wiki/CBOR
+
+[[def: RFC8949, Concise Binary Object Representation (CBOR)]]
+
+~ https://datatracker.ietf.org/doc/rfc8949/
+
+[[def: MGPK, Msgpack Mapping Object Codes]]
+
+~ https://github.com/msgpack/msgpack/blob/master/spec.md
+
+[[def: RFC3986, Uniform Resource Identifier (URI): Generic Syntax]]
+
+~ https://datatracker.ietf.org/doc/html/rfc3986
+
+[[def: RFC8820, URI Design and Ownership]]
+
+~ https://datatracker.ietf.org/doc/html/rfc8820
+
+[[def: ACDC_WP, Authentic Chained Data Containers (ACDC) White Paper]]
+
+~ https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/ACDC.web.pdf
+
+[[def: VCEnh, VC Spec Enhancement Strategy Proposal]]
+
+~ https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/VC_Enhancement_Strategy.md
+
+[[def: ACDC_TF, ACDC (Authentic Chained Data Container) Task Force]]
+
+~ https://wiki.trustoverip.org/display/HOME/ACDC+%28Authentic+Chained+Data+Container%29+Task+Force
+
+[[def: TOIP, Trust Over IP (ToIP) Foundation]]
+
+~ https://trustoverip.org
+
+[[def: IETF, Internet Engineering Task Force]]
+
+~ https://www.ietf.org
+
+[[def: KERI, Key Event Receipt Infrastructure (KERI)]]
+
+~ https://arxiv.org/abs/1907.02143
+
+[[def: ITPS, Information-Theoretic and Perfect Security]]
+
+~ https://en.wikipedia.org/wiki/Information-theoretic_security
+
+[[def: OTP, One-Time-Pad]]
+
+~ https://en.wikipedia.org/wiki/One-time_pad
+
+[[def: VCphr, Vernom Cipher (OTP)]]
+
+~ https://www.ciphermachinesandcryptology.com/en/onetimepad.htm
+
+[[def: SSplt, Secret Splitting]]
+
+~ https://www.ciphermachinesandcryptology.com/en/secretsplitting.htm
+
+[[def: SShr, Secret Sharing]]
+
+~ https://en.wikipedia.org/wiki/Secret_sharing
+
+[[def: CSPRNG, Cryptographically-secure pseudorandom number generator (CSPRNG)]]
+
+~ https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator
+
+[[def: IThry, Information Theory]]
+
+~ https://en.wikipedia.org/wiki/Information_theory
+
+[[def: CAcc, Cryptographic Accumulator]]
+
+~ https://en.wikipedia.org/wiki/Accumulator_(cryptography)
+
+[[def: XORA, XORA (XORed Accumulator)]]
+
+~ https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/XORA.md
+
+[[def: GLEIF, GLEIF (Global Legal Entity Identifier Foundation)]]
+
+~ https://www.gleif.org/en/
+
+[[def: vLEI, vLEI (verifiable Legal Entity Identifier) Definition]]
+
+~ https://github.com/WebOfTrust/vLEI
+
+[[def: GLEIF_vLEI, GLEIF vLEI (verifiable Legal Entity Identifier)]]
+
+~ https://www.gleif.org/en/lei-solutions/gleifs-digital-strategy-for-the-lei/introducing-the-verifiable-lei-vlei
+
+[[def: GLEIF_KERI, GLEIF with KERI Architecture]]
+
+~ https://github.com/WebOfTrust/vLEI
+
+[[def: W3C_VC, W3C Verifiable Credentials Data Model v1.1]]
+
+~ https://www.w3.org/TR/vc-data-model/
+
+[[def: W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0]]
+
+~ https://w3c-ccg.github.io/did-spec/
+
+[[def: Salt, Salts, Nonces, and Initial Values]]
+
+~ https://medium.com/@fridakahsas/salt-nonces-and-ivs-whats-the-difference-d7a44724a447
+
+[[def: RB, Rainbow Table]]
+
+~ https://en.wikipedia.org/wiki/Rainbow_table
+
+[[def: DRB, Dictionary Attacks, Rainbow Table Attacks and how Password Salting defends against them]]
+
+~ https://www.commonlounge.com/discussion/2ee3f431a19e4deabe4aa30b43710aa7
+
+[[def: BDay, Birthday Attack]]
+
+~ https://en.wikipedia.org/wiki/Birthday_attack
+
+[[def: BDC, Birthday Attacks, Collisions, And Password Strength]]
+
+~ https://auth0.com/blog/birthday-attacks-collisions-and-password-strength/
+
+[[def: HCR, Hash Collision Resistance]]
+
+~ https://en.wikipedia.org/wiki/Collision_resistance
+
+[[def: QCHC, Cost analysis of hash collisions: Will quantum computers make SHARCS obsolete?]]
+
+~ https://cr.yp.to/hash/collisioncost-20090823.pdf
+
+[[def: EdSC, The Provable Security of Ed25519: Theory and Practice Report]]
+
+~ https://eprint.iacr.org/2020/823
+
+[[def: PSEd, The Provable Security of Ed25519: Theory and Practice]]
+
+~ https://ieeexplore.ieee.org/document/9519456?denied=
+
+[[def: TMEd, Taming the many EdDSAs]]
+
+~ https://eprint.iacr.org/2020/1244.pdf
+
+[[def: JSchCp, Schema Composition in JSON Schema]]
+
+~ https://json-schema.org/understanding-json-schema/reference/combining.html
+
+[[def: JSchRE, Regular Expressions in JSON Schema]]
+
+~ https://json-schema.org/understanding-json-schema/reference/regular_expressions.html
+
+[[def: JSchId, JSON Schema Identification]]
+
+~ https://json-schema.org/understanding-json-schema/structuring.html#schema-identification
+
+[[def: JSchCx, Complex JSON Schema Structuring]]
+
+~ https://json-schema.org/understanding-json-schema/structuring.html#base-uri
+
+[[def: RC, Ricardian Contract]]
+
+~ https://en.wikipedia.org/wiki/Ricardian_contract
+
+[[def: CLC, Chain-Link Confidentiality]]
+
+~ https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2045818
+
+[[def: DHKE, Diffie-Hellman Key Exchange]]
+
+~ https://www.infoworld.com/article/3647751/understand-diffie-hellman-key-exchange.html
+
+[[def: KeyEx, Key Exchange]]
+
+~ https://libsodium.gitbook.io/doc/key_exchange
+
+[[def: IDSys, Identity System Essentials]]
+
+~ https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/Identity-System-Essentials.pdf
+
+[[def: Hash, Cryptographic Hash Function]]
+
+~ https://en.wikipedia.org/wiki/Cryptographic_hash_function
+
+[[def: Mrkl, Merkle Tree]]
+
+~ https://en.wikipedia.org/wiki/Merkle_tree
+
+[[def: TwoPI, Second Pre-image Attack on Merkle Trees]]
+
+~ https://flawed.net.nz/2018/02/21/attacking-merkle-trees-with-a-second-preimage-attack/
+
+[[def: MTSec, Merkle Tree Security]]
+
+~ https://blog.enuma.io/update/2019/06/10/merkle-trees-not-that-simple.html
+
+[[def: DSig, Digital Signature]]
+
+~ https://en.wikipedia.org/wiki/Digital_signature
+
+[[def: Level, Security Level]]
+
+~ https://en.wikipedia.org/wiki/Security_level
+
+[[def: Twin, Digital Twin]]
+
+~ https://en.wikipedia.org/wiki/Digital_twin
+
+[[def: TMal, Transaction Malleability]]
+
+~ https://en.wikipedia.org/wiki/Transaction_malleability_problem
+
+[[def: PGM, The Property Graph Database Model]]
+
+~ http://ceur-ws.org/Vol-2100/paper26.pdf
+
+[[def: Dots, Constructions from Dots and Lines]]
+
+~ https://arxiv.org/pdf/1006.2361.pdf
+
+[[def: KG, Knowledge Graphs]]
+
+~ https://arxiv.org/pdf/2003.02320.pdf
+
+[[def: Abuse, Alice Attempts to Abuse a Verifiable Credential]]
+
+~ https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/final-documents/alice-attempts-abuse-verifiable-credential.md
+
+[[def: SKEM, On using the same key pair for Ed25519 and an X25519 based KEM]]
+
+~ https://eprint.iacr.org/2021/509
+
+[[spec]]
