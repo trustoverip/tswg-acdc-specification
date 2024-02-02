@@ -3657,6 +3657,31 @@ Python dict of compact ACDC with message type, `t` field.
 }
 ```
 
+#### ACDC message as top-level field map in CESR native format
+
+When an ACDC message appears in CESR native format as a top-level field it shall use either of the CESR count codes, `-G##` or  `-0G#####` at the top-level. The top-level fields (labels and values) that appear shall appear in the following order: `[ v, t, d, u, i, rd, s, a, A, e, r]`. The required fields are `[v, t, d, i, s]`. The rules for the appearance of optional fields are the same as those defined above for the other serialization kinds. The major difference here is that the Version field value is a CESR primitive that provides the protocol type and the version. It does not provide a serialization kind or length. This is already indicated by the count code, `-G##` or  `-0G#####`.
+
+#####  Compact Private ACDC with top-level field map in CESR native format
+
+For clarity the first column provides the equivalent label value for the other serialization kinds (JSON, CBOR, MGPK). The actual label is the CESR encoded label in the second column.
+
+| Field Label | Label Value| Field or Count Value  | Description |
+|:--------:|:--------:|:-------|:------|
+| NA |  NA | `-G##` or `-0G#####` | Count code for CESR native  top-level field map signable message |
+| `v` | `0J_v` | `YACDCBAA` | Protocol Version primitive (ACDC 2.00) |
+| `t` | `0J_t` | `Xacd` | Message type primitive |
+| `d` |  `0J_d` |`EGgbiglDXNE0GC4NQq-hiB5xhHKXBxkiojgBabiu_JCk` | SAID of ACDC packet  |
+| `u` |  `0J_u` |`0AGC4NQq-hiB5xhHKXBxkiK` | UUID (salt) of ACDC packet  |
+| `i` |  `0J_i` |`EBabiu_JCkE0GbiglDXNB5C4NQq-hiGgxhHKXBxkiojg` | AID of issuer of ACDC |
+| `rd` |  `0Krd` |`ECkE0GbiglDXNB5C4NQq-hiGgxhHKXBxkiojgBabiu_J` | SAID of revocation registry for ACDC |
+| `s` |  `0J_s` |`EDXNB5C4NQq-hiGgxhHKXBxkiojgBabiu_JCkE0Gbigl` | SAID of schema section of ACDC packet  |
+| `a` |   `0J_a` |`EC4NQq-hiGgbiglDXNB5xhHKXBxkiojgBabiu_JCkE0G` | SAID of schema of attribute section of ACDC packet |
+| `e` |  `0J_e` |`EFXBxkiojgBabiu_JCkE0GC4NQq-hiGgbiglDXNB5xhH` | SAID of schema of edge section of ACDC packet |
+| `r` |  `0J_r` |`EMiGgbiglDXNB5xhHFXBxkiojgBabiu_JCkE0GC4NQq-` | SAID of schema of rule section ACDC packet |
+
+
+
+
 #### Section message fields
 
 | Label | Title | Description |
