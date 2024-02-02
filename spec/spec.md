@@ -671,7 +671,16 @@ The following field labels are reserved at all nested field map levels in the At
 |:-:|:--|:--|
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
-|`i`| Identifier (AID)| Context dependent AID as determined by its enclosing map such as Issuee identifier. |
+|`i`| Identifier (AID)| Context-dependent AID as determined by its enclosing map such as Issuee identifier. |
+|`dt`| issuer relative ISO date/time string |
+
+##### Datetime, `dt` field
+The datetime, `dt` field value, if any, shall be the ISO-8601 datetime string with microseconds and UTC offset as per IETF RFC-3339. This datetime is relative to the clock of the issuer. Attributes typically include one or more date time fields. In a given field map (block) the primary datetime will use the label, `dt`. Typically, this is the datetime of the issuance of the ACDC. Other datetime fields may include an expiration datetime or the like.
+
+ An example datetime string in this format is as follows:
+
+`2020-08-22T17:50:09.988921+00:00`
+
 
 #### Compact attribute section schema
 
@@ -2887,10 +2896,9 @@ The expanded attribute block has the following fields:
 |---|---|---|
 |d| attribute block SAID |
 |u| UUID salty nonce blinding factor, random or HD generated |
-|cd| container/credential SAID of ACDC or ACDC bulk aggregate when bulk-issued | 
 |ts| transaction state value string | 
 
-The fields shall appear in the following order `[d, u, cd, ts]`. When used in private (blinded) mode, all are required. When used in public (unblinded) mode, the SAID, `d` field is optional, the UUID, `u` field is not allowed, but both the container SAID, `cd` and transaction state, `ts` fields are required.
+The fields shall appear in the following order `[d, u, ts]`. When used in private (blinded) mode, all are required. When used in public (unblinded) mode, the SAID, `d` field is optional, the UUID, `u` field is not allowed, the transaction state, `ts` field is required.
 
 ##### SAID, `d` field
 
@@ -2902,18 +2910,13 @@ The UUID, `u` field value shall be a cryptographic strength salty-nonce with app
 
 When the UUID, `u`, is derived from a shared secret salt and a public path such as the sequence number using a hierarchically deterministic derivation algorithm, and given that the possible state values are finite small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event.
 
-##### Container SAID, `cd` field
-
-The container SAID, `cd` field value shall be the SAID of the associated ACDC or the SAID of the bulk aggregate of a bulk-issued set of ACDCs (whichever applies). The container SAID, `cd` field value binds an ACDC or bulk-issued set of ACDCs to the Registry state.  
-
 ##### Transaction state, `ts` field
 
 The transaction state, `ts` field value shall be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
 
-
 #### Private (blinded) state registry example
 
-Consider a blindable state revocation registry for ACDCs operated in blinded (private) mode. The transaction state can be one of two values, `issued`, or `revoked`. In this case, placeholder values of the empty, `` string for transaction state, `ts` and container SAID, `cd` fields are also employed to decorrelate the initialization.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+Consider a blindable state revocation registry for ACDCs operated in blinded (private) mode. The transaction state can be one of two values, `issued`, or `revoked`. In this case, the placeholder value of the empty, `` string for transaction state, `ts` field is also employed to decorrelate the initialization.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
 
 ```json
 {
@@ -2950,13 +2953,12 @@ The associated expanded attribute block is as follows:
 {
  "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
  "u": "ZHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "cd": "",
  "ts": ""
 }
 ```
-Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. In this case, the value of the container SAID, `cd` field, and transaction state, `ts` fields are just empty strings as placeholder values. The transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. This makes the first use(s) of the registry uncorrelated to the actual issuance of the real ACDC. 
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. In this case, the value of the transaction state, the `ts` field, is just an empty string as a placeholder value. The transaction state may not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. This makes the first use(s) of the registry uncorrelated to the actual issuance of the real ACDC. 
 
-Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `d` field must be either the empty string placeholder or the real ACDC SAID. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
+Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `d` field must be either the empty string placeholder or the real ACDC SAID. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder value of the `ts` field or with one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
 
 Sometime later, the real ACDC is issued as indicated by its SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the registry inception, `rip` event. This binds the ACDC to the Registry.
 
@@ -2981,12 +2983,11 @@ The associated expanded attribute block is as follows:
 {
  "d": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-",
  "u": "ZIZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL",
- "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
  "ts": "issued"
 }
 ```
 
-Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Notice further that in this case, the value of the container SAID, `cd` field is the real value of the ACDC, and the value of the transaction state, `ts` field is `issued` (not placeholder).  Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows which ACDC it wishes to disclose so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder values of `cd` and `ts` fields or with the real ACDC SAID for the `cd` field and one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then disclose the matching expanded attribute block to the Disclosee, who can verify it against the published transaction event.
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Notice further that in this case, the value of the transaction state, `ts` field is `issued` (not the empty placeholder).  Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The discloser also knows which ACDC it wishes to disclose so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded attribute block for either the empty placeholder value  or with one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event attribute, `a` field value. The Discloser can then disclose the matching expanded attribute block to the Disclosee, who can verify it against the published transaction event.
 
 The Discloser can then instruct the Issuer to issue one or more updates with new blinding factors so that the initial Disclosee may no longer validate the state of the ACDC without another interactive disclosure by the Discloser.
 
@@ -3011,7 +3012,6 @@ The associated expanded attribute block is as follows:
 {
  "d": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI",
  "u": "ZNoRxCJp2wIGM9u2Edk-PLIZ1H4zpq06UecHwzy-K9Fp",
- "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
  "ts": "revoked"
 }
 ```
@@ -3058,7 +3058,6 @@ The associated expanded attribute block is as follows:
 ```json
 {
  "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
  "ts": "issued"
 }
 ```
@@ -3085,7 +3084,6 @@ The associated expanded attribute block is as follows:
 ```json
 {
  "d": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI",
- "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
  "ts": "revoked"
 }
 ```
@@ -3123,9 +3121,8 @@ The state is initialized with the following simple update event:
  "dt": "2024-06-01T05:01:42.660407+00:00",
  "a": 
  {
-   "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
    "ts": "issued"
-  }
+ }
 }
 ```
 
@@ -3144,18 +3141,11 @@ Sometime later, the ACDC is revoked with the publication by the Issuer of the fo
  "dt": "2024-07-04T05:01:42.660407+00:00",
  "a": 
  {
-   "cd": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
    "ts": "revoked"
  }
 }
 ```
 
-
-### Transfer Registry
-
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/34
-:::
 
 ## Annex
 
