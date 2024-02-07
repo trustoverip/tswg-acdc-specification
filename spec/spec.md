@@ -104,7 +104,7 @@ IN NO EVENT WILL ANY ToIP PARTY BE LIABLE TO ANY OTHER PARTY FOR LOST PROFITS OR
 
 ## Scope
 
-narrow scope here
+Implementation design of a protocol-based data container specification that enables secure attribution of data within the container to a cryptographically derived identifier using the KERI and CESR protocols. This makes the containers authenticatable. Containers may be chained together using cryptographic digests to form a verifiable extensible graph data structure. This makes the containers chainable. There is no reliance on trusted third parties.  The application scope includes any electronically transmitted information. The implementation dependency scope assumes CESR and KERI. 
 
 ## Normative references
 
