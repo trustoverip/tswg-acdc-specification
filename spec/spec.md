@@ -297,7 +297,7 @@ The following table defines the top-level fields in an ACDC and their order of a
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: ACDCvvSSSShhhhhh_ that provides protocol type, version, serialization type, size, and terminator. |
+|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.` that provides protocol type, version, serialization type, size, and terminator. |
 |`d`| Digest ([[3]]) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
 |`i`| Issuer Identifier ([[ref: AID]])| Autonomic Identifier whose control authority is established via KERI verifiable Key State. |
@@ -1328,7 +1328,7 @@ Issued by Amy:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
   "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
@@ -1344,7 +1344,7 @@ Issued by Bob:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "d":  "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK",
@@ -1359,7 +1359,7 @@ Issued by Cat:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "d":  "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
   "u":  "0ADAE0qHcgNghkDaG7OY1wja",
   "i":  "EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E",
@@ -1374,7 +1374,7 @@ Issued by Dug:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
   "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
@@ -1601,7 +1601,7 @@ Issued by Amy:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "d":  "EHdSXCJnBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3g",
   "u":  "0ADaG7OY1wjaDAE0qHcgNghk",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
@@ -1851,7 +1851,7 @@ Issued by Amy:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
@@ -2124,7 +2124,7 @@ Issued by Amy:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
@@ -2388,7 +2388,7 @@ Issued by Amy:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
   "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
   "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
@@ -2958,7 +2958,7 @@ Consider a blindable state revocation registry for ACDCs operated in blinded (pr
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "rip",
  "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
  "u": "0AHcgNghkDaG7OY1wjaDAE0q",
@@ -2974,7 +2974,7 @@ The state is initialized with decorrelated placeholder values with the issuance 
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "upd",
  "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
  "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
@@ -3009,7 +3009,7 @@ Suppose the associated update event occurs at sequence number 5. The published t
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "upd",
  "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
  "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
@@ -3038,7 +3038,7 @@ Suppose at some later time, a Validator requires that the Discloser provide cont
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "upd",
  "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
  "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
@@ -3067,7 +3067,7 @@ Consider a blindable state revocation Registry for ACDCs operated in an unblinde
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "rip",
  "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
  "u": "0AHcgNghkDaG7OY1wjaDAE0q",
@@ -3084,7 +3084,7 @@ The state is initialized with the following update event:
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "upd",
  "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
  "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
@@ -3114,7 +3114,7 @@ Sometime later the ACDC is revoked with the publication by the Issuer of the fol
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "upd",
  "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
  "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
@@ -3140,7 +3140,7 @@ Consider a blindable state revocation Registry for ACDCs operated in an unblinde
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "rip",
  "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
  "u": "0AHcgNghkDaG7OY1wjaDAE0q",
@@ -3159,7 +3159,7 @@ The state is initialized with the following simple update event:
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "upd",
  "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
  "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
@@ -3179,7 +3179,7 @@ Sometime later, the ACDC is revoked with the publication by the Issuer of the fo
 
 ```json
 {
- "v": "ACDCCAAJSONAACQ_",
+ "v": "ACDCCAAJSONAACQ.",
  "t": "upd",
  "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
  "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
@@ -3658,7 +3658,7 @@ The following table defines the top-level fields in an ACDC with a Message type 
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: ACDCvvSSSShhhhhh_ that provides protocol type, Version, serialization type, size, and terminator. |
+|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.`that provides protocol type, Version, serialization type, size, and terminator. |
 |`t`| Message Type| Three-character Message type |
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
@@ -3676,7 +3676,7 @@ Python dict of compact ACDC with message type, `t` field.
 
 ```python
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "t":  "acd",
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
@@ -3715,7 +3715,7 @@ For clarity the first column provides the equivalent label value for the other s
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: ACDCvvSSSShhhhhh_ that provides protocol type, Version, serialization type, size, and terminator. |
+|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.` that provides protocol type, Version, serialization type, size, and terminator. |
 |`t`| Message Type| Three-character Message type |
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
@@ -3739,7 +3739,7 @@ Compact form with Attribute section:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "t":  "acd",
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
@@ -3758,7 +3758,7 @@ Compact form with Attribute aggregate section:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD_",
+  "v":  "ACDCCAAJSONAACD.",
   "t":  "acd",
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
@@ -3777,7 +3777,7 @@ The Schema, `s` field value is the expanded Schema section from the associated A
 
 ```json
 {
-  "v": "ACDCCAAJSONAACD_",
+  "v": "ACDCCAAJSONAACD.",
   "t": "sch", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "s": 
@@ -3855,7 +3855,7 @@ The Attribute, `a` field value is the expanded Attribute section from the associ
 
 ```json
 {
-  "v": "ACDCCAAJSONAACD_",
+  "v": "ACDCCAAJSONAACD.",
   "t": "att", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "a": 
@@ -3875,7 +3875,7 @@ The Attribute aggregate, `A` field value is the expanded Attribute aggregate sec
 
 ```json
 {
-  "v": "ACDCCAAJSONAACD_",
+  "v": "ACDCCAAJSONAACD.",
   "t": "agg", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "A":
@@ -3905,7 +3905,7 @@ The Edge, `e` field value is the expanded Edge section from the associated ACDC.
 
 ```json
 {
-  "v": "ACDCCAAJSONAACD_",
+  "v": "ACDCCAAJSONAACD.",
   "t": "edg", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "e": 
@@ -3928,7 +3928,7 @@ The Rule, `r` field value is the expanded Rules section from the associated ACDC
 
 ```json
 {
-  "v": "ACDCCAAJSONAACD_",
+  "v": "ACDCCAAJSONAACD.",
   "t": "rul", 
   "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
   "r": 
