@@ -2881,7 +2881,7 @@ The fields for the Init, `rip` event , given by their labels, shall appear in th
 
 #### Update event fields
 
-The fields for the Update, `upd` event , given by their labels, shall appear in the following order, `[v, t, d, rd, s, p, dt, a]`. All are required. The value of the Message type, `t` field shall be `upd`. 
+The fields for the Update, `upd` event , given by their labels, shall appear in the following order, `[v, t, d, r, s, p, dt, a]`. All are required. The value of the Message type, `t` field shall be `upd`. 
 
 #### Field descriptions
 
