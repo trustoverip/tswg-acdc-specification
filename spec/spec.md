@@ -314,7 +314,7 @@ When present, the top-level fields shall appear in the following order: `[v, d, 
 
 #### Required fields
 
-The following fields are required `[v, d, i, s]`. One and only one of the following two fields is also required: `[a, A]`.
+The following fields are required `[v, d, i, s]`. 
 
 ### Other reserved fields
 
@@ -375,11 +375,12 @@ Because KERI is agnostic about the namespace for any particular AID, different n
 
 ### Attribute field
 
-The top-level Attribute section `a`, field value may have as its value a nested field map. Each level of nesting may be fully expanded or represented by its SAID. When present, the `a` field value provides the so-called payload data of the ACDC. The `a` field syntax is described in more detail below. An ACDC may either have an `a` field or an `A` field (see next section) but not both.
+The top-level Attribute section `a`, field value may have as its value a nested field map. Each level of nesting may be fully expanded or represented by its SAID. When present, the `a` field value provides the so-called payload data of the ACDC. The `a` field syntax is described in more detail below. An ACDC shall not have both an `a` field and an `A` field (see next section) when it has either.
 
 ### Selectively disclosable Attribute aggregate field
 
-The top-level selectively disclosable Attribute aggregate section, `A`, field value is an aggregate of cryptographic commitments used to make a commitment to a set (bundle) of selectively disclosable Attributes. The value of the Attribute aggregate, `A`, field depends on the type of Selective Disclosure mechanism employed. For example, the aggregate value could be the cryptographic digest of the concatenation of an ordered set of cryptographic digests, a Merkle tree root digest of an ordered set of cryptographic digests, or a cryptographic accumulator. The Selective Disclosure mechanisms are described in detail in the Selective Disclosure section. When present, the `A` field value provides the so-called payload data of the ACDC. The `A` field syntax is described in more detail below. An ACDC may either have an `a` field or an `A` field (see previous section) but not both.
+The top-level selectively disclosable Attribute aggregate section, `A`, field value is an aggregate of cryptographic commitments used to make a commitment to a set (bundle) of selectively disclosable Attributes. The value of the Attribute aggregate, `A`, field depends on the type of Selective Disclosure mechanism employed. For example, the aggregate value could be the cryptographic digest of the concatenation of an ordered set of cryptographic digests, a Merkle tree root digest of an ordered set of cryptographic digests, or a cryptographic accumulator. The Selective Disclosure mechanisms are described in detail in the Selective Disclosure section. When present, the `A` field value provides the so-called payload data of the ACDC. The `A` field syntax is described in more detail below. An ACDC shall not have both an `a` field and an `A` field (see next section) when it has either.
+
 
 ### Edge field
 
