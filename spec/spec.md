@@ -3640,13 +3640,13 @@ CESR support for the ACDC protocol includes conveying sections of an ACDC as CES
 
 |Ilk|Name|Description|
 |---|---|---|
-|     |      | Registry TEL Message Types|
+|     |        | **Registry TEL Message Types** |
 | rip | Registry Inception | Initialize blindable state ACDC Registry |
 | upd | Update | Update transaction state of blindable state ACDC Registry |
-|     |        | ACDC Message |
+|     |        | **ACDC Message** |
 |     | ACDC | Default ACDC without Message type (ilk), `t` field |
 | acd | ACDC | With Message type (ilk), `t` field |
-|     |        | ACDC Section Message types |
+|     |        | **ACDC Section Message types** |
 | sch | Schema | Schema section Message |
 | att | Attribute | Attribute section Message |
 | agg | Aggregate | Attribute aggregate section Message |
