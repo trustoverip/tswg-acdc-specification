@@ -3106,8 +3106,6 @@ The associated expanded Attribute block is as follows:
 
 Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Further notice that the UUID, `u` field is missing. This makes the attribute block unblinded. The Issuer may provide an API that allows a Validator to query the attributed block for any given transaction event in the registry, or knowing that it is unblinded, a Validator can try the two different state value possibilities to discover which one generates a SAID, `d` field value that matches the attribute, `a` field value in the event.
 
-Notice that the value of the Attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded Attribute block. Further notice that the UUID, `u` field is missing. This makes the Attribute block unblinded. The Issuer may provide an API that allows a Validator to query the attributed block for any given transaction event in the Registry, or knowing that its unblinded, a Validator can try the two different state value possibilities to discover which one generates a SAID, `d` field value that matches the Attribute, `a` field value in the event.
-
 Sometime later the ACDC is revoked with the publication by the Issuer of the following event:
 
 
@@ -3638,13 +3636,13 @@ CESR support for the ACDC protocol includes conveying sections of an ACDC as CES
 
 |Ilk|Name|Description|
 |---|---|---|
-|     |      | Registry TEL Message Types|
+|     |        | **Registry TEL Message Types** |
 | rip | Registry Inception | Initialize blindable state ACDC Registry |
 | upd | Update | Update transaction state of blindable state ACDC Registry |
-|     |        | ACDC Message |
+|     |        | **ACDC Message** |
 |     | ACDC | Default ACDC without Message type (ilk), `t` field |
 | acd | ACDC | With Message type (ilk), `t` field |
-|     |        | ACDC Section Message types |
+|     |        | **ACDC Section Message types** |
 | sch | Schema | Schema section Message |
 | att | Attribute | Attribute section Message |
 | agg | Aggregate | Attribute aggregate section Message |
