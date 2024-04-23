@@ -348,7 +348,7 @@ Compliant ACDC version 2.XX implementations shall support the old ACDC version 1
 
 ### Self-addressing identifier (SAID) fields
 
-Some fields in ACDCs may have for their value either a field map or a SAID. A SAID follows the SAID protocol [[3]]. Essentially, a [[3]] is a Self-addressing identifier (self-referential content addressable). A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-addressed data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) may be compacted into its SAID. The uncompacted blocks for each associated SAID may be attached or cached to optimize bandwidth and availability without decreasing security.
+Some fields in ACDCs may have for their value either a field map or a SAID. A SAID follows the SAID protocol [[3]]. A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-addressed data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) may be compacted into its SAID. The uncompacted blocks for each associated SAID may be attached or cached to optimize bandwidth and availability without decreasing security.
 
 Several top-level ACDC fields may have for their value either a serialized field map or the SAID of that field map. Each SAID provides a stable, universal, cryptographically verifiable, and agile reference to its encapsulating block (serialized field map). These include the `d`, and `rd` fields. Moreover, the value of top-level `s`, `a`, `e`, and `r` fields may be replaced by the SAID of their associated field map. When replaced by their SAID, these top-level sections are in compact form.
 
@@ -669,7 +669,7 @@ In general, Schema indicated by non-local URI references (`$id` or `$ref`) must 
 
 This does not preclude the use of remotely cached SAIDified Schema resources because those resources are end-verifiable to their embedded SAID references. Said another way, a SAIDified Schema resource is itself a SAD referenced by its SAID. A URI that includes a SAID may be used to securely reference a remote or distributed SAIDified schema resource because that resource is fixed (immutable, nonmalleable) and verifiable to both the SAID in the reference and the embedded SAID in the resource so referenced. To elaborate, a non-local URI reference that includes an embedded cryptographic commitment such as a SAID is verifiable to the underlying resource when that resource is a SAD. This applies to JSON Schema as a whole as well as bundled subschema resources.
 
-There ACDC supported formats for the value of the top-level id, `$id`, field are as follows:
+The ACDC supported formats for the value of the top-level id, `$id`, field are as follows:
 
 Bare SAIDs may be used to refer to a SAIDified Schema as long as the JSON Schema validator supports bare SAID references. By default, many if not all JSON Schema Validators support bare strings (non-URIs) for the Base URI provided by the top-level `$id` field value.
 
@@ -1145,13 +1145,11 @@ Notice that the compact form of the `grades` subblock has as the field value of 
 
 ### Edge section  
 
-The Edge Section, `e` field appears as a top-level block within the ACDC.  The Edge Section has several reserved fields that may appear as top-level fields within its block. 
+The Edge Section, `e` field appears as a top-level block within the ACDC and denotes the start of subsequent Edge-groups. The Edge Section has several reserved fields that may appear as top-level fields within its block.
 
 #### Block types
 
 There are two types of field maps or blocks that may appear as values of fields within the Edge Section, `e` field either at the top level of the Edge block itself or nested. These are Edges or Edge-groups. Edges may only appear as locally unique labeled (using non-reserved labels) blocks nested within an Edge-group. There are two exceptions for Edges, compact and simple compact form. In these two forms the Edge field value is not a block but a string. These exceptions are defined below.
-
-The Edge Section is the top-level Edge-group. 
 
 Nested Edge-groups may only appear as locally unique labeled blocks nested within another Edge-group. The block type, Edge or Edge-group, is indicated by its corresponding labeled subschema, with the exception of the top-level Edge-group, which is the Edge Section and is indicated by the Edge Section subschema. An Edge is indicated by the required presence of a node, `n` field in the non-compact variant of its subschema. An Edge-group shall not have a node, `n` field.
 
@@ -2032,15 +2030,13 @@ As the examples above have shown, the Edge Section syntax enables the composable
 
 ### Rule Section  
 
-The purpose of the Rules section is to provide a set of rules or conditions as a Ricardian Contract [[43]]. The important features of a Ricardian contract are that it is both human and machine-readable and referenceable by a cryptographic digest. A JSON-encoded document or block, such as the Rules section block, is a practical example of both a human and machine-readable document.  The Rules section's top-level SAID, `d` field provides the digest.  This provision supports the bow-tie model of RC. 
+The Rule Section, `r` field appears as a top-level block within the ACDC and denotes the start of subsequent Rule-groups. The purpose of the Rules section is to provide a set of rules or conditions as a Ricardian Contract [[43]]. The important features of a Ricardian contract are that it is both human and machine-readable and referenceable by a cryptographic digest. A JSON-encoded document or block, such as the Rules section block, is a practical example of both a human and machine-readable document.  The Rules section's top-level SAID, `d` field provides the digest.  This provision supports the bow-tie model of RC. 
 
 The Rules Section includes labeled nested blocks called Rules that provide the legal language (terms , conditions, definitions etc). The labeled clauses can be structured hierarchically, where each Rule, in turn, can include nested labeled Rules. The labels on the Rules may follow a structured naming or numbering convention. These provisions enable the Rules section to satisfy the features of an RC. 
 
 #### Block types
 
 There are two types of field maps or blocks that may appear as values of fields within the Rule Section, `r` field either at the top level of the Rule block itself or nested. These are Rules or Rule-groups. Rules may only appear as locally unique labeled (using non-reserved labels)  blocks nested within an Rule-Group. There are two exceptional forms for Rules, compact and simple compact form. In these two forms, the labeled Rule field value is not a block but a string. These exceptions are defined below.
-
-The Rule Section is the top-level Rule-group. 
 
 Nested Rule-groups may only appear as locally unique labeled blocks nested within another Rule-group. The block type, Rule or Rule-group, is indicated by its corresponding labeled subschema, with the exception of the top-level Rule-group, which is the Rules Section and is indicated by the Rules Section subschema. A Rule-group is indicated by the presence of one or more non-reserved labeled fields whose value represents a nested Rule or Rule-Groups.  
 
