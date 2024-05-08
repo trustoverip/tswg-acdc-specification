@@ -2678,9 +2678,13 @@ The difference between exchange types is the information disclosed, not the mech
 
 The second is convenience. A standard, simple protocol is easier to implement, support, update, understand, and adopt. The tooling is more consistent.
 
-This IPEX [[ref: IPEX]] protocol leverages important features of ACDCs and ancillary protocols such as CESR [[1]], SAIDs [[3]], and CESR-Path proofs [[ref: Proof-ID]] as well as Ricardian Contracts [[43] and Graduated Disclosure (Metadata, Partial, Selective, Full) to enable Contractually Protected Disclosure. Contractually Protected Disclosure includes both Chain-Link Confidential [[44] and Contingent Disclosure [[ref: ACDC]].
+This IPEX [[ref: IPEX]] protocol leverages important features of ACDCs and ancillary protocols such as CESR [[1]], SAIDs [[3]], and CESR-Path proofs [[ref: Proof-ID]] as well as Ricardian Contracts [[43]] and Graduated Disclosure (Metadata, Partial, Selective, Full) to enable Contractually Protected Disclosure. Contractually Protected Disclosure includes both Chain-Link Confidential [[44]] and Contingent Disclosure [[ref: ACDC]].
 
 ### Exchange Protocol
+The protocol is specified via its exchange (message) types and, from the perspectives of the discloser and disclosee, their states and valid state transitions. 
+
+#### Exchange Types
+The following exchange messages may be sent between a disclosee and discloser:
 
 | Discloser | Disclosee | Initiate | Contents | Description |
 |:-:|:-:|:-:|:--|:--|
@@ -2693,7 +2697,75 @@ This IPEX [[ref: IPEX]] protocol leverages important features of ACDCs and ancil
 |`grant`|  | Y | Full or Selective Disclosure ACDC, signature on `grant` or its SAID  | includes Attribute values, CESR-Proof signature |
 | | `admit` | N | signature on `grant` or its SAID  | CESR-Proof signature |
 
-#### Commitments via SAID
+When messages of these types are validly exchanged depends on messages previously exchanged and the resulting states of the disclosee and discloser, as described below.
+
+#### Discloser States and Transitions
+The following states and transitions are defined for the Discloser. These state names are non-normative; however, they are helpful for understanding the protocol.
+
+**States**
+
+| State | On Entry Send to Disclosee | Description |
+|:--|:--|:--|
+| `RECEIVED_APPLY` |
+| `SENDING_APPLY_SPURN` | spurn |
+| `PREPARING_AND_SENDING_OFFER` | offer | Prepare and send either offer-requested (referencing disclosee's apply) or offer-unsolicited |
+| `SENT_OFFER` |
+| `EVALUATING_OFFER_RESPONSE` |
+| `SENDING_OFFER_SPURN` | spurn |
+| `PREPARING_AND_SENDING_GRANT` | grant | Prepare and send either grant-requested (referencing disclosee's agree) or grant-unsolicited |
+| `WAITING_FOR_GRANT_RESPONSE` |
+
+**Transitions**
+
+| Current State | Event | Next State | Description |
+|:--|:--|:--|:--|
+| (start) | received apply from disclosee | `RECEIVED_APPLY` | Disclosee sent an apply exchange message |
+| `RECEIVED_APPLY` | discloser spurns apply | `SENDING_APPLY_SPURN` | Disclosee rejected the apply exchange message |
+| `SENDING_APPLY_SPURN` | (auto transition) | (final) | Disclosee sent a spurn exchange message |
+| (start) | discloser signals to send unrequested offer | `PREPARING_AND_SENDING_OFFER` |  |
+| `PREPARING_AND_SENDING_OFFER` | sent offer | `SENT_OFFER` ||
+| `SENT_OFFER` | received spurn from disclosee | (final) |  |
+| `SENT_OFFER` | received agree from disclosee | `EVALUATING_OFFER_RESPONSE` |  |
+| `EVALUATING_OFFER_RESPONSE` | discloser spurns | `SENDING_OFFER_SPURN` |  |
+| `WAITING_FOR_GRANT_RESPONSE` | received admit from disclosee | (final) | |
+| `WAITING_FOR_GRANT_RESPONSE` | received spurn from disclosee | (final) | Handling a spurn of grant from disclosee is optional |
+
+#### Disclosee States and Transitions
+The following states and transitions are defined for the Disclosee. These state names are non-normative.
+**States**
+
+| State | On Entry Send to Disclosee | Description |
+|:--|:--|:--|
+| `SENDING_APPLY` | send apply to disclosee | |
+| `WAITING_FOR_RESPONSE_FROM_APPLY` | | |
+| `RECEIVED_OFFER` | | |
+| `SENDING_AGREE` | send agree to discloser | |
+| `SENDING_OFFER_SPURN` | send spurn to discloser | |
+| `WAITING_FOR_RESPONSE_FROM_AGREE` | | |
+| `SENDING_ADMIT` | send admit to discloser | Note may alternately implement a spurn versus auto-admit |
+
+**Transitions**
+
+| Current State | Event | Next State | Description |
+|:--|:--|:--|:--|
+| (start) | send apply to disclosee | `SENDING_APPLY` |  |
+| `WAITING_FOR_RESPONSE_FROM_APPLY` | received spurn from discloser | (final) |  |
+| `WAITING_FOR_RESPONSE_FROM_APPLY` | received offer from discloser | `RECEIVED_OFFER` |  |
+| (start) | received unrequested offer from discloser | `RECEIVED_OFFER` |  |
+| `RECEIVED_OFFER` | disclosee accepts offer | `SENDING_AGREE` |  |
+| `RECEIVED_OFFER` | disclosee spurn offer | `SENDING_OFFER_SPURN` |  |
+| `SENDING_OFFER_SPURN` | (auto transition) | (final) |  |
+| `SENDING_AGREE` | (auto transition) | `WAITING_FOR_RESPONSE_FROM_AGREE` |  |
+| `WAITING_FOR_RESPONSE_FROM_AGREE` | received spurn from discloser | (final) |  |
+| `WAITING_FOR_RESPONSE_FROM_AGREE` | received grant (requested) from discloser | `SENDING_ADMIT` |  |
+| `(start)` | received unrequested grant from discloser | `SENDING_ADMIT` |  |
+| `SENDING_ADMIT` | (auto transition) | (final) |  |
+
+
+#### Exchange Protocol Exceptions
+Exception handling cases, e.g., for timeouts or receiving invalid messages (messages with wrong signature or received when in the wrong state) are not specified here and left to the implementer.
+
+### Commitments via SAID
 
 All the variants of an ACDC have various degrees of expansion of the compact variant. Therefore, an Issuer commitment via a signature (direct) or KEL anchored seal (indirect) to any variant of ACDC (metadata, compact, partial, nested partial, full, selective, etc.)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top-level section field is either the SAD or the SAID of the SAD of the associated section. Both a SAD and its SAID, when signed or sealed, each provide a verifiable commitment to the SAD. In the former, the signature or seal verification is directly against the SAD itself. In the latter, the SAID as digest must first be verified against its SAD, and then the signature or seal on the SAID may be verified. This indirect verifiability (one or multiple levels of commitment via cryptographic digests) assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top-level structure as the compact variant, then a signature on any variant may be used to verify the Issuer's commitment to any other variant either directly or indirectly, in whole or in part on a top-level section by top-level section basis. This cross-variant Issuer commitment verifiability is an essential property that supports Graduated Disclosure by the Disclosee of any or all variants, whether Full, Compact, Metadata, Partial, Selective etc.
 
@@ -2708,13 +2780,13 @@ To summarize, when the Issuer commits to the composed Schema of an ACDC it is co
 Consequently, the IPEX protocol must specify how a validator does validation of any variant in a Graduated Disclosure. To restate, there are two proofs that a Discloser must provide. The first is proof of issuance (PoI), and the second is proof of disclosure (PoD). In the former, the Discloser provides the variant via its SAD that was actually signed or seal (as SAD or SAID of SAD) by the Issuer in order for the Disclosee to verify authentic issuance via the signature on that variant.  In the latter, the Discloser must disclose the Issuer-enabled (via Schema composition) variant that the Discloser offered to disclose as part of the Graduated Disclosure process.
 
 
-#### IPEX Validation
+### IPEX Validation
 
 The goal is to define a validation process (set of rules) that works for all variants of an ACDC and for all types of Graduated Disclosure of that ACDC.
 
 For example, in the bulk issuance of an ACDC (see bulk issued ACDCs in the [Annex](#bulk-issued-private-acdcs)), the Issuer only signs or seals the blinded SAID of the SAD, which is the compact variant of the ACDC, not the SAD itself. This enables a Discloser to make a proof of inclusion of the ACDC in a bulk issuance set by unblinding the signature on the blinded SAID without leaking correlation to anything but the blinded SAID itself. To clarify, the Disclosee can verify the commitment to the SAID via set inclusion without disclosing any other information about the ACDC. Issuer signing or sealing of the SAID, not the SAD, also has the side benefit of minimizing the computation of large numbers of bulk-issued commitments.
 
-##### Issuer Commitment Rules
+#### Issuer Commitment Rules
 
 The Issuer must provide a signature or seal on the SAID of the most compact form variant defined by the Schema of the ACDC (see the "most compact form" algorithm above). 
 
