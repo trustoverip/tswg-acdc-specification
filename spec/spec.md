@@ -2704,62 +2704,66 @@ The following states and transitions are defined for the Discloser. These state 
 
 **States**
 
-| State | On Entry Send to Disclosee | Description |
+| State | On Entry, Send to Disclosee | Description |
 |:--|:--|:--|
-| `RECEIVED_APPLY` |
-| `SENDING_APPLY_SPURN` | spurn |
-| `PREPARING_AND_SENDING_OFFER` | offer | Prepare and send either offer-requested (referencing disclosee's apply) or offer-unsolicited |
-| `SENT_OFFER` |
-| `EVALUATING_OFFER_RESPONSE` |
-| `SENDING_OFFER_SPURN` | spurn |
-| `PREPARING_AND_SENDING_GRANT` | grant | Prepare and send either grant-requested (referencing disclosee's agree) or grant-unsolicited |
-| `WAITING_FOR_GRANT_RESPONSE` |
+| `Applied` |
+| `SpurningApply` | spurn |
+| `Offering` | offer | Prepare and send either a requested offer (referencing disclosee's apply) or unsolicited offer |
+| `Offered` |
+| `Agreed` |
+| `SpruningAgreed` | spurn |
+| `Granting` | grant | Prepare and send either a requested grant (referencing disclosee's agree) or unsolicited grant |
+| `Granted` |
 
 **Transitions**
 
-| Current State | Event | Next State | Description |
+| Current State | Trigger | Next State | Description |
 |:--|:--|:--|:--|
-| (start) | received apply from disclosee | `RECEIVED_APPLY` | Disclosee sent an apply exchange message |
-| `RECEIVED_APPLY` | discloser spurns apply | `SENDING_APPLY_SPURN` | Disclosee rejected the apply exchange message |
-| `SENDING_APPLY_SPURN` | (auto transition) | (final) | Disclosee sent a spurn exchange message |
-| (start) | discloser signals to send unrequested offer | `PREPARING_AND_SENDING_OFFER` |  |
-| `PREPARING_AND_SENDING_OFFER` | sent offer | `SENT_OFFER` ||
-| `SENT_OFFER` | received spurn from disclosee | (final) |  |
-| `SENT_OFFER` | received agree from disclosee | `EVALUATING_OFFER_RESPONSE` |  |
-| `EVALUATING_OFFER_RESPONSE` | discloser spurns | `SENDING_OFFER_SPURN` |  |
-| `WAITING_FOR_GRANT_RESPONSE` | received admit from disclosee | (final) | |
-| `WAITING_FOR_GRANT_RESPONSE` | received spurn from disclosee | (final) | Handling a spurn of grant from disclosee is optional |
+| (start) | received apply from disclosee | `Applied` | Disclosee sent an apply exchange message |
+| `Applied` | discloser spurns apply | `SpurningApply` | Disclosee rejected the apply exchange message |
+| `SpurningApply` | (auto transition) | (final) | Disclosee sent a spurn exchange message |
+| (start) | discloser signals to send unrequested offer | `Offering` |  |
+| `Offering` | discloser sent offer | `Offered` ||
+| `Offered` | received spurn from disclosee | (final) |  |
+| `Offered` | received agree from disclosee | `Agreed` |  |
+| `Agreed` | discloser spurns | `SpruningAgreed` |  |
+| `Agreed` | discloser decides to grant | `Granting` |  |
+| `Granting` | (auto transition) | `Granted` |  |
+| `Granted` | received admit from disclosee | (final) | |
+
 
 #### Disclosee States and Transitions
 The following states and transitions are defined for the Disclosee. These state names are non-normative.
+
 **States**
 
-| State | On Entry Send to Disclosee | Description |
+| State | On Entry, Send to Discloser | Description |
 |:--|:--|:--|
-| `SENDING_APPLY` | send apply to disclosee | |
-| `WAITING_FOR_RESPONSE_FROM_APPLY` | | |
-| `RECEIVED_OFFER` | | |
-| `SENDING_AGREE` | send agree to discloser | |
-| `SENDING_OFFER_SPURN` | send spurn to discloser | |
-| `WAITING_FOR_RESPONSE_FROM_AGREE` | | |
-| `SENDING_ADMIT` | send admit to discloser | Note may alternately implement a spurn versus auto-admit |
+| `Applying` | apply | |
+| `Applied` | | |
+| `Offered` | | |
+| `Agreeing` | agree | |
+| `SpurningOffer` | spurn | |
+| `Agreed` | | |
+| `Admitting` | admit | |
 
 **Transitions**
 
-| Current State | Event | Next State | Description |
+| Current State | Trigger | Next State | Description |
 |:--|:--|:--|:--|
-| (start) | send apply to disclosee | `SENDING_APPLY` |  |
-| `WAITING_FOR_RESPONSE_FROM_APPLY` | received spurn from discloser | (final) |  |
-| `WAITING_FOR_RESPONSE_FROM_APPLY` | received offer from discloser | `RECEIVED_OFFER` |  |
-| (start) | received unrequested offer from discloser | `RECEIVED_OFFER` |  |
-| `RECEIVED_OFFER` | disclosee accepts offer | `SENDING_AGREE` |  |
-| `RECEIVED_OFFER` | disclosee spurn offer | `SENDING_OFFER_SPURN` |  |
-| `SENDING_OFFER_SPURN` | (auto transition) | (final) |  |
-| `SENDING_AGREE` | (auto transition) | `WAITING_FOR_RESPONSE_FROM_AGREE` |  |
-| `WAITING_FOR_RESPONSE_FROM_AGREE` | received spurn from discloser | (final) |  |
-| `WAITING_FOR_RESPONSE_FROM_AGREE` | received grant (requested) from discloser | `SENDING_ADMIT` |  |
-| `(start)` | received unrequested grant from discloser | `SENDING_ADMIT` |  |
-| `SENDING_ADMIT` | (auto transition) | (final) |  |
+| (start) | send apply to disclosee | `Applying` |  |
+| `Applying` | (auto transition) | `Applied` |  |
+| `Applied` | received spurn from discloser | (final) |  |
+| `Applied` | received offer from discloser | `Offered` |  |
+| (start) | received unrequested offer from discloser | `Offered` |  |
+| `Offered` | disclosee accepts offer | `Agreeing` |  |
+| `Offered` | disclosee spurn offer | `SpurningOffer` |  |
+| `SpurningOffer` | (auto transition) | (final) |  |
+| `Agreeing` | (auto transition) | `Agreed` |  |
+| `Agreed` | received spurn from discloser | (final) |  |
+| `Agreed` | received grant (requested) from discloser | `Admitting` |  |
+| `(start)` | received unrequested grant from discloser | `Admitting` |  |
+| `Admitting` | (auto transition) | (final) |  |
 
 
 #### Exchange Protocol Exceptions
