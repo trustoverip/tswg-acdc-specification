@@ -6,7 +6,20 @@
       "spec_directory": "./spec",
       "output_path": "./docs",
       "markdown_paths": [
-        "spec.md"
+        "header.md",
+        "foreword.md",
+        "introduction.md",
+        "doc-features.md",
+        "terms-and-definitions.md",
+        "acdc-structure.md",
+        "acdc-variants.md",
+        "top-level-acdc-sections.md",
+        "disclosure-mechanisms-and-exploitation-protection.md",
+        "exploitation-protection-mechanisms.md",
+        "issuance-and-presentation-exchange-ipex.md",
+        "transaction-event-logs-tels-as-acdc-state-registries.md",
+        "annex.md",
+        "bibliography.md"
       ],
       "logo": "https://raw.githubusercontent.com/trustoverip/logo-assets/master/logos/ToIP-Logo-Color-SolidDimensional-Horizontal-LightOnDark.svg",
       "logo_link": "https://github.com/trustoverip/tswg-acdc-specification",
