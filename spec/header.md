@@ -2,7 +2,7 @@ Authentic Chained Data Containers (ACDC)
 <!-- file name: header.md -->
 ==================
 
-**Specification Status**: v1.0 Draft
+**Specification Status**: v1.0 Draft 
 
 **Latest Draft:**
 
