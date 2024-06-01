@@ -51,3 +51,347 @@ The blind is derived from a secret salt shared between the Issuer and the design
 The Issuer may provide an authenticated service endpoint for the Discloser to which the Discloser can make a signed request to update the blind.  Each new event published by the Issuer in the Registry shall increment the sequence number and hence the blinding factor but may or may not change the actual blinded state.  Because each updated event in the Registry has a new blinding factor regardless of an actual change of state or not, an observer cannot correlate state to event updates.
 
 A blindabe state Registry may be used in an unblinded fashion. The Issuer could just publish the state unblinded. This makes is a public Registry. Consequently, a blindable state Registry is generic. It may be used in either a private or public manner.
+
+
+#### Message types
+
+Blindable state registries have two types of events. These types are shown in the following table:
+
+|Ilk| Name | Description|
+|---|---|---|
+|`rip`| Registry Inception | registry initialization |
+|`upd`| Update | transaction event state update |
+
+In some cases, the usage of the registry may provide correlatable information, as would be the case where the first real transaction state is always the same or the final state results in the disuse of the Registry. In those cases, the Issuer may choose to define an empty (null) state and an empty (null) ACDC SAID as known placeholder values. The first transaction state update event in the Registry can, therefore, be published before any real ACDC has been created, to which it may be later applied. Disuse of the Registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned. 
+
+
+#### Top-level fields
+
+The reserved field labels for the top level of a blindable state registry transaction event are as follows:
+
+|Label|Description|
+|---|---|---|
+|`v`| Version String |
+|`t`| Message type |
+|`d`| event block SAID |
+|`u`| UUID salty nonce |
+|`i`| Issuer AID |
+|`r`| Registry SAID|
+|`s`| sequence number|
+|`p`| prior event SAID |
+|`dt`| Issuer relative ISO date/time string |
+|`a`| state Attribute block or Attribute block SAID|
+
+#### Init event fields
+
+The fields for the Init, `rip` event , given by their labels, shall appear in the following order, `[v, t, d, u, i, s, dt]`. All are required. The value of the Message type, `t` field shall be `rip`. The value of the sequence number field, `s` shall be the hex encoded string for the integer 0. 
+
+#### Update event fields
+
+The fields for the Update, `upd` event , given by their labels, shall appear in the following order, `[v, t, d, r, s, p, dt, a]`. All are required. The value of the Message type, `t` field shall be `upd`. 
+
+#### Field descriptions
+
+##### Version String, `v` field
+
+The Version String, `v` field value uses the same format as an ACDC Version String {{see above}}. The protocol type shall be `ACDC`.
+
+##### Message type, `t` field
+
+The Message type, `t` field value shall be  one of the Message types in the table above. The Message types do not leak any state information. The first Message in some types of Registries such as an issuance/revocation Registry.
+
+##### SAID, `d` field
+
+The SAID, `d` field value shall be the SAID of its enclosing block. A transaction event's SAID enables a verifiable globally unique reference to that event.
+
+##### UUID, `u` field
+The UUID, `u` field value shall be a cryptographic strength salty nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[48]]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [[30]] [[31]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
+
+##### Issuer, `i` field
+
+The Issuer, `i` field value shall be the AID of the Issuer. This removes any ambiguity about the semantics of a seal of a transaction event that appears in a KEL. When the KEL controller AID and Issuer AID are the same for a transaction event seal that appears in a given KEL, then the KEL Controller is making a commitment as Issuer to the transaction event. A transaction event seal that appears in a KEL with a different Controller AID is merely a nonrepudiable endorsement of the transaction state by some other party, not a duplicity-evident nonrepudiable commitment by the Issuer to the transaction state. This may appear to be redundant because the Issuer AID also appears in the ACDC. In a blinded state Registry, however, the ACDC SAID only appears in the blinded Attribute block likewise in a yet-to-be-disclosed private ACDC, the Issuer is also blinded, so a Registry observer that hosts a copy of the Registry that is not also a Disclosee of either the expanded transaction event and/or the associated ADCD would not be able to confirm that commitment and may thereby be subject to a DDoS attack without the presence of the Issuer, `i` field in the Registy initialization event's public top-level fields.
+
+##### Registry SAID, `r` field
+
+The Registry SAID, `r` field value shall be the value of the SAID, `d` field of the Registry Inception, `rip` event. Because the Issuer, `i` field appears in the `rip` event, the Registry SAID, `r` field value cryptographically binds the Registry to the Issuer AID. The Registry SAID enables a verifiable globally unique reference to the Registry (TEL). Update events shall include the Registry SAID, `r` field so that they can be easily associated with the Registry (TEL). The ACDC managed by the Registry also includes a reference to the Registry in the ADCD's own Registry SAID, `rd` field, thereby binding the ACDC to the Registry. To clarify the value of the Registry SAID, `r` field in transaction events is the same value as the corresponding Registry SAID, `rd` field in the associated ACDC.
+
+##### Sequence number, `s` field
+
+The sequence number, `s` field value shall be a hex-encoded string with no leading zeros of a zero-based strictly monotonically increasing integer. The first (zeroth) transaction event in a given Registry (TEL) shall have a sequence number of 0 or `0` hex.
+
+##### Prior event SAID, `p` field
+
+The prior event SAID, `p` field value shall be the SAID, `d` field value of the immediately prior event in the TEL. The prior, `p` field backward chains together the events in a given TEL.
+
+##### Datetime, `dt` field
+
+The datetime, `dt` field value shall be the ISO-8601 datetime string with microseconds and UTC offset as per IETF RFC-3339. This shall be the datetime of the issuance of the transaction event relative to the clock of the issuer. An example datetime string in this format is as follows:
+
+`2020-08-22T17:50:09.988921+00:00`
+
+##### Attribute, `a` field
+
+The Attribute, `a` field value shall be the SAID of the blinded Attribute block when used in a blinded (private) fashion. Alternatively, when used in an unblinded (public) fashion, the Attribute, `a` field value shall be either the fully expanded Attribute block (field map) or the SAID of the Attribute block but without its UUID, `u` field. See below for a description of the expanded Attribute block.
+
+#### Expanded attribute block
+
+The expanded Attribute block has the following fields:
+
+|Label|Description|
+|---|---|---|
+|d| Attribute block SAID |
+|u| UUID salty nonce blinding factor, random or HD generated |
+|ts| transaction state value string | 
+
+The fields shall appear in the following order `[d, u, ts]`. When used in private (blinded) mode, all are required. When used in public (unblinded) mode, the SAID, `d` field is optional, the UUID, `u` field is not allowed, the transaction state, `ts` field is required.
+
+##### SAID, `d` field
+
+The SAID, `d` field value shall be the SAID of its enclosing block. An Attribute section's SAID enables a verifiable globally unique reference to that state contained in the block but without necessarily disclosing that state.
+
+##### UUID, `u` field
+
+The UUID, `u` field value shall be a cryptographic strength salty nonce with approximately 128 bits of entropy. The UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[48]]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [[30]] [[31]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
+
+When the UUID, `u`, is derived from a shared secret salt and a public path such as the sequence number using a hierarchically deterministic derivation algorithm and given that the possible state values are finite and small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event.
+
+##### Transaction state, `ts` field
+
+The transaction state, `ts` field value shall be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
+
+#### Private (blinded) state Registry example
+
+Consider a blindable state revocation registry for ACDCs operated in blinded (private) mode. The transaction state can be one of two values, `issued`, or `revoked`. In this case, the placeholder value of the empty, `` string for transaction state, `ts` field is also employed to decorrelate the initialization.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "rip",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "u": "0AHcgNghkDaG7OY1wjaDAE0q",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "0",
+ "dt": "2024-05-27T19:16:50.750302+00:00"
+}
+```
+
+With respect to the event above, given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere. This value is derived from the Issuer AID, binding the Registry to the Issuer AID. When this Registry identifier value is included in the Registry SAID, `rd` field of an ACDC, this binds that ACDC to the Registry.
+
+The state is initialized with decorrelated placeholder values with the issuance of the following placeholder update event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "upd",
+ "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
+ "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "1",
+ "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "dt": "2024-06-01T05:01:42.660407+00:00",
+ "a": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-"
+}
+```
+
+Notice in the event above that the registry SAID, `r` field value matches the value of the SAID, `d` field in the Registry Inception, `rip` event. 
+
+The associated expanded Attribute block is as follows:
+
+```json
+{
+ "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "u": "ZHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "ts": ""
+}
+```
+
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. In this case, the value of the transaction state, the `ts` field, is just an empty string as a placeholder value. The transaction state may not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. This makes the first use(s) of the registry uncorrelated to the actual issuance of the real ACDC. 
+
+Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The Discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `d` field must be either the empty string placeholder or the real ACDC SAID. The Discloser can now compute the SAID, `d` field value of the expanded Attribute block for either the empty placeholder value of the `ts` field or with one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event Attribute, `a` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
+
+Sometime later, the real ACDC is issued as indicated by its SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the registry inception, `rip` event. This binds the ACDC to the Registry.
+
+Suppose the associated update event occurs at sequence number 5. The published transaction event is as follows:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "upd",
+ "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "5",
+ "p": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
+ "dt": "2024-06-01T05:01:42.660407+00:00",
+ "a": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-"
+}
+```
+
+The associated expanded Attribute block is as follows:
+
+```json
+{
+ "d": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-",
+ "u": "ZIZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL",
+ "ts": "issued"
+}
+```
+
+Notice that the value of the Attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded Attribute block. Notice further that in this case, the value of the transaction state, `ts` field, is `issued` (not the empty placeholder).  Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `s` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The Discloser also knows which ACDC it wishes to disclose so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded Attribute block for either the empty placeholder value or with one of the two possible state values, namely, `issued` or `revoked` for the `ts` field. This gives three possibilities. The Discloser tries each one until it finds the one that matches the published transaction event Attribute, `a` field value. The Discloser can then disclose the matching expanded Attribute block to the Disclosee, who can verify it against the published transaction event.
+
+The Discloser can then instruct the Issuer to issue one or more updates with new blinding factors so that the initial Disclosee may no longer validate the state of the ACDC without another interactive disclosure by the Discloser.
+
+Suppose at some later time, a Validator requires that the Discloser provide continuing proof of issuance. In that case, the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state. Suppose this is at sequence number 9 as follows:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "upd",
+ "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
+ "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "9",
+ "p": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "dt": "2024-07-04T05:01:42.660407+00:00",
+ "a": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI"
+}
+```
+
+The associated expanded Attribute block is as follows: 
+
+```json
+{
+ "d": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI",
+ "u": "ZNoRxCJp2wIGM9u2Edk-PLIZ1H4zpq06UecHwzy-K9Fp",
+ "ts": "revoked"
+}
+```
+
+The Discloser could continue to have the blind updated periodically. This would generate new transaction events with new values for its Attribute, `a` field, but without changing the transaction state field value. This decorrelates the time of revocation with respect to the latest event in the Registry.
+
+#### Public (unblinded) state Registry example 
+
+Consider a blindable state revocation Registry for ACDCs operated in an unblinded (public) mode. The transaction state can be one of two values, `issued`, or `revoked`. The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "rip",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "u": "0AHcgNghkDaG7OY1wjaDAE0q",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "0",
+ "dt": "2024-05-27T19:16:50.750302+00:00"
+}
+```
+With respect to the event above, given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere.
+
+Sometime later, an ACDC is issued as indicated by its SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the value given by the value of the SAID, `d` field in the registry inception, `rip` event. This binds the ACDC to the Registry.
+
+The state is initialized with the following update event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "upd",
+ "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
+ "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "1",
+ "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "dt": "2024-06-01T05:01:42.660407+00:00",
+ "a": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-"
+}
+```
+Notice in the event above that the registry SAID, `r` field value matches the value of the SAID, `d` field in the Registry Inception, `rip` event. 
+
+The associated expanded Attribute block is as follows:
+
+```json
+{
+ "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "ts": "issued"
+}
+```
+
+Notice that the value of the attribute, `a` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block. Further notice that the UUID, `u` field is missing. This makes the attribute block unblinded. The Issuer may provide an API that allows a Validator to query the attributed block for any given transaction event in the registry, or knowing that it is unblinded, a Validator can try the two different state value possibilities to discover which one generates a SAID, `d` field value that matches the attribute, `a` field value in the event.
+
+Sometime later the ACDC is revoked with the publication by the Issuer of the following event:
+
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "upd",
+ "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
+ "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "2",
+ "p": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "dt": "2024-07-04T05:01:42.660407+00:00",
+ "a": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI"
+}
+```
+
+The associated expanded Attribute block is as follows: 
+
+```json
+{
+ "d": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI",
+ "ts": "revoked"
+}
+```
+
+#### Simple public (unblinded) state Registry example 
+
+Consider a blindable state revocation Registry for ACDCs operated in an unblinded (public) mode. The transaction state can be one of two values, `issued`, or `revoked`. The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "rip",
+ "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "u": "0AHcgNghkDaG7OY1wjaDAE0q",
+ "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
+ "s": "0",
+ "dt": "2024-05-27T19:16:50.750302+00:00"
+}
+```
+
+Given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere as the Registry SAID, `rd` field. The `rd` field value is derived from the Issuer AID, binding the Registry to the Issuer AID. 
+
+Sometime later, an ACDC for this Registry is issued as indicated by its SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the Registry SAID, `rd` field of that ACDC will be the Registry SAID given by the value of the SAID, `d` field in the Registry inception, `rip` event. This binds the ACDC to the Registry.
+
+The state is initialized with the following simple update event:
+
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "upd",
+ "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
+ "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "1",
+ "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "dt": "2024-06-01T05:01:42.660407+00:00",
+ "a": 
+ {
+   "ts": "issued"
+ }
+}
+```
+
+Notice that the value of the Attribute, `a` field in the transaction event, is now a field map block, not a SAID string. Further notice that both the SAID, `d`, and UUID, `u` fields are missing as they are now superfluous.
+
+Sometime later, the ACDC is revoked with the publication by the Issuer of the following simple update event:
+
+```json
+{
+ "v": "ACDCCAAJSONAACQ.",
+ "t": "upd",
+ "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
+ "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
+ "s": "2",
+ "p": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
+ "dt": "2024-07-04T05:01:42.660407+00:00",
+ "a": 
+ {
+   "ts": "revoked"
+ }
+}
+```
