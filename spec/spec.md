@@ -1,7 +1,7 @@
 Authentic Chained Data Containers (ACDC)
 ==================
 
-**Specification Status**: v1.0 Draft
+**Specification Status**: v0.9 Draft
 
 **Latest Draft:**
 
