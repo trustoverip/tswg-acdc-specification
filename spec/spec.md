@@ -3636,7 +3636,9 @@ In essence, an ACDC is really just a verifiable property graph fragment of an ex
 
 ### ACDC protocol Message types
 
-CESR support for the ACDC protocol includes conveying sections of an ACDC as CESR-compatible messages (packets). These messages can be part of a CESR stream or part of the attachment group to an ACDC. This is useful for sending the ACDC in its compact form and then attaching the section details as individual message packets. This enables one to cache sections so that they do not have to be transmitted repeatedly or reuse sections that are the same for multiple ACDC instances, which is often the case for the schema and rule sections. An ACDC message itself may have as an option a message type field. This allows CESR native versions of ACDCs. The default is that absent a message type field, an ACDC protocol message given by the version string field is an ACDC. All other message types MUST have the message type field. The following table provides all the message types (ilks) for the ACDC protocol. The message type (ilk) field label is `t` and MUST appear at the top-level immediately following the version string, `v` field.
+CESR support for the ACDC protocol includes conveying sections of an ACDC as CESR-compatible messages (packets) with their own message types by section. These section messages can be part of a CESR stream or part of the attachment group to an ACDC. This is useful for sending the ACDC in its compact form and then attaching the section details as individual section message packets. This enables one to cache sections so that they do not have to be transmitted repeatedly or reuse sections that are the same for multiple ACDC instances, which is often the case for the schema and rule sections. CESR native ACDC messages may appear as either field maps or field fields at the top level. The difference is determined by the top-level universal count (group) code for the message. The combination of top-level count (group) code and message-type determines the rules for the presence of fields and field labels.
+
+The following section details the ACDC message types, including section message types.
 
 #### Message type table
 
@@ -3646,7 +3648,7 @@ CESR support for the ACDC protocol includes conveying sections of an ACDC as CES
 | rip | Registry Inception | Initialize blindable state ACDC Registry |
 | upd | Update | Update transaction state of blindable state ACDC Registry |
 |     |        | **ACDC Message** |
-|     | ACDC | Default ACDC without Message type (ilk), `t` field |
+|     | ACDC | Default ACDC without Message type (ilk), `t` field in non-native serialization|
 | acd | ACDC | With Message type (ilk), `t` field |
 |     |        | **ACDC Section Message types** |
 | sch | Schema | Schema section Message |
@@ -3655,7 +3657,23 @@ CESR support for the ACDC protocol includes conveying sections of an ACDC as CES
 | edg | Edge | Edge section Message |
 | rul | Rule | Rules section Message |
 
-#### ACDC Message with Message type field
+#### Message type field appearance
+
+The message type field, labeled `t`, does not appear in non-CESR-native serialization kinds, namely JSON, CBOR, and MGPK, of ACDC messages of type `acd`. The protocol type in the version string for these non-CESR-native serialization kinds is `ACDC`. When no message type field appears, then the message type is inferred to be `acd`. All other message types, regardless of serialization kind, whether it be CESR native or non-CESR-native, MUST include a message type field. To elaborate, the message type field MUST appear in all native CESR messages; it only does not appear in non-CESR-native serialization kinds of `acd` type messages.
+
+#### ACDC as a top-level field map in CESR native format
+
+When an ACDC message of type `acd` in CESR native format, i.e. the serialization kind is `CESR`, appears as a top-level field map, it MUST use either of the CESR count codes, `-G##` or  `--G#####` at the top-level. The top-level fields (labels and values) that appear MUST appear in the following order: `[ v, t, d, u, i, rd, s, a, A, e, r]`. The required fields for `acd` messages are `[v, t, d, i, s]`. The rules for the appearance of optional fields are the same as those defined above for the other serialization kinds. The Version field value is a CESR primitive that provides the protocol type and the version. It does not provide a serialization kind or length. This is already indicated by the count codes, `-G##` or  `--G#####`.
+
+Likewise, for all the other ACDC protocol message types, when the serialization kind is `CESR`, i.e. is in a native CESR message format then the appearance of top levels fields with optional fields is as described above for those specific messages.
+
+#### ACDC as a top-level set of fixed fields in CESR native format
+
+When an ACDC message of type `acd` in CESR native format, i.e. the serialization kind is `CESR`,  appears as a top-level set of fixed fields, it MUST use either of the CESR count codes, `-F##` or  `--F#####` at the top-level. The top-level field values (no labels) MUST appear in the following order: `[ v, t, d, u, i, rd, s, a, A, e, r]`. All fields are required but may have empty values. The value of either or both the `a` and `A` field MUST be empty. To clarify, both the `a` and `A` field values MUST not be non-empty, one or the other or both MUST be empty. Emptiness for field values that allow a field map count code as a value is indicated by a generic map count code with zero-length contents. Emptiness for field values that allow a list field count code as a value is indicated by a generic list count code with zero-length contents. Emptiness for field values that require a CESR primitive is indicated by the `Null` CESR primitive code, `1AAK`. The Version field value is a CESR primitive that provides the protocol type and the version. It does not provide a serialization kind or length. This is already indicated by the count codes, `-F##` or  `--F#####`.
+
+Likewise, for all the other ACDC protocol message types, when the serialization kind is `CESR`, i.e. is in a native CESR message format then the appearance of top levels fields is required. There are no optional fields. Emptiness for field values that allow a field map count code as a value is indicated by a generic map count code with zero-length contents. Emptiness for field values that allow a list field count code as a value is indicated by a generic list count code with zero-length contents. Emptiness for field values that require a CESR primitive is indicated by the `Null` CESR primitive code, `1AAK`.
+
+#### ACDC `acd` Message with Message type field
 
 The following table defines the top-level fields in an ACDC with a Message type field and their order of appearance. Some fields are optional, but all fields that appear MUST appear in this order, `[v, t, d, u, i, s, a, A, e, r]`.
 
@@ -3673,7 +3691,7 @@ The following table defines the top-level fields in an ACDC with a Message type 
 |`e`| Edge| Either the SAID of a block of Edges or the block itself.|
 |`r`| Rule | Either the SAID a block of Rules or the block itself. |
 
-The Message type field enables fixed fields at the top level for an even more compact ACDC. The SAD of an ACDC is a labeled field map, such as an object in Javascript, or a dict in Python. The over-the-wire serialization could be CESR with fixed fields. Shown below is the labeled SAD as a Python dict (not the over-the-wire JSON or CESR).  The Message type, `t` field for ACDCs is an optional field for JSON, CBOR, MessagePack, and CESR field maps but is required for CESR fixed fields. This enables more than one type of CESR fixed field top-level ACDC CESR serialization that is unambiguously parseable. This seems to violate the schema-is-type convention in order to enable a parser to correctly parse a fixed field Message type.
+The SAD of an ACDC is a labeled field map, such as an object in Javascript, or a dict in Python. The over-the-wire serialization could be native CESR using either a field map or fixed fields at the top level. The fixed field CESR native format could be especially compact. Shown below is the labeled SAD as a Python dict (not the over-the-wire JSON or CESR).  The Message type, `t` field for ACDCs is an optional field for JSON, CBOR, MessagePack, and CESR field maps but is required for CESR fixed fields. This enables more than one type of CESR fixed field top-level ACDC CESR serialization that is unambiguously parseable. This seems to violate the schema-is-type convention in order to enable a parser to correctly parse a fixed field Message type. The message group count code determines if the ACDC is fixed field or a field map. 
 
 Python dict of compact ACDC with message type, `t` field.
 
@@ -3692,9 +3710,6 @@ Python dict of compact ACDC with message type, `t` field.
 }
 ```
 
-#### ACDC message as top-level field map in CESR native format
-
-When an ACDC message appears in CESR native format as a top-level field it MUST use either of the CESR count codes, `-G##` or  `-0G#####` at the top-level. The top-level fields (labels and values) that appear MUST appear in the following order: `[ v, t, d, u, i, rd, s, a, A, e, r]`. The required fields are `[v, t, d, i, s]`. The rules for the appearance of optional fields are the same as those defined above for the other serialization kinds. The major difference here is that the Version field value is a CESR primitive that provides the protocol type and the version. It does not provide a serialization kind or length. This is already indicated by the count code, `-G##` or  `-0G#####`.
 
 #####  Compact Private ACDC with top-level field map in CESR native format
 
