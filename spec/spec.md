@@ -2922,14 +2922,14 @@ The datetime, `dt` field value MUST be the ISO-8601 datetime string with microse
 
 `2020-08-22T17:50:09.988921+00:00`
 
-##### Transaction state, `ts` field
-
-The transaction state, `ts` field value MUST be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
 
 ##### Transaction ACDC SAID, `td` field
 
 The transaction ACDC SAID, `td` field value is the SAID of the ACDC itself. It is the value of the top-level `d` field in the ACDC. This binds the ACDC to the TEL (Registry). The events in the registry are in turn, bound to the key state of the issuer via an anchored seal in the KEL of the issuer. This hierarchical binding binds the key-state of the issuer to the TEL, which in turn is bound to the ACDC itself.  This binding is a verifiable commitment by the issuer to its issuance of the ACDC that survives changes in the keystate of the Issuer.
 
+##### Transaction state, `ts` field
+
+The transaction state, `ts` field value MUST be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
 
 ##### Attribute, `a` field
 
@@ -2962,15 +2962,12 @@ When used in public (unblinded) mode, the UUID, `u` field value MAY be the empty
 The attribute block said, `d` field should typically use the Blake3 Digest code `E`, but any of the cryptographic strength digest codes of length 44 characters in qb64 Text domain MAY be used. 
 When the `td` field value is the empty placeholder, it uses the CESR `Empty` primitive code with value `1AAP`.
 
-The state `ts` field value is a variable-length string primitive or tag that MUST satisfy the following regular expression:
+When the state `ts` field value is a placeholder as indicated by the empty string, i.e., "", it MUST be CESR encoded as the CESR `Empty` primitive code with value `1AAP`.
+
+In general, the state `ts` field value may be encoded using any of the codes from the following table for string-ish encodings:
 
 ```python
-r'^[a-zA-Z_][a-zA-Z0-9_]*$'
-```
-
-This may be encoded using any of the codes from the following table:
-
-```python
+Empty: str= `1AAP` # Empty value for Nonce, UUID, state or related fields
 Tag1:  str = '0J'  # 1 B64 char tag with 1 pre pad
 Tag2:  str = '0K'  # 2 B64 char tag
 Tag3:  str = 'X'  # 3 B64 char tag
@@ -2998,7 +2995,6 @@ Bytes_Big_L1: str = '8AAB'  # Byte String big lead size 1
 Bytes_Big_L2: str = '9AAB'  # Byte String big lead size 2
 ```
 
-When the state `ts` field value is the empty string as placeholder it MUST use the CESR `Empty` primitive code with value `1AAP`.
 
 #### Calculating the SAID of the serialized attribute block
 
@@ -3006,9 +3002,9 @@ As mentioned above, the expanded attributed block is serialized using a CESR gro
 
 ##### SAID Calculation Example
 
-For example, suppose the UUID, `u` field value is encoded as `EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQ`, the transaction ACDC said, `td` field value is encoded as `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`, and the transaction state, `ts` field value is the string "issued" encoded as `Xissued`. The length of the group content is 140 characters. The 144-character dummied serialization, including the four-character group count code, is as follows:
+For example, suppose the UUID, `u` field value is encoded as `EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQ`, the transaction ACDC said, `td` field value is encoded as `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`, and the transaction state, `ts` field value is the string "issued" encoded as `0Missued`. The length of the group content is 140 characters. The 144-character dummied serialization, including the four-character group count code, is as follows:
 ```   
--aCM############################################EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PXissued
+-aCM############################################EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P0Missued
 ```
 
 The CESR encoded Blake3 digest of this string is ``.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
