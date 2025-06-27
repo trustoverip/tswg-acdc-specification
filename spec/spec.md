@@ -2867,7 +2867,7 @@ The reserved field labels for the top level of a state registry (both blindable 
 |`s`| sequence number|
 |`p`| prior event SAID |
 |`dt`| Issuer relative ISO date/time string |
-|`a`| state Attribute block or Attribute block SAID|
+|`a`| Attribute block SAID|
 |`ta`| transaction target ACDC SAID|
 |`ts`| transaction state|
 
@@ -2933,12 +2933,12 @@ The transaction state, `ts` field value MUST be a string from a small finite set
 
 ##### Attribute, `a` field
 
-The Attribute, `a` field value MUST be the SAID of the Attribute block when used in a blinded (private) fashion. Alternatively, when used in an unblinded (public) fashion, the Attribute, `a` field value MUST be either the fully expanded Attribute block (field map) or the SAID of the Attribute block. See below for a description of the expanded Attribute block.
+The Attribute, `a` field value MUST be the SAID of the Attribute block. See below for a description of the Attribute block.
 
 
-#### Expanded attribute block
+#### Attribute block
 
-The expanded Attribute block corresponding to the Attribute `a` field value has the following fields:
+The Attribute block corresponding to the Attribute `a` field value has the following fields:
 
 |Label|Description|
 |---|---|---|
@@ -2951,16 +2951,36 @@ The expanded Attribute block corresponding to the Attribute `a` field value has 
 The fields MUST appear in the following order `[d, u, td, ts]`. 
 
 
-The actual expanded attribute block is not part of the blindable update message. It is provided as a CESR serialization using the CESR group or count codes labeled `BlindedStateGroup` with code format `-a##` or `BigBlindedStateGroup` with code format `--a#####`. The group is serialized starting with the count code and then followed by the four fields serialized in order as CESR primitives that are appropriate for the attribute block SAID, UUID, ACDC SAID, and transaction state string. 
+The actual Attribute block is not part of the blindable update message. It is provided as a CESR serialization using the CESR group or count codes labeled `BlindedStateGroup` with code format `-a##` or `BigBlindedStateGroup` with code format `--a#####`. The group is serialized starting with the count code and then followed by the four fields serialized in order as CESR primitives that are appropriate for the attribute block SAID, UUID, ACDC SAID, and transaction state string. 
 
-The attribute block said, `d` field should typically use the Blake3 Digest code `E`, but any of the cryptographic strength digest codes of length 44 characters in qb64 Text domain MAY be used. 
 
-The UUID `u` field should use the `Salt_256` code for a 32-byte (256-bit) raw salty nonce value with approximately 256 bits of cryptographic strength. But any appropriate cryptographic digest may be used. Typically, this is some derivation process using a salt and a deterministic path based on the sequence number of the associated  `bup` event message. When used in public unblinded mode, the UUID, `u` field value MAY be the CESR `Empty` primitive code with value `1AAP`.
+##### SAID, `d` field
+
+The SAID, `d` field value MUST be the SAID of its enclosing block. An Attribute section's SAID enables a verifiable globally unique reference to that state contained in the block but without necessarily disclosing that state.
+
+The Attribute block said, `d` field should typically use the Blake3 Digest code `E`, but any of the cryptographic strength digest codes of length 44 characters in qb64 Text domain MAY be used. 
+When the `td` field value is the empty placeholder, it uses the CESR `Empty` primitive code with value `1AAP`.
+
+
+##### UUID, `u` field
+
+When not empty, the UUID `u` field value MUST be a cryptographic strength salty nonce with approximately 128 bits of entropy (nominally). The UUID `u` field means that the block's SAID `d` field value provides a secure cryptographic digest of the contents of the block [[48]]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [[30]] [[31]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field, notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
 
 When used in public (unblinded) mode, the UUID, `u` field value MAY be the empty nonce value. 
 
-The attribute block said, `d` field should typically use the Blake3 Digest code `E`, but any of the cryptographic strength digest codes of length 44 characters in qb64 Text domain MAY be used. 
-When the `td` field value is the empty placeholder, it uses the CESR `Empty` primitive code with value `1AAP`.
+The UUID `u` field should use the `Salt_256` code for a 32-byte (256-bit) raw salty nonce value with approximately 256 bits of cryptographic strength. But any appropriate cryptographic digest may be used. Typically, this is some derivation process using a salt and a deterministic path based on the sequence number of the associated  `bup` event message. When used in public unblinded mode, the UUID, `u` field value MAY be the CESR `Empty` primitive code with value `1AAP`.
+
+When the UUID, `u`, is derived from a shared secret salt and a public path such as the sequence number using a hierarchically deterministic derivation algorithm and given that the possible state values are finite and small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event. When the `u` field value is derived from a shared secret salt the derivation algorithm MUSt preserve the approximately 128 bits of cryptographic strength. This typically means a derived UUID `u` field value is 256 bits in length.
+
+##### Transaction ACDC SAID, `td` field
+
+The transaction ACDC SAID, `td` field value is the SAID of the associated ACDC itself. It is the value of the top-level `d` field in the ACDC. This binds the ACDC to the TEL (Registry). The events in the registry are in turn, bound to the key state of the issuer via an anchored seal in the KEL of the issuer. This hierarchical binding binds the key-state of the issuer to the TEL, which in turn is bound to the ACDC itself.  This binding is a verifiable commitment by the issuer to its issuance of the ACDC that survives changes in the keystate of the Issuer.
+
+
+##### Transaction state, `ts` field
+
+The transaction state, `ts` field value MUST be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
+
 
 When the state `ts` field value is a placeholder as indicated by the empty string, i.e., "", it MUST be CESR encoded as the CESR `Empty` primitive code with value `1AAP`.
 
@@ -2996,11 +3016,11 @@ Bytes_Big_L2: str = '9AAB'  # Byte String big lead size 2
 ```
 
 
-#### Calculating the SAID of the serialized attribute block
+##### Calculating the SAID of the serialized Attribute block
 
 As mentioned above, the expanded attributed block is serialized using a CESR group. The SAID of such a serialization is calculated on the QB64 TEXT domain representation. The SAID protocol replaces the attribute block SAID, `d` field value with dummy characters, in this case forty-four `#` characters. A 32-byte raw digest of the full group serialization, including the count code and all fields but with the dummy characters in place of the `d`, field value  is then computed. Finally, the forty-four dummy characters are replaced with the 44 characters of the QB64 Text Domain CESR encoding of that raw digest. This is the resultant serialized expanded attribute block. The SAID of this serialization is the value to place in the attribute `a` field in the associated blindable update `bup` event message.
 
-##### SAID Calculation Example
+##### Attributed Block SAID Calculation Example
 
 For example, suppose the UUID, `u` field value is encoded as `EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQ`, the transaction ACDC said, `td` field value is encoded as `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`, and the transaction state, `ts` field value is the string "issued" encoded as `0Missued`. The length of the group content is 140 characters. The 144-character dummied serialization, including the four-character group count code, is as follows:
 ```   
@@ -3015,7 +3035,7 @@ The CESR encoded Blake3 digest of this string is ``.  This is substituted in the
 
 In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the attribute, `a` field in the associated blindable update, `bup` event.
 
-##### Placeholder Calculation Example
+##### Attribute Block Placeholder Calculation Example
 
 For example, suppose the UUID, `u` field value is encoded as `EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQ`, the empty placeholder transaction ACDC said, `td` field value is encoded as `1AAP`, and the transaction state, `ts` field value is the string "issued" encoded as `Xissued`. The length of the group content is 140 characters. The 144-character dummied serialization, including the four-character group count code, is as follows:
 ```   
@@ -3027,27 +3047,6 @@ The CESR encoded Blake3 digest of this string is ``.  This is substituted in the
 ```
 
 ```
-
-
-
-##### SAID, `d` field
-
-The SAID, `d` field value MUST be the SAID of its enclosing block. An Attribute section's SAID enables a verifiable globally unique reference to that state contained in the block but without necessarily disclosing that state.
-
-##### UUID, `u` field
-
-When not empty, the UUID `u` field value MUST be a cryptographic strength salty nonce with approximately 128 bits of entropy (nominally). The UUID `u` field means that the block's SAID `d` field value provides a secure cryptographic digest of the contents of the block [[48]]. An adversary, when given both the block's SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [[30]] [[31]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field, notwithstanding knowledge of both the block's structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's state unless and until there has been a disclosure of that state.
-
-When the UUID, `u`, is derived from a shared secret salt and a public path such as the sequence number using a hierarchically deterministic derivation algorithm and given that the possible state values are finite and small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event. When the `u` field value is derived from a shared secret salt the derivation algorithm MUSt preserve the approximately 128 bits of cryptographic strength. This typically means a derived UUID `u` field value is 256 bits in length.
-
-##### Transaction ACDC SAID, `td` field
-
-The transaction ACDC SAID, `td` field value is the SAID of the associated ACDC itself. It is the value of the top-level `d` field in the ACDC. This binds the ACDC to the TEL (Registry). The events in the registry are in turn, bound to the key state of the issuer via an anchored seal in the KEL of the issuer. This hierarchical binding binds the key-state of the issuer to the TEL, which in turn is bound to the ACDC itself.  This binding is a verifiable commitment by the issuer to its issuance of the ACDC that survives changes in the keystate of the Issuer.
-
-
-##### Transaction state, `ts` field
-
-The transaction state, `ts` field value MUST be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
 
 #### Private (blinded) state Registry example
 
