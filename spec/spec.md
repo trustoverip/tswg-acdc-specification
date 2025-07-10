@@ -3680,7 +3680,6 @@ The following section details the ACDC message types, including section message 
 | acm | ACDC | Top-level Field Map with Message type (ilk), `t` field |
 | act | ACDC | Top-level Fixed field with Attribute section and Message type (ilk), `t` field |
 | acg | ACDC | Top-level Fixed field with Aggregate section and Message type (ilk), `t` field |
-
 |     |        | **ACDC Section Message types** |
 | sch | Schema | Schema section Message |
 | att | Attribute | Attribute section Message |
@@ -3773,7 +3772,7 @@ For clarity, the first column in the table below provides the unencoded label. T
 
 #### Section Message Types
 
-The section messages are meant to provide a way to send the exposed sections independently of the associated ACDC message. To elaborate, an ACDC itself has a message type of either `acm`, `act` or `acd`. Without loss of specifity, when referring to an ACDC message without specifying the message type, then one of the three types, `acm`, `act`, or `acg` is implied. Otherwise, the message type is specified. In contrast, the ACDC section messages are always referred to as an "ACDC section message" not merely an "ACDC message" unless the message type of the section message is specified.
+The section messages are meant to provide a way to send the exposed sections independently of the associated ACDC message. To elaborate, an ACDC itself has a message type of either `acm`, `act` or `acd`. Without loss of specifity, when referring to an ACDC message without specifying the message type, then one of the three types, `acm`, `act`, or `acg` is implied. Otherwise, the message type is specified. Whereas, in contradistinction, the ACDC section messages are always referred to as an "ACDC section message", not merely an "ACDC message", unless the message type of the section message is specified.
 
 All designated fields are required in ACDC section messages. There are no optional fields. However, field values may be empty. Emptiness for field values that MUST have a string value is indicated by an empty string. In CESR, an empty string primitive is encoded as a variable-length bytes string primitive with zero length given by the primitive encoding `4BAA`. Emptiness for field values that MAY accept a field map is indicated by an empty field map. In CESR, an empty field map is encoded as a generic map group with empty contents given by the group code `-IAA`. Emptiness for field values that MAY accept a list is indicated by an empty list. In CESR, an empty list is encoded as a generic list group with empty contents given by the group code `-JAA`. 
 
@@ -3787,11 +3786,11 @@ All designated fields are required in ACDC section messages. There are no option
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
 |`a`| Attribute| Either the SAID of a block of Attributes or the block itself. |
-|`A`| Attribute Aggregate| Either the aggregate of a selectively disclosable block of Attributes or the block itself. |
+|`A`| Attribute Aggregate| Either the aggregate (effective SAID) of a selectively disclosable block of Attributes or the block itself. |
 |`e`| Edge| Either the SAID of a block of Edges or the block itself.|
 |`r`| Rule | Either the SAID a block of Rules or the block itself. |
 
-Each section Message MUST have Version String, `v`, Message type, `t`,  and SAID, `d` fields in that order. The value of the SAID, `d` field is the said of the Message block itself not the SAID of the embedded section field value. The embedded section block's SAID, `d` field MUST match the section field value in the associated ACDC.
+Each section Message MUST have Version String, `v`, Message type, `t`,  and SAID, `d` fields in that order. The value of the SAID, `d` field is the said of the Section Message itself not the SAID of the embedded section field value. 
 
 The remaining top-level field in each section message is the appropriate section field for the Message type, as follows: 
 
@@ -3800,6 +3799,8 @@ The remaining top-level field in each section message is the appropriate section
 - Attribute aggregate, `A` field for the aggregate, `agg` Message
 - Edge, `e` field for the Edge, `edg` Message
 - Rule, `r` field for the Rule, `rul` Message
+- 
+The embedded section block's SAID, `d` field in the respective section top-level field MUST match the section field value in the associated ACDC when in most compact form. This SAID is computed using the most compact SAID algorithm. To clarify, the said of the message itself as given by the top-level said, `d` field value is not computed using the most compact SAID algorithm, but the embedded said, `d` field of the top-level section field is computed using the most compact SAID algorithm.
 
 For the following Messages, except for the Attribute aggregate variant, assume that the associated compact ACDC is as follows:
 Compact form with Attribute section:
@@ -3916,7 +3917,7 @@ In a Schema Section Message, the Schema, `s` field value is the expanded Schema 
 }
 ```
 
-#### Attribute section Message
+#### Attribute Section Message
 
 In a Attribute Section Message, the Attribute, `a` field value is the expanded Attribute section from the associated ACDC. Notice that the value of the `d` field within the Attribute subblock matches the value of the Attribute, `a` field in the associated ACDC above.
 
@@ -3936,7 +3937,7 @@ In a Attribute Section Message, the Attribute, `a` field value is the expanded A
 }
 ```
 
-#### Aggregated Attribute Message
+#### Aggregated Attribute Section Message
 
 In an Aggregate Section Message, the Aggregate, `A` field value is the expanded attribute aggregate section from the associated ACDC. Notice that the value of the attribute Aggregate, `A` field in the associated ACDC above, is computed as the digest of concatenated digests of the elements of the selectively disclosable array (see Annex on Selective Disclosure).
 
@@ -3966,7 +3967,7 @@ In an Aggregate Section Message, the Aggregate, `A` field value is the expanded 
 }
 ```
 
-#### Edge Message
+#### Edge Section Message
 
 In an Edge Section Message, the Edge, `e` field value is the expanded Edge section from the associated ACDC. Notice that the value of the `d` field within the Edge subblock matches the value of the Edge, `e` field in the associated ACDC above.
 
@@ -3989,7 +3990,7 @@ In an Edge Section Message, the Edge, `e` field value is the expanded Edge secti
 }
 ```
 
-#### Rule Message
+#### Rule Section Message
 
 In a Rule Section Message, the Rule, `r` field value is the expanded Rules section from the associated ACDC. Notice that the value of the `d` field within the Rule subblock matches the value of the Rule, `r` field in the associated ACDC above.
 
