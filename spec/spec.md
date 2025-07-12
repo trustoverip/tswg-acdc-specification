@@ -3504,7 +3504,7 @@ Given that aggregate value ‘A’ appears as the compact value of the top-level
 - The actual detailed disclosed Attribute block itself (at index ‘j’) with all its fields.
 - The list of all Attribute block digests, \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\] that includes a<sub>j</sub>.
 - The ACDC in compact form with selectively disclosable Attribute section, `A`, field value set to aggregate ‘A’.
-- The signature(s), ‘s’, of the Issuee on the ACDC's top-level SAID, `d`, field.
+- The presence of the issuance seal digest in the Issuer's KEL bound to the ACDC top-level SAID, `d`, field either directly or indirectly through a TEL Registry entry.
 
 The actual detailed disclosed Attribute block is only disclosed after the Disclosee has agreed to the terms of the Rules section. Therefore, in the event the potential Disclosee declines to accept the terms of disclosure, then a presentation of the compact version of the ACDC and/or the list of Attribute digests, \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\]. does not provide any point of correlation to any of the Attribute values themselves. The Attributes of block ‘j’ are hidden by a<sub>j</sub>\ and the list of Attribute digests \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\] is hidden by the aggregate ‘A’. The Partial Disclosure needed to enable Chain-link Confidentiality does not leak any of the selectively disclosable details.
 
@@ -3516,7 +3516,6 @@ The Disclosee may then verify the disclosure by:
 - computing the top-level SAID, `d`, field of the provided ACDC.
 - confirming the presence of the issuance seal digest in the Issuer's KEL
 - confirming that the issuance seal digest in the Issuer's KEL is bound to the ACDC top-level SAID, `d`, field either directly or indirectly through a TEL Registry entry.
-verifying the provided signature(s) of the Issuee on the provided top-level SAID, `d` field value.
 
 The last 3 steps that culminate with verifying the signature(s) require determining the Key state of the Issuer at the time of issuance.  Therefore, this may require additional verification steps as per the KERI and SAD Path protocols.
 
