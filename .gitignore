@@ -21,8 +21,7 @@ report.xml
 !requirements.txt
 .DS_Store
 .idea
-venv/
-/.vs
+venv
 node_modules
 *.log
 dist
