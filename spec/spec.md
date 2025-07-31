@@ -2198,7 +2198,6 @@ Any Validator can cryptographically verify the authoritative state of the transa
 
 ACDCs may be rightly generically referred to as Verifiable Containers (VCs). Often, ACDCs are used as entitlements or credentials and, therefore, may also be rightly referred to as Verifiable Credentials (VCs). The abbreviation VC works in either case. An ACDC can more simply be denoted as a Container or a Credential. A Verifiable Container/Credential Registry (VCR) is a type of TEL. It is a form of a Verifiable Data Registry (VDR) that tracks the state of ACDCs issued by the Controller of the KEL. Without loss of specificity, in this section, a TEL serving the purpose of a VCR may be simply denoted as a Registry. A Registry that tracks the dynamic issuance and revocation state of an ACDC is called a Revocation Registry.
 
-
 ### Registry Message Types and Fields
 
 State registries have three types of events. These types are shown in the following table:
@@ -2481,13 +2480,14 @@ Consider a blindable state revocation registry for ACDCs operated in blinded (pr
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAADa.",
-        "t": "rip",
-        "d": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
-        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
-        "n": "0",
-        "dt": "2025-07-04T17:51:00.000000+00:00"
+
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "n": "0",
+    "dt": "2025-07-04T17:51:00.000000+00:00"
 }
 ```
 
@@ -2498,14 +2498,14 @@ The state is initialized with decorrelated placeholder values with the issuance 
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAAEi.",
-        "t": "bup",
-        "d": "EPNwyvHp2XJsz9pSpXtHtcCmzw6bKSFc-nhGKTbso0Yg",
-        "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
-        "n": "1",
-        "p": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
-        "dt": "2025-08-01T18:06:10.988921+00:00",
-        "b": "ECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6J"
+    "v": "ACDCCAACAAJSONAAEi.",
+    "t": "bup",
+    "d": "EPNwyvHp2XJsz9pSpXtHtcCmzw6bKSFc-nhGKTbso0Yg",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "1",
+    "p": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "dt": "2025-08-01T18:06:10.988921+00:00",
+    "b": "ECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6J"
 }
 ```
 
@@ -2517,7 +2517,6 @@ Notice in the event above that the registry SAID, `rd` field value matches the v
 | `u` |`aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`| UUID salty nonce blinding factor, random or HD generated |
 | `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`| 
 | `ts` | `1AAP` |Transaction state value string | 
-
 
 Notice that the value of the BLID blinded attribute, `b` field in the transaction event, matches the value of the BLID, `b` field in the expanded attribute block.  Likewise, notice that the value of the transaction ACDC SAID, in the `td` field, is the CESR encoded value for empty, serving as a placeholder value. Furthermore, the value of the transaction state, `ts` field, is also is the CESR encoded value for empty. This indicates that the transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. To update the blind, the issuer issues a new blindable update event, `bup`, with a new blind, UUID `u` field value in the associate attribute block derived from the shared Salt and the sequence number of the `bup` event.  This makes the first use(s) of the registry uncorrelated with the eventual actual issuance of a real ACDC. 
 
@@ -2533,14 +2532,14 @@ Suppose the associated update event occurs at sequence number 2. The published b
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAAEi.",
-        "t": "bup",
-        "d": "EBdytzDC4dnatn-6mrCWLSGuM62LM0BgS31YnAg5NTeW",
-        "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
-        "n": "2",
-        "p": "EPNwyvHp2XJsz9pSpXtHtcCmzw6bKSFc-nhGKTbso0Yg",
-        "dt": "2020-08-02T12:00:20.000000+00:00",
-        "b": "EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t"
+    "v": "ACDCCAACAAJSONAAEi.",
+    "t": "bup",
+    "d": "EBdytzDC4dnatn-6mrCWLSGuM62LM0BgS31YnAg5NTeW",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "2",
+    "p": "EPNwyvHp2XJsz9pSpXtHtcCmzw6bKSFc-nhGKTbso0Yg",
+    "dt": "2020-08-02T12:00:20.000000+00:00",
+    "b": "EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t"
 }
 ```
 
@@ -2573,15 +2572,15 @@ At some time later the issuer decides to make the issuance state public. The iss
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAAEy.",
-        "t": "upd",
-        "d": "ENR6tbkJCJXQTiu5TP-RBxkS2_ZSZBgbJmpjKucDe07h",
-        "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
-        "n": "3",
-        "p": "EBdytzDC4dnatn-6mrCWLSGuM62LM0BgS31YnAg5NTeW",
-        "dt": "2020-08-03T12:00:20.000000+00:00",
-        "td": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
-        "ts": "revoked"
+    "v": "ACDCCAACAAJSONAAEy.",
+    "t": "upd",
+    "d": "ENR6tbkJCJXQTiu5TP-RBxkS2_ZSZBgbJmpjKucDe07h",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "3",
+    "p": "EBdytzDC4dnatn-6mrCWLSGuM62LM0BgS31YnAg5NTeW",
+    "dt": "2020-08-03T12:00:20.000000+00:00",
+    "td": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
+    "ts": "revoked"
 }
 ```
 
@@ -2591,13 +2590,13 @@ Consider a unblindable state revocation Registry for ACDCs operated in an unblin
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAADa.",
-        "t": "rip",
-        "d": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
-        "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
-        "n": "0",
-        "dt": "2025-07-04T17:53:00.000000+00:00"
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
+    "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+    "n": "0",
+    "dt": "2025-07-04T17:53:00.000000+00:00"
 }
 ```
 With respect to the event above, given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere, typically as the value of the `rd` field.
@@ -2639,7 +2638,6 @@ Sometime later, the ACDC is revoked with the publication by the Issuer of the fo
 ```
 
 Notice that this event is chain-linked to the prior update event.
-
 
 ## Annex
 
@@ -2696,7 +2694,6 @@ Nonetheless, some applications require bundled Attributes and therefore may bene
 The use of a revocation Registry is an example of a type of bundling, not of Attributes in a credential, but uses of a credential in different contexts. Unbundling the usage contexts may be beneficial. This is provided by bulk-issued ACDCs.
 
 Finally, in the case where the correlation of activity of an Issuee across contexts even when the ACDC used in those contexts is not correlatable may be addressed of a variant of bulk-issued ACDCs that have unique Issuee AIDs with an independent TEL Registry per Issuee instance. This provides non-repudiable (recourse supporting) disclosure while protecting from the malicious correlation between 2nd parties and other 2nd and/or 3rd parties as to who (Issuee) is involved in a presentation.
-
 
 #### Inclusion proof via Merkle tree root digest
 
