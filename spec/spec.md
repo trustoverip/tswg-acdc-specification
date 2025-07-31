@@ -322,6 +322,8 @@ These MAY appear at other levels besides the top-level of an ACDC.
 |`o`| Operator| Either unary operator on Edge or m-ary operator on edge-group in Edge section. Enables expressing of Edge logic on Edge subgraph.|
 |`w`| Weight| Edge weight property that enables default property for directed weighted edges and operators on directed weighted edges.|
 |`l`| Legal Language| Text of Ricardian contract clause.|
+|`dt`| Datetime | Issuer's relative ISO datetime string |
+
 
 ### Compact labels
 
@@ -331,7 +333,7 @@ The primary field labels are compact in that they MUST use only one or at most t
 
 The Version String, `v`, field MUST be the first field in any top-level ACDC field map encoded in JSON, CBOR, or MGPK [[spec: RFC4627]] [[spec: RFC4627]] [[12]] [[13]] [[14]].  It provides a regular expression target for determining a serialized field map's serialization format and size (character count) constituting an ACDC message body. A Stream parser SHOULD use the Version String to extract and deserialize (deterministically) any serialized Stream of ACDC Message bodies. Each ACDC Message body in a Stream MAY use a different serialization type. The format for the Version String field value is defined in the CESR specification [[1]]. 
 
-The protocol field, `PPPP` value in the Version String MUST be `ACDC` for the ACDC protocol. The version field, `VVV`, MUST encode the current version of the ACDC protocol [[1]].
+The protocol field, `PPPP` value in the Version String MUST be `ACDC` for the ACDC protocol. The protocol version field, `Mmm`, MUST encode the current major `M` and minor `mm` version of the ACDC protocol [[1]] used by the associated message. The CESR genus version field `Ggg` MUST encode the major `G` and minor `gg` version of the CESR protocol used to encode the associated message [[reference to CESR protocol specification]].
 
 ##### Legacy Version String field format
 
@@ -342,9 +344,9 @@ Compliant ACDC version 2.XX implementations MUST support the old ACDC version 1.
 
 Some fields in ACDCs MAY have for their value either a field map or a SAID. A SAID follows the SAID protocol [[3]]. A SAID is a special type of cryptographic digest of its encapsulating field map (block). The encapsulating block of a SAID is called a SAD (Self-addressed data). Using a SAID as a field value enables a more compact but secure representation of the associated block (SAD) from which the SAID is derived. Any nested field map that includes a SAID field (i.e., is, therefore, a SAD) MAY be compacted into its SAID. The uncompacted blocks for each associated SAID MAY be attached or cached to optimize bandwidth and availability without decreasing security.
 
-Several top-level ACDC fields MAY have for their value either a serialized field map or the SAID of that field map. Each SAID provides a stable, universal, cryptographically verifiable, and agile reference to its encapsulating block (serialized field map). These include the `d`, and `rd` fields. Moreover, the value of top-level `s`, `a`, `e`, and `r` fields MAY be replaced by the SAID of their associated field map. When replaced by their SAID, these top-level sections are in compact form.
+More specifically, special top-level ACDC fields MUST have for their value either a serialized field map or the SAID of that field map. Recall that each SAID provides a stable, universal, cryptographically verifiable, and agile reference to its encapsulating block (serialized field map). The special top-level SAID fields in ACDC include the `d`, and `rd` fields. Moreover, the value of top-level `s`, `a`, `e`, and `r` fields MAY be replaced by the SAID of their associated field map. The values of the `s`, `a`, `e`, and `r` fields provide normatively defined sections of an ACDC. When replaced by their SAID, these top-level field values represent their associated sections in *compact* form.
 
-Recall that a cryptographic commitment (such as a digital signature or cryptographic digest) on a given digest with sufficient cryptographic strength, including collision resistance [[34]] [[35]], is equivalent to a commitment to the block from which the given digest was derived.  Specifically, a digital signature on a SAID makes a verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. This enables reasoning about ACDCs in whole or in part via their SAIDs in a fully interoperable, verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts [[43]]. This includes reasoning about the whole ACDC given by its top-level SAID, `d`, field, as well as reasoning about any nested sections using their SAIDs.
+A cryptographic commitment (such as a digital signature or a cryptographic digest) on some other given cryptographic digest, all with sufficient cryptographic strength, including collision resistance [[34]] [[35]] of the digest(s), is equivalent to a commitment to thea actual serialized block on which the given digest was derived (computed).  Specifically, a digital signature on a SAID makes a verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. Moreover, a digest of a data block that, in turn, contains digests of yet other data blocks, makes a compact, hierarchical, verifiable cryptographic commitment to the digested data blocks. The combination of non-repudiable commitments and hierarchical commitments enables reasoning about ACDCs in whole or in part via their SAIDs in a fully interoperable, verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts [[43]]. This includes reasoning about the whole ACDC given by its top-level SAID, `d`, field, as well as reasoning about any of its special nested sections using the section SAIDs.
 
 ### Registry SAID field
 
@@ -353,32 +355,36 @@ When present, the registry SAID, `rd` field value is the SAID of the initializin
 
 ### Universally unique identifier (UUID) fields
 
-The purpose of the UUID, `u`, field in any block is to provide sufficient entropy to the SAID, `d`, field of the associated block to make computationally infeasible any brute force attacks on that block that attempt to discover the block contents from the schema and the SAID. The UUID, `u`, field may be considered a salty nonce [[29]]. Without the entropy provided the UUID, `u`, field, an adversary may be able to reconstruct the block contents merely from the SAID of the block and the [[ref: Schema]] of the block using a rainbow or dictionary attack on the set of field values allowed by the Schema [[30]] [[31]]. The effective security level, entropy, or cryptographic strength of the schema-compliant field values may be much less than the cryptographic strength of the SAID digest. Another way of saying this is that the cardinality of the power set of all combinations of allowed field values may be much less than the cryptographic strength of the SAID. Thus, an adversary could successfully discover via brute force the exact block by creating digests of all the elements of the power set which may be small enough to be computationally feasible instead of inverting the SAID itself. Sufficient entropy in the `u` field ensures that the cardinality of the power set allowed by the schema is at least as great as the entropy of the SAID digest algorithm itself.
+The purpose of the UUID, `u`, field in any block is to provide sufficient entropy to the SAID, `d`, field of the associated block to make computationally infeasible any brute force attacks on that block that attempt to discover the block contents from the schema and the SAID. The UUID, `u`, field may be considered a salty nonce [[29]]. Without the entropy provided by the UUID, `u`, field, an adversary may be able to reconstruct the block contents merely from the SAID of the block and the [[ref: Schema]] of the block using a rainbow or dictionary attack on the set of field values allowed by the Schema [[30]] [[31]]. The resultant effective security level, entropy, or cryptographic strength of the schema-compliant field values may be much less than the cryptographic strength of the SAID digest. Another way of saying this is that the cardinality of the power set of all combinations of allowed field values may be much less than the cryptographic strength of the SAID as a cryptographic digest. Thus, an adversary could successfully discover the exact block by creating digests of all the elements of the power set, which may be small enough to be computationally feasible, rather than inverting the SAID itself. Sufficient entropy in the `u` field, however, ensures that the cardinality of the power set allowed by the schema is at least as great as the entropy of the SAID digest algorithm itself.
 
-A UUID, `u` field MAY optionally appear in any block (field map) at any level of an ACDC. Whenever a block in an ACDC includes a UUID, `u`, field then its associated SAID, `d`, field makes a blinded commitment to the contents of that block. The UUID, `u`, field is the blinding factor. This makes that block securely partially disclosable or even selectively disclosable notwithstanding disclosure of the associated Schema of the block. The block contents can only be discovered given disclosure of the included UUID field. Likewise, when a UUID, `u`, field appears at the top level of an ACDC then that top-level SAID, `d`, field makes a blinded commitment to the contents of the whole ACDC itself. Thus, the whole ACDC, not merely some block within the ACDC, MAY be disclosed in a privacy-preserving (correlation minimizing).
+A UUID, `u` field, MAY optionally appear in any block (field map) at any level of an ACDC. Whenever a block in an ACDC includes a UUID, `u`, field then, its associated SAID, `d`, field makes a blinded commitment to the contents of that block. The UUID, `u`, field is the blinding factor. This makes that block securely partially disclosable or even selectively disclosable, notwithstanding disclosure of the associated Schema of the block along with the block SAID. With an embedded UUID field value that contains sufficient cryptographic entropy, the block contents can only be discovered if the included UUID field is explicitly disclosed. Likewise, when a UUID, `u`, field appears at the top level of an ACDC then, that top-level SAID, `d`, field makes a blinded commitment to the contents of the whole ACDC itself. Thus, the whole ACDC, not merely some block within the ACDC, MAY be disclosed in a correlation-minimizing (what some call privacy-preserving) manner.
 
-### Autonomic IDentifier (AID) fields
+### Autonomic IDentifier (AID) Fields
 
 Some fields, such as the `i`, Issuer identifier field, MUST each have an [[ref: AID]] as its value. An AID is a fully qualified Self-certifying Identifier (SCID) that follows the KERI protocol [[2]].  An AID MUST be derived from one or more `(public, private)` key pairs using asymmetric or public-key cryptography to create verifiable digital signatures [[52]]. Each AID SHOULD have set of one or more Controllers who each control a private key. By virtue of their private key(s), the Controllers MAY make statements on behalf of the associated AID backed by uniquely verifiable commitments via digital signatures on those statements. Any entity then MAY verify those signatures using the associated set of public keys. No shared or trusted relationship between the Controllers and Verifiers is REQUIRED. The verifiable key state for AIDs MUST be established with the KERI protocol [[2]]. The use of AIDs enables ACDCs to be used in a portable but securely attributable, fully decentralized manner in an ecosystem that spans trust domains.
 
-### Namespaced AIDs
 
-Because KERI is agnostic about the namespace for any particular AID, different namespace standards MAY be used to express KERI AIDs or identifiers derived from AIDs as the value of these AID related fields in an ACDC. Some of the examples below use the W3C DID namespace specification with the `did:keri` method [[ref: DIDK_ID]. However, the examples would have the same validity from a KERI perspective if some other supported namespace was used or no namespace was used at all. The latter case consists of a bare KERI AID (identifier prefix) expressed in CESR format [[1]].
+##### Datetime, `dt` fields
+The datetime, `dt` field value, if any, MUST be the ISO-8601 datetime string with microseconds and UTC offset as per IETF RFC-3339. This datetime is relative to the clock of the issuer. Attributes typically include one or more date time fields. In a given field map (block) the primary datetime will use the label, `dt`. Typically, this is the datetime of the issuance of the ACDC. Other datetime fields MAY include an expiration datetime or the like.
 
-### Attribute field
+ An example datetime string in this format is as follows:
+
+`2020-08-22T17:50:09.988921+00:00`
+
+
+### Partially Disclosable Attribute Section Field
 
 The top-level Attribute section `a`, field value MAY have as its value a nested field map. Each level of nesting MAY be fully expanded or represented by its SAID. When present, the `a` field value provides the so-called payload data of the ACDC. The `a` field syntax is described in more detail below. An ACDC MUST not have both an `a` field and an `A` field (see next section) when it has either.
 
-### Selectively disclosable Attribute aggregate field
+### Selectively Disclosable Aggregate Section Field
 
-The top-level selectively disclosable Attribute aggregate section, `A`, field value is an aggregate of cryptographic commitments used to make a commitment to a set (bundle) of selectively disclosable Attributes. The value of the Attribute aggregate, `A`, field depends on the type of Selective Disclosure mechanism employed. For example, the aggregate value could be the cryptographic digest of the concatenation of an ordered set of cryptographic digests, a Merkle tree root digest of an ordered set of cryptographic digests, or a cryptographic accumulator. The Selective Disclosure mechanisms are described in detail in the Selective Disclosure section. When present, the `A` field value provides the so-called payload data of the ACDC. The `A` field syntax is described in more detail below. An ACDC MUST not have both a non-empty `a` field value and a non-empty `A` field value (see next section) when it has either.
+The top-level selectively disclosable Aggregate section, `A`, field value is an aggregate of cryptographic commitments used to make a commitment to a set (bundle) of selectively disclosable Attributes. The value of the Aggregate, `A`, field depends on the type of Selective Disclosure mechanism employed. The baseline standard approach is that the Aggregate field value is a cryptographic digest of the concatenation of an ordered set of the SAIDs of blinded Attribute sub-blocks. Other approaches to forming an aggregate could be a Merkle tree root digest of an ordered set of cryptographic digests, or a cryptographic accumulator. The standard Selective Disclosure mechanism, i.e. a digest of the concatenation of the SAIDs of blinded attribute sub-blocks is described in detail in the Selective Disclosure section. When present, the `A` field value provides the so-called payload data of the ACDC. The `A` field syntax is described in more detail below. An ACDC MUST not have both a non-empty `a` field value and a non-empty `A` field value (see next section) when it has either.
 
-
-### Edge field
+### Partially Disclosable Edge Section Field
 
 The top-level Edge section `e` field value makes a cryptographically verifiable commitment to other ACDCs via references to their SAIDs. The `e` field syntax is described in more detail below.
 
-### Rule field
+### Partially Disclosable Rule Section field
 
 The top-level Rule section `r`, field value provides both human and machine readable legal language that MAY be associated with the ACDC. This is a type of Ricardian contract. The `r` field syntax is described in more detail below.
 
@@ -391,9 +397,9 @@ The ordering of the top-level fields when present in an ACDC must be as follows,
 
 There are several variants of ACDCs determined by the presence/absence of certain fields and/or the value of those fields when used in combination. The primary ACDC variants are public, private, metadata, and bespoke. A given variant MAY be Targeted (Untargeted). 
 
-All the variants have two alternate forms, compact and non-compact. In the compact form of any variant, the values of the top-level fields for the Schema, Attribute, Attribute aggregate, Edge, and Rule sections are the SAIDs (digests) of the corresponding expanded (non-compact) form of each section {{SAID}}. Additional variants arise from the presence or absence of different fields inside the Attribute or Attribute aggregate section. 
+All the variants have two alternate forms, compact and non-compact. In the compact form of any variant, the values of the top-level fields for the Schema, Attribute, Aggregate, Edge, and Rule sections are the SAIDs (digests) of the corresponding expanded (non-compact) form of each section {{SAID}}. When in a non-compact form then one or more of the section fields may be partially or fully expanded. Additional variants arise from the presence or absence of different fields inside the Attribute or Attribute aggregate section. 
 
-At the top level, the presence (absence), of the UUID, `u`, field produces two additional variant combinations. These are private (public), respectively. In addition, a present but empty UUID, `u`, field produces a private metadata variant. Furthermore, a given variant MAY be either Targeted or Untargeted based on the presence of the Issuee field in the Attribute or Attribute aggregate sections. Similarly, any variant with an Attribute section MAY have nested sub-blocks within the Attribute section that are either compact or non-compact. This enables nested Partial Disclosure. The type of disclosure a given variant supports MAY be dependent on how the different sections appear in the ACDC.
+At the top level, the presence (absence), of the UUID, `u`, field produces two additional variant combinations. These are private (public), respectively. In addition, a present but empty UUID, `u`, field produces a *Private Metadata* variant. Furthermore, a given variant MAY be either *Targeted* or *Untargeted* based on the presence of the Issuee field in the Attribute or Attribute aggregate sections. Similarly, any variant with an Attribute section MAY have nested sub-blocks within the Attribute section that are either compact or non-compact. This enables nested Partial Disclosure. The type of disclosure a given variant supports MAY be dependent on how the different sections appear in the ACDC.
 
 An overview of each variant is explained below.
 
@@ -407,24 +413,22 @@ To verify the SAID, just reverse the process. First, expand a given block, verif
 
 The algorithm for computing the “most compact form" of a block for computing its SAID is as follows.
 
-- A SAIDed block is any block that has a SAID field `d` when in block-level expanded form. Any SAIDed block is compactifiable into the compact form consisting of a string field whose value is the SAID of the block-level expanded form and whose label is the block label. This compact form MUST appear as the first variant in the `oneOf` subschema list for its labeled field. In block-level expanded form, all fields with non-SAIDed subblock values are fully expanded, whereas all fields with SAIDed subblocks are represented in compact form. The latter requires first representing each SAIDed subblock in block-level expanded form, computing its SAID, and then using that SAID to represent it in compact form.
+- A SAIDed block is any block that has a SAID field `d` when in block-level expanded form. Any SAIDed block is compactifiable into the compact form consisting of a string field whose value is the SAID of the block-level expanded form and whose label is the block label. This compact form MUST appear as the first variant in the `oneOf` subschema list for its labeled field. In block-level expanded form, all fields within a block with non-SAIDed subblock values are fully expanded, whereas all fields with SAIDed subblocks are represented in compact form. The latter requires first representing each SAIDed subblock in block-level expanded form, computing its SAID, and then using that SAID to represent it in compact form. This process is recursively applied to multiple levels of SAIDed subblocks 
 
-- A SAIDed block that does not have any nested SAIDed subblocks as fields is a leaf block. Its SAID MUST be computed on the full expanded representation of the block. It MAY then be represented in the compact form but using the SAID computed on its fully expanded form. To clarify, because the leaf has no SAIDed subblocks, its block-level expanded form is fully expanded, including any fields with subblocks. This is a concern when it has subblocks whose schema has `oneOf` composition variants that omit any details. This is the case for a simple-compact edge or a simple-compact rule (see below under the Edge and Rule sections), which are each a nested (non-SAIDed) subblock with a non-SAID-based compact `oneOf` variant. These are special cases, and the most detailed variant of the subblock MUST be the fully expanded form. 
+- A SAIDed block that does not have any nested SAIDed subblocks as fields is a leaf block. It's SAID MUST be computed on the full expanded representation of the block. It MAY then be represented in the compact form but using the SAID computed on its fully expanded form. This enables its enclosing block to be represented in blocklevel expanded form. To clarify, because the leaf has no SAIDed subblocks, its block-level expanded form is fully expanded, including any fields with subblocks. This is a concern when it has subblocks whose schema has `oneOf` composition variants that omit any details. This is the case for a simple-compact edge or a simple-compact rule (see below under the Edge and Rule sections), which are each a nested (non-SAIDed) subblock with a non-SAID-based compact `oneOf` variant. These are special cases, and the most detailed variant of the subblock MUST be the fully expanded form. To elaborate, when a non-Saided sublock has variants given by `oneof` composition in its schema, then the most fully expanded `oneof` variant is used to compute the SAID of its enclosing SAIDed subblock.
 
 - The computation of the SAID of any SAIDed block is as follows. 
     - Fully expand any field within the block whose value is a Non-SAIDed sub-block.
     - Compact any field within the block whose value is a leaf block with its SAID computed on its fully expanded form.
     - Compact any non-leaf SAIDed block with its SAID computed on its block-level expanded form. The SAID of any non-leaf SAIDed subblock is recursively computed. Once all SAIDed subblocks have been represented in compact form, the SAID of the SAIDed block is then computed on the resultant representation.
     
-    
 To elaborate, the algorithm recursively compacts a nested set of SAIDed subblocks by doing a depth-first search of all SAIDed subblock fields in a given block where each branch of the search terminates when it reaches a leaf subblock whereupon it computes the SAID of the leaf, compacts it and then continues the depth-first search until all the SAIDed subblock fields are compacted and then computes the SAID of that block and then ascends the tree, compacting subblocks and computing block SAIDs until it reaches the top-level block that is the ACDC itself. 
 
-Thereby, there is one and only one "most compact form" SAID for any given ACDC as well as one and only one "most compact form" SAID for each of the ACDC top-level sections regardless of all the different variants allowed by the `oneOf` compositions of any SAIDed subblocks. This "most compact form," SAID, is what is used to reference an ACDC as the node value of an Edge or to reference a section.
-
+Thereby, there is one and only one "most compact form" SAID for any given ACDC, as well as one and only one "most compact form" SAID for each of the ACDC top-level sections, regardless of all the different variants allowed by the `oneOf` compositions of any SAIDed subblocks. This "most compact form," SAID, is what is used to reference an ACDC as the node value of an Edge or to reference a section.
 
 ### Compact ACDC
 
-The top-level section field values of a Compact ACDC are the SAIDs of each uncompacted top-level section. The section field labels are `s`, `a`, (`A`), `e`, and `r`.
+The top-level section field values of a Compact ACDC are the SAIDs of each uncompacted top-level section. The section field labels are `s`, `a`, `e`, and `r`. A special case is an ACDC with an Aggregate section `A` field. Although the compact aggregate value is not computed using the most compact SAID algorithm, the most compact form of the ACDC has the aggregate value as the value of the Aggregate section field. It effectively acts like a SAID for the purpose of compacting the ACDC. To clarify, an Aggregate section uses its own algorightm for compact and un-compact (expanded) forms. Its compact form is used in the compact form of is its enclosing ACDC.
 
 
 ### Public ACDC
@@ -437,195 +441,12 @@ Given a top-level UUID, `u`, field, whose value has sufficient cryptographic ent
 
 ### Metadata ACDC 
 
-An empty, top-level UUID, `u`, field appearing in an ACDC indicates that the ACDC is a metadata ACDC. The purpose of a metadata ACDC is to provide a mechanism for a Discloser to make cryptographic commitments to the metadata of a yet to be disclosed private ACDC without providing any point of correlation to the actual top-level SAID, `d`, field of that yet to be disclosed ACDC. The top-level SAID, `d`, field, of the metadata ACDC, is cryptographically derived from an ACDC with an empty top-level UUID, `u`, field so its value will necessarily be different from that of an ACDC with a high entropy top-level UUID, `u`, field value. Nonetheless, the Discloser MAY make a non-repudiable cryptographic commitment to the metadata SAID in order to initiate a contractually protected exchange without leaking correlation to the actual ACDC to be disclosed [[44]. A Disclosee MAY verify the other metadata information in the metadata ACDC before agreeing to any restrictions imposed by the future disclosure. The metadata includes the Issuer, the Schema, the provenanced Edges, and the Rules (terms-of-use). The top-level Attribute section, `a`, field value, or the top-level Attribute aggregate, `A` field value of a metadata ACDC MAY be empty so that its value is not correlatable across disclosures (presentations). Should the potential Disclosee refuse to agree to the Rules, then the Discloser has not leaked the SAID of the actual ACDC or the SAID of the Attribute block that would have been disclosed.
+An empty, top-level UUID, `u`, field appearing in an ACDC indicates that the ACDC is a metadata ACDC. The purpose of a metadata ACDC is to provide a mechanism for a Discloser to make cryptographic commitments to the metadata of a yet to be disclosed private ACDC without providing any point of correlation to the actual top-level SAID, `d`, field of that yet to be disclosed ACDC. The top-level SAID, `d`, field, of the metadata ACDC, is cryptographically derived from an ACDC with an empty top-level UUID, `u`, field so its value will necessarily be different from that of an ACDC with a high entropy top-level UUID, `u`, field value. Nonetheless, the Discloser MAY make a non-repudiable cryptographic commitment to the metadata SAID in order to initiate a contractually protected exchange without leaking correlation to the actual ACDC to be disclosed [[44]. A Disclosee MAY verify the other metadata information in the metadata ACDC before agreeing to any restrictions imposed by the future disclosure. The metadata includes the Issuer, the Schema, the provenanced Edges, and the Rules (terms-of-use). The top-level Attribute section, `a`, field value, or the top-level Attribute aggregate, `A` field value of a metadata ACDC, MAY be empty or missing so that its value is not correlatable across disclosures (presentations). Should the potential Disclosee refuse to agree to the Rules, then the Discloser has not leaked the SAID of the actual ACDC or the SAID of the Attribute block that would have been disclosed.
 
-Given the metadata ACDC, the potential Disclosee is able to verify the Issuer, the Schema, the provenanced Edges, and Rules prior to agreeing to the Rules.  Similarly, an Issuer MAY use a metadata ACDC to get agreement to a contractual waiver expressed in the Rules section with a potential Issuee prior to issuance. Should the Issuee refuse to accept the terms of the waiver, then the Issuer has not leaked the SAID of the actual ACDC that would have been issued nor the SAID of its attributes block nor the Attribute values themselves.
+Given the metadata ACDC, the potential Disclosee can verify the Issuer, the Schema, the provenance of the Edges, and the terms and conditions in the Rules prior to agreeing to the Rules.  Similarly, an Issuer MAY use a metadata ACDC to get agreement to a contractual waiver expressed in the Rules section with a potential Issuee prior to issuance. Should the Issuee refuse to accept the terms of the waiver, then the Issuer has not leaked the SAID of the actual ACDC that would have been issued, nor the SAID of its attributes block, nor the Attribute values themselves.
 
-When a metadata ACDC is disclosed (presented), only the Discloser's signature(s) is attached, not the Issuer's signature(s). This precludes the Issuer's signature(s) from being used as a point of correlation until after the Disclosee has agreed to the terms in the rule section. When Contractually Protected Disclosure is used, the Issuer's signature(s) is not disclosed to the Disclosee until after the Disclosee has agreed to the terms. The Disclosee is protected from a forged Discloser because, ultimately, verification of the disclosed ACDC will fail if the Discloser does not eventually provide verifiable Issuer's signatures. Nonetheless, should the potential Disclosee not agree to the terms of the disclosure expressed in the Rules section, then the Issuer's signature(s) is not leaked.
+When a metadata ACDC is disclosed (presented), only cryptographic commitments from the Discloser are attached, not commitments from the Issuer. This prevents the Issuer commitments from being used as a point of correlation until after the Disclosee has agreed to the terms in the rule section. Likewise, when a Contractually Protected Disclosure is used, the Issuer's commitments are not disclosed to the Disclosee until after the Disclosee has agreed to the terms. The Disclosee is protected from a forged Discloser because, ultimately, verification of the disclosed ACDC will fail if the Discloser does not eventually provide verifiable Issuer commitments. Nonetheless, should the potential Disclosee not agree to the terms of the disclosure expressed in the Rules section, then the Issuer's commitments are not leaked.
 
-### ACDC Examples
-
-#### Compact public ACDC example
-
-An example of a fully compact public ACDC is shown below. The ACDC is public because the `u` field is missing.
-
-```json
-{
-  "v":  "ACDC10JSON00011c_",
-  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "i":  "EFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPMmkPreYpZf",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
-```
-
-The schema for the Compact public ACDC example above is provided below.
-
-```json
-{
-  "$id": "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Compact Public ACDC",
-  "description": "Example JSON Schema for a Compact private ACDC.",
-  "credentialType": "CompactPublicACDCExample",
-  "version": "1.0.0",
-  "type": "object",
-  "required":
-  [
-    "v",
-    "d",
-    "u",
-    "i",
-    "rd",
-    "s",
-    "a",
-    "e",
-    "r"
-  ],
-  "properties":
-  {
-    "v":
-    {
-      "description": "ACDC version string",
-      "type": "string"
-    },
-    "d":
-    {
-     "description": "ACDC SAID",
-      "type": "string"
-    },
-    "i":
-    {
-      "description": "Issuer AID",
-      "type": "string"
-    },
-    "rd":
-    {
-      "description": "Registry SAID",
-      "type": "string"
-    },
-    "s": 
-    {
-      "description": "schema SAID",
-      "type": "string"
-    },
-    "a": 
-    {
-      "description": "attribute SAID",
-      "type": "string"
-    },
-    "e": 
-    {
-      "description": "edge SAID",
-      "type": "string"
-    },
-    "r": 
-    {
-      "description": "rule SAID",
-      "type": "string"
-    }
-  },
-  "additionalProperties": false
-}
-```
-
-
-#### Compact private ACDC example.
-
-An example of a fully compact private ACDC is shown below. The ACDC is private because the `u` field is non-empty.
-
-```json
-{
-  "v":  "ACDC10JSON00011c_",
-  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
-  "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
-
-```
-
-The schema for the Compact private ACDC example above is provided below.
-
-```json
-{
-  "$id": "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Compact Private ACDC",
-  "description": "Example JSON Schema for a Compact private ACDC.",
-  "credentialType": "CompactPrivateACDCExample",
-  "version": "1.0.0",
-  "type": "object",
-  "required":
-  [
-    "v",
-    "d",
-    "u",
-    "i",
-    "rd",
-    "s",
-    "a",
-    "e",
-    "r"
-  ],
-  "properties":
-  {
-    "v":
-    {
-      "description": "ACDC version string",
-      "type": "string"
-    },
-    "d":
-    {
-     "description": "ACDC SAID",
-      "type": "string"
-    },
-    "u":
-    {
-     "description": "ACDC UUID",
-      "type": "string"
-    },
-    "i":
-    {
-      "description": "Issuer AID",
-      "type": "string"
-    },
-    "rd":
-    {
-      "description": "Registry SAID",
-      "type": "string"
-    },
-    "s": 
-    {
-      "description": "schema SAID",
-      "type": "string"
-    },
-    "a": 
-    {
-      "description": "attribute SAID",
-      "type": "string"
-    },
-    "e": 
-    {
-      "description": "edge SAID",
-      "type": "string"
-    },
-    "r": 
-    {
-      "description": "rule SAID",
-      "type": "string"
-    }
-  },
-  "additionalProperties": false
-}
-```
 
 ## Top-level ACDC sections
 
@@ -633,11 +454,11 @@ The schema for the Compact private ACDC example above is provided below.
 
 #### Type-is-schema
 
-Notable is the fact that no top-level type fields exist in an ACDC. This is because the [[ref: Schema]], `s`, field itself is the type field for the ACDC and its parts. ACDCs follow the design principle of separation of concerns between a data container's actual payload information and the type information of that container's payload. In this sense, type information is metadata, not data. The Schema dialect used by ACDCs is JSON Schema 2020-12 [[10]] [[11]]. JSON Schema supports composable schema (subschema), conditional Schema (subschema), and regular expressions in the Schema. Composability enables a Validator to ask and answer complex questions about the type of even optional payload elements while maintaining isolation between payload information and type (structure) information about the payload [[39]] [[40]] [[41]] [[42]]. A static but composed schema allows a verifiably immutable set of variants. Although the set is immutable, the variants enable graduated but secure disclosure. ACDC's use of JSON Schema MUST be in accordance with the ACDC defined profile as defined herein. The exceptions are defined below.
+Notable is the fact that no top-level type fields exist in an ACDC. This is because the [[ref: Schema]], `s`, field itself is the type field for the ACDC and its parts. ACDCs follow the design principle of separation of concerns between a data container's actual payload information and the type information of that container's payload. In this sense, type information is metadata, not data. The Schema dialect used by ACDCs is JSON Schema 2020-12 [[10]] [[11]]. JSON Schema supports composable schema (subschema), conditional Schema (subschema), and regular expressions in the Schema. Composability enables a Validator to ask and answer complex questions about the type of payload elements including optional elements while maintaining isolation between payload information and type (structure) information about the payload [[39]] [[40]] [[41]] [[42]]. A static but composed schema allows a verifiably immutable set of variants. Although the set is immutable, the variants enable graduated but secure disclosure. ACDC's use of JSON Schema MUST be in accordance with the ACDC defined profile as defined herein. The exceptions are defined below.
 
 #### Schema ID field label
 
-The usual field label for SAID fields in ACDCs is `d`. In the case of the [[ref: Schema]] section, however, the field label for the SAID of the Schema section is `$id`. This repurposes the Schema id field label, `$id` as defined by JSON Schema [[41]] [[42]].  The top-level id, `$id`, field value in a JSON Schema provides a unique identifier of the Schema instance. In a non-ACDC schema, the value of the id, `$id`, field is expressed as a URI. This is called the Base URI of the schema. In an ACDC schema, however, the top-level id, `$id`, field value is repurposed. This field value MUST include the SAID of the schema. This ensures that the ACDC Schema is static and verifiable to their SAIDs. A verifiably static Schema satisfies one of the essential security properties of ACDCs as discussed below. There are several ACDC supported formats for the value of the top-level id, `$id`, field but all of the formats MUST include the SAID of the Schema (see below). Correspondingly, the value of the top-level schema, `s`, field MUST be the SAID included in the schema's top-level `$id` field. The detailed schema is either attached or cached and maybe discovered via its SAIDified id, `$id`, field value.
+The usual field label for SAID fields in ACDCs is `d`. In the case of the [[ref: Schema]] section, however, the field label for the SAID of the Schema section is `$id`. This repurposes the Schema id field label, `$id` as defined by JSON Schema [[41]] [[42]].  The top-level id, `$id`, field value in a JSON Schema provides a unique identifier of the Schema instance. In a non-ACDC schema, the value of the id, `$id`, field is expressed as a URI. This is called the Base URI of the schema. In an ACDC schema, however, the top-level id, `$id`, field value is repurposed. This field value MUST be the SAID of the schema. This ensures that the ACDC Schema is static and verifiable to their SAIDs. A verifiably static Schema satisfies one of the essential security properties of ACDCs as discussed below. There are several ACDC supported formats for the value of the top-level id, `$id`, field but all of the formats MUST include the SAID of the Schema (see below). Correspondingly, the value of the top-level schema, `s`, field MUST be the SAID included in the schema's top-level `$id` field. The detailed schema is either attached or cached and maybe discovered via its SAIDified id, `$id`, field value.
 
 The digest algorithm employed for generating [[ref: Schema]] SAIDs MUST have an approximate cryptographic strength of 128 bits. The [[3]] MUST be generated in compliance with the ToIP SAID internet draft specification and MUST be encoded using CESR. The CESR encoding indicates the type of cryptographic digest used to generate the SAID. 
 
@@ -645,35 +466,36 @@ When an id, `$id`, field appears in a subschema, it indicates a bundled subschem
 
 #### Static (immutable) schema
 
-For security reasons, the full Schema of an ACDC MUST be completely self-contained and statically fixed (immutable) for that ACDC meaning that no dynamic Schema references or dynamic Schema generation mechanisms are allowed.
+For security reasons, the full Schema of an ACDC MUST be completely self-contained and statically fixed (immutable) for that ACDC. This means that dynamic Schema references or dynamic Schema generation mechanisms MUST NOT be used, i.e are not allowed.
 
 Should an adversary successfully attack the source that provides the dynamic Schema resource and change the result provided by that reference, then the Schema validation on any ACDC that uses that dynamic Schema reference may fail. Such an attack effectively revokes all the ACDCs that use that dynamic Schema reference, which is called a Schema revocation attack.
 
-More insidiously, an attacker could shift the semantics of the dynamic Schema in such a way that although the ACDC still passes its Schema validation, the behavior of the downstream processing of that ACDC is changed by the semantic shift. This type of attack is called a semantic malleability attack which may be considered a new type of transaction malleability attack [[55]].
+More insidiously, an attacker could shift the semantics of the dynamic Schema in such a way that although the ACDC still passes its Schema validation, the behavior of the downstream processing of that ACDC is changed by the semantic shift. This type of attack is called a semantic malleability attack, which may be considered a new type of transaction malleability attack [[55]].
 
 To prevent both forms of attack, all Schema MUST be static, i.e., Schema MUST be SADs and therefore verifiable against their SAIDs.
 
 To elaborate, the serialization of a static schema SHOULD be self-contained. A compact commitment to the detailed static Schema is provided by its SAID. In other words, the SAID of a static Schema is a verifiable cryptographic identifier for its SAD. Therefore, all ACDC compliant Schema MUST be SADs. In other words, the Schema MUST therefore be SAIDified. The associated detailed static Schema (uncompacted SAD) is bound cryptographically and verifiable to its SAID.
 
-The JSON Schema specification allows complex Schema references that MAY include non-local URI references [[41]] [[42]] [[15]] [[16]]. These references may use the `$id` or `$ref` keywords. A relative URI reference provided by a `$ref` keyword is resolved against the Base URI provided by the top-level `$id` field. When this top-level Base URI is non-local, then all relative `$ref` references are, therefore, also non-local. A non-local URI reference provided by a `$ref` keyword may be resolved without reference to the Base URI.
+The JSON Schema specification allows complex Schema references that MAY include non-local URI references [[41]] [[42]] [[15]] [[16]]. These references may use the `$id` or `$ref` keywords. A relative URI reference provided by a `$ref` keyword is resolved against the Base URI provided by the top-level `$id` field. When this top-level Base URI is non-local, then all relative `$ref` references are, therefore, also non-local. Using the JSON schema specification, a non-local URI reference provided by a `$ref` keyword may be resolved without reference to the Base URI.
 
-In general, Schema indicated by non-local URI references (`$id` or `$ref`) MUST not be used because they are not cryptographically end-verifiable. The value of the underlying Schema resource so referenced MAY change (mutate). To restate, a non-local URI Schema resource is not end-verifiable to its URI reference because there is no cryptographic binding between URI and resource [[15]] [[16]].
+In this, the ACDC specification, Schema indicated by non-local URI references (`$id` or `$ref`) MUST NOT be used because they are not cryptographically end-verifiable. The value of the underlying Schema resource so referenced MAY change (mutate). To restate, a non-local URI Schema resource is not end-verifiable to its URI reference because there is no cryptographic binding between URI and resource [[15]] [[16]].
 
-This does not preclude the use of remotely cached SAIDified Schema resources because those resources are end-verifiable to their embedded SAID references. Said another way, a SAIDified Schema resource is itself a SAD referenced by its SAID. A URI that includes a SAID MAY be used to securely reference a remote or distributed SAIDified schema resource because that resource is fixed (immutable, nonmalleable) and verifiable to both the SAID in the reference and the embedded SAID in the resource so referenced. To elaborate, a non-local URI reference that includes an embedded cryptographic commitment such as a SAID is verifiable to the underlying resource when that resource is a SAD. This applies to JSON Schema as a whole as well as bundled subschema resources.
+This does not preclude the use of remotely cached SAIDified Schema resources because those resources are end-verifiable to their embedded SAID references. In other words, a SAIDified Schema resource is itself a SAD referenced by its SAID. A URI that includes a SAID MAY be used to securely reference a remote or distributed SAIDified schema resource because that resource is fixed (immutable, nonmalleable) and verifiable to both the SAID in the reference and the embedded SAID in the resource so referenced. To elaborate, a non-local URI reference that includes an embedded cryptographic commitment such as a SAID is verifiable to the underlying resource when that resource is a SAD. This applies to JSON Schema as a whole as well as bundled subschema resources. 
 
-The REQUIRED ACDC supported formats for the value of the top-level id, `$id`, field are as follows:
+The value of the top-level id field, `$id`, MUST be a bare SAID. A bare SAID is simply the serialized SAID value using the appropriate CESR primitive encoding. Because only a bare SAID may be used to refer to a SAIDified Schema, only JSON Schema validators that support bare SAID references are compatible. By default, many, if not all, JSON Schema Validators support bare strings (non-URIs) for the Base URI provided by the top-level `$id` field value.
 
-Bare SAIDs MAY be used to refer to a SAIDified Schema as long as the JSON Schema validator supports bare SAID references. By default, many if not all JSON Schema Validators support bare strings (non-URIs) for the Base URI provided by the top-level `$id` field value.
+
+The value of any relative URI references for schema as provided by a `$ref` keyword MAY be resolved against a virtual base URI constructed from top-level `$id` field bare SAID value. A virtual base URI may employ one of the following schemes:
 
 -	The `sad:` URI scheme MAY be used to directly indicate a URI resource that safely returns a verifiable SAD. For example, `sad:SAID` where SAID is replaced with the actual SAID of a SAD that provides a verifiable non-local reference to JSON Schema as indicated by the media-type of `schema+json`.
 
 -	The KERI OOBI specification provides a URL syntax that references a SAD resource by its SAID at the service endpoint indicated by that URL [[4]]. Such remote OOBI URLs are also safe because the provided SAD resource is verifiable against the SAID in the OOBI URL. Therefore, OOBI URLs MAY be used as non-local URI references for JSON Schema [[4]] [[15]] [[16]].
 
--	The `did:` URI scheme MAY be used safely to prefix non-local URI references that act to namespace SAIDs expressed as DID URIs or DID URLs.  DID resolvers resolve DID URLs for a given DID method such as `did:keri` [[5]] and may return DID docs or DID doc metadata with SAIDified schema or service endpoints that return SAIDified schema or OOBIs that return SAIDified schema [[15]] [[16]] [[4]]. A verifiable non-local reference in the form of DID URL that includes the schema SAID is resolved safely when it dereferences to the SAD of that SAID. For example, the resolution result returns an ACDC JSON Schema whose id, `$id`, field includes the SAID and returns a resource with JSON Schema mime-type of `schema+json`.
+-	The `did:` URI scheme MAY be used safely to prefix non-local URI references that act to namespace SAIDs expressed as DID URIs or DID URLs.  DID resolvers resolve DID URLs for a given DID method such as `did:webs` or `did:keri` [[5]] and may return DID docs or DID doc metadata with SAIDified schema or service endpoints that return SAIDified schema or OOBIs that return SAIDified schema [[15]] [[16]] [[4]]. A verifiable non-local reference in the form of DID URL that includes the schema SAID is resolved safely when it dereferences to the SAD of that SAID. For example, the resolution result returns an ACDC JSON Schema whose id, `$id`, field value is its SAID and returns a resource with JSON Schema mime-type of `schema+json`.
 
-To clarify, ACDCs MUST NOT use complex JSON Schema references which allow dynamically generated Schema resources to be obtained from online JSON Schema Libraries [[41]] [[42]]. The latter approach may be difficult or impossible to secure because a cryptographic commitment to the base Schema that includes complex Schema (non-relative URI-based) references only commits to the non-relative URI reference and not to the actual schema resource which may change (is dynamic, mutable, malleable). To restate, this approach is insecure because a cryptographic commitment to a complex (non-relative URI-based) reference is not equivalent to a commitment to the detailed associated Schema resource so referenced if it may change.
+To clarify, ACDCs MUST NOT use complex JSON Schema references that allow dynamically generated Schema resources to be obtained from online JSON Schema Libraries [[41]] [[42]]. The latter approach may be difficult or impossible to secure because a cryptographic commitment to the base Schema that includes complex Schema (non-relative URI-based) references only commits to the non-relative URI reference and not to the actual schema resource which may change (is dynamic, mutable, malleable). To restate, this approach is insecure because a cryptographic commitment to a complex (non-relative URI-based) reference is not equivalent to a commitment to the detailed associated Schema resource so referenced if it may change.
 
-ACDCs MUST use static JSON Schema (i.e., SAIDifiable Schema). These MAY include internal relative references to other parts of a fully self-contained static (SAIDified) Schema or references to static (SAIDified) external Schema parts. As indicated above, these references MAY be bare SAIDs, DID URIs or URLs (`did:` scheme), SAD URIs (`sad:` scheme), or OOBI URLs [[4]]. Recall that a commitment to a SAID with sufficient collision resistance makes an equivalent secure commitment to its encapsulating block SAD. Thus, static schema MAY be either fully self-contained or distributed in parts but the value of any reference to a part MUST be verifiably static (immutable, nonmalleable) by virtue of either being relative to the self-contained whole or being referenced by its SAID. The static schema in whole or in parts MAY be attached to the ACDC itself or provided via a highly available cache or data store. To restate, this approach is securely end-verifiable (zero-trust) because a cryptographic commitment to the SAID of a SAIDified schema is equivalent to a commitment to the detailed associated schema itself (SAD).
+ACDCs MUST use static JSON Schema (i.e., SAIDifiable Schema). These MAY include internal relative references using the `$ref` keyword to other parts of a fully self-contained static (SAIDified) Schema or references to static (SAIDified) external Schema parts. As indicated above, these references MAY be bare SAIDs, DID URIs or URLs (`did:` scheme), SAD URIs (`sad:` scheme), or OOBI URLs [[4]]. Recall that a commitment to an SAID with sufficient collision resistance makes an equivalent secure commitment to its encapsulating block SAD. Thus, a static schema may be either fully self-contained or distributed in parts, but the value of any reference to a part must be verifiably static (immutable, non-malleable) by virtue of either being relative to the self-contained whole or being referenced by its SAID. The static schema, in whole or in part, MAY be attached to the ACDC itself or provided via a highly available cache or data store. To restate, this approach is securely end-verifiable (zero-trust) because a cryptographic commitment to the SAID of a SAIDified schema is equivalent to a commitment to the detailed associated schema itself (SAD).
 
 #### Schema dialect
 
@@ -711,7 +533,7 @@ One of the most important features of ACDCs is support for Chain-Link Confidenti
 
 As is the case for Compact (uncompacted) ACDC disclosure, composable JSON Schema enables the use of the same base Schema for both the validation of the Partial disclosure of the offer metadata prior to contract acceptance and validation of full or detailed disclosure after contract acceptance [[10]][[39]]. A cryptographic commitment to the base schema securely specifies the allowable semantics for both Partial and Full Disclosure. Decomposition of the base Schema enables a Validator to impose more specific semantics at later stages of the exchange process. Specifically, the `oneOf` subschema composition operator validates against either the compact SAID of a block or the full block. Decomposing the schema to remove the optional Compact variant enables a Validator to ensure complaint Full Disclosure. To clarify, a Validator can confirm Schema compliance both before and after detailed disclosure by using a composed base Schema pre-disclosure and a decomposed schema post-disclosure with the undisclosed options removed. These features provide a mechanism for secure schema-validated contractually-bound Partial (and/or Selective) Disclosure of confidential data via ACDCs.
 
-### Attribute section
+### Attribute Section
 
 #### Reserved field labels
 
@@ -724,17 +546,23 @@ The following field labels are reserved at all nested field map levels in the At
 |`i`| Identifier (AID)| Context-dependent AID as determined by its enclosing map such as Issuee identifier. |
 |`dt`| Datetime | Issuer's relative ISO datetime string |
 
-##### Datetime, `dt` field
-The datetime, `dt` field value, if any, MUST be the ISO-8601 datetime string with microseconds and UTC offset as per IETF RFC-3339. This datetime is relative to the clock of the issuer. Attributes typically include one or more date time fields. In a given field map (block) the primary datetime will use the label, `dt`. Typically, this is the datetime of the issuance of the ACDC. Other datetime fields MAY include an expiration datetime or the like.
+The types of values for the `d`, `u`, `i`, and `dt` fields are described above for ACDC reserved field labels. 
 
- An example datetime string in this format is as follows:
+The following field labels are reserved at the top-level only of the Attribute section of an ACDC.
 
-`2020-08-22T17:50:09.988921+00:00`
+| Label | Title | Description |
+|:-:|:--|:--|
+|`cargo`| Cargo | Field value is embedded encapsulated data|
 
+The Cargo, `cargo` field is described below.
+
+##### Cargo, `cargo` field
+
+The cargo, `cargo` field value, embedded, encapsulated data. The cargo field establishes a convention for encapsulating data using the ACDC as a data container for its "cargo".  The semantics of its cargo filed value is opaque to its ACDC as data container. This enables an ACDC to convey some other data format, including other types of verifiable credentials or application-specific data types.  These MUST be serializable using a serialization that is compatible with the serialization kind of the ACDC that conveys them. 
 
 #### Compact attribute section schema
 
-When the value of the  Attribute section has been compacted into its SAID, its Schema is as follows: 
+When the value of the  Attribute section has been compacted into its SAID, its JSON Schema subschema is as follows: 
 
 ```json
 {
@@ -746,8 +574,6 @@ When the value of the  Attribute section has been compacted into its SAID, its S
 }
 ```
 
-[//]: # (Create issue to resolve this)
-
 #### Attribute section variants
 
 Two variants, namely, Targeted (Untargeted), are defined respectively by the presence (absence) of an Issuee, `i` field at the top-level of the uncompacted Attribute section block.
@@ -758,28 +584,13 @@ These four variants MAY appear in combination.
 
 ##### Targeted attribute section 
 
-Consider the case where the Issuee, `i`, field is present at the top level of the Attribute section, as shown below:
-
-```json
-{
-  "a":
-  {
-    "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-    "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA",
-    "temp": 45,
-    "lat": "N40.3433",
-    "lon": "W111.7208"
-  }
-}
-```
-
-When present at the top level of the Attribute section, the Issuee, `i`, field value is the ACDC's Issuee AID. This Issuee AID is a provably controllable identifier that is the Target. This makes the ACDC a Targeted ACDC. Targeted ACDCs MAY be used for many different purposes, such as authorization or delegation directed at the Target. In other words, a targeted ACDC provides a container for authentic data that MAY also be used as some form of authorization, such as a credential that is verifiably bound to the Issuee as targeted by the Issuer. Furthermore, by virtue of the targeted Issuee's provable control over its AID, the Targeted ACDC MAY be verifiably presented (disclosed) by the Issuee AID Controller.
+When present at the top level of the Attribute section, the Issuee, `i`, field value is the ACDC's Issuee AID. This Issuee AID is a provably controllable identifier that is the Target. This makes the ACDC a Targeted ACDC. Targeted ACDCs MAY be used for many different purposes, these include but are not limited too: entitlements, authorizations, or delegations directed at the Target. In other words, a targeted ACDC provides a container for authentic data that MAY also be used as some form of entitlement, such as a credential that is verifiably bound to the Issuee as targeted by the Issuer. Furthermore, by virtue of the Targeted Issuee's provable control over its AID, the Targeted ACDC MAY be verifiably presented (disclosed) by the Controller of the Issuee AID.
 
 To elaborate, the definition of the term credential is "evidence of authority, status, rights, entitlement to privileges, or the like". The presence of an attribute section top-level Issuee, `i`, field enables the ACDC to be used as a Verifiable Credential given by the Issuer to the Issuee.
 
-One reason the Issuee, `i`, field is nested into the Attribute section, `a`, block is to enable the Issuee AID to be partially or selectively disclosable. Because the actual semantics of Issuee may depend on the use case, the semantically precise albeit less common terms of Issuer and Issuee are used in this specification. In some use cases, for example, an Issuee may be called the Holder; in others, the Subject of the ACDC. But no matter the use case, the `i` field designates the Issuee AID, i.e. Target. The Issuee MUST be designated by the `i` field at the top-level of the attribute, `a` or `A` aggregate field block. 
+One reason the Issuee, `i`, field is nested into the Attribute section, `a`, block is to enable the Issuee AID to be partially disclosable. Because the actual semantics of Issuee may depend on the use case, the semantically precise albeit less common terms of Issuer and Issuee are used in this specification. In some use cases, for example, an Issuee MAY be called the Holder; in others, the Subject of the ACDC. But no matter the use case, the `i` field designates the Issuee AID, i.e., Target. The Issuee MUST be designated by the `i` field value at the top-level of the attribute `a`, field block. 
 
-The ACDC MUST be "issued by" an Issuer and MUST be "issued to" an Issuee. This precise terminology does not bias or color the role (function) an Issuee plays in using an ACDC. What the presence of Issuee AID does provide is a mechanism for control of the subsequent use of the ACDC once it has been issued. To elaborate, because the Issuee, `i`, field value MUST be an AID, by definition, there is a provable Controller of that AID. Therefore, the Issuee Controller MAY make non-repudiable commitments via digital signatures on behalf of its AID.  Therefore, subsequent use of the ACDC by the Issuee MAY be securely attributed to the Issuee.
+The ACDC MUST be "issued by" an Issuer and MUST be "issued to" an Issuee. This precise terminology does not bias or color the role (function) an Issuee plays in using an ACDC. What the presence of Issuee AID does provide is a mechanism for control of the subsequent use of the ACDC once it has been issued. To elaborate, because the Issuee, `i`, field value MUST be an AID, by definition, there is a provable Controller of that AID. Therefore, the Issuee Controller MAY make non-repudiable verifiable commitments to an issuance either directly via ephemeral digital signatures on behalf of its AID or indirectly by anchoring the SAID of the issuance in its KEL (Key Event Long).  Therefore, any use of the ACDC by the Issuee MAY be securely attributed to the Issuee.
 
 Importantly, the presence of an Issuee, `i`, field means that the associated Issuee MAY make authoritative verifiable presentations or disclosures of the ACDC. A designated Issuee also better enables the initiation of presentation exchanges of the ACDC between that Issuee as Discloser and a Disclosee (Verifier).
 
@@ -789,111 +600,15 @@ Likewise, the presence of an Issuee, `i`, field means that the Issuer MAY use th
 
 Contractual issuance and presentation exchanges are described in detail later in the IPEX protocol section {{reference to IPEX section}}.
 
-:::issue
-:::
-
 ##### Untargeted Attribute section
 
-Consider the case where the Issuee, `i`, field is absent at the top level of the Attribute section, as shown below:
+Consider the case where the Issuee, `i`, field is absent at the top level of the Attribute section. In this case, the ACDC has an Issuer but no Issuee. Because there is no provably controllable AID as a Target, the issuance is therefore Untargeted. The data in the Attribute section MAY be considered an undirected verifiable attestation or observation by the Issuer.  In this case, the issuance is effectively addressed "to whom it may concern." An Untargeted ACDC enables verifiable authorship by the Issuer of the data in the Attributes section, but there is no specified counterparty and no verifiable mechanism for delegation of authority.  Consequently, the Rules section MAY provide only contractual obligations on implied counterparties while still expressing contractual obligations or waivers of obligations on the Issuer.
 
-```json
-{
-  "a":
-  {
-    "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-    "temp": 45,
-    "lat": "N40.3433",
-    "lon": "W111.7208"
-  }
-}
-```
-
-This ACDC has an Issuer but no Issuee. There is no provably controllable AID as a Target of the issuance, i.e., Untargeted. The data in the Attribute section MAY be considered an undirected verifiable attestation or observation by the Issuer.  The attestation is addressed "to whom it may concern." An Untargeted ACDC enables verifiable authorship by the Issuer of the data in the Attributes section, but there is no specified counterparty and no verifiable mechanism for delegation of authority.  Consequently, the Rules section MAY provide only contractual obligations of implied counterparties.
-
-This form of an ACDC provides a container for authentic data only (not authentic data as authorization). But authentic data is still a very important use case. To clarify, an Untargeted ACDC enables verifiable authorship of data. An observer, such as a sensor that controls an AID, MAY make verifiable, nonrepudiable measurements and publish them as ACDCs. These MAY be chained together to provide provenance for or a chain-of-custody of any data.  Furthermore, a hybrid chain of one or more targeted ACDCs ending in a chain of one or more Untargeted ACDCs enables delegated authorized attestations at the tail of that chain. These provenanceable chains of ACDCs could be used to provide a verifiable data supply chain for any compliance-regulated application. This provides a way to protect participants in a supply chain from imposters. Such data supply chains are also useful as a verifiable digital twin of a physical supply chain [[54]].
-
+To elaborate, an Untargeted ACDC provides a container for authentic data only (not authentic data as an authorization or entitlement to a specified party). However, authentic data remains a very important use case. To clarify, an Untargeted ACDC enables verifiable authorship of data. An observer, such as a sensor that controls an AID, MAY make verifiable, nonrepudiable measurements and publish them as ACDCs. These MAY be chained together to provide provenance of a chain of custody of any data.  Furthermore, a hybrid chain of one or more targeted ACDCs ending in a chain of one or more Untargeted ACDCs enables delegated authorized attestations at the head of that chain. These provenanceable chains of ACDCs could be used to provide a verifiable data supply chain for any compliance-regulated application. This provides a way to protect participants in a supply chain from imposters. Such data supply chains are also useful as a verifiable digital twin of a physical supply chain [[54]].
 
 #### Targeted private-attribute section example
 
-Consider the following form of an uncompacted private-attribute block,
-
-```json
-{
-  "a":
-  {
-    "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-    "u": "0AwjaDAE0qHcgNghkDaG7OY1",
-    "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA",
-    "score": 96,
-    "name": "Jane Doe"
-  }
-}
-```
-
-
-with subschema below,
-
-
-```json
-{
-  "a":
-  {
-    "description": "attribute section",
-    "oneOf":
-    [
-      {
-        "description": "attribute SAID",
-        "type": "string"
-      },
-      {
-        "description": "uncompacted attribute section",
-        "type": "object",
-        "required":
-        [
-          "d",
-          "u",
-          "i",
-          "score",
-          "name"
-        ],
-        "properties":
-        {
-          "d":
-          {
-            "description": "attribute SAID",
-            "type": "string"
-          },
-          "u":
-          {
-            "description": "attribute UUID",
-            "type": "string"
-          },
-          "i":
-          {
-            "description": "Issuee AID",
-            "type": "string"
-          },
-          "score":
-          {
-            "description": "test score",
-            "type": "integer"
-          },
-          "name":
-          {
-            "description": "test taker full name",
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      }
-    ]
-  }
-}
-```
-
-As described above in the Schema section of this specification, the `oneOf` subschema composition operator validates against either the compact SAID of a block or the full block. A Validator can use a composed Schema that has been committed to by the Issuer to securely confirm Schema compliance both before and after detailed disclosure by using the fully composed base Schema pre-disclosure and a specific decomposed variant post-disclosure. Decomposing the Schema to remove the optional compact variant (i.e., removing the `oneOf` compact option) enables a Validator to ensure compliant Full Disclosure. To clarify, using the JSON Schema `oneOf` composition Operator enables the composed subschema to validate against both the compact and un-compacted value of the private-attribute section, `a`, field.
-
-As discussed above, the presence of the `i` field at the top level of the Attribute section block makes this a targeted Attribute section. The AID given by the `i` field value is the target entity called the Issuee. The semantics of the Issuee SHOULD be defined by the Credential Frameworks in the EGF.
+As discussed above, the presence of the `i` field at the top level of the Attribute section block makes this a targeted Attribute section. The AID given by the `i` field value is the target entity called the Issuee. The semantics of the Issuee SHOULD be defined by the Credential Frameworks in an associated Ecosystem Goveranance Framework (EGF) for the ACDC.
 
 Given the presence of a top-level UUID, `u`, field of the Attribute block whose value has sufficient cryptographic entropy, then the top-level SAID, `d`, field of the Attribute block provides a secure cryptographic digest of the contents of the Attribute block [[48]]. An adversary when given both the Schema of the Attribute block and its SAID, `d`, field, is not able to discover the remaining contents of the attribute block in a computationally feasible manner such as a rainbow table attack [[30]] ] [[31]].  Therefore, the attribute block's UUID, `u`, field in a compact ACDC enables its Attribute block's SAID, `d`, field to securely blind the contents of the Attribute block notwithstanding knowledge of the Attribute block's Schema and SAID, `d` field.  Moreover, a cryptographic commitment to that Attribute block's, SAID, `d`, field does not provide a fixed point of correlation to the Attribute field values themselves unless and until there has been a disclosure of those field values.
 
@@ -901,37 +616,101 @@ To elaborate, when an ACDC includes a sufficiently high entropy UUID, `u`, field
 
 Because the Issuee AID is nested in the attribute block as that block's top-level, Issuee, `i`, field, a presentation exchange (disclosure) could be initiated on behalf of a different AID that has not yet been correlated to the Issuee AID and then only correlated to the Issuee AID after the Disclosee has agreed to the Chain-Link Confidentiality provisions in the rules section of the private-attributes ACDC [[44].
 
-#### Targeted public-attribute section example
-
-Suppose that the un-compacted value of the Attribute section as denoted by the Attribute section, `a`, field is as follows,
+Consider an example of an Attribute Section as defined by the following JSON Schema subschema,
 
 ```json
+"a":
 {
-  "a":
-  {
-    "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-    "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA",
-    "score": 96,
-    "name": "Jane Doe"
-  }
+    "description": "Attribute Section",
+    "oneOf":
+    [
+        {
+            "description": "Attribute Section SAID",
+            "type": "string"
+          },
+          {
+            "description": "Attribute Section Detail",
+            "type": "object",
+            "required":
+            [
+              "d",
+              "u",
+              "i",
+              "score",
+              "name"
+            ],
+            "properties":
+            {
+              "d":
+              {
+                "description": "Attribute Section SAID",
+                "type": "string"
+              },
+              "u":
+              {
+                "description": "Attribute Section UUID",
+                "type": "string"
+              },
+              "i":
+              {
+                "description": "Issuee AID",
+                "type": "string"
+              },
+              "score":
+              {
+                "description": "Test Score",
+                "type": "integer"
+              },
+              "name":
+              {
+                "description": "Test Taker Full Name",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+    ]
 }
 ```
 
-with subschema below,
+As described above in the Schema section of this specification, the `oneOf` subschema composition operator validates against either the compact SAID of a block or the full block. A Validator can use a composed Schema that has been committed to by the Issuer to securely confirm Schema compliance both before and after detailed disclosure by using the fully composed base Schema pre-disclosure and a specific decomposed variant post-disclosure. Decomposing the Schema to remove the optional compact variant (i.e., removing the `oneOf` compact option) enables a Validator to ensure compliant Full Disclosure. To clarify, using the JSON Schema `oneOf` composition Operator enables the composed subschema to validate against both the compact and un-compacted value of the private-attribute section, `a`, field.
+
+
+The attribute section field, whose value is the uncompacted attribute section block, is given by the following Python dictionary:
+
+```python
+"a":
+{
+        "d": "EIMMcLl1w2KW2J3AD3twaESJO4u_fDFCdlMHjouojU8C",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+        "score": 96,
+        "name": "Zoe Doe"
+}
+```
+
+The attribute section field whose value is the compacted SAID is given by,
+
+```python
+"a": "EIMMcLl1w2KW2J3AD3twaESJO4u_fDFCdlMHjouojU8C"
+```
+
+#### Targeted public-attribute section example
+
+Consider the following JSON Schema subschema for targeted attribute section block with the subschema below,
 
 ```json
-{
   "a":
   {
-    "description": "attribute section",
+    "description": "Attribute Section",
     "oneOf":
     [
       {
-        "description": "attribute section SAID",
+        "description": "Attribute Section SAID",
         "type": "string"
       },
       {
-        "description": "uncompacted attribute section",
+        "description": "Attribute Section Detail",
         "type": "object",
         "required":
         [
@@ -944,12 +723,7 @@ with subschema below,
         {
           "d":
           {
-            "description": "attribute section SAID",
-            "type": "string"
-          },
-           "u":
-          {
-            "description": "attribute section UUID",
+            "description": "Attribute Section SAID",
             "type": "string"
           },
           "i":
@@ -959,12 +733,12 @@ with subschema below,
           },
           "score":
           {
-            "description": "grade point average",
+            "description": "Test Score",
             "type": "integer"
           },
           "name":
           {
-            "description": "test taker full name",
+            "description": "Test Taker Full Name",
             "type": "string"
           }
         },
@@ -972,10 +746,26 @@ with subschema below,
       }
     ]
   }
+```
+As described above in the Schema section of this specification, the `oneOf` subschema composition operator validates against either the compact SAID of a block or the full block. A Validator can use a composed Schema that has been committed to by the Issuer to securely confirm Schema compliance both before and after detailed disclosure by using the fully composed base Schema pre-disclosure and a specific decomposed variant post-disclosure. Decomposing the Schema to remove the optional compact variant (i.e., removing the `oneOf` compact option) enables a Validator to ensure compliant Full Disclosure. To clarify, using the JSON Schema `oneOf` composition Operator enables the composed subschema to validate against both the compact and un-compacted value of the public-attribute section, `a`, field.
+
+The attribute section field, whose value is the uncompacted attribute section block is given by the following Python dictionary:
+
+```python
+"a":
+{
+        "d": "ELNJxIInWN4WAih9MQ4vVDrMRYnmhToS9a0gqjLfctOO",
+        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+        "score": 96,
+        "name": "Zoe Doe"
 }
 ```
 
-As described above in the Schema section of this specification, the `oneOf` subschema composition operator validates against either the compact SAID of a block or the full block. A Validator can use a composed Schema that has been committed to by the Issuer to securely confirm Schema compliance both before and after detailed disclosure by using the fully composed base Schema pre-disclosure and a specific decomposed variant post-disclosure. Decomposing the Schema to remove the optional compact variant (i.e., removing the `oneOf` compact option) enables a Validator to ensure compliant Full Disclosure. To clarify, using the JSON Schema `oneOf` composition Operator enables the composed subschema to validate against both the compact and un-compacted value of the public-attribute section, `a`, field.
+The attribute section field whose value is the compacted SAID is given by,
+
+```python
+"a": "ELNJxIInWN4WAih9MQ4vVDrMRYnmhToS9a0gqjLfctOO"
+```
 
 The SAID, `d`, field at the top level of the uncompacted Attribute block is the same SAID used as the compacted value of the Attribute section, `a`, field.
 
@@ -983,48 +773,23 @@ As discussed above, the presence of the `i` field at the top level of the Attrib
 
 Given the absence of a `u` field at the top level of the Attributes block, however, knowledge of both SAID, `d`, field at the top level of an Attributes block and the schema of the Attributes block may enable the discovery of the remaining contents of the attributes block via a rainbow table attack [[30]] [[31]]. Therefore, the SAID, `d`, field of the Attributes block, although a cryptographic digest, does not securely blind the contents of the Attributes block given knowledge of the Schema. It only provides compactness, not privacy. Moreover, any cryptographic commitment to that SAID, `d`, field potentially provides a fixed correlation point to the attribute block field values despite the non-disclosure of those field values via a Compact Attribute section. Thus, an ACDC without a UUID, `u` field in its Attributes block MUST be considered a Public-Attribute ACDC even when expressed in compact form.
 
+
 #### Nested partially disclosable Attribute section example
 
-Suppose that the un-compacted value of the Attribute section of an ACDC is as follows:
-
-Attribute section:
+Suppose that the subschema for the  Attribute section of an ACDC is as follows:
 
 ```json
-{
   "a":
   {
-    "d": "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9",
-    "u": "0ADAE0qHcgNghkDaG7OY1wja",
-    "i": "EFv7vklXKhzBrAqjsKAn2EDIPmkPreYApZfFk66jpf3u",
-    "name": "Jane Doe",
-    "gpa": 3.50,
-    "grades":
-    {
-      "d": "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9",
-      "u": "0AHcgNghkDaG7OY1wjaDAE0q",
-      "history": 3.00,
-      "english": 4.00,
-      "math": 3.0
-    }
-  }
-}
-```
-
-Attribute section subschema:
-
-```json
-{
-  "a":
-  {
-    "description": "attribute section",
+    "description": "Attribute Section",
     "oneOf":
     [
       {
-        "description": "attribute SAID",
+        "description": "Attribute Section SAID",
         "type": "string"
       },
       {
-        "description": "attribute section detail",
+        "description": "Attribute Section Detail",
         "type": "object",
         "required":
         [
@@ -1039,7 +804,7 @@ Attribute section subschema:
         {
           "d":
           {
-            "description": "attribute SAID",
+            "description": "Attribute Section SAID",
             "type": "string"
           },
           "i":
@@ -1049,25 +814,25 @@ Attribute section subschema:
           },
           "name":
           {
-            "description": "student full name",
+            "description": "Student Full Name",
             "type": "string"
           },
           "gpa":
           {
-            "description": "grade point average",
+            "description": "Grade Point Average",
             "type": "number"
           },
           "grades":
           {
-            "description": "grades by subject block",
+            "description": "Grades Block",
             "oneOf":
             [
               {
-                "description": "block SAID",
+                "description": "Block SAID",
                 "type": "string"
               },
               {
-                "description": "block detail",
+                "description": "Block detail",
                 "type": "object",
                 "required":
                 [
@@ -1081,27 +846,27 @@ Attribute section subschema:
                 {
                   "d":
                   {
-                    "description": "block SAID",
+                    "description": "Block SAID",
                     "type": "string"
                   },
                   "u":
                   {
-                    "description": "block UUID",
+                    "description": "Block UUID",
                     "type": "string"
                   },
                   "history":
                   {
-                    "description": "history grade",
+                    "description": "History Grade",
                     "type": "number"
                   },
                   "english":
                   {
-                    "description": "english grade",
+                    "description": "English Grade",
                     "type": "number"
                   },
                   "math":
                   {
-                    "description": "math grade",
+                    "description": "Math Grade",
                     "type": "number"
                   }
                 },
@@ -1114,32 +879,451 @@ Attribute section subschema:
       }
     ]
   }
+```
+Suppose that the uncompacted value of the Attribute section of an ACDC is as follows:
+
+Attribute section:
+
+```python
+"a":
+{
+    "d": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "name": "Zoe Doe",
+    "gpa": 3.5,
+    "grades":
+    {
+        "d": "EFQnBFeKAeS4DAWYoKDwWXOT4h2-XaGk7-w4-2N4ktXy",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+        "history": 3.5,
+        "english": 4.0,
+        "math": 3.0
+    }
 }
 ```
+
 
 The Attribute section subschema includes a `oneOf` composition operator at the grades subblock. The `grades` subblock has both a block level SAID, `d` and UUID, `u` field. This means that the `grades` subblock detail can be hidden so that only the top-level fields in the Attribute section are disclosed. The following shows a compatible partially disclosed variant of the Attribute section.
 
 Partially disclosed Attribute section:
 
-```json
+```python
+"a":
 {
-  "a":
-  {
-    "d": "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9",
-    "u": "0ADAE0qHcgNghkDaG7OY1wja",
-    "i": "EFv7vklXKhzBrAqjsKAn2EDIPmkPreYApZfFk66jpf3u",
-    "name": "Jane Doe"
-    "gpa": 3.50,
-    "grades": "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9"
-  }
+    "d": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "name": "Zoe Doe",
+    "gpa": 3.5,
+    "grades": "EFQnBFeKAeS4DAWYoKDwWXOT4h2-XaGk7-w4-2N4ktXy"
 }
 ```
 
 Notice that the compact form of the `grades` subblock has as the field value of the `grades` field the value of the SAID, `d` field in the expanded version (see above). This means that when the subblock detail is provided, a Validator can verify it against the SAID provided in the compact (partially disclosed) form.
 
-### Edge section  
+
+The fully compact section would be as follows:
+
+```python
+"a": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U"
+```
+Notice that the compact form of the `a` block has as the field value of the `a` field the value of the SAID, `d` field in the expanded `a` section (see above).
+
+### Aggregate Section
+
+A selectively disclosable blinded Aggregate section appears at the top level using the field label `A`. This is distinct from the field label `a` for a partially disclosable Attribute section. This makes clear (unambiguous) the semantics of each respective section's associated Schema. This also clearly reflects the fact that the value of a compact variant of the selectively disclosable Aggregate section is an aggregate, AGID, (Aggregate ID) not a SAID. As described in more detail below, the top-level selectively disclosable Aggregate section, `A`, field value is an aggregate of cryptographic commitments that makes a commitment to an ordered set (list) of selectively disclosable blinded attribute blocks. 
+
+The Uncompacted (Expanded) Aggregate section value is a list of blindable attribute blocks, where each attribute block represents a field map.
+
+
+#### Reserved field labels
+
+The following field labels are reserved at all nested field map levels in the Aggregate section of an ACDC.
+ 
+| Label | Title | Description |
+|:-:|:--|:--|
+|`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
+|`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
+|`i`| Identifier (AID)| Context-dependent AID as determined by its enclosing map such as Issuee identifier. |
+|`dt`| Datetime | Issuer's relative ISO datetime string |
+
+The types of values for the `d`, `u`, `i`, and `dt` fields are described above for ACDC reserved field labels. 
+
+
+#### Basic selective disclosure mechanism
+
+The purpose of the Aggregate section is to provide what herein is called "selective disclosure". The verifiable credential community has defined "selective disclosure" with respect to verifiable credentials to mean disclosing some information contained in a verifiable credential in a way that does not leak other information contained in the verifiable credential.  ACDCs employ several different mechanisms that fall under the general description of graduated disclosure, where some information in an ACDC is disclosed while other information is not disclosed. Because there are several mechanisms that may be employed by ACDCs, different nomenclature is used to distinguish those mechanisms from one another. For example, the Attribute section above refers to its graduate disclosure mechanism as "partial disclosure". The Aggregate section described here uses a different graduated disclosure  mechanism that more closely aligns what other verifiable credentials protocols call "selective disclosure". Therefore nomenclature for the Aggregate section's type of graduated disclosure is "selective disclosure".  
+
+The use of the term "selective disclosure" in this context should not be confused with its application in the financial sector, particularly in relation to publicly traded companies that make selective disclosures about their operations. 
+
+The basic Selective Disclosure mechanism provided by the Aggregate section is based on a single aggregated blinded commitment to a list (array) of blinded commitments to undisclosed values. Membership of any blinded commitment to a value in the list of aggregated blinded commitments may be proven without leaking (disclosing) the unblinded value belonging to any other blinded commitment in the list. This enables provable Selective Disclosure of the unblinded values. When a non-repudiable cryptographic commitment is asserted on the aggregated blinded commitment, then any disclosure of a given value belonging to any of the embedded blinded commitments in the list is also non-repudiable. This approach does not require any more complex cryptography than digests and digital signatures or anchors in TELS or KELs that in turn are digitally signed. This satisfies the KERI design ethos of "minimally sufficient means". The primary drawback of this approach is verbosity. It trades ease, simplicity, and the adoptability of implementation for size. A more complex but less verbose approach would be to replace the list of blinded commitments with a Merkle tree of those commitments, where the Merkle tree root becomes the aggregated blinded commitment. This approach is beyond the scope of this version of the ACDC specification.
+
+Together, the combination of sufficient cryptographic entropy of the blinding factors, collision resistance of the digests, and unforgeability of the non-repudiable digital commitments of the inclusion proof prevents a potential Disclosee or adversary from discovering in a computationally feasible way the values of any undisclosed blinded attribute block details merely from the schema of the block detail together with either the aggregated blinded commitment and/or the list of aggregated blinded commitments [@Hash][@HCR][@QCHC][@Mrkl][@TwoPI][@MTSec]. A potential Disclosee or adversary would also need the actual value details, which include the blinding factor.
+
+#### Selectively disclosable Aggregate of attribute blocks
+
+The selectively disclosable aggregate section of an ACDC, provides an ordered set of Attributes as an list (array) of blinded blocks. In addition to its attribute-specific field or fields, each blinded attribute block in the set has its own SAID, `d`, field and UUID, `u`, field. All fields in a given block MUST be disclosed together as a set. When a blinded attribute block has more than one attribute field, then each field in the block is not independently selectively disclosable. 
+
+Notably, because the field labels for a given block only appear within that blinded block, the field labels are also blinded. The order of appearance of elements in an 'anyOf' subschema for the Aggregate array is not correlated to the actual order of appearance of the associated block or blocks in the blinded array itself.  
+
+This prevents inference based on location in the blinded array. It also prevents the correlation between contextualized variants of a field label that appear in different, selectively disclosable blocks. For example, a given localized or internationalized variant that uses a different language or other contextually correlatable information in the field labels itself is not leaked by the disclosure of another variant. Each of these localization/internatialization variants would get their own blinded attributed block with unique field labels. To clarify, knowledge of one variant via its disclosed block does not leak information about some other, so far undisclosed variant.
+
+##### Blinded attribute array
+
+Given that each blindable Attribute block's UUID, `u`, field has sufficient cryptographic entropy, then each blindable Attribute block's SAID, `d`, field provides a secure cryptographic digest of its contents that effectively blinds the Attribute block's attribute value(s) from discovery given only its Schema and SAID. To clarify, the adversary, despite being given both the Schema of the Attribute block and its SAID, `d`, field value, is not able to discover the remaining contents of the Attribute block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the UUID, `u`, field of each blindable Attribute block enables the associated SAID, `d`, field to securely blind the block's contents notwithstanding knowledge of the block's Schema and that SAID, `d`, field.  Moreover, a cryptographic commitment to that SAID, `d`, field does not provide a fixed point of correlation to the associated Attribute (SAD) field values themselves unless and until there has been specific disclosure of those field values themselves.
+
+In addition to the blindable Attribute blocks, the blinded attribute array includes as its zeroth element the aggregate value. This is called the AGID (Aggregate ID). This serves the same function of the SAID of a field map. It provides a universally unique content addressable self-referential identifier of a given blindable attribute list.
+
+Given a total of `N` blindable attribute blocks plus the AGID, a given blinded Attributes list has `N+1` elements. Let a<sub>i</sub> represent the SAID, `d`, field of the attribute block at zero-based index ‘i'. More precisely, the set of elements is expressed as the ordered set,
+
+\{a<sub>i</sub> for all i in \{0, ..., N\}\}.
+
+The ordered set of a<sub>i</sub> may also be expressed as a list, that is,
+
+\[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N</sub>\].
+
+#### Computation of the AGID (Aggregate ID)
+
+The zeroth entry in the blinded attribute list represents a cryptogrphic digest of a given type. The length of this string is defined by the type of digest. This string is populated with dummy characters, namely `#` equal to the length of the digest type when CESR encoded as qb64 (text domain).  The remaining `N` elements in the list are populated with the SAID values (CESR encoded qb64) of each the `N` blindable attribute blocks. This results in a list with `N+1` elements. This list is then serialized as a list in whatever serialization kind is used by the enclosing ACDC (CESR, JSON, CBOR, MGPK). A digest of this serialization is computer and qb64 value of that digest replaces the dummied values in the zeroth element. This digest value in CESR qb64 is the AGID.  Working examples of AGID computation are provided below.
+
+#### Inclusion proof via aggregated list digest (AGID)
+
+All the a<sub>i</sub> in the list are serialized and then aggregated into a single aggregate digest denoted the AGID by computing the digest of their ordered serialization in a list. This is expressed as follows:
+
+AGID = H(C(a<sub>i</sub> for all i in \{0, ..., N\})), where ‘H’ is the digest (hash) Operator and ‘C’ is the ordered serialization operator.
+
+In compact form, the value of the selectively disclosable top-level Attribute section, `A`, field is set to the aggregated value ‘AGID’. This aggregate ‘AGID’ makes a blinded cryptographic commitment to all SAIDS in the list,
+
+\[a<sub>1</sub>, ...., a<sub>N</sub>\].  
+
+Please note that the zeroth element \[a<sub>0</sub>] is a placeholder for the AGID itself.
+
+Given sufficient collision resistance of the digest Operator, the digest of an ordered concatenation is not subject to a birthday attack on its concatenated elements [[ref: BDC][[ref: BDay][[ref: QCHC][[ref: HCR][[48]].
+
+Moreover, the aggregate AGID makes a commitment to each element a<sub>i</sub> for i=1..N SAID. A block's SAID itself makes a blinded commitment to its block's (SAD) attribute value(s) in detail. Because each block is itself blinded by its SAID and UUID, disclosure of any given a<sub>i</sub> SAID does not expose or disclose any discoverable information detail about either its own or another block's Attribute value(s). Therefore, one may safely disclose the full list of a<sub>i</sub> elements without exposing the blinded block Attribute values.
+
+Proof of inclusion in the list of a given blindable block consists of checking the list for a matching SAID value. A computationally efficient way to do this is to create a hash table or B-tree of the list and then check for inclusion via lookup in the hash table or B-tree of a block's SAID.
+
+To elaborate, given that aggregate value ‘AGID’ appears as the compact value of the top-level Attribute section, `A`, field, the Selective Disclosure proof of the Attribute at index ‘j’ may be provided to the Disclosee with four items of information. These are:
+
+- The actual, detailed disclosed Attribute block itself (at index ‘j’) with all its fields.
+- The full list including the AGID at a<sub>0</sub> all `N` Attribute block SAID digests, i.e. \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N</sub>\] that includes a<sub>j</sub>.
+- The ACDC in compact form with selectively disclosable Attribute section, `A`, field value set to aggregate ‘AGID’.
+- The presence of the issuance seal digest in the Issuer's KEL bound to the ACDC top-level SAID, `d`, field either directly or indirectly through a TEL Registry entry.
+
+In common practice, the actual, detailed disclosed Attribute block may only be disclosed after the Disclosee has agreed to the terms of the Rules section. Therefore, in the event the potential Disclosee declines to accept the terms of disclosure, then a presentation of the compact version of the ACDC with only the AGID and/or the list of blinded Attribute SAIDS, \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\]. does not provide any point of correlation to any of the blinded Attribute values themselves. The Attributes of block ‘j’ are hidden by its SAID at a<sub>j</sub>\ and the list of Attribute digests \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\] is hidden by the aggregate ‘AGID’. The Partial Disclosure needed to enable graduate disclosure for Chain-link Confidentiality does not leak any of the selectively disclosable details.
+
+The Disclosee may then verify the disclosure by:
+- computing a<sub>j</sub> on the selectively disclosed Attribute block details.
+- confirming that the computed a<sub>j</sub> appears in the provided list \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\].
+- computing ‘AGID’ from the provided list \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\].
+- confirming that the computed ‘AGID’ matches the value, ‘AGID’, of the selectively disclosable Attribute section, `A`, field value in the provided ACDC (also the zeroth element a<sub>0</sub> of the list.
+- computing the top-level SAID, `d` field of the provided ACDC in the most compact form.
+- confirming the presence of the issuance seal digest in the Issuer's KEL
+- confirming that the issuance seal digest in the Issuer's KEL is bound to the ACDC top-level SAID, `d`, field either directly or indirectly through a TEL Registry entry.
+
+
+A private selectively disclosable ACDC provides significant correlation minimization because a Discloser may use a metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain Link Confidentiality expressed in the Rule section [[44]. Thus, only malicious Disclosees who violate Chain Link Confidentiality may correlate between presentations of a given private, selectively disclosable ACDC. Nonetheless, the malicious Disclosees are not able to discover any undisclosed Attributes.
+
+#### Composed Schema for selectively disclosable Aggregate section
+
+Because the Aggregate section's selectively disclosable blindable Attribute blocks are provided by an array (list), the uncompacted variant in the Schema uses an array of items and the `anyOf` composition Operator to allow one or more of the items to be disclosed without requiring all to be disclosed. Thus, both the `oneOf` and `anyOf` composition Operators are used. The `oneOf` is used to provide compact Partial Disclosure of the aggregate, ‘AGID’, as the value of the top-level selectively disclosable Attribute section, `A`, field in its compact variant, and the nested `anyOf` Operator is used to enable Selective disclosure in the uncompacted selectively disclosable variant. An additional layer of `oneOf` is used to enable disclosure of either the block SAID or the block detail.
+
+```json
+{
+      "A":
+      {
+        "description": "Selectively disclosable attribute aggregate section",
+        "oneOf":
+        [
+          {
+            "description": "Aggregate Section AGID",
+            "type": "string"
+          },
+          {
+            "description": "Selectively disclosable attribute details",
+            "type": "array",
+            "uniqueItems": True,
+            "items":
+            {
+              "anyOf":
+              [
+                {
+                    "description": "Issue Block",
+                    "oneOf":
+                    [
+                        {
+                            "description": "Issuee Block SAID",
+                            "type": "string"
+                        },
+                        {
+                          "description": "Issuee Block Detail",
+                          "type": "object",
+                          "required":
+                          [
+                            "d",
+                            "u",
+                            "i"
+                          ],
+                          "properties":
+                          {
+                            "d":
+                            {
+                              "description": "Block SAID",
+                              "type": "string"
+                            },
+                            "u":
+                            {
+                              "description": "Block UUID",
+                              "type": "string"
+                            },
+                            "i":
+                            {
+                              "description": "Issuee SAID",
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": False
+                        }
+                    ]
+                },
+                {
+                    "description": "Score Block",
+                    "oneOf":
+                    [
+                        {
+                            "description": "Score Block SAID",
+                            "type": "string"
+                        },
+                        {
+                          "description": "Score Block Detail",
+                          "type": "object",
+                          "required":
+                          [
+                            "d",
+                            "u",
+                            "score"
+                          ],
+                          "properties":
+                          {
+                            "d":
+                            {
+                              "description": "Block SAID",
+                              "type": "string"
+                            },
+                            "u":
+                            {
+                              "description": "Block UUID",
+                              "type": "string"
+                            },
+                            "score":
+                            {
+                              "description": "Score Value",
+                              "type": "integer"
+                            }
+                          },
+                          "additionalProperties": False
+                        }
+                    ]
+                },
+                {
+                    "description": "Name Block",
+                    "oneOf":
+                    [
+                        {
+                            "description": "Name Block SAID",
+                            "type": "string"
+                        },
+                        {
+                          "description": "Name Block Detail",
+                          "type": "object",
+                          "required":
+                          [
+                            "d",
+                            "u",
+                            "name"
+                          ],
+                          "properties":
+                          {
+                            "d":
+                            {
+                              "description": "Block SAID",
+                              "type": "string"
+                            },
+                            "u":
+                            {
+                              "description": "Block UUID",
+                              "type": "string"
+                            },
+                            "name":
+                            {
+                              "description": "Name Value",
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": False
+                        }
+                    ]
+                }
+              ]
+            }
+          }
+        ],
+        "additionalProperties": False
+      }
+    }
+```
+
+##### JSON Serialization
+Consider the following Aggregate section in uncompacted, fully disclosed form computed using JSON serialization as follows:
+
+```python
+"A":
+[
+        "EN5d44fTNM0M4kmMMVrsH0HwMLRLyb6SoJEV0ogkLdXx",
+        {
+            "d": "EI2lwi1ZKrs-bDwgEreOhEh-W2O5xrOm5T-QCyMuX5V4",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+            "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"
+        },
+        {
+            "d": "EC-vU19URXX8ztfWdp_j2HHr1lJsqtGa1YHtZrg6-GMR",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+            "score": 96
+        },
+        {
+            "d": "EKYLUIpDXNT0ujSdoNOT5pLp0okOKW3mAbg-M7K5OO_C",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+            "name": "Zoe Doe"
+        }
+]
+```
+
+Note that the zeroth element in the list is the value of the AGID as `EN5d44fTNM0M4kmMMVrsH0HwMLRLyb6SoJEV0ogkLdXx`.
+Also note that the value of the `i` field is the Issuee of the ACDC as `ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf`.
+
+In fully compact form, the Aggregate section is as follows:
+
+```python
+"A": "EN5d44fTNM0M4kmMMVrsH0HwMLRLyb6SoJEV0ogkLdXx"
+```
+Notice that the value of the `A` field is the AGID.
+
+In list form, i.e., compacted to a list with only the AGID and the block SAIDs, the Aggregate section is as follows:
+
+```python
+"A":
+[
+        "EN5d44fTNM0M4kmMMVrsH0HwMLRLyb6SoJEV0ogkLdXx",
+        "EI2lwi1ZKrs-bDwgEreOhEh-W2O5xrOm5T-QCyMuX5V4",
+        "EC-vU19URXX8ztfWdp_j2HHr1lJsqtGa1YHtZrg6-GMR",
+        "EKYLUIpDXNT0ujSdoNOT5pLp0okOKW3mAbg-M7K5OO_C"
+]
+```
+
+When the serialization kind is JSON, the raw value used to compute the AGID with a dummied value for the AGID is as follows:
+
+```json
+["############################################","EI2lwi1ZKrs-bDwgEreOhEh-W2O5xrOm5T-QCyMuX5V4","EC-vU19URXX8ztfWdp_j2HHr1lJsqtGa1YHtZrg6-GMR","EKYLUIpDXNT0ujSdoNOT5pLp0okOKW3mAbg-M7K5OO_C"]
+```
+The Blake3-256 digest of this value encoded in CESR qb64 is the AGID above.
+
+Lets suppose that selective disclosure of the Issuee block and the Score block is desired but without disclosing the Name block.  This disclosure would be as follows:
+
+```python
+"A":
+[
+        "EN5d44fTNM0M4kmMMVrsH0HwMLRLyb6SoJEV0ogkLdXx",
+        {
+            "d": "EI2lwi1ZKrs-bDwgEreOhEh-W2O5xrOm5T-QCyMuX5V4",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+            "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"
+        },
+        {
+            "d": "EC-vU19URXX8ztfWdp_j2HHr1lJsqtGa1YHtZrg6-GMR",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+            "score": 96
+        },
+        "EKYLUIpDXNT0ujSdoNOT5pLp0okOKW3mAbg-M7K5OO_C"
+]
+```
+
+From this disclosure, the block SAIDS can be computed, and then the compact list form with only AGID and block SAIDs can be constructed, and then the AGID can be computed to verify the disclosure.
+
+##### CESR Native Serialization
+
+If instead, CESR native serialization is used, the fully uncompacted Aggregate section is as follows:
+
+```python
+"A":
+[
+        "EEL7OTDzXjYoaDE8g8064thOpKdxsJWaG8DhRyOB58qW",
+        {
+            "d": "EPss9hsx7P5iYjWXNYJM5NiEu5EtPQHdGZ5K-qXK2p5E",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+            "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"
+        },
+        {
+            "d": "EGoIcPap1swfLGRQzTaxf38HsLFuHehBCY5kUSDK8XGs",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+            "score": 96
+        },
+        {
+            "d": "ED50KTrvT5n20JFTsyZFvBJfH-bOAVP9xHFhtbI5nCN6",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+            "name": "Zoe Doe"
+        }
+]
+```
+The AGID is `EEL7OTDzXjYoaDE8g8064thOpKdxsJWaG8DhRyOB58qW`
+
+In list form, i.e., compacted to a list with only the AGID and the block SAIDs, the Aggregate section is as follows:
+
+```python
+"A":
+[
+        "EEL7OTDzXjYoaDE8g8064thOpKdxsJWaG8DhRyOB58qW",
+        "EPss9hsx7P5iYjWXNYJM5NiEu5EtPQHdGZ5K-qXK2p5E",
+        "EGoIcPap1swfLGRQzTaxf38HsLFuHehBCY5kUSDK8XGs",
+        "ED50KTrvT5n20JFTsyZFvBJfH-bOAVP9xHFhtbI5nCN6"
+]
+```
+
+When the serialization kind is CESR, the raw value used to compute the AGID with a dummied value for the AGID is as follows:
+
+```python
+-JAs############################################EPss9hsx7P5iYjWXNYJM5NiEu5EtPQHdGZ5K-qXK2p5EEGoIcPap1swfLGRQzTaxf38HsLFuHehBCY5kUSDK8XGsED50KTrvT5n20JFTsyZFvBJfH-bOAVP9xHFhtbI5nCN6
+```
+The Blake3-256 digest of this value encoded in CESR qb64 is the AGID above.
+
+Lets suppose that selective disclosure of the Issuee block and the Score block is desired but without disclosing the Name block.  This disclosure would be as follows:
+
+```python
+"A":
+[
+        "EEL7OTDzXjYoaDE8g8064thOpKdxsJWaG8DhRyOB58qW",
+        {
+            "d": "EPss9hsx7P5iYjWXNYJM5NiEu5EtPQHdGZ5K-qXK2p5E",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+            "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"
+        },
+        {
+            "d": "EGoIcPap1swfLGRQzTaxf38HsLFuHehBCY5kUSDK8XGs",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+            "score": 96
+        },
+        "ED50KTrvT5n20JFTsyZFvBJfH-bOAVP9xHFhtbI5nCN6"
+    ]
+```
+From this disclosure, the block SAIDS can be computed, and then the compact list form with only AGID and block SAIDs can be constructed, and then the AGID can be computed to verify the disclosure.
+
+### Edge Section  
 
 The Edge Section, `e` field MAY appear as a top-level block within the ACDC and denotes the start of subsequent Edge-groups. The Edge Section has several reserved fields that MAY appear as top-level fields within its block.
+
+The Edge Section itself MUST have a "oneOf" composition with only its SAID so that the Edge Section MUST be expressable in the most compact form as merely its SAID.  
+
 
 #### Block types
 
@@ -1261,16 +1445,15 @@ When an Edge block does not include a SAID, `d` field, then the node, `n` field 
 
 The value of the required node, `n` field, is the SAID of the ACDC to which the Edge connects, i.e., the node, `n` field indicates, designates, references, links, or "points to" another ACDC called the far node. To clarify, the Edge is directed from the near node, i.e., the ACDC in which the Edge block resides, to the far node, which is the ACDC indicated by the value of node, `n` field of that block. The edges and nodes form a directed acyclic graph (DAG). 
 
-In order for a given Edge to be valid, at the very least, a Validator MUST confirm that the SAID of the provided far node ACDC matches the node, `n` field value given in the near node ACDC Edge block and MUST confirm that the provided far node ACDC satisfies its own schema. When the Edge block has a schema, `s` field is present (see below), then the far node MUST also validate against the Schema indicated by the near node Edge's Schema, `s` field value.
-
-
-###### Simple compact edge
-
-When an Edge sub-block has only one field, that is, its node, `n` field, i.e., it has no other properties, then the Edge block MAY use an alternate simplified, compact form where the labeled Edge field value is the value of its node, `n,` field. The Edge is, therefore, public.  This enables the very compact expression of simple public Edges. The Schema for that Edge's label MUST indicate that the Edge value is a far node SAID string and use a `oneOF` composition whose expanded block has only a Node, `n` field with the far node SAID as its value. 
+In order for a given Edge to be valid, at the very least, a Validator MUST confirm that the SAID of the provided far node ACDC matches the node, `n` field value given in the near node ACDC Edge block and MUST confirm that the provided far node ACDC satisfies its own schema. When the (near node) Edge block's schema, `s` field is present (see below), then the far node MUST also validate against the Schema indicated by the near node Edge block's Schema, `s` field value.
 
 ##### Schema, `s` field
 
-When present, the Schema `s` field MUST appear immediately following the node `n` field in the Edge sub-block. The schema, `s` field provides an additional constraint on the far node ACDC. The far node ACDC MUST also validate against an Edge block schema, `s` field when present.  To clarify, the Validator, after validating that the provided far node ACDC indicated by the node, `n` field satisfies its (the far ACDC's) own Schema, MUST also confirm that far node ACDC passes Schema validation with respect to the Edge's `s` field value. This validation is simplified whenever the SAID of the far node ACDC Schema matches the SAID of the Edge's Schema, `s` field because only one Schema validation has to be performed. However, when the Schema SAIDs differ, two Schema validation runs MUST be performed. The Edge Schema, `s` field enables a given Issuer of an ACDC to force forward compatibility constraints (i.e. minor schema version changes) on old ACDCs to which a new issuance is chained without having to add each old minor version to a list of `oneOf` compositions in the Edge's Schema, `s` field value. Major version changes are, by definition backwards breaking, so either the old version ACDC's MUST be revoked and reissued or the new Edge's schema value MUST include a `oneOf` composition that includes the old major versions. See the discussion under the Schema section for Schema versioning.
+When present, the Schema `s` field MUST appear immediately following the node `n` field in the Edge sub-block. The schema, `s` field provides an additional constraint on the far node ACDC. The far node ACDC MUST also validate against an Edge block's schema, `s` field when present.  To clarify, the Validator, after validating that the provided far node ACDC indicated by the node, `n` field satisfies its (the far ACDC's) own Schema, MUST also confirm that far node ACDC passes Schema validation with respect to the Edge's `s` field value. This validation is simplified whenever the SAID of the far node ACDC Schema matches the SAID of the Edge's Schema, `s` field because only one Schema validation has to be performed. However, when the Schema SAIDs differ, two Schema validation runs MUST be performed. 
+
+The Edge Schema, `s` field enables a given Issuer of an ACDC to force forward compatibility constraints (i.e. minor schema version changes) on old ACDCs to which a new issuance is chained without having to add each old minor version to a list of `oneOf` compositions in the new Edge's Schema, `s` field value. As long as the new Edge's schema validates against the old minor version ACDC, no additional `oneof` is required in the new Edge's schema. This enables the old schema to be self-deprecated as it will automatically fall out of use once all the ACDCs issued under it have expired. Whereas, adding a `oneof` in the new Edge's schema effectively forces continued valid use of the old schema. This latter case is not self-deprecating. 
+
+Major version changes, in contrast, are, by definition, backward-breaking, so either old major version ACDCs must be revoked and reissued or the new Edge's schema value must include a `oneOf` composition that includes the old major versions. Refer to the discussion under the Schema section for information on Schema versioning.
 
 ##### Operator, `o` field
 
@@ -1311,722 +1494,28 @@ Weighted directed Edges may represent degrees of confidence or likelihood. PGs w
 
 Edge property fields appear as labeled fields whose labels are not any of the reserved field labels for either Edge-groups or Edges, namely, `[d, u, n, s, o, w].' Labeled property fields MUST appear after all of any fields with a reserved field label.
 
+###### Simple compact edge
+
+When an Edge sub-block has only one field, that is, its node, `n` field, i.e., it has no other properties, then the Edge block MAY use an alternate simplified, compact form where the labeled Edge field value is the value of its node, `n,` field. The Edge is, therefore, public.  This enables the very compact expression of simple public Edges. The Schema for that Edge's label MUST indicate in its description that the Edge value is a Far Node SAID, not the Edge block SAID.
+
+#### Summary
+
+The Edge Section syntax enables the composable and extensible but efficient expression of aggregating (m-ary) and unary Operators, both singly and in combination, as applied to nestable groups of Edges.  The intelligent defaults for the Operator, `o`, field, namely, `AND` for m-ary Operators and `I2I` for unary Operators for targeted ACDCs and `NI2I` for untargeted ACDCs, means that in many use cases, the Operator, `o`, field, does not even need to be present. This syntax is sufficiently general in scope to satisfy the contemplated use cases, including those with more advanced business logic. 
 
 
-#### Edge Section Examples
+#### Examples
 
-Consider four different ACDCs in compact form (see below). The Issuer of the first is named Amy with AID, `EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM`, the Issuer of the second is named Bob with AID, `EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK`, the Issuer of the third is named Cat with AID, `EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E`, and the Issuer of the fourth is named Dug with AID, `EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr`. Notice that the AID of each Issuer appears in the Issuer, `i` field of its respective ACDC below.
+The Edge section examples are included in the full ACDC examples in the Annex. This is because Edges refer to other ACDCs. To fully set up the Edge examples, it is necessary to understand the complete format of an ACDC.
 
-Issued by Amy:
-
-```json
-{
-  "v":  "ACDCCAAJSONAACD.",
-  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "u":  "0ANghkDaG7OY1wjaDAE0qHcg",
-  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
-```
-
-Issued by Bob:
-
-```json
-{
-  "v":  "ACDCCAAJSONAACD.",
-  "d":  "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
-  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
-  "i":  "EFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBrAqjsK",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "EGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqG",
-  "a":  "EBf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwLIr9",
-  "r":  "EMORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3"
-}
-```
-
-Issued by Cat:
-
-```json
-{
-  "v":  "ACDCCAAJSONAACD.",
-  "d":  "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
-  "u":  "0ADAE0qHcgNghkDaG7OY1wja",
-  "i":  "EDIPMvklXKhmkPreYpZfzBrAqjsKFk66jpf3uFv7An2E",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
-  "a":  "EIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUderzwL",
-  "r":  "EBe71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOL"
-}
-```
-
-Issued by Dug:
-
-```json
-{
-  "v":  "ACDCCAAJSONAACD.",
-  "d":  "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
-  "u":  "0AHcgNghkDaG7OY1wjaDAE0q",
-  "i":  "EAqjsKFk66jpf3uFv7An2EDIPMvklXKhmkPreYpZfzBr",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "EAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4re",
-  "a":  "EFrn9y2PYgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lk",
-  "r":  "EH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6DZIl3MOR"
-}
-```
-
-
-
-##### Two Edges
-
-Suppose that the Edge Section of the ACDC issued by Amy, when expanded, has two Edges labeled `poe` for proof-of-entitlement and `data`.  The `poe` Edge links back to the ACDC issued by Bob's AID and the `data` Edge links back to the ACDC issued by Cat's AID. 
-
-Edge section expanded:
-
-```json
-{
-  "e":
-  {
-    "d": "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
-    "u": "0AwjaDAE0qHcgNghkDaG7OY1",
-    "poe":
-    {
-      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
-      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
-      "n": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
-      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
-    },
-    "data":
-    {
-      "d": "ELxUdYerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOc",
-      "u": "0ADAE0qHcgNghkDaG7OY1wja",
-      "n": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
-      "s": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
-      "o": "NI2I"
-    }
-  }
-}
-```
-
-Edge section (compact private edges):
-
-```json
-{
-  "e":
-  {
-    "d": "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
-    "u": "0AwjaDAE0qHcgNghkDaG7OY1",
-    "poe": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
-    "data": "ELxUdYerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOc"
-  }
-}
-```
-
-Edge section subschema:
-
-```json
-"e":
-{
-  "description": "edge section",
-  "oneOf":
-  [
-    {
-      "description": "edge section SAID",
-      "type": "string"
-    },
-    {
-      "description": "edge section detail",
-      "type": "object",
-      "required":
-      [
-        "d",
-        "u",
-        "poe",
-        "data"
-      ],
-      "properties":
-      {
-        "d":
-        {
-          "description": "edge section SAID",
-          "type": "string"
-        },
-        "u":
-        {
-          "description": "edge section UUID",
-          "type": "string"
-        },
-        "poe":
-        {
-          "description": "proof of entitlement edge",
-          "oneOf":
-          [
-            {
-              "description": "compact form edge detail SAID",
-              "type": "string"
-            },
-            {
-              "description": "edge detail",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "u",
-                "n",
-                "s"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "edge SAID",
-                  "type": "string"
-                },
-                "u":
-                {
-                  "description": "edge UUID",
-                  "type": "string"
-                },
-                "n":
-                {
-                  "description": "far node SAID",
-                  "type": "string"
-                },
-                "s":
-                {
-                  "description": "far node schema SAID",
-                  "type": "string",
-                  "const": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
-                }
-              },
-              "additionalProperties": false
-            }
-          ]
-        },
-        "data":
-        {
-          "description": "data edge",
-          "oneOf":
-          [
-            {
-              "description": "compact form edge detail SAID",
-              "type": "string"
-            },
-            {
-              "description": "data edge detail",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "u",
-                "n",
-                "s",
-                "o"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "edge SAID",
-                  "type": "string"
-                },
-                "u":
-                {
-                  "description": "edge UUID",
-                  "type": "string"
-                },
-                "n":
-                {
-                  "description": "far node SAID",
-                  "type": "string"
-                },
-                "s":
-                {
-                  "description": "far node schema SAID",
-                  "type": "string",
-                  "const": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
-                },
-                "o":
-                {
-                  "description": "unary edge operator",
-                  "type": "string"
-                },
-              },
-              "additionalProperties": false
-            },
-          ]
-        }
-      },
-      "additionalProperties": false
-    }
-  ]
-}
-```
-
-Notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the Node, `n` field value of the `bob` Edge block is the value of the SAID, `d` field of the ACDC issued by Bob, and the Node, `n` field value of the `cat` Edge block is the value of the SAID, `d` field of the ACDC issued by Cat. Further, notice that the top-level Edge-group of the ACDC issued by Amy has no Operator field. This means that the default m-ary operator `AND` is applied. Therefore Amy's ACDC is invalid unless both the linked ACDCs issued by Bob and Cat are valid. Moreover, notice that the Edge block labeled `poe` in Amy's ACDC has no operator, `o` field. This means that the default unary Operator `I2I` is applied. This means that Bob's ACDC must designate Amy's AID as the Issuee in order for this edge to be valid. Finally, notice that the Edge block labeled `data` in Amy's ACDC has an Operator, `o` field value of `NI2I`. This means that there is no requirement that Cat's ACDC designates Amy's AID as the Issuee in order for this Edge to be valid. If it does, fine; if not, also fine.
-
-Suppose that the expanded Attribute section of the ACDC issued by Bob is as follows:
-
-```json
-"a":
-{
-  "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "u": "0ADAE0qHcgNghkDaG7OY1wja",
-  "i": "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-}
-```
-
-Because the value of the Issuee, `i`, field in Bob's Attribute section is Amy's AID, the default `I2I` Operator on Amy's Edge labeled `poe` is satisfied. Thus, Amy's ACDC validates with respect to its Edges.
-
-Both Edges can be individually compacted and private because they include both `d` and `u` fields. The Schema allows this compact Edge form with a `oneOf` composition on each of the Edges. Notice that in the compact Edge form the value of each labeled Edge field is the SAID, `d` field value of its expanded form.  To elaborate, the Edge section can be expressed in one of three forms. These are:
-- compact private form, as a whole, because its schema uses the `oneOf` composition.
-- partially expanded form with compact private Edges because each Edge's subschema uses the `oneOf` composition.
-- fully expanded form with fully expanded Edge blocks because of the combination of `oneOf` compositions at both the section and Edge levels.
-
-##### Nested edge group
- 
-In contrast to the previous example, this example shows a nested Edge-group in the ACDC issued by Amy. Amy's Edge Section when expanded, has three Edges labeled `poe`, `sewer`, and `gas` as shown below, where each of these labeled Edges links back to the ACDCs issued respectively by Bob's, Cat's, and Dug's AIDs. The nested Edge-group has label `poa` for proof-of-address. Some of the field values in the compact version of the ACDC issued by Amy must change because the Edge section and Schema are both different.
-
-Issued by Amy:
-
-```json
-{
-  "v":  "ACDCCAAJSONAACD.",
-  "d":  "EHdSXCJnBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3g",
-  "u":  "0ADaG7OY1wjaDAE0qHcgNghk",
-  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "EFWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPqGGeIZ8a8",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "EJtQIYPvAu6DZIl3MOARH3dCdoFOLe71iheqcywJcnjt",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
-```
-
-
-Edge section:
-```json
-{
-  "e":
-  {
-    "d": "EJtQIYPvAu6DZIl3MOARH3dCdoFOLe71iheqcywJcnjt",
-    "u": "0AwjaDAE0qHcgNghkDaG7OY1",
-    "poe":
-    {
-      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
-      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
-      "n": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
-      "s": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw"
-    },
-    "poa":
-    {
-      "d": "E2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn9y",
-      "u": "0ANghkDaG7OY1wjaDAE0qHcg",
-      "o": "OR",
-      "sewer":
-      {
-        "d": "ELxUdYerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOc",
-        "u": "0ADAE0qHcgNghkDaG7OY1wja",
-        "n": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
-        "s": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
-      },
-      "gas":
-      {
-        "d": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
-        "u": "0AAE0qHcgNghkDaG7OY1wjaD",
-        "n": "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B",
-        "s": "EFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lk",
-      }
-    }
-  }
-}
-```
-
-Edge section subschema:
-
-```json
-"e":
-{
-  "description": "edge section",
-  "oneOf":
-  [
-    {
-      "description": "edge section SAID",
-      "type": "string"
-    },
-    {
-      "description": "edge detail",
-      "type": "object",
-      "required":
-      [
-        "d",
-        "u",
-        "poe",
-        "poa"
-      ],
-      "properties":
-      {
-        "d":
-        {
-          "description": "edge section SAID",
-          "type": "string"
-        },
-        "u":
-        {
-          "description": "edge section UUID",
-          "type": "string"
-        },
-        "poe":
-        {
-          "description": "entitlement edge",
-          "type": "object",
-          "required":
-          [
-            "d",
-            "u",
-            "n",
-            "s"
-          ],
-          "properties":
-          {
-            "d":
-            {
-              "description": "edge SAID",
-              "type": "string"
-            },
-            "u":
-            {
-              "description": "edge UUID",
-              "type": "string"
-            },
-            "n":
-            {
-              "description": "far node SAID",
-              "type": "string"
-            },
-            "s":
-            {
-              "description": "far node schema SAID",
-              "type": "string",
-              "const": "ELIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
-            }
-          },
-          "additionalProperties": false
-        },
-        "poa":
-        {
-          "description": "proof of address group",
-          "type": "object",
-          "required":
-          [
-            "d",
-            "u",
-            "o",
-            "sewer",
-            "gas"
-          ],
-          "properties":
-          {
-            "d":
-            {
-              "description": "edge SAID",
-              "type": "string"
-            },
-            "u":
-            {
-              "description": "edge UUID",
-              "type": "string"
-            },
-            "o":
-            {
-              "description": "m-ary group operator",
-              "type": "string",
-              "const": "OR"
-            },
-            "sewer":
-            {
-              "description": "sewer address edge",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "u",
-                "n",
-                "s"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "edge SAID",
-                  "type": "string"
-                },
-                "u":
-                {
-                  "description": "edge UUID",
-                  "type": "string"
-                },
-                "n":
-                {
-                  "description": "far node SAID",
-                  "type": "string"
-                },
-                "s":
-                {
-                  "description": "far node schema SAID",
-                  "type": "string",
-                  "const": "EHwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_N",
-                },
-              },
-              "additionalProperties": false
-            },
-            "gas":
-            {
-              "description": "gas address edge",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "u",
-                "n",
-                "s"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "edge SAID",
-                  "type": "string"
-                },
-                "u":
-                {
-                  "description": "edge UUID",
-                  "type": "string"
-                },
-                "n":
-                {
-                  "description": "far node SAID",
-                  "type": "string"
-                },
-                "s":
-                {
-                  "description": "far node schema SAID",
-                  "type": "string",
-                  "const": "EFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lk",
-                },
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false
-        },
-      },
-      "additionalProperties": false
-    }
-  ]
-}
-```
-
-Notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the Node, `n` field value of the `poe` Edge block is the value of the SAID, `d` field of the ACDC issued by Bob, the Node, `n` field value of the `sewer` Edge block is the value of the SAID, `d` field of the ACDC issued by Cat, and the Node, `n` field value of the `gas` Edge block is the value of the SAID, `d` field of the ACDC issued by Dug. Further, notice that the top-level Edge-group of the ACDC issued by Amy has no Operator field. This means that the default m-ary Operator `AND` is applied. This top-level Edge-group includes one Edge labeled `poe` and a nested Edge-group labeled `poa`. This nested Edge group has two Edges labeled `sewer` and `gas`. The Edge-group's Operator, `o` field value is `OR`. This means that the Edge-group is valid if either of its Edges is valid. The unary Operators on the `poe`, `sewer`, and `gas` edges are the default `I2I` because the Operator, `o` field is missing in each of the associated Edge blocks. This means that each of the ACDCs issued by Bob, Cat, and Dug must designate Amy's AID as the Issuee in order for the associated Edge to be valid. But as long as the `poe` Edge is valid, only one of the Edges, `sewer` or `gas`, must be valid for Amy's ACDC to be valid with respect to its Edges.
-
-To clarify, with this version of the Edge Section, Amy's ACDC is valid with respect to its Edges if the ACDC issued by Bob is valid, and either Cat's or Dug's ACDCs are valid.  Amy's Edge section with nested Edge-group provides a sub-graph with an `AND-OR` logic tree on its three Edges. This is suitable for many types of business logic, such as KYC, for example, where the combination of a proof of entitlement (`poe`) and a proof of one of two types of addresses (`sewer` or `gas`) is required.
-
-The three Edges and the nested Edge-group could each be individually compacted and private because they include both `d` and `u` fields. To simplify the example, however, the `oneOF` composition was not applied to the individual Edges and nested Edge group. Therefore, the simplified Schema only allows the expanded form of the individual Edges and nested Edge group.  Nonetheless, the Edge section, as a whole can be expressed in compact private form because its Schema uses the `oneOf` composition. 
-
-##### Compact public edge section example
-
-Suppose instead Amy is not concerned about privacy at either the section or the individual Edge and Edge group level. Amy therefore could benefit from using an expanded Edge Section that is more compact. Furthermore,  Amy's ACDC may not benefit from specifying a different Schema constraint on the far nodes of its Edges. Therefore, compared to the example above, several fields could be eliminated. These include all the `u` fields, all but the top-level Edge Section `d` field, and all the `s` fields.
-
-Issued by Amy:
-
-```json
-{
-  "v":  "ACDCCAAJSONAACD.",
-  "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
-  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
-  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
-```
-
-
-Edge section (simple compact edges):
-```json
-{
-  "e":
-  {
-    "d": "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
-    "poe": "ECJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2BBWNHdSX",
-    "poa":
-    {
-      "o": "OR",
-      "sewer": "EK0neuniccMBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5",
-      "gas": "EBWNHdSXCJnFJL5OuQPyM5K0neuniccMBdXt3gIXOf2B"
-    }
-  }
-}
-```
-
-Edge section subschema:
-
-```json
-"e":
-{
-  "description": "edge section",
-  "oneOf":
-  [
-    {
-      "description": "edge section SAID",
-      "type": "string"
-    },
-    {
-      "description": "edge detail",
-      "type": "object",
-      "required":
-      [
-        "d",
-        "poe",
-        "poa"
-      ],
-      "properties":
-      {
-        "d":
-        {
-          "description": "edge section SAID",
-          "type": "string"
-        },
-        "poe":
-        {
-          "description": "entitlement edge",
-          "oneOf":
-          [
-            {
-              "description": "simple compact form far node SAID",
-              "type": "string"
-            },
-            {
-              "description": "edge detail",
-              "type": "object",
-              "required":
-              [
-                "n",
-              ],
-              "properties":
-              {
-                "n":
-                {
-                  "description": "far node SAID",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          ]
-        },
-        "poa":
-        {
-          "description": "proof of address group",
-          "type": "object",
-          "required":
-          [
-            "o",
-            "sewer",
-            "gas"
-          ],
-          "properties":
-          {
-            "o":
-            {
-              "description": "m-ary group operator",
-              "type": "string",
-              "const": "OR"
-            },
-            "sewer":
-            {
-              "description": "sewer address edge",
-              "oneOf":
-              [
-                {
-                  "description": "simple compact form far node SAID",
-                  "type": "string"
-                },
-                {
-                  "description": "edge detail",
-                  "type": "object",
-                  "required":
-                  [
-                    "n",
-                  ],
-                  "properties":
-                  {
-                    "n":
-                    {
-                      "description": "far node SAID",
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              ]
-            },
-            "gas":
-            {
-              "description": "gas address edge",
-              "oneOf":
-              [
-                {
-                  "description": "simple compact form far node SAID",
-                  "type": "string"
-                },
-                {
-                  "description": "edge detail",
-                  "type": "object",
-                  "required":
-                  [
-                    "n",
-                  ],
-                  "properties":
-                  {
-                    "n":
-                    {
-                      "description": "far node SAID",
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              ]
-            }
-          },
-          "additionalProperties": false
-        },
-      },
-      "additionalProperties": false
-    }
-  ]
-}
-```
-
-Notice how much more compact is the Edge section in partially expanded form. As before, notice that the SAID, `d` field value in the Edge Section (top-level Edge-group) block is the same as the value of the Edge Section, `e` field in the ACDC issued by Amy. Also, notice that the value of the `poe` field is the value of the SAID, `d` field of the ACDC issued by Bob. This is the simple compact form of an Edge described above. Likewise, for the `sewer` field value and the `gas` field value which are respectively the value of the SAID, `d` field of the ACDCs issued by Cat and Dug. All the Edges and nested Edge-groups are public because they include a `u` field. The schema uses the `oneOf` composition operator on all three Edges. This indicates that the compact form is simple compact form because their expanded block form only includes a Node, `n` field and not a SAID, `d` field.
-
-Otherwise, this example's semantics are the same as the previous example, just more compact.
-
-##### Examples Summary
-
-As the examples above have shown, the Edge Section syntax enables the composable and extensible but efficient expression of aggregating (m-ary) and unary Operators both singly and in combination as applied to nestable groups of Edges.  The intelligent defaults for the Operator, `o`, field, namely, `AND` for m-ary Operators and `I2I` for unary Operators, means that in many use cases, the Operator, `o`, field, does not even need to be present. This syntax is sufficiently general in scope to satisfy the contemplated use cases, including those with more advanced business logic. 
 
 ### Rule Section  
 
 The Rule Section, `r` field appears as a top-level block within the ACDC and denotes the start of subsequent Rule-groups. The purpose of the Rules section is to provide a set of rules or conditions as a Ricardian Contract [[43]]. The important features of a Ricardian contract are that it is both human and machine-readable and referenceable by a cryptographic digest. A JSON-encoded document or block, such as the Rules section block, is a practical example of both a human and machine-readable document.  The Rules section's top-level SAID, `d` field provides the digest.  This provision supports the bow-tie model of RC. 
 
-The Rules Section includes labeled nested blocks called Rules that provide the legal language (terms , conditions, definitions etc). The labeled clauses can be structured hierarchically, where each Rule, in turn, can include nested labeled Rules. The labels on the Rules MAY follow a structured naming or numbering convention. These provisions enable the Rules section to satisfy the features of an RC. 
+The Rules Section includes labeled nested blocks called Rules that provide the legal language (terms , conditions, definitions etc). The labeled clauses can be structured hierarchically, where each Rule, in turn, can include nested labeled Rules. The labels on the Rules MAY follow a structured naming or numbering convention. These provisions enable the Rules section to satisfy the features of an RC.
+ 
+The Rule Section itself MUST have a "oneOf" composition with only its SAID so that the Rule Section MUST be expressable in the most compact form as merely its SAID.  
+
 
 #### Block types
 
@@ -2096,357 +1585,274 @@ Given that an individual Rule block includes a SAID, `d` field, a compact repres
 
 The UUID, `u` field is optional, but when it appears, it MUST appear as the second field in the Rule Section block following the SAID, `d` field. The value of this field MUST be a cryptographic strength salty-nonce with approximately 128 bits of entropy. When present, the UUID, `u` field means that the block's SAID, `d` field value provides a secure cryptographic digest of the contents of the block [[48]]. An adversary, when given both the block's subschema and its SAID, cannot discover the remaining contents of the block in a computationally feasible manner, such as a rainbow table attack [[30]] [[31]].  Therefore, the block's UUID, `u` field securely blinds the contents of the block via its SAID, `d` field notwithstanding knowledge of both the block's subschema and SAID.  Moreover, a cryptographic commitment to that block's SAID, `d` field does not provide a fixed point of correlation to the block's field values themselves unless and until there has been a disclosure of those field values.
 
+When any Rule or Rule-group block, as opposed to the Rule Section as a whole, has both its own SAID, `d`, field and UUID, `u,` field then that block may be used in a confidential manner via partial disclosure. To clarify, a Rule or Rule-group block with both a SAID, `d`, and UUID, `u` fields, where that UUID has sufficiently high entropy, protects the compact form of that block from discovery via a rainbow table attack merely from its SAID and subschema [[30]] [[31]]. Therefore, such a Rule or Rule-group may be kept hidden until later disclosure. These are referred to as private or confidential Rules or Rule Groups.
+
+When there is no benefit to a nested private (partially disclosable) rules or rule groups then the rule's or rule group's UUID field is not needed. 
+
+
 ##### Legal, `l` field
 
 The legal language, `l`, field in each clause block provides the associated legal language as a string.
 
-
 ##### Simple compact Rule
 
-When a Rule block has only one field, that is, its legal, `l` field, i.e., it has no other properties, then the rule block MAY use an alternate simplified, compact form where the labeled rule field value is the value of its legal, `l` field. The rule is, therefore, public.  This enables the very compact expression of simple public Rules. The Schema for that Rule's label MUST indicate that the Rule's compact value is the value of its Legal, `l` field in expanded form and use a `oneOF` composition whose expanded block has only a Legal, `l` field.
+When a Rule block has only one field, that is, its legal, `l` field, i.e., it has no other properties, then the rule MAY use an alternate simplified, compact form where the labeled rule field value is what would have been the value of its legal, `l` field when not in simple compact form.  The Rule block is, therefore, public.  This enables the very compact expression of simple public Rules. The Schema for that Rule's label MUST indicate in its description that the Rule value is Legal Language, not a SAID.
 
-#### Rule section examples
+#### Rule Examples
 
-##### Private rules
-
-Some Rules and Rule-groups, as opposed to the Rule Section as a whole, may benefit from confidential disclosure. Recall that individual Rule and Rule-group blocks MAY have their own SAID, `d`, field and UUID, `u,` field. To clarify, a Rule or Rule-group block with both a SAID, `d`, and UUID, `u` fields, where that UUID has sufficiently high entropy, protects the compact form of that block from discovery via a rainbow table attack merely from its SAID and subschema [[30]] [[31]]. Therefore, such a Rule or Rule-group may kept hidden until later disclosure. These are called private Rules or Rule-groups. The following example has an independently hidable Rule-group and Rules.
-
-Issued by Amy:
+Consider the following sub-schema for a partially disclosable Rule section:
 
 ```json
 {
-  "v":  "ACDCCAAJSONAACD.",
-  "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
-  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
-  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
-```
-
-Rule section expanded:
-
-```json
-"r":
-{
-  "d": "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB",
-  "u": "0ADaG7OaDAE0qHcgY1Nghkwj",
-  "disclaimers":
-  {
-    "d": "ELIr9Bf7V_NAwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
-    "u": "0AHcgY1NghkwjDaG7OaDAE0q",
-    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
-    "warrantyDisclaimer":
-    {
-      "d": "EBgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
-      "u": "0AG7OY1wjaDAE0qHcgNghkDa",
-      "l": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
-    },
-    "liabilityDisclaimer":
-    {
-      "d": "ED1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
-      "u": "0AHcgNghkDaG7OY1wjaDAE0q",
-      "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
-    }
-  },
-  "permittedUse":
-  {
-    "d": "EEgOcLxUdYerzwLFrn9y2PgveY4-9Ir9Bf7V_NAwY1lk",
-    "u": "0ADaG7OY1wjaDAE0qHcgNghk",
-    "l": "The person or legal entity identified by the ACDC's Issuee AID (Issuee) agrees to only use the information contained in this ACDC for non-commercial purposes."
-  }
-}
-```
-
-Rule section compact private rules:
-
-```json
-"r":
-{
-  "d": "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB",
-  "u": "0ADaG7OaDAE0qHcgY1Nghkwj",
-  "disclaimers":
-  {
-    "d": "ELIr9Bf7V_NAwY1lkFrn9y2PgveY4-9XgOcLxUdYerzw",
-    "u": "0AHcgY1NghkwjDaG7OaDAE0q",
-    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
-    "warrantyDisclaimer": "EBgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
-    "liabilityDisclaimer": "ED1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
-  },
-  "permittedUse": "EEgOcLxUdYerzwLFrn9y2PgveY4-9Ir9Bf7V_NAwY1lk"
-}
-```
-
-
-Rule section schema:
-
-```json
-"r":
-{
-  "description": "rule section",
-  "oneOf":
-  [
-    {
-      "description": "rule section SAID",
-      "type": "string"
-    },
-    {
-      "description": "rule detail",
-      "type": "object",
-      "required":
-      [
-        "d",
-        "u",
-        "disclaimers",
-        "permittedUse"
-      ],
-      "properties":
-      {
-        "d":
+    "description": "Rule Section",
+    "oneOf":
+    [
         {
-          "description": "rule section SAID",
-          "type": "string"
+            "description": "Rule Section SAID",
+            "type": "string"
         },
-        "u":
         {
-          "description": "rule section UUID",
-          "type": "string"
-        },
-        "disclaimers":
-        {
-          "description": "rule group",
-          "type": "object",
-          "required":
-          [
-            "d",
-            "u",
-            "l",
-            "warrantyDisclaimer",
-            "liabilityDisclaimer"
-          ],
-          "properties":
-          {
-            "d":
-            {
-              "description": "rule group SAID",
-              "type": "string"
-            },
-            "u":
-            {
-              "description": "rule group UUID",
-              "type": "string"
-            },
-            "warrantyDisclaimer":
-            {
-              "description": "rule",
-              "oneOf":
-              [
-                {
-                  "description": "compact form",
-                  "type": "string"
-                },
-                {
-                  "description": "rule detail",
-                  "type": "object",
-                  "required":
-                  [
-                    "d",
-                    "u",
-                    "l",
-                  ],
-                  "properties":
-                  {
-                    "d":
-                    {
-                      "description": "rule SAID",
-                      "type": "string"
-                    },
-                    "u":
-                    {
-                      "description": "rule UUID",
-                      "type": "string"
-                    },
-                    "l":
-                    {
-                      "description": "legal language",
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              ]
-            },
-            "liabilityDisclaimer":
-            {
-              "description": "rule",
-              "oneOf":
-              [
-                {
-                  "description": "compact form",
-                  "type": "string"
-                },
-                {
-                  "description": "rule detail",
-                  "type": "object",
-                  "required":
-                  [
-                    "d",
-                    "u",
-                    "l",
-                  ],
-                  "properties":
-                  {
-                    "d":
-                    {
-                      "description": "rule SAID",
-                      "type": "string"
-                    },
-                    "u":
-                    {
-                      "description": "rule UUID",
-                      "type": "string"
-                    },
-                    "l":
-                    {
-                      "description": "legal language",
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              ]
-            }
-          },
-          "additionalProperties": false
-        },
-        "permittedUse":
-        {
-          "description": "rule",
-          "oneOf":
-          [
-            {
-              "description": "compact form",
-              "type": "string"
-            },
-            {
-              "description": "rule detail",
-              "type": "object",
-              "required":
-              [
+            "description": "Rule Section Detail",
+            "type": "object",
+            "required":
+            [
                 "d",
                 "u",
-                "l",
-              ],
-              "properties":
-              {
+                "disclaimers",
+                "permittedUse"
+            ],
+            "properties":
+            {
                 "d":
                 {
-                  "description": "rule SAID",
-                  "type": "string"
+                    "description": "Rule Section SAID",
+                    "type": "string"
                 },
                 "u":
                 {
-                  "description": "rule UUID",
-                  "type": "string"
+                    "description": "Rule Section UUID",
+                    "type": "string"
                 },
-                "l":
+                "disclaimers":
                 {
-                  "description": "legal language",
-                  "type": "string"
+                    "description": "Rule Group",
+                    "oneOf":
+                    [
+                        {
+                            "description": "Rule Group SAID",
+                            "type": "string"
+                        },
+                        {
+                            "description": "Rule Group Detail",
+                            "type": "object",
+                            "required":
+                            [
+                                "d",
+                                "u",
+                                "l",
+                                "warrantyDisclaimer",
+                                "liabilityDisclaimer"
+                            ],
+                            "properties":
+                            {
+                                "warrantyDisclaimer":
+                                {
+                                    "oneOf":
+                                    [
+                                        {
+                                            "description": "Rule SAID",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "description": "Rule Detail",
+                                            "type": "object",
+                                            "required":
+                                            [
+                                                "d",
+                                                "u",
+                                                "l"
+                                            ],
+                                            "properties":
+                                            {
+                                                "d":
+                                                {
+                                                    "description": "Rule SAID",
+                                                    "type": "string"
+                                                },
+                                                "u":
+                                                {
+                                                    "description": "Rule UUID",
+                                                    "type": "string"
+                                                },
+                                                "l":
+                                                {
+                                                    "description": "Legal Language",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        }
+                                    ],
+                                },
+                                "liabilityDisclaimer":
+                                {
+                                    "oneOf":
+                                    [
+                                        {
+                                            "description": "Rule SAID",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "description": "Rule Detail",
+                                            "type": "object",
+                                            "required":
+                                            [
+                                                "d",
+                                                "u",
+                                                "l"
+                                            ],
+                                            "properties":
+                                            {
+                                                "d":
+                                                {
+                                                    "description": "Rule SAID",
+                                                    "type": "string"
+                                                },
+                                                "u":
+                                                {
+                                                    "description": "Rule UUID",
+                                                    "type": "string"
+                                                },
+                                                "l":
+                                                {
+                                                    "description": "Legal Language",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                },
+                "permittedUse":
+                {
+                    "oneOf":
+                    [
+                        {
+                            "description": "Rule SAID",
+                            "type": "string"
+                        },
+                        {
+                            "description": "Rule Detail",
+                            "type": "object",
+                            "required":
+                            [
+                                "d",
+                                "u",
+                                "l"
+                            ],
+                            "properties":
+                            {
+                                "d":
+                                {
+                                    "description": "Clause SAID",
+                                    "type": "string"
+                                },
+                                "u":
+                                {
+                                    "description": "Clause UUID",
+                                    "type": "string"
+                                },
+                                "l":
+                                {
+                                    "description": "Legal Language",
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    ]
                 }
-              },
-              "additionalProperties": false
-            }
-          ]
+            },
+            "additionalProperties": false
+        }
+    ]
+}
+```
+
+Also consider the following compatible nested partially disclosable rule section in fully disclosed uncompact form, as follows:
+
+```python
+"r":
+{
+    "d": "EL7oXtsH1t7YqOOCS0fMhWfUKx1fHwiQ2u47fVba4lAA",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+    "disclaimers":
+    {
+        "d": "EIRP8ZLuMNb1I_Uk1GgnD3qZ_MAh6GaXV1JmzFKLebb3",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+        "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
+        "warrantyDisclaimer":
+        {
+            "d": "EA84ClmyIMrSl5XaAWENAxTVZH25_YZGmu0WQm_VBBeV",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+            "l": "Issuer provides this ACDC on an AS IS basis."
         },
-      },
-      "additionalProperties": false
-    }
-  ]
-}
-```
-
-Notice that the value of the Rules Section's UUID, `d` field matches the value of the Rule, `r` field in the ACDC issued by Amy. Furthermore, notice that in the compact private Rule form the value of the labeled Rules is the value of the SAID, `d` field from the expanded form.
-
-#### Simple compact public Rules
-
-When there is no benefit to a private Rules section, then its UUID fields are not needed. Moreover, for the Rules themselves do not benefit from a dedicated SAID, `d` field. Given this change, the Rules section can be expressed in a compact form with simple compact Rules. Recall that in simple, compact form, each Rule block MUST NOT have any fields besides the Legal, `l` field. This field value then becomes the value of the labeled Rule block.
-
-Issued by Amy:
-
-```json
-{
-  "v":  "ACDCCAAJSONAACD.",
-  "d":  "EBWNFJL5OuQPyM5K0neunicIXOf2BcMBdXt3gHdSXCJn",
-  "u":  "0AG7OY1wjaDAE0qHcgNghkDa",
-  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "EGGeIZ8a8FWS7a6s4reAXRZOkogZ2A46jrVPTzlSkUPq",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "EFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOARH3dCdo",
-  "r":  "EDZIl3MORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6"
-}
-```
-
-Rules section expanded:
-
-```json
-"r":
-{
-  "d": "EDZIl3MORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6",
-  "disclaimers":
-  {
-    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
-    "warrantyDisclaimer":
-    {
-      "l": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
+        "liabilityDisclaimer":
+        {
+            "d": "ECENp0nXYDm_bLgr7TlJ8ns8I1QI2qzyqxoXnYG8B-ac",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
+            "l": "The Issuer SHALL NOT be liable for ANY damages arising as a result of this credential."
+        }
     },
-    "liabilityDisclaimer":
+    "permittedUse":
     {
-      "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
+        "d": "EIn94r7ax0PmalGUddjP3ElnU2Lzz92UFE1uIinoVeVs",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXc0",
+        "l": "The Issuee (controller of the Issuee AID) MAY only use this ACDC for non-commercial purposes."
     }
-  },
-  "permittedUse":
-  {
-    "l": "The person or legal entity identified by the ACDC's Issuee AID (Issuee) agrees to only use the information contained in this ACDC for non-commercial purposes."
-  }
 }
 ```
 
-Rules section simple compact private Rules:
+This rule section has a top-level rule group, that contains one nested rule group labeled "disclaimers" with two rules and one additional "permittedUse" rule. The SAID of this rule section, computed using the most compact SAID algorithm, is `EL7oXtsH1t7YqOOCS0fMhWfUKx1fHwiQ2u47fVba4lAA`. Notice that each rule group and each rule has its own SAID computed using the most compact SAID algorithm.
 
-```json
+Consider a more compact, partially disclosed version of the rule section as follows:
+
+```python
 "r":
 {
-  "d": "EDZIl3MORH3dCdoFOLBe71iheqcywJcnjtJtQIYPvAu6",
-  "disclaimers":
-  {
-    "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
-    "warrantyDisclaimer": "Issuer provides this ACDC on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE",
-    "liabilityDisclaimer": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
-  },
-  "permittedUse": "The person or legal entity identified by the ACDC's Issuee AID (Issuee) agrees to only use the information contained in this ACDC for non-commercial purposes."
+    "d": "EL7oXtsH1t7YqOOCS0fMhWfUKx1fHwiQ2u47fVba4lAA",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+    "disclaimers": "EIRP8ZLuMNb1I_Uk1GgnD3qZ_MAh6GaXV1JmzFKLebb3",
+    "permittedUse": "EIn94r7ax0PmalGUddjP3ElnU2Lzz92UFE1uIinoVeVs"
 }
 ```
 
+In this form, the "disclaimers" rule group is hidden but is verifiably referenced by its SAID. Likewise, the "permittedUse" rule is hidden but is verifiably referenced by its SAID.
 
-Rule section schema:
+The most compact form of the rule section is simply a field whose value is its SAID shown as follows:
+```python
+"r": "EL7oXtsH1t7YqOOCS0fMhWfUKx1fHwiQ2u47fVba4lAA"
+```
+
+Consider a different variant of this Rule Section with the same rules, but uses the simple compact form.  Its fully disclosed version is quite compact but does not enable nested graduated disclosure.
+
+The schema for the non-partially disclosable version is as follows:
 
 ```json
-"r":
 {
-  "description": "rule section",
+  "description": "Rule Section",
   "oneOf":
   [
     {
-      "description": "rule section SAID",
+      "description": "Rule Section SAID",
       "type": "string"
     },
     {
-      "description": "rule detail",
+      "description": "Rule Section Detail",
       "type": "object",
       "required":
       [
@@ -2458,12 +1864,12 @@ Rule section schema:
       {
         "d":
         {
-          "description": "rule section SAID",
+          "description": "Rule Section SAID",
           "type": "string"
         },
         "disclaimers":
         {
-          "description": "rule group",
+          "description": "Rule Group",
           "type": "object",
           "required":
           [
@@ -2473,103 +1879,73 @@ Rule section schema:
           ],
           "properties":
           {
+            "l":
+            {
+                "description": "Legal Language",
+                "type": "string"
+            },
             "warrantyDisclaimer":
             {
-              "description": "rule",
-              "oneOf":
-              [
-                {
-                  "description": "simple compact form",
-                  "type": "string"
-                },
-                {
-                  "description": "rule detail",
-                  "type": "object",
-                  "required":
-                  [
-                    "l",
-                  ],
-                  "properties":
-                  {
-                    "l":
-                    {
-                      "description": "legal language",
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              ]
+                "description": "Rule in Simple Compact Form",
+                "type": "string"
             },
             "liabilityDisclaimer":
             {
-              "description": "rule",
-              "oneOf":
-              [
-                {
-                  "description": "simple compact form",
-                  "type": "string"
-                },
-                {
-                  "description": "rule detail",
-                  "type": "object",
-                  "required":
-                  [
-                    "l",
-                  ],
-                  "properties":
-                  {
-                    "l":
-                    {
-                      "description": "legal language",
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              ]
+                "description": "Rule in Simple Compact Form",
+                "type": "string"
             }
           },
           "additionalProperties": false
         },
         "permittedUse":
         {
-          "description": "rule",
-          "oneOf":
-          [
-            {
-              "description": "simple compact form",
-              "type": "string"
-            },
-            {
-              "description": "rule detail",
-              "type": "object",
-              "required":
-              [
-                "l",
-              ],
-              "properties":
-              {
-                "l":
-                {
-                  "description": "legal language",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          ]
+          "description": "Rule in Simple Compact Form",
+          "type": "string"
         },
       },
       "additionalProperties": false
     }
   ]
 }
+```
+
+Consider the following compatible rule section in fully disclosed form, as follows:
+
+```python
+"r":
+{
+    "d": "EF9f-pCPJcgQclUu1OzzAfgyURW7iLPF2nwhuKYHFBlV",
+    "disclaimers":
+    {
+        "l": "The person or legal entity identified by this ACDC's Issuer AID (Issuer) makes the following disclaimers:",
+        "warrantyDisclaimer": "Issuer provides this ACDC on an AS IS basis.",
+        "liabilityDisclaimer": "The Issuer SHALL NOT be liable for ANY damages arising as a result of this credential."
+    },
+    "permittedUse": "The Issuee (controller of the Issuee AID) MAY only use this ACDC for non-commercial purposes."
+}
+```
+
+The most compact form of the rule section is simply a field whose value is its SAID shown as follows:
+```python
+"r": "EF9f-pCPJcgQclUu1OzzAfgyURW7iLPF2nwhuKYHFBlV"
 ```
 
 ## Disclosure mechanisms and exploitation protection
 
 An important design goal of ACDCs is to support the sharing of provably authentic data while also protecting against the exploitation of that data. Often, the term privacy protection is used to describe similar properties. However, a narrow focus on privacy protection may lead to problematic design trade-offs. With ACDCs, the primary design goal is not data privacy protection per se but the more general goal of protection from the unpermissioned exploitation of data. In this light, a given privacy protection mechanism may be employed to help protect against data exploitation but only when it serves that more general-purpose and not as an end in and of itself.
+
+### Binding to Key State at time of Issuance
+
+To protect against later forgery in the event of a future compromise of the signing keys of the Issuer, the Issuer must anchor an issuance proof digest seal to the ACDC in its KEL. This seal binds the signing Key State to the issuance. There are two cases. In the first case, an issuance/revocation Registry is used. In the second case, an issuance/revocation Registry is not used.
+
+When the ACDC is registered using an issuance/revocation TEL, then the issuance proof seal digest is the SAID of the issuance (Inception) event in the ACDC's TEL entry. The issuance event in the TEL includes the SAID of the ACDC. This binds the ACDC to the issuance proof seal in the Issuer's KEL through the TEL entry.
+
+When the ACDC is not registered using an issuance/revocation TEL, then the issuance proof seal digest is the SAID of the ACDC itself.
+
+In either case, this issuance proof seal makes a verifiable binding between the issuance of the ACDC and the Key State of the Issuer at the time of issuance. Because aggregated value ‘A’ provided as the Attribute section, `A`, field, value is bound to the SAID of the ACDC which is also bound to the Key State via the issuance proof seal, the Attribute details of each attribute block are also bound to the Key state.
+
+The requirement of an anchored issuance proof seal means that the forger must first successfully publish in the KEL of the Issuer an inclusion proof digest seal bound to a forged ACDC. This makes any forgery attempt detectable. To elaborate, the only way to successfully publish such a seal is in a subsequent Interaction Event in a KEL that has not yet changed its Key State via a Rotation Event. Whereas any KEL that has changed its Key State via a Rotation MUST be forked before the Rotation. This makes the forgery attempt either both detectable and recoverable via Rotation in any KEL that has not yet changed its Key State or detectable as Duplicity in any KEL that has changed its Key State. In any event, the issuance proof seal ensures detectability of any later attempt at forgery using compromised keys.
+
 
 ### Data privacy
 
@@ -2744,12 +2120,12 @@ Consider the following disclosure-specific ACDC. The Issuer is the Discloser, th
 {
   "v":  "ACDC10JSON00011c_",
   "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
+  "i":  "EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
   "s":  "EGGeIZ8a8FWS7a646jrVPTzlSkUPqs4reAXRZOkogZ2A",
   "a":
   {
     "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-    "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA",
+    "i": "EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA",
     "date": "2022-08-22T17:50:09.988921+00:00",
     "place": "GoodFood Restaurant, 953 East Sheridan Ave, Cody WY 82414 USA"
   },
@@ -2822,42 +2198,24 @@ Any Validator can cryptographically verify the authoritative state of the transa
 
 ACDCs may be rightly generically referred to as Verifiable Containers (VCs). Often, ACDCs are used as entitlements or credentials and, therefore, may also be rightly referred to as Verifiable Credentials (VCs). The abbreviation VC works in either case. An ACDC can more simply be denoted as a Container or a Credential. A Verifiable Container/Credential Registry (VCR) is a type of TEL. It is a form of a Verifiable Data Registry (VDR) that tracks the state of ACDCs issued by the Controller of the KEL. Without loss of specificity, in this section, a TEL serving the purpose of a VCR may be simply denoted as a Registry. A Registry that tracks the dynamic issuance and revocation state of an ACDC is called a Revocation Registry.
 
-### Blindable-State-Registry
-
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/32
-:::
-
-In some applications, it is desirable that the current state of an ACDC be hidden or blinded such that the only way for a potential Validator of the state to observe that state is when the Controller of some AID, when acting as Discloser, discloses the state at the time of presentation of that ACDC. This makes the associated TEL, a blindable state registry. This is a type of private registry. To clarify, the Issuer designates some AID as the Discloser. Typically, for ACDCs with an Issuee, the Discloser is the Issuee, but the Issuer could designate any AID as the Discloser. Only the Discloser can unblind the state to a potential Disclosee.
-
-A Blindable-State-Registry MAY be used in an unblinded fashion. The Issuer could unblind the state by attaching the unblinded state to the event when publishing it. This makes it effectively a public Registry. Consequently, a Blindable-State-Registry is generic. It MAY be used in either a private or public manner.
-
-Usually, in a Blindable-State-Registry disclosure of the state by Discloser to Disclosee is interactive. A Disclosee may only observe the state when first unblinded in an interactive exchange with the Discloser. After disclosure, the Discloser may then request that the Issuer update the state with a new blinding factor (the blind). The Disclosee cannot then observe the current state of the TEL without yet another disclosure interaction with the Discloser.
-
-The blind is derived from a secret salt shared between the Issuer and the designated Discloser. The current blind is deterministically derived from this salt and the sequence number of the transaction event. This is used to blind the state of the event. To elaborate, the hierarchically deterministic derivation path for the blind is the sequence number of the TEL event, which, combined with the salt, produces a universally unique salty nonce (UUID) to act as the blind. The Issuer publishes the transaction event with a blinded state so that a Validator can independently verify the Issuer's commitment to that state, but without being able to determine the state via a transaction event seal in the Issuer's KEL with the SAID of that event. Only the Issuer can change the actual blinded state. Only the Issuer and Discloser have a copy of the secret salt, so only they can independently derive the current blind from the sequence number. Given the blind and a small finite number of possible values for the transaction state, the Discloser can verifiably discover and hence unblind the current transaction state from the published SAID of the current transaction event, its sequence number, and the shared secret salt. 
-
-The Issuer MAY provide an authenticated service endpoint for the Discloser to which the Discloser can make a signed request to update the blind.  Each new event published by the Issuer in the Registry MUST increment the sequence number and hence the blinding factor, but MAY or MAY not change the actual blinded state.  Because each updated event in the Registry has a new blinding factor, regardless of any actual change of state or not, an observer cannot correlate state to event updates.
-
-
-
 ### Registry Message Types and Fields
 
 State registries have three types of events. These types are shown in the following table:
 
 |Ilk| Name | Description|
-|---|---|---|
+|---|---|
 |`rip`| Registry Inception | registry initialization |
 |`bup`| Blindable Update | blindable transaction event state update |
-|`upd`| Update | non-blinded transaction event state update |
+|`upd`| Update | non-blindable transaction event state update |
 
-In some cases, the usage of the Blindable-State-Registry may provide correlatable information, as would be the case where the first real transaction state is always the same or the final state results in the disuse of the Registry. In those cases, the Issuer MAY choose to define an empty state and an empty ACDC SAID as known placeholder values. The first transaction state update event in the Registry can, therefore, be published before any real ACDC has been created, to which it may be later applied. Disuse of the Registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned. 
+A Registry MAY be used in either blinded or unblinded fashion or both, depending on the type of state update used. Even when a blindable state update is used, the Issuer could explicitly unblind the state by attaching the unblinded state to the event when publishing it.  In contrast, an unblindable state update can never be used in a blinded fashion. Its state is always exposed. The advantage of an unblindable state update is its simplicity. A given Registry could switch between using blindable and unblindable update messages as its state evolves. Consequently, a State-Registry is generic. It MAY be used in either a private (blinded) or public (unblinded) manner.
 
 #### Top-level fields
 
-The reserved field labels for the top level of a state registry (both blindable and unblinded) transaction event are as follows:
+The reserved field labels for the top level of a state registry (both blindable and unblindable) transaction event are as follows:
 
 |Label|Description|
-|---|---|---|
+|---|---|
 |`v`| Version String |
 |`t`| Message type |
 |`d`| event block SAID |
@@ -2922,7 +2280,6 @@ The datetime, `dt` field value MUST be the ISO-8601 datetime string with microse
 
 `2020-08-22T17:50:09.988921+00:00`
 
-
 ##### Transaction ACDC SAID, `td` field
 
 The transaction ACDC SAID, `td` field value is the SAID of the ACDC itself. It is the value of the top-level `d` field in the ACDC. This binds the ACDC to the TEL (Registry). The events in the registry are in turn, bound to the key state of the issuer via an anchored seal in the KEL of the issuer. This hierarchical binding binds the key-state of the issuer to the TEL, which in turn is bound to the ACDC itself.  This binding is a verifiable commitment by the issuer to its issuance of the ACDC that survives changes in the keystate of the Issuer.
@@ -2935,32 +2292,29 @@ The transaction state, `ts` field value MUST be a string from a small finite set
 
 The Blinded attribute, `b` field value MUST be the SAID of the blinded attribute block. See below for a description of the Attribute block.
 
-
 #### Blinded attribute block
 
 The Blinded attribute block corresponding to the blinded attribute `b` field value has the following fields:
 
-|Label|Description|
-|---|---|---|
-|`d`| Blinded attribute block SAID |
+|Virtual Label|Description|
+|---|---|
+|`b`| BLID blinding SAID |
 |`u`| UUID salty nonce blinding factor, random or HD generated |
 |`td`| Transaction ACDC SAID field this is the top-level `d` field in the ACDC| 
 |`ts`| Transaction state value string | 
 
+The fields MUST appear in the following order `[b, u, td, ts]`. 
 
-The fields MUST appear in the following order `[d, u, td, ts]`. 
+The field labels are virtual in that the labels never appear in the CESR serialization; they are a mnemonic for reference purposes. For example, the value of the BLID `b`, field in the blinded attribute block also appears as the value of the labled `b` field in the associated blindable state update, `bup`, message. Likewise, the `td` and `ts` field values have the same semantics as the `td` and `ts` field values in the non-blindable update, `upd` message.
 
+The actual Blinded attribute block is not part of the blindable update message. It MAY be provided as an attachment to some message, such as the associate ACDC, as part of a CESR serialization using one of the CESR group or count codes labeled `BlindedStateGroup` with code format `-a##` or `BigBlindedStateGroup` with code format `--a######`. When provided as an attachment, multiple blinded attribute blocks MAY be included in a given group. A group consists of its count code followed by one or more Blinded attribute blocks, where each block is composed of a concatenation of the four fields serialized in order as CESR primitives that are appropriate for the BLID, UUID, ACDC SAID, and transaction state string fields in that block. An example of an attachment serialization with group code is provided below.
 
-The actual Attribute block is not part of the blindable update message. It is provided as a CESR serialization using the CESR group or count codes labeled `BlindedStateGroup` with code format `-a##` or `BigBlindedStateGroup` with code format `--a#####`. The group consists of its count code followed by the four fields serialized in order as CESR primitives that are appropriate for the attribute block SAID, UUID, ACDC SAID, and transaction state string. 
+##### BLID, `b` field
 
+The blinding SAID, BLID, `b` field value MUST be calculated as a cryptographic strength digest on the CESR serialization of the concatenation of block field values. The details of this calculation are provided later. A BLID is effectively a type of SAID. It is not calculated on field map structure with a labeled field for a SAID, but uses instead a fixed field concatenation with a known place in that concatenation for its BLID (blinding SAID). A blinded attribute section's BLID enables a verifiable globally unique reference to that state contained in the block, but without necessarily disclosing that state.
 
-##### SAID, `d` field
-
-The SAID, `d` field value MUST be the SAID of its enclosing block. A blinded attribute section's SAID enables a verifiable globally unique reference to that state contained in the block but without necessarily disclosing that state.
-
-The blinded attribute block said, `d` field should typically use the Blake3 Digest code `E`, but any of the cryptographic strength digest codes of length 44 characters in qb64 Text domain MAY be used. 
+The BLID, `b` field should typically use the Blake3 Digest code `E`, but any of the cryptographic strength digest codes of length 44 characters in the qb64 Text domain MAY be used. 
 When the `td` field value is the empty placeholder, it uses the CESR `Empty` primitive code with value `1AAP`.
-
 
 ##### UUID, `u` field
 
@@ -2980,7 +2334,6 @@ The transaction ACDC SAID, `td` field value is the SAID of the associated ACDC i
 ##### Transaction state, `ts` field
 
 The transaction state, `ts` field value MUST be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
-
 
 When the state `ts` field value is a placeholder as indicated by the empty string, i.e., "", it MUST be CESR encoded as the CESR `Empty` primitive code with value `1AAP`.
 
@@ -3015,213 +2368,276 @@ Bytes_Big_L1: str = '8AAB'  # Byte String big lead size 1
 Bytes_Big_L2: str = '9AAB'  # Byte String big lead size 2
 ```
 
+#### Blinded State Disclosure
+
+In some applications, it is desirable that the current state of an ACDC be hidden or blinded such that the only way for a potential Validator of the state to observe that state is when the Controller of some AID, when acting as Discloser, discloses the state at the time of presentation of that ACDC. This makes the associated TEL a blinded state registry. This is a type of private registry. To clarify, the Issuer designates some AID as the Discloser. Typically, for ACDCs with an Issuee, the Discloser is the Issuee, but the Issuer could designate any AID as the Discloser. Only the Discloser can unblind the state to a potential Disclosee.
+
+Usually, a disclosure of a blinded state by Discloser to Disclosee is interactive. A Disclosee may only observe the state when first unblinded in an interactive exchange with the Discloser. After disclosure, the Discloser may then request that the Issuer update the state with a new blinding factor (the blind). The Disclosee cannot then observe the current state of the TEL without yet another disclosure interaction with the Discloser.
+
+The blind is derived from a secret salt shared between the Issuer and the designated Discloser. The current blind is deterministically derived from this salt and the sequence number of the transaction event. This is used to blind the state of the event. To elaborate, the hierarchically deterministic derivation path for the blind is the sequence number of the TEL event, which, combined with the salt, produces a universally unique salty nonce (UUID) to act as the blind. The Issuer publishes the transaction event with a blinded state so that a Validator can independently verify the Issuer's commitment to that state, but without being able to determine the state via a transaction event seal in the Issuer's KEL with the SAID of that event. Only the Issuer can change the actual blinded state. Only the Issuer and Discloser have a copy of the secret salt, so only they can independently derive the current blind from the sequence number. Given the blind and a small finite number of possible values for the transaction state, the Discloser can verifiably discover and hence unblind the current transaction state from the published SAID of the current transaction event, its sequence number, and the shared secret salt. 
+
+The Issuer MAY provide an authenticated service endpoint for the Discloser to which the Discloser can make a signed request to update the blind.  Each new event published by the Issuer in the Registry MUST increment the sequence number and hence the blinding factor, but MAY or MAY not change the actual blinded state.  Because each updated event in the Registry has a new blinding factor, regardless of any actual change of state or not, an observer cannot correlate state to event updates.
+
+In some cases, the Blindable-State-Registry may provide correlatable information, such as when the first real transaction state is always the same or the final state results in the registry's disuse. In those cases, the Issuer MAY choose to define an empty state and an empty ACDC SAID as known placeholder values. The first transaction state update event in the Registry can, therefore, be published before any real ACDC has been created, to which it may be later applied. Disuse of the Registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned. 
 
 ##### Calculating the SAID of the serialized Blinded Attribute block
 
-As mentioned above, the expanded attributed block is serialized using a CESR group. The SAID of such a serialization is calculated on the QB64 TEXT domain representation. The SAID protocol replaces the attribute block SAID, `d` field value with dummy characters, in this case forty-four `#` characters. A 32-byte raw digest of the full group serialization, including the count code and all fields but with the dummy characters in place of the `d`, field value  is then computed. Finally, the forty-four dummy characters are replaced with the 44 characters of the QB64 Text Domain CESR encoding of that raw digest. This is the resultant serialized expanded attribute block. The SAID of this serialization is the value to place in the attribute `a` field in the associated blindable update `bup` event message.
+As mentioned above, the expanded attributed block is serialized as a concatenation of the CESR seralizations of each of its field values. The BLID of such a serialization is computed on the QB64 TEXT domain representation. The BLID computation follows the SAID protocol adapted for fixed field representations. First the size of the BLID field is derived from the type of digest to be used for its computation. For example, the number of characters of a BLAKE3-256 digest in CESR Text domain is 44 characters. Its slot is replaced with `#` dummy characters, specifically forty-four `#` characters. The Text domain CESR serializations of the remaining fields are appended in order to form the string to be digested. The BLAKE3-256 32-byte raw digest of this dummied full serialization is then computed. This raw digest is serialized in CESR Text domain (qualified Base64). This serialization is the BLID. Finally, the forty-four dummy characters are replaced with the 44 characters of the BLID. The resultant CESR serialized attribute block. 
+
+The BLID is the value BLID `b` field in the associated blindable update `bup` event message.
+
+As mentioned previously, disclosure of the blinded attribute block can be provided by attaching its serialization via one of the CESR count (group) count codes labeled `BlindedStateGroup` with code format `-a##` or `BigBlindedStateGroup` with code format `--a######`.  
 
 ##### Blinded Attribute Block SAID Calculation Example
 
-For example, suppose the UUID, `u` field value is encoded as `EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQ`, the transaction ACDC said, `td` field value is encoded as `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`, and the transaction state, `ts` field value is the string "issued" encoded as `0Missued`. The length of the group content is 140 characters. The 144-character dummied serialization, including the four-character group count code, is as follows:
+For example, suppose the UUID, `u` field value is encoded as `aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB` the transaction ACDC said, `td` field value is encoded as `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`, and the transaction state, `ts` field value is the string "issued" encoded as `0Missued`. The digest to be used to compute the BLID is the BLAKE3-256 digest, which when CESR encoded has a length of 44 characters. This is filled with forty-four `#` dummy characters.  The resulting length of the group content is 140 characters. 
+
+For the sake of clarity, the field values are shown in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `b` | `############################################`| Dummied BLID (Blinding SAID) |
+| `u` |`aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB`| UUID salty nonce blinding factor, random or HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`| 
+| `ts` | `0Missued` |Transaction state value string | 
+
+
+ The 140-character dummied serialization is as follows:
 ```   
--aCM############################################EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P0Missued
+############################################aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
 ```
 
-The CESR encoded Blake3 digest of this string is ``.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
+The CESR encoded Blake3 digest of this string is `EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t`.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
 
 ```
-
+EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_taLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
 ```
 
-In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the attribute, `a` field in the associated blindable update, `bup` event.
+Broken out into fields, the values are provided in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `b` | `EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t`| Dummied BLID (Blinding SAID) |
+| `u` |`aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB`| UUID salty nonce blinding factor, random or HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`| 
+| `ts` | `0Missued` |Transaction state value string | 
+
+
+In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, `b` field in the associated blindable update, `bup` event.
+
+An attachment of this blinded attribute block would be prefixed with the appropriate CESR count code as follows:
+
+```
+-aAjEOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_taLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
+```
 
 ##### Blinded Attribute Block Placeholder Calculation Example
 
-For example, suppose the UUID, `u` field value is encoded as `EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQ`, the empty placeholder transaction ACDC said, `td` field value is encoded as `1AAP`, and the transaction state, `ts` field value is the string "issued" encoded as `Xissued`. The length of the group content is 140 characters. The 144-character dummied serialization, including the four-character group count code, is as follows:
+Suppose the UUID, `u` field value is encoded as `aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`, the empty placeholder transaction ACDC said, `td` field value is encoded as `1AAP` (CESR coding for the empty value), and the transaction state, `ts` field is also encoded as `1AAP` for empty. The digest to be used to compute the BLID is the BLAKE3-256 digest, which when CESR encoded has a length of 44 characters. This is filled with forty-four `#` dummy characters.  The resulting length of the group content is 96 characters. 
+
+For the sake of clarity, the field values are shown in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `b` | `############################################`| Dummied BLID (Blinding SAID) |
+| `u` |`aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`| UUID salty nonce blinding factor, random or HD generated |
+| `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`| 
+| `ts` | `1AAP` |Transaction state value string | 
+
+
+ The 96-character dummied serialization is as follows:
 ```   
--aCM############################################EJsmv3hTHz-SbkM3KbLKezOBevuPPNxdQLVdyrnoXjrQELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PXissued
+############################################aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv81AAP1AAP
 ```
 
-The CESR encoded Blake3 digest of this string is ``.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
+The CESR encoded Blake3 digest of this string is `ECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6J`.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
 
 ```
+ECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6JaG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv81AAP1AAP
+```
 
+Broken out into fields, the values are provided in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `b` | `ECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6J`| BLID (Blinding SAID) |
+| `u` |`aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`| UUID salty nonce blinding factor, random or HD generated |
+| `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`| 
+| `ts` | `1AAP` |Transaction state value string | 
+
+
+In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, `b` field in the associated blindable update, `bup` event.
+
+An attachment of this blinded attribute block would be prefixed with the appropriate CESR count code as follows:
+
+```
+-aAYECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6JaG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv81AAP1AAP
 ```
 
 #### Private (blinded) state Registry example
 
-Consider a blindable state revocation registry for ACDCs operated in blinded (private) mode. The transaction state can be one of two values, `issued`, or `revoked`. In this case, the placeholder value of the empty, `` string for transaction state, `ts` field is also employed to decorrelate the initialization.  The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following transaction event:
+Consider a blindable state revocation registry for ACDCs operated in blinded (private) mode. The transaction state can be one of two values, `issued` or `revoked`. In this case, the placeholder value of the empty string for the transaction state, `ts` field, is also employed to decorrelate the initialization.  The Issuer with AID, `ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf` first creates one among many placeholder Registries by issuing the following transaction event:
 
-```json
+```python
 {
- "v": "ACDCCAAJSONAACQ.",
- "t": "rip",
- "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "u": "0AHcgNghkDaG7OY1wjaDAE0q",
- "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
- "n": "0",
- "dt": "2024-05-27T19:16:50.750302+00:00"
+
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "n": "0",
+    "dt": "2025-07-04T17:51:00.000000+00:00"
 }
 ```
 
 With respect to the event above, given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere. This value is derived from the Issuer AID, binding the Registry to the Issuer AID. When this Registry identifier value is included in the Registry SAID, `rd` field of an ACDC, this binds that ACDC to the Registry.
+To clarify the registry identifer, REGID, is `ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ`. It is the value of the `d` field in the registry inception event above. It is computed as the SAID of that event.  In the top-level of an ACDC it is the value of the `rd` field.
 
 The state is initialized with decorrelated placeholder values with the issuance of the following placeholder update event:
 
-```json
+```python
 {
- "v": "ACDCCAAJSONAACQ.",
- "t": "bup",
- "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
- "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "n": "1",
- "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "dt": "2024-06-01T05:01:42.660407+00:00",
- "b": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec"
+    "v": "ACDCCAACAAJSONAAEi.",
+    "t": "bup",
+    "d": "EPNwyvHp2XJsz9pSpXtHtcCmzw6bKSFc-nhGKTbso0Yg",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "1",
+    "p": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "dt": "2025-08-01T18:06:10.988921+00:00",
+    "b": "ECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6J"
 }
 ```
 
-Notice in the event above that the registry SAID, `r` field value matches the value of the SAID, `d` field in the Registry Inception, `rip` event. 
+Notice in the event above that the registry SAID, `rd` field value matches the value of the SAID, `d` field in the Registry Inception, `rip` event. The value of the blinded attribute block BLID, `b` field is that taken from the placeholder blinded attribute block above. Repeated here as follows:
 
-The associated expanded blinded attribute block is as follows:
+|Virtual Label|Value|Description|
+|---|---|---|
+| `b` | `ECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6J`| BLID (Blinding SAID) |
+| `u` |`aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`| UUID salty nonce blinding factor, random or HD generated |
+| `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`| 
+| `ts` | `1AAP` |Transaction state value string | 
 
-```json
-{
- "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "u": "ZHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "td": "",
- "ts": ""
-}
-```
-
-Notice that the value of the blinded attribute, `b` field in the transaction event, matches the value of the SAID, `d` field in the expanded attribute block.  Likewise, notice that the value of the transaction ACDC SAID, in the `td` field, is an empty string, serving as a placeholder value. Furthermore, the value of the transaction state, `ts` field, is also just an empty string as a placeholder value. This indicates that the transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. To update the blind, the issuer issues a new blindable update event, `bup` with a new blind, UUID `u` field value in the associate attribute block.  This makes the first use(s) of the registry uncorrelated with the eventual actual issuance of a real ACDC. 
+Notice that the value of the BLID blinded attribute, `b` field in the transaction event, matches the value of the BLID, `b` field in the expanded attribute block.  Likewise, notice that the value of the transaction ACDC SAID, in the `td` field, is the CESR encoded value for empty, serving as a placeholder value. Furthermore, the value of the transaction state, `ts` field, is also is the CESR encoded value for empty. This indicates that the transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. To update the blind, the issuer issues a new blindable update event, `bup`, with a new blind, UUID `u` field value in the associate attribute block derived from the shared Salt and the sequence number of the `bup` event.  This makes the first use(s) of the registry uncorrelated with the eventual actual issuance of a real ACDC. 
 
 Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, `u` field was derived. The shared secret salt MUST have approximately 128 bits of cryptographic entropy. In this case, in order to preserve the cryptographic entropy through the derivation, the value of the UUID `u` field is twice as long as the shared secret salt. Typically, the derivation might use a hierarchically deterministic derivation algorithm based on a digest of the shared secret with a deterministic path. 
 
-Suppose later, the real ACDC is issued and is uniquely identified its top-level SAID, `d` field  value, namely, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The Discloser can then download the published transaction event to get the sequence number `n` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The Discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `td` field MUST be either the empty string placeholder or the real ACDC SAID. 
+Suppose later, the real ACDC is issued and is uniquely identified its top-level SAID, `d` field value, namely, `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`. The Discloser can then download the published blinded update `bup` transaction event to get the sequence number `n` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The Discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `td` field MUST be either the empty string placeholder or the real ACDC SAID given above. 
 
-The Discloser can now compute the SAID, `d` field value of the expanded Attribute block for all the combinations of the possible values for the `td` and `ts` field. For the  `rd` field possible values include one of `["", "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P"]`. For the `ts` field the possible values include one of  `[ "", "issued", "revoked"]`.  This gives six combinations. The Discloser tries each one until it finds the one that matches the published transaction event blinded attribute, `b` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
+The Discloser can now compute the blinding SAID, BLID, `b` field value of the expanded Attribute block for all the combinations of the possible values for the `td` and `ts` fields. The`td` field possible values include either `1AAP` or `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`. The possible `ts` field values include one of `1AAP`, `0Missued`, or `Yrevoked`. These latter three values correspond to the CESR Text domain encodings of the strings "", "issued" and "revoked".  This gives a total of six combinations of possible field values. The Discloser tries each combination until it finds the one that matches the published transaction event blinded attribute, BLID, `b` field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.
 
 To elaborate, the value of the Issuer, `i` field of the corresponding issued ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the registry SAID given by the value of the SAID, `d` field in the registry inception, `rip` event. The value of the top-level `d` field in the ACDC will be the same as the `td` field of the attribute block of the blindable update `bup` event that effectively "issues" the ACDC. These field values cryptographically bind the ACDC to the Registry and, in turn, bind the Registry to the ACDC.
 
-Suppose the associated update event occurs at sequence number 5. The published blindable update transaction event is as follows:
+Suppose the associated update event occurs at sequence number 2. The published blindable update transaction event is as follows:
 
-```json
+```python
 {
- "v": "ACDCCAAJSONAACQ.",
- "t": "bup",
- "d": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "n": "5",
- "p": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
- "dt": "2024-06-01T05:01:42.660407+00:00",
- "b": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-"
+    "v": "ACDCCAACAAJSONAAEi.",
+    "t": "bup",
+    "d": "EBdytzDC4dnatn-6mrCWLSGuM62LM0BgS31YnAg5NTeW",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "2",
+    "p": "EPNwyvHp2XJsz9pSpXtHtcCmzw6bKSFc-nhGKTbso0Yg",
+    "dt": "2020-08-02T12:00:20.000000+00:00",
+    "b": "EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t"
 }
 ```
 
-The associated expanded Attribute block shown abstractly as a JSON blockis as follows:
+The value of the blinded attribute block BLID, `b` field, is taken from the issued blinded attribute block above. Repeated here as follows:
 
-```json
-{
- "d": "EK9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-",
- "u": "ZIZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PL",
- "td": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P"
- "ts": "issued"
- }
-```
+|Virtual Label|Value|Description|
+|---|---|---|
+| `b` | `EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t`| Dummied BLID (Blinding SAID) |
+| `u` |`aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB`| UUID salty nonce blinding factor, random or HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`| 
+| `ts` | `0Missued` |Transaction state value string | 
 
-Notice that the value of the blinded attribute, `b` field in the transaction event, matches the value of the SAID, `d` field in the expanded Attribute block. Further notice that the value of the `td` field is the same as the SAID (top-level `d`) field value of the issued ACDC (not shown).  Finally, notice that in this case, the value of the transaction state, `ts` field, is `issued` (not the empty placeholder).
 
-Suppose that the Discloser has been given the shared secret salt from which the value of the expanded attribute block's blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `n` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The Discloser also knows which ACDC it wishes to disclose, so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the SAID, `d` field value of the expanded Attribute block for all the combinations of the possible values for the `td` and `ts` fields.  For the `td` field these are either the empty string placeholder value or the actual ACDC SAID. For the `ts` field these are one of the empty placeholder value, `issued` or `revoked`. This gives six combinations to try. The Discloser tries each one until it finds the one that matches the published transaction event blinded attribute, `b` field value. The Discloser can then disclose the matching expanded Attribute block to the Disclosee, who can verify it against the published transaction event.
+Notice that the value of the blinded attribute, BLID, `b` field in the transaction event, matches the value of the BLID, `b` field in the expanded blinded attribute block. Further notice that the value of the `td` field is the same as the SAID (top-level `d`) field value of the issued ACDC.  Finally, notice that in this case, the value of the transaction state, `ts` field, is `issued` (not the empty placeholder).
+
+Suppose that the Discloser has been given the shared secret salt from which the value of the expanded attribute block's blind, UUID, `u` field was generated. The Discloser can then download the published transaction event to get the sequence number, `n` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, `u` field value. The Discloser also knows which ACDC it wishes to disclose, so it also has the ACDC, SAID, `d` field value. The Discloser can now compute the BLID, `b` field value of the expanded blinded attribute block for all the combinations of the possible values for the `td` and `ts` fields.  For the `td` field these are either of the CESR serializations of the empty string placeholder value or the actual ACDC SAID. For the `ts` field these are one of the CESR serializations of the strings, "", "issued", or "revokes" e.g. `1AAP`, `0Missued`, or `Yrevoked`. This gives six combinations to try. The Discloser tries each one until it finds the one that matches the published transaction event blinded attribute, BLID, `b` field value. The Discloser can then disclose the matching expanded blinded block to the Disclosee, who can verify it against the published transaction event.
 
 The Discloser can then instruct the Issuer to issue one or more updates with new blinding factors so that the initial Disclosee may no longer validate the state of the ACDC without another interactive disclosure by the Discloser.
 
-Suppose, sometime later, a Validator requires that the Discloser provide continuing proof of issuance. In that case, the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state. Suppose this is at sequence number 9 as follows:
-
-```json
-{
- "v": "ACDCCAAJSONAACQ.",
- "t": "upd",
- "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
- "r": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "n": "9",
- "p": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "dt": "2024-07-04T05:01:42.660407+00:00",
- "b": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI"
-}
-```
-
-The associated expanded blinded attribute block is as follows: 
-
-```json
-{
- "d": "EGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wI",
- "u": "ZNoRxCJp2wIGM9u2Edk-PLIZ1H4zpq06UecHwzy-K9Fp",
- "td": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
- "ts": "revoked"
-}
-```
-
+Suppose, sometime later, a Validator requires that the Discloser provide continuing proof of issuance. In that case, the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state. 
 The Discloser could continue to have the blind updated periodically. This would generate new blindable update, `bup` transaction events with new values for its blinded attribute, `b` field, but without changing either the `td` or `ts` field values. This decorrelates the time of revocation with respect to the latest event in the Registry.
 
-#### Public Unblinded Blindable-State-Registry Example
+#### Public Unblinded Blindable Example
 
-In this case, the issuer just attaches to any publication of a Blindable-Update `bup` event the associated expanded blinded attribute block. This uses a CESR group code to attach the four field values.
+In this case, the issuer attaches the associated expanded blinded attribute block to any publication of a Blindable-Update `bup` event. As explained above, this uses either of the count codes `BlindedStateGroup` with code format `-a##` or `BigBlindedStateGroup` with code format `--a######` to attach one or more expanded blinded attribute blocks.
 
-#### Public Non-Blindable State Registry example 
+#### Public Non-Blindable Update to Blindable Example
 
-Consider a unblindable state revocation Registry for ACDCs operated in an unblinded (public) mode. The transaction state can be one of two values, `issued`, or `revoked`. The Issuer with AID, `ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx` first creates one among many placeholder Registries by issuing the following registry inception `rip`, transaction event:
+At some time later the issuer decides to make the issuance state public. The issuer can publish a non-blindable update using the update `upd` event message as follows:
 
-```json
+```python
 {
- "v": "ACDCCAAJSONAACQ.",
- "t": "rip",
- "d": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "u": "0AHcgNghkDaG7OY1wjaDAE0q",
- "i": "ECJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRx",
- "n": "0",
- "dt": "2024-05-27T19:16:50.750302+00:00"
+    "v": "ACDCCAACAAJSONAAEy.",
+    "t": "upd",
+    "d": "ENR6tbkJCJXQTiu5TP-RBxkS2_ZSZBgbJmpjKucDe07h",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "3",
+    "p": "EBdytzDC4dnatn-6mrCWLSGuM62LM0BgS31YnAg5NTeW",
+    "dt": "2020-08-03T12:00:20.000000+00:00",
+    "td": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
+    "ts": "revoked"
 }
 ```
-With respect to the event above, given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere.
 
-Sometime later, an ACDC is issued as indicated by its SAID, `d` field value, `ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P`. The value of the Issuer, `i` field of that ACDC will be the Issuer AID. The value of the registry SAID, `rd` field of that ACDC will be the value given by the value of the SAID, `d` field in the registry inception, `rip` event. This binds the ACDC to the Registry.
+#### Public Non-Blindable State Update Registry Example 
+
+Consider a unblindable state revocation Registry for ACDCs operated in an unblinded (public) mode. The transaction state can be one of two values, `issued`, or `revoked`. The Issuer with AID, `EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW` first creates one among many placeholder Registries by issuing the following registry inception `rip`, transaction event:
+
+```python
+{
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
+    "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+    "n": "0",
+    "dt": "2025-07-04T17:53:00.000000+00:00"
+}
+```
+With respect to the event above, given that the UUID, `u` field value has sufficient cryptographic entropy, the SAID, `d` field provides a universally unique identifier for the Registry that can be referenced elsewhere, typically as the value of the `rd` field.
+
+Sometime later, an ACDC is issued as indicated by its SAID, `d` field value, `EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5`. The value of the Issuer, `i` field of that ACDC will be the same as the Issuer AID for the registry inception event. The value of the registry SAID, `rd` field of that ACDC will be the value given by the value of the SAID, `d` field in the registry inception, `rip` event. This binds the ACDC to the Registry and binds the Issuer to both the ACDC and the registry.
 
 The state is initialized with the following (non-blindable) update event:
 
-```json
+```python
 {
- "v": "ACDCCAAJSONAACQ.",
- "t": "upd",
- "d": "EIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJp2w",
- "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "n": "1",
- "p": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "dt": "2024-06-01T05:01:42.660407+00:00",
- "ta": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
- "ts": "issued"
+        "v": "ACDCCAACAAJSONAAEx.",
+        "t": "upd",
+        "d": "EJFxtbr9WioIkzTfVX4iC6Axxyg8jjKSX0ZrJgoNHiB-",
+        "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+        "n": "1",
+        "p": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+        "dt": "2020-08-03T12:00:20.000000+00:00",
+        "td": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+        "ts": "issued"
 }
 ```
-Notice in the event above that the registry SAID, `r` field value matches the value of the SAID, `d` field in the Registry Inception, `rip` event. Notice that the value of the `ta` field matches the top-level SAID `d` field value of the issued ACDC (not shown).
-
+Notice in the event above that the registry SAID, `rd` field value matches the value of the SAID, `d` field in the Registry Inception, `rip` event. Notice that the value of the `td` field matches the top-level SAID `d` field value of the issued ACDC (not shown). Also notice that the prior `p` field value is the same as the SAID `d` field value of the  `rip` event and the sequence number `n` field is 1 more than the `rip` event sequence number. This cryptographically chain links the update event to the prior inception event as sequential events.
 
 Sometime later, the ACDC is revoked with the publication by the Issuer of the following event:
 
 
-```json
+```python
 {
- "v": "ACDCCAAJSONAACQ.",
- "t": "upd",
- "d": "EB2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9FpNoRxCJ",
- "rd": "ENoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06UecHwzy-K9Fp",
- "n": "2",
- "p": "EHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4zpq06Uec",
- "dt": "2024-07-04T05:01:42.660407+00:00",
- "ta": "ELMZ1H4zpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-P",
- "ts": "revoked"
+        "v": "ACDCCAACAAJSONAAEy.",
+        "t": "upd",
+        "d": "EJQ-ezS6h0Oa0BIN_w4KjstdapfOfrwmVluxn1DR5Gja",
+        "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+        "n": "2",
+        "p": "EJFxtbr9WioIkzTfVX4iC6Axxyg8jjKSX0ZrJgoNHiB-",
+        "dt": "2020-08-04T12:00:20.000000+00:00",
+        "td": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+        "ts": "revoked"
 }
 ```
 
+Notice that this event is chain-linked to the prior update event.
 
 ## Annex
 
@@ -3254,11 +2670,16 @@ The highest level of cryptographic security with respect to a cryptographic secr
 
 ### Selective Disclosure
 
-::: issue
-https://github.com/trustoverip/tswg-acdc-specification/issues/21
-:::
+The verifiable credential community has defined "selective disclosure" with respect to verifiable credentials to mean disclosing some information contained in a verifiable credential in a way that does not leak other information contained in the verifiable credential.  The use of the term "selective disclosure" in this context should not be confused with its application in the financial sector, particularly in relation to publicly traded companies that make selective disclosures about their operations. 
 
-As explained previously in section 5, the primary difference between Partial Disclosure and Selective Disclosure is determined by the correlatability with respect to its encompassing block after Full Disclosure of the detailed field value. A partially disclosable field becomes correlatable to its encompassing block after its Full Disclosure. Whereas a selectively disclosable field may be excluded from the Full Disclosure of any other selectively disclosable fields in its encompassing block. After Selective Disclosure, the selectively disclosed fields are not correlatable to the so far undisclosed but selectively disclosable fields in the same encompassing block. In this sense, Full Disclosure means detailed disclosure of the selectively disclosed attributes not detailed disclosure of all selectively disclosable attributes.
+
+ACDCs employ several different mechanisms that fall under the general description of graduated disclosure, where some information in an ACDC is disclosed while other information is not disclosed. Because there are several mechanisms that may be employed by ACDCs, different nomenclature is used to distinguish those mechanisms from one another. For example, the Attribute section refers to its graduate disclosure mechanism as "partial disclosure". The Aggregate section, in contrast, refers to its graduated disclosure  mechanism  "selective disclosure".
+
+Selective Disclosure in combination with Partial Disclosure for Chain-link Confidentiality provides comprehensive correlation minimization because a Discloser may use a non-disclosing metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain-link Confidentiality expressed in the Rules section [@CLC]. Thus, only malicious Disclosees who violate Chain-link Confidentiality may correlate between independent disclosures of the value details of distinct members in the list of aggregated blinded commitments. Nonetheless, they are not able to discover any as-of-yet undisclosed (unblinded) value details.
+
+The derivation the cryptographic aggregate used for Selective Disclosure depends on the type of Selective Disclosure mechanism employed. For example, the aggregate value could be the cryptographic digest of the concatenation of an ordered set of cryptographic digests, a Merkle tree root digest of an ordered set of cryptographic digests, or a cryptographic accumulator.
+
+As explained previously for the top-level  Aggregate section, the primary difference between Partial Disclosure and Selective Disclosure is determined by the correlatability with respect to its encompassing block after Full Disclosure of the detailed field value. A partially disclosable field becomes correlatable to its encompassing block after its Full Disclosure. Whereas a selectively disclosable field may be excluded from the Full Disclosure of any other selectively disclosable fields in its encompassing block. After Selective Disclosure, the selectively disclosed fields are not correlatable to the so far undisclosed but selectively disclosable fields in the same encompassing block. In this sense, Full Disclosure means detailed disclosure of the selectively disclosed attributes not detailed disclosure of all selectively disclosable attributes.
 
 Recall that Partial Disclosure is an essential mechanism needed to support Chain-link Confidentiality [@CLC]. The Chain-link Confidentiality exchange offer requires Partial Disclosure, and Full Disclosure only happens after acceptance of the offer. Selective Disclosure, on the other hand, is an essential mechanism needed to unbundle in a correlation minimizing way a single commitment by an Issuer to a bundle of fields (i.e., a nested block or array of fields). This allows separating a "stew" of "ingredients" (Attributes) into its constituent ingredients (attributes) without correlating the constituents via the stew.
 
@@ -3273,253 +2694,6 @@ Nonetheless, some applications require bundled Attributes and therefore may bene
 The use of a revocation Registry is an example of a type of bundling, not of Attributes in a credential, but uses of a credential in different contexts. Unbundling the usage contexts may be beneficial. This is provided by bulk-issued ACDCs.
 
 Finally, in the case where the correlation of activity of an Issuee across contexts even when the ACDC used in those contexts is not correlatable may be addressed of a variant of bulk-issued ACDCs that have unique Issuee AIDs with an independent TEL Registry per Issuee instance. This provides non-repudiable (recourse supporting) disclosure while protecting from the malicious correlation between 2nd parties and other 2nd and/or 3rd parties as to who (Issuee) is involved in a presentation.
-
-#### Basic selective disclosure mechanism
-
-The basic Selective Disclosure mechanism shared by all is comprised of a single aggregated blinded commitment to a list of blinded commitments to undisclosed values. Membership of any blinded commitment to a value in the list of aggregated blinded commitments may be proven without leaking (disclosing) the unblinded value belonging to any other blinded commitment in the list. This enables provable Selective Disclosure of the unblinded values. When a non-repudiable digital signature is created on the aggregated blinded commitment then any disclosure of a given value belonging to a given blinded commitment in the list is also non-repudiable. This approach does not require any more complex cryptography than digests and digital signatures. This satisfies the design ethos of minimally sufficient means. The primary drawback of this approach is verbosity. It trades ease and simplicity and adoptability of implementation for size. Its verbosity may be mitigated by replacing the list of blinded commitments with a Merkle tree of those commitments where the Merkle tree root becomes the aggregated blinded commitment.
-
-Given sufficient cryptographic entropy of the blinding factors, collision resistance of the digests, and unforgeability of the digital signatures, either inclusion proof format (list or Merkle tree digest) prevents a potential Disclosee or adversary from discovering in a computationally feasible way the values of any undisclosed blinded value details from the combination of the schema of those value details and either the aggregated blinded commitment and/or the list of aggregated blinded commitments [@Hash][@HCR][@QCHC][@Mrkl][@TwoPI][@MTSec]. A potential Disclosee or adversary would also need both the blinding factor and the actual value details.
-
-Selective Disclosure in combination with Partial Disclosure for Chain-link Confidentiality provides comprehensive correlation minimization because a Discloser may use a non-disclosing metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain-link Confidentiality expressed in the Rules section [@CLC]. Thus, only malicious Disclosees who violate Chain-link Confidentiality may correlate between independent disclosures of the value details of distinct members in the list of aggregated blinded commitments. Nonetheless, they are not able to discover any as-of-yet undisclosed (unblinded) value details.
-
-#### Selectively disclosable attribute ACDC as attribute Aggregate
-
-In a selectively disclosable attribute ACDC, the set of Attributes is provided as an array of blinded blocks. Each Attribute in the set has its own dedicated blinded block. Each block has its own SAID, `d`, field and UUID, `u`, field in addition to its attribute field or fields. When an Attribute block has more than one Attribute field, then each element in the set of fields in that block is not independently selectively disclosable. All elements MUST be disclosed together as a set. Notable is that the field labels of the selectively disclosable Attributes are also blinded because they only appear within the blinded block. This prevents unpermissioned correlation via contextualized variants of a field label that appear in a selectively disclosable block. For example, localized or internationalized variants where each variant's field label(s) each use a different language or some other context correlatable information in the field labels themselves.
-
-A selectively disclosable attribute Aggregate section appears at the top level using the field label `A`. This is distinct from the field label `a` for a non-selectively disclosable Attribute section. This makes clear (unambiguous) the semantics of the each respective section's associated Schema. This also clearly reflects the fact that the value of a compact variant of selectively disclosable attribute Aggregate section is an aggregate, not a SAID. As described previously, the top-level selectively disclosable attribute Aggregate section, `A`, field value is an aggregate of cryptographic commitments used to make a commitment to a set (bundle) of selectively disclosable attributes. The derivation of its value depends on the type of Selective Disclosure mechanism employed. For example, the aggregate value could be the cryptographic digest of the concatenation of an ordered set of cryptographic digests, a Merkle tree root digest of an ordered set of cryptographic digests, or a cryptographic accumulator.
-The uncompacted (expanded) Aggregate section value is a list of attribute blocks, where each attribute block is a field map.
-
-The Issuee field with reserved label `i` is absent from all attribute blocks of an uncompacted Untargeted selectively disclosable ACDC Aggregate section as follows:
-
-```json
-{
-  "A":
-  [
-    {
-      "d": "ELIr9Bf7V_NHwY1lkgveY4-Frn9y2PY9XgOcLxUderzw",
-      "u": "0AG7OY1wjaDAE0qHcgNghkDa",
-      "score": 96
-    },
-    {
-      "d": "E9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PYgveY4-",
-      "u": "0AghkDaG7OY1wjaDAE0qHcgN",
-      "name": "Jane Doe"
-    }
-  ]
-}
-```
-
-The Issuee field, with reserved label `i` is present in one and only one attribute block of an uncompacted Targeted selectively disclosable ACDC Aggregate section as follows:
-
-```json
-{
-  "A":
-  [
-    {
-      "d": "ErzwLIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUde",
-      "u": "0AqHcgNghkDaG7OY1wjaDAE0",
-      "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA"
-    },
-    {
-      "d": "ELIr9Bf7V_NHwY1lkgveY4-Frn9y2PY9XgOcLxUderzw",
-      "u": "0AG7OY1wjaDAE0qHcgNghkDa",
-      "score": 96
-    },
-    {
-      "d": "E9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PYgveY4-",
-      "u": "0AghkDaG7OY1wjaDAE0qHcgN",
-      "name": "Jane Doe"
-    }
-  ]
-}
-```
-
-##### Blinded attribute array
-
-Given that each Attribute block's UUID, `u`, field has sufficient cryptographic entropy, then each Attribute block's SAID, `d`, field provides a secure cryptographic digest of its contents that effectively blinds the Attribute block's attribute value(s) from discovery given only its Schema and SAID. To clarify, the adversary, despite being given both the Schema of the Attribute block and its SAID, `d`, field value, is not able to discover the remaining contents of the Attribute block in a computationally feasible manner, such as a rainbow table attack [@RB][@DRB].  Therefore, the UUID, `u`, field of each Attribute block enables the associated SAID, `d`, field to securely blind the block's contents notwithstanding knowledge of the block's Schema and that SAID, `d`, field.  Moreover, a cryptographic commitment to that SAID, `d`, field does not provide a fixed point of correlation to the associated Attribute (SAD) field values themselves unless and until there has been specific disclosure of those field values themselves.
-
-Given a total of ‘N’ elements in the Attributes array, let a<sub>i</sub> represent the SAID, `d`, field of the attribute at zero-based index ‘i'. More precisely, the set of Attributes is expressed as the ordered set,
-
-\{a<sub>i</sub> for all i in \{0, ..., N-1\}\}.
-
-The ordered set of a<sub>i</sub> may be also expressed as a list, that is,
-
-\[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\].
-
-#### Composed Schema for selectively disclosable attribute section
-
-Because the selectively disclosable Attributes are provided by an array (list), the uncompacted variant in the Schema uses an array of items and the `anyOf` composition Operator to allow one or more of the items to be disclosed without requiring all to be disclosed. Thus, both the `oneOf` and `anyOf` composition Operators are used. The `oneOf` is used to provide compact Partial Disclosure of the aggregate, ‘A’, as the value of the top-level selectively disclosable Attribute section, `A`, field in its compact variant and the nested `anyOf` Operator is used to enable Selective disclosure in the uncompacted selectively disclosable variant.
-
-```json
-{
-  "A":
-  {
-    "description": "selectively disclosable attribute aggregate section",
-    "oneOf":
-    [
-      {
-        "description": "attribute aggregate",
-        "type": "string"
-      },
-      {
-        "description": "selectively disclosable attribute details",
-        "type": "array",
-        "uniqueItems": true,
-        "items":
-        {
-          "anyOf":
-          [
-            {
-              "description": "issuee attribute",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "u",
-                "i"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "attribute SAID",
-                  "type": "string"
-                },
-                "u":
-                {
-                  "description": "attribute UUID",
-                  "type": "string"
-                },
-                "i":
-                {
-                  "description": "issuee SAID",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            },
-            {
-              "description": "score attribute",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "u",
-                "score"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "attribute SAID",
-                  "type": "string"
-                },
-                "u":
-                {
-                  "description": "attribute UUID",
-                  "type": "string"
-                },
-                "score":
-                {
-                  "description": "score value",
-                  "type": "integer"
-                }
-              },
-              "additionalProperties": false
-            },
-            {
-              "description": "name attribute",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "u",
-                "name"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "attribute SAID",
-                  "type": "string"
-                },
-                "u":
-                {
-                  "description": "attribute UUID",
-                  "type": "string"
-                },
-                "name":
-                {
-                  "description": "name value",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          ]
-        }
-      }
-    ],
-    "additionalProperties": false
-  }
-}
-```
-
-#### Inclusion proof via aggregated list digest
-
-All the a<sub>i</sub> in the list are aggregated into a single aggregate digest denoted ‘A’ by computing the digest of their ordered concatenation. This is expressed as follows:
-
-A = H(C(a<sub>i</sub> for all i in \{0, ..., N-1\})), where ‘H’ is the digest (hash) Operator and ‘C’ is the concatentation Operator.
-
-To be explicit, using the targeted example above, let a<sub>0</sub> denote the SAID of the Issuee Attribute, a<sub>1</sub> denote the SAID of the score Attribute, and a<sub>2</sub> denote the SAID of the name Attribute then the aggregated digest ‘A’ is computed as follows:
-
-A = H(C(a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>)).
-
-Equivalently using ‘+’ as the infix concatenation operator, the aggregated digest is ‘A’ is computed as follows:
-
-A = H(a<sub>0</sub> + a<sub>1</sub> + a<sub>2</sub>).
-
-Given sufficient collision resistance of the digest Operator, the digest of an ordered concatenation is not subject to a birthday attack on its concatenated elements [[ref: BDC][[ref: BDay][[ref: QCHC][[ref: HCR][[48]].
-
-In compact form, the value of the selectively disclosable top-level Attribute section, `A`, field is set to the aggregated value ‘A’. This aggregate ‘A’ makes a blinded cryptographic commitment to the all the ordered elements in the list,
-
-\[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\].
-
-Moreover, because each a<sub>i</sub> element also makes a blinded commitment to its block's (SAD) attribute value(s), disclosure of any given a<sub>i</sub> element does not expose or disclose any discoverable information detail about either its own or another block's Attribute value(s). Therefore, one may safely disclose the full list of a<sub>i</sub> elements without exposing the blinded block Attribute values.
-
-Proof of inclusion in the list consists of checking the list for a matching value. A computationally efficient way to do this is to create a hash table or B-tree of the list and then check for inclusion via lookup in the hash table or B-tree.
-
-To protect against later forgery given a later compromise of the signing keys of the Issuer, the Issuer MUST anchor an issuance proof digest seal to the ACDC in its KEL. This seal binds the signing Key State to the issuance. There are two cases. In the first case, an issuance/revocation Registry is used. In the second case, an issuance/revocation Registry is not used.
-
-When the ACDC is registered using an issuance/revocation TEL, then the issuance proof seal digest is the SAID of the issuance (Inception) event in the ACDC's TEL entry. The issuance event in the TEL includes the SAID of the ACDC. This binds the ACDC to the issuance proof seal in the Issuer's KEL through the TEL entry.
-
-When the ACDC is not registered using an issuance/revocation TEL, then the issuance proof seal digest is the SAID of the ACDC itself.
-
-In either case, this issuance proof seal makes a verifiable binding between the issuance of the ACDC and the Key State of the Issuer at the time of issuance. Because aggregated value ‘A’ provided as the Attribute section, `A`, field, value is bound to the SAID of the ACDC which is also bound to the Key State via the issuance proof seal, the Attribute details of each attribute block are also bound to the Key state.
-
-The requirement of an anchored issuance proof seal means that the forger must first successfully publish in the KEL of the Issuer an inclusion proof digest seal bound to a forged ACDC. This makes any forgery attempt detectable. To elaborate, the only way to successfully publish such a seal is in a subsequent Interaction Event in a KEL that has not yet changed its Key State via a Rotation Event. Whereas any KEL that has changed its Key State via a Rotation MUST be forked before the Rotation. This makes the forgery attempt either both detectable and recoverable via Rotation in any KEL that has not yet changed its Key State or detectable as Duplicity in any KEL that has changed its Key State. In any event, the issuance proof seal ensures detectability of any later attempt at forgery using compromised keys.
-
-Given that aggregate value ‘A’ appears as the compact value of the top-level Attribute section, `A`, field, the Selective Disclosure of the Attribute at index ‘j’ may be proven to the Disclosee with four items of information. These are:
-
-- The actual detailed disclosed Attribute block itself (at index ‘j’) with all its fields.
-- The list of all Attribute block digests, \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\] that includes a<sub>j</sub>.
-- The ACDC in compact form with selectively disclosable Attribute section, `A`, field value set to aggregate ‘A’.
-- The presence of the issuance seal digest in the Issuer's KEL bound to the ACDC top-level SAID, `d`, field either directly or indirectly through a TEL Registry entry.
-
-The actual detailed disclosed Attribute block is only disclosed after the Disclosee has agreed to the terms of the Rules section. Therefore, in the event the potential Disclosee declines to accept the terms of disclosure, then a presentation of the compact version of the ACDC and/or the list of Attribute digests, \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\]. does not provide any point of correlation to any of the Attribute values themselves. The Attributes of block ‘j’ are hidden by a<sub>j</sub>\ and the list of Attribute digests \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\] is hidden by the aggregate ‘A’. The Partial Disclosure needed to enable Chain-link Confidentiality does not leak any of the selectively disclosable details.
-
-The Disclosee may then verify the disclosure by:
-- computing a<sub>j</sub> on the selectively disclosed Attribute block details.
-- confirming that the computed a<sub>j</sub> appears in the provided list \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\].
-- computing ‘A’ from the provided list \[a<sub>0</sub>, a<sub>1</sub>, ...., a<sub>N-1</sub>\].
-- confirming that the computed ‘A’ matches the value, ‘A’, of the selectively disclosable Attribute section, `A`, field value in the provided ACDC.
-- computing the top-level SAID, `d`, field of the provided ACDC.
-- confirming the presence of the issuance seal digest in the Issuer's KEL
-- confirming that the issuance seal digest in the Issuer's KEL is bound to the ACDC top-level SAID, `d`, field either directly or indirectly through a TEL Registry entry.
-
-The last 3 steps that culminate with verifying the signature(s) require determining the Key state of the Issuer at the time of issuance.  Therefore, this may require additional verification steps as per the KERI and SAD Path protocols.
-
-A private selectively disclosable ACDC provides significant correlation minimization because a Discloser may use a metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain Link Confidentiality expressed in the Rule section [[44]. Thus, only malicious Disclosees who violate Chain Lnk Confidentiality may correlate between presentations of a given private selectively disclosable ACDC. Nonetheless, the malicious Disclosees are not able to discover any undisclosed Attributes.
 
 #### Inclusion proof via Merkle tree root digest
 
@@ -3966,7 +3140,7 @@ In an Aggregate Section Message, the Aggregate, `A` field value is the expanded 
     {
       "d": "ErzwLIr9Bf7V_NHwY1lkFrn9y2PYgveY4-9XgOcLxUde",
       "u": "0AqHcgNghkDaG7OY1wjaDAE0",
-      "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA"
+      "i": "EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA"
     },
     {
       "d": "ELIr9Bf7V_NHwY1lkgveY4-Frn9y2PY9XgOcLxUderzw",
@@ -4028,319 +3202,1254 @@ In a Rule Section Message, the Rule, `r` field value is the expanded Rules secti
 }
 ```
 
-### ACDC Examples 
+### Working ACDC Examples 
 
-Public ACDC with compact and uncompacted variants
+#### Working Examples Setup
 
-Public compact variant
+The examples were created with the keripy library. The code to generate the examples is provided via unit tests. These may be found in tests/spec/acdc. 
 
-```json
-{
-  "v":  "ACDC10JSON00011c_",
-  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "a":  "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-  "e":  "ERH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZIl3MOA",
-  "r":  "Ee71iheqcywJcnjtJtQIYPvAu6DZIl3MORH3dCdoFOLB"
-}
+A brief explanation of the setup code is provided here to help implementers who wish to reproduce the examples from scratch.
+
+##### AIDs
+
+The examples require an Issuer AID. This AID is created in accordance with the KERI protocol. This requires creating digital signing key-pairs whose public keys are used in an inception event to create the AID. The keripy library has a utility class Salter (found in keri.core.signing.Salter) that facilitates the creation of signing key pairs. For the examples, any needed signing key pairs can be recreated using a known non-random salt. The known non-random salt is merely for reproducibility. In a real-world application, the salt should be a high entropy secret. The salt used for the examples is the python byte string 
+```python
+b'acdcspecworkexam'
+```
+Using a Salter instance a set of key pairs may be created. These keypairs are instantiated as Signer class instances. The Signer class can be found in keri.core.signing.Sigher. The creation code is as follows:
+
+```python
+salt = b'acdcspecworkexam'
+salter = Salter(raw=salt)
+signers = salter.signers(count=8,transferable=True, temp=True)
+```
+The Salter.signers method creates a count number of Signer instances and returns them in a list. Each Signer holds a key pair. The private key seed for each key pair is created using Argon2 to stretch a deterministic path that is based on the salt and a path that is the hex representation of the count offset for each Signer. For the zeroth signer this is as follows:
+
+```python
+import pysodium
+seed = pysodium.crypto_pwhash(outlen=32, passwd='0', salt=b'acdcspecworkexam', opslimit=1,
+                                memlimit=8192, alg=pysodium.crypto_pwhash_ALG_ARGON2ID13)
 ```
 
-Public uncompacted variant
+The seed becomes the private signing key for the keypair the public verification key is generated using Ed25519 as follows:
 
-```json
-{
-  "v":  "ACDC10JSON00011c_",
-  "d":  "EBdXt3gIXOf2BBWNHdSXCJnFJL5OuQPyM5K0neuniccM",
-  "i":  "did:keri:EmkPreYpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPM",
-  "rd": "EMwsxUelUauaXtMxTfPAMPAI6FkekwlOjkggtymRy7x",
-  "s":  "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "a":
-  {
-    "d": "EgveY4-9XgOcLxUderzwLIr9Bf7V_NHwY1lkFrn9y2PY",
-    "i": "did:keri:EpZfFk66jpf3uFv7vklXKhzBrAqjsKAn2EDIPmkPreYA",
-    "score": 96,
-    "name": "Jane Doe"
-  },
-  "e":
-  {
-    "d": "EerzwLIr9Bf7V_NHwY1lkFrn9y2PgveY4-9XgOcLxUdY",
-    "boss":
-    {
-      "d": "E9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NHwY1lkFrn",
-      "n": "EIl3MORH3dCdoFOLe71iheqcywJcnjtJtQIYPvAu6DZA",
-      "s": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71",
-      "w": "high"
-    }
-  },
-  "r":
-  {
-    "d": "EwY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NA",
-    "warrantyDisclaimer":
-    {
-      "d": "EXgOcLxUdYerzwLIr9Bf7V_NAwY1lkFrn9y2PgveY4-9",
-      "l": "Issuer provides this credential on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE"
-    },
-    "liabilityDisclaimer":
-    {
-      "d": "EY1lkFrn9y2PgveY4-9XgOcLxUdYerzwLIr9Bf7V_NAw",
-      "l": "In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the Issuer be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this credential. "
-    }
-  }
-}
+```python
+verkey, sigkey = pysodium.crypto_sign_seed_keypair(seed)
 ```
 
-Composed Schema that supports both public compact and uncompacted variants
+The verkey is used as the raw input to a Verfer (verifier) Class instance (found in keri.core.coring.Verfer) as follows:
+```python
+verfer = Verfer(raw=verkey, code=MtrDex.Ed25519)
+```
 
-```json
+From this, the initial signing public verification key in CESR encoded qualified Base64 `Text` domain representation is as follows:
+
+```python
+'DA8-J0EW88RMYqtUHQDqT4q2YH2iBFlW8HobHKV74yi_'
+```
+
+In order to create the Issuer AID, two other signing key pairs are needed. One other is the "next" rotating key pair. The signer at index 1 is used for this. From this, the next rotating public verification key in CESR encoded qualified Base64 `Text` domain representation is as follows: 
+
+```python
+'DLe4uewytqfqa4NB4AntNKBZ61I0TYcgMz-FSz1V9qeM'
+```
+
+Another one is a witness key pair. Witness AIDs are usually non-transferable and use a non-transferable CESR encoding. The associated key pairs may be generated as follows:
+
+```python
+walt = b'acdcspecworkwits'
+walter = Salter(raw=walt)
+wigners = walter.signers(count=4,transferable=False, temp=True)
+```
+The signer (wigner) at index 0 is used for this. From this, the witness AID, (which is also its signing public verification key) in CESR encoded qualified Base64 `Text` domain representation is as follows: 
+
+```python
+'BKRaC6UsijUY1FRjExoAMc8WOHBDIfIKYnOlxWH8eOe8'
+```
+
+From these three cryptographic primitives we can create a Python dictionary with all the data needed to generate the inception event for the Issuer as follows:
+
+```python
+ sad = \
+ {
+        'v': 'KERICAACAAJSONAAFb.',
+        't': 'icp',
+        'd': 'ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz',
+        'i': 'ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz',
+        's': '0',
+        'kt': '1',
+        'k': ['DA8-J0EW88RMYqtUHQDqT4q2YH2iBFlW8HobHKV74yi_'],
+        'nt': '1',
+        'n': ['DLe4uewytqfqa4NB4AntNKBZ61I0TYcgMz-FSz1V9qeM'],
+        'bt': '1',
+        'b': ['BKRaC6UsijUY1FRjExoAMc8WOHBDIfIKYnOlxWH8eOe8'],
+        'c': [],
+        'a': []
+}
+```
+The JSON examples use a JSON serialization of the inception event to generate the Issuer AID. In python, this is performed as follows:
+
+```python
+import json
+
+raw = json.dumps(sad, separators=(",", ":"), ensure_ascii=False).encode()
+```
+
+This results in the following raw JSON for the inception event.
+
+```python
+(b'{"v":"KERICAACAAJSONAAFb.","t":"icp","d":"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtz'
+b'Dn1meBVLAz","i":"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz","s":"0","kt":'
+b'"1","k":["DA8-J0EW88RMYqtUHQDqT4q2YH2iBFlW8HobHKV74yi_"],"nt":"1","n":["DLe4'
+b'uewytqfqa4NB4AntNKBZ61I0TYcgMz-FSz1V9qeM"],"bt":"1","b":["BKRaC6UsijUY1FRjEx'
+b'oAMc8WOHBDIfIKYnOlxWH8eOe8"],"c":[],"a":[]}')
+```
+
+The calculation of the SAIDed fields in the inception event require knowledge of the KERI and CESR protocols for generating SAIDs on serialization of field maps.  A utility function for generating an inception event may be found in keri.core.eventing.incept. The raw above was generated as follows:
+
+```python
+from collections import namedtuple
+
+issuerSigner = signers[0]
+issuerVerKey = issuerSigner.verfer.qb64  # issuer's public verification key
+assert issuerVerKey == 'DA8-J0EW88RMYqtUHQDqT4q2YH2iBFlW8HobHKV74yi_'
+
+issuerRotSigner = signers[1]
+issuerRotVerKey = issuerRotSigner.verfer.qb64  # issuer's public verification key
+assert issuerRotVerKey == 'DLe4uewytqfqa4NB4AntNKBZ61I0TYcgMz-FSz1V9qeM' # use in example
+
+issuerWitSigner = wigners[0]
+issuerWitVerKey = issuerWitSigner.verfer.qb64  # issuer's public verification key
+assert issuerWitVerKey == 'BKRaC6UsijUY1FRjExoAMc8WOHBDIfIKYnOlxWH8eOe8' # use in example
+
+Versionage = namedtuple("Versionage", "major minor")
+Vrsn_2_0 = Versionage(major=2, minor=0)  # KERI Protocol Version Specific
+
+assert MtrDex.Blake3_256 == 'E'
+
+keys = [issuerVerKey]  # initial signing keys
+nkeys = [issuerRotVerKey]  # next (rotation) keys
+wits = [issuerWitVerKey]  # witness aids (same as public verkey)
+serder = incept(keys, code='E', ndigs=nkeys, wits=wits, version=Vrsn_2_0, kind='JSON')
+```
+
+The ACDC examples use the resultant Issuer AID, namely:
+```python
+"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"
+```
+
+In some examples, this AID is given the name Amy has in Amy's AID.
+
+Some examples also have an Issuee AID. This is generated similarly to the Issuer AID but using different keys.
+This produces the following inception event, sad dictionary, and raw.
+
+```python
+sad = \
 {
-  "$id": "E46jrVPTzlSkUPqGGeIZ8a8FWS7a6s4reAXRZOkogZ2A",
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Public ACDC",
-  "description": "Example JSON Schema Public ACDC.",
-  "credentialType": "PublicACDCExample",
-  "type": "object",
-   "required":
-  [
-    "v",
-    "d",
-    "i",
-    "rd",
-    "s",
-    "a",
-    "e",
-    "r"
-  ],
-  "properties":
-  {
-    "v":
-    {
-      "description": "ACDC version string",
-      "type": "string"
-    },
-    "d":
-    {
-     "description": "ACDC SAID",
-      "type": "string"
-    },
-    "i":
-    {
-      "description": "Issuer AID",
-      "type": "string"
-    },
-    "rd":
-    {
-      "description": "Registry SAID",
-      "type": "string"
-    },
-    "s":
-    {
-      "description": "schema section",
-      "oneOf":
-      [
+        'v': 'KERICAACAAJSONAAFb.',
+        't': 'icp',
+        'd': 'ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf',
+        'i': 'ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf',
+        's': '0',
+        'kt': '1',
+        'k': ['DLc6u76NIr0VqirQPC9k4WlOHw2mIG97Q3BV0UM3EjH5'],
+        'nt': '1',
+        'n': ['DC-QD-olCSce4Sf6qapV0vqP0lvROt5DWqMcUYxY6mFQ'],
+        'bt': '1',
+        'b': ['BOfVpWhuTlb5S2CJOVLSeUm9A0Xq7h0n6e9Qng3g4H2p'],
+        'c': [],
+        'a': []
+    }
+```
+
+```python
+(b'{"v":"KERICAACAAJSONAAFb.","t":"icp","d":"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCm'
+b'yzDAXWhYmf","i":"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf","s":"0","kt":'
+b'"1","k":["DLc6u76NIr0VqirQPC9k4WlOHw2mIG97Q3BV0UM3EjH5"],"nt":"1","n":["DC-Q'
+b'D-olCSce4Sf6qapV0vqP0lvROt5DWqMcUYxY6mFQ"],"bt":"1","b":["BOfVpWhuTlb5S2CJOV'
+b'LSeUm9A0Xq7h0n6e9Qng3g4H2p"],"c":[],"a":[]}')
+```
+
+The process is summarized with the following code snippet.
+
+```python
+from collections import namedtuple
+
+issuerSigner = signers[2]
+issuerVerKey = issuerSigner.verfer.qb64  # issuer's public verification key
+assert issuerVerKey == 'DLc6u76NIr0VqirQPC9k4WlOHw2mIG97Q3BV0UM3EjH5'
+
+issuerRotSigner = signers[3]
+issuerRotVerKey = issuerRotSigner.verfer.qb64  # issuer's public verification key
+assert issuerRotVerKey == 'DC-QD-olCSce4Sf6qapV0vqP0lvROt5DWqMcUYxY6mFQ' # use in example
+
+issuerWitSigner = wigners[1]
+issuerWitVerKey = issuerWitSigner.verfer.qb64  # issuer's public verification key
+assert issuerWitVerKey == 'BOfVpWhuTlb5S2CJOVLSeUm9A0Xq7h0n6e9Qng3g4H2p' # use in example
+
+Versionage = namedtuple("Versionage", "major minor")
+Vrsn_2_0 = Versionage(major=2, minor=0)  # KERI Protocol Version Specific
+
+assert MtrDex.Blake3_256 == 'E'
+
+keys = [issuerVerKey]  # initial signing keys
+nkeys = [issuerRotVerKey]  # next (rotation) keys
+wits = [issuerWitVerKey]  # witness aids (same as public verkey)
+serder = incept(keys, code='E', ndigs=nkeys, wits=wits, version=Vrsn_2_0, kind='JSON')
+
+```
+
+The ACDC examples use the resultant Issuee AID, namely:
+```python
+"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"
+```
+
+In some examples, this AID is given the name Bob has in Bob's AID.
+
+Similarly, an AID for Cal used in some examples can be created using signers[4] for the initial signing key pair, signers[5] for the rotating key pair, and wigners[2] for the witness AID. The resultant AID for Cal is:
+
+```python
+"ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"
+```
+
+Likewise, an AID for Deb used in some examples can be created using signers[6] for the initial signing key pair, signers[7] for the rotating key pair, and wigners[3] for the witness AID. The resultant AID for Deb is:
+
+```python
+"EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"
+```
+
+These are summarized here for reference:
+```python
+amy = "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"
+bob = "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"
+cal = "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"
+deb = "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"
+```
+
+##### Registry SAIDs
+
+ACDCs typically would reference a TEL that manages the issuance/revocation state of the ACDC. This requires a TEL registry identifier that is the SAID of a registry inception event, `rip`. 
+
+A registry is created for each of the AIDs for Amy, Bob, Cal and Deb as issuer of their respective registry as follows:
+
+Registry Inception event for Amy
+
+```python
+{
+        "v": "ACDCCAACAAJSONAADa.",
+        "t": "rip",
+        "d": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+        "n": "0",
+        "dt": "2025-07-04T17:50:00.000000+00:00"
+}
+```
+Registry SAID for Amy = `EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX`
+
+Registry Inception event for Bob
+
+```python
+{
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "n": "0",
+    "dt": "2025-07-04T17:51:00.000000+00:00"
+}
+```
+Registry SAID for Bob = `ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ`
+
+Registry Inception for Cal
+
+```python
+{
+        "v": "ACDCCAACAAJSONAADa.",
+        "t": "rip",
+        "d": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+        "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
+        "n": "0",
+        "dt": "2025-07-04T17:52:00.000000+00:00"
+}
+```
+Registry SAID for Cal = `EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw`
+
+Registry Inception for Deb
+
+```python
+{
+        "v": "ACDCCAACAAJSONAADa.",
+        "t": "rip",
+        "d": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
+        "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+        "n": "0",
+        "dt": "2025-07-04T17:53:00.000000+00:00"
+}
+```
+Registry SAID for Deb = `EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU`
+
+The registry SAIDs (registry IDs) are summarized here:
+
+```python
+regAmy = "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX"
+regBob = "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"
+regCal = "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"
+regDeb = "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"
+```
+
+##### UUIDs
+Many of the examples include uuid `u` fields with salty nonce values. For ease of reproducibility deterministic uuids are used. These come from the following set:
+
+```python
+assert uuids == \
+[
+     '0ABhY2Rjc3BlY3dvcmtyYXcw',
+     '0ABhY2Rjc3BlY3dvcmtyYXcx',
+     '0ABhY2Rjc3BlY3dvcmtyYXcy',
+     '0ABhY2Rjc3BlY3dvcmtyYXcz',
+     '0ABhY2Rjc3BlY3dvcmtyYXc0',
+     '0ABhY2Rjc3BlY3dvcmtyYXc1',
+     '0ABhY2Rjc3BlY3dvcmtyYXc2',
+     '0ABhY2Rjc3BlY3dvcmtyYXc3',
+     '0ABhY2Rjc3BlY3dvcmtyYXc4',
+     '0ABhY2Rjc3BlY3dvcmtyYXc5',
+     '0ABhY2Rjc3BlY3dvcmtyYXdh',
+     '0ABhY2Rjc3BlY3dvcmtyYXdi',
+     '0ABhY2Rjc3BlY3dvcmtyYXdj',
+     '0ABhY2Rjc3BlY3dvcmtyYXdk',
+     '0ABhY2Rjc3BlY3dvcmtyYXdl',
+     '0ABhY2Rjc3BlY3dvcmtyYXdm'
+]    
+```
+
+These may be generated with the following code snippet:
+```python
+raws = [b'acdcspecworkraw' + b'%0x'%(i, ) for i in range(16)]
+uuids = [Noncer(raw=raw).qb64 for raw in raws]
+```
+
+The Noncer class may be found in keri.core.coring.Noncer. Essentially, a Noncer instance can encode a byte string as a salty nonce in CESR format.
+
+
+
+#### Complete ACDC Example: Private (partially disclosable) ACDC with Edges
+
+Suppose for this example that Sunspot College issues a grade transcript via an ACDC to a student named Zoe Doe.  This  transcript has three edges. One edge links back to an accreditation credential issued to the college. The other two edges are examples of work product by the student to demonstrate skill proficiency. One is a credential issued by the  student's major department endorsing a research report written by the student. This endorsement is in turn endorsed by the college by virtue of being linked via an edge in the transcript ACDC. The other edge links to a credential issued by the student asserting the student's senior project.  This is endorsed by the college by virtue of being linked via an edge in the transcript ACDC.
+
+The AIDs as setup for this example have aliases for each AID, the aliases do not correspond to real names they are used for simplicity of reference. The college named Sunspot College uses the AID named Amy. The student named Zoe Doe uses the AID named Bob. The accreditation agency uses the AID named Cal. Finally, the department in the college uses the AID named Deb. In this example, the serialization kind used for all the messages is JSON.
+
+The associated AIDs are summarized as follows:
+
+```python
+amy = "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"
+bob = "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"
+cal = "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"
+deb = "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"
+```
+
+Several other issuances must be created and issued before the transcript ACDC can be created and issued. These will be stepped through in turn.
+
+#####  Accreditation ACDC
+
+Cal (a euphemism for the accreditation agency) creates a placeholder registry in order to issue a revokable ACDC to Amy (a euphemism for Sunspot College).  This is created with a registration inception event message as follows:
+
+```python
+{
+        "v": "ACDCCAACAAJSONAADa.",
+        "t": "rip",
+        "d": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+        "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
+        "n": "0",
+        "dt": "2025-07-04T17:52:00.000000+00:00"
+}
+```
+The registration identifier is the SAID of this message, as follows:
+```python
+regCal = "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"
+```
+
+Cal uses this to issue an accreditation ACDC.  The full ACDC is as follows:
+ ```python
+ {
+        "v": "ACDCCAACAAJSONAAKX.",
+        "t": "acm",
+        "d": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdh",
+        "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
+        "rd": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
+        "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG",
+        "a":
         {
-          "description": "schema section SAID",
-          "type": "string"
+            "d": "EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXc3",
+            "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+            "name": "Sunspot College",
+            "level": "gold"
         },
+        "r":
         {
-          "description": "schema detail",
-          "type": "object"
+            "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
+            "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
         }
-      ]
+}
+```
+
+Note that the value of the `rd` field is the same as the value of regCal. This binds the issued ACDC to a specific issuance/revocation state registry. Note also that the top-level `i` field value is Cal's AID. Also note that nested inside the attribute block with label `a` is the issuee field `i` (not to be confused with the top-level issuer). The issuee field value is Amy's AID.  This binds Amy as the target of the ACDC. 
+
+This ACDC can be compacted into its most compact form. This is as follows:
+```python
+{
+        "v": "ACDCCAACAAJSONAAF3.",
+        "t": "acm",
+        "d": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdh",
+        "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
+        "rd": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
+        "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG",
+        "a": "EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL",
+        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+}
+```
+
+Note that the SAIDs of the sections are the same in both the uncompact and compact variants.
+
+The schema for this ACDC is as follows:
+
+```json
+    {
+        "$id": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Accreditation Schema",
+        "description": "Accreditation JSON Schema for acm ACDC.",
+        "credentialType": "Accreditation_ACDC_acm_message",
+        "version": "2.0.0",
+        "type": "object",
+        "required": ["v", "d", "i", "s", "a", "r"],
+        "properties":
+        {
+            "v": {"description": "ACDC version string", "type": "string"},
+            "t": {"description": "Message type", "type": "string"},
+            "d": {"description": "Message SAID", "type": "string"},
+            "u": {"description": "Message UUID", "type": "string"},
+            "i": {"description": "Issuer AID", "type": "string"},
+            "rd": {"description": "Registry SAID", "type": "string"},
+            "s":
+            {
+                "description": "Schema Section",
+                "oneOf":
+                [
+                    {"description": "Schema Section SAID", "type": "string"},
+                    {"description": "Schema Section Detail", "type": "object"}
+                ]
+            },
+            "a":
+            {
+                "description": "Attribute Section",
+                "oneOf":
+                [
+                    {"description": "Attribute Section SAID", "type": "string"},
+                    {
+                        "description": "Attribute Section Detail",
+                        "type": "object",
+                        "required": ["d", "u", "i", "score", "name"],
+                        "properties":
+                        {
+                            "d": {"description": "Attribute Section SAID", "type": "string"},
+                            "u": {"description": "Attribute Section UUID", "type": "string"},
+                            "i": {"description": "Issuee AID", "type": "string"},
+                            "name": {"description": "Institution Name", "type": "string"},
+                            "level": {"description": "Accreditation Level", "type": "string"}
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "e":
+            {
+                "description": "Edge Section",
+                "oneOf":
+                [
+                    {"description": "Edge Section SAID", "type": "string"},
+                    {"description": "Edge Section Detail", "type": "object"}
+                ]
+            },
+            "r":
+            {
+                "description": "Rule Section",
+                "oneOf":
+                [
+                    {"description": "Rule Section SAID", "type": "string"},
+                    {
+                        "description": "Rule Section Detail",
+                        "type": "object",
+                        "required": ["d", "l"],
+                        "properties":
+                        {
+                            "d": {"description": "Rule Section SAID", "type": "string"},
+                            "l": {"description": "Legal Language", "type": "string"}
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "additionalProperties": false
+}
+```
+
+Note that the SAID of the schema is provided by the `$id` field. Its field value matches the value of the `s` field in the ACDC itself.
+
+
+##### Research Report ACDC
+
+Deb (a euphemism for the department) creates a placeholder registry to issue a revocable ACDC that endorses a report authored by Bob.  The associated registry was created with a registration inception event message as follows:
+
+```python
+{
+        "v": "ACDCCAACAAJSONAADa.",
+        "t": "rip",
+        "d": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
+        "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+        "n": "0",
+        "dt": "2025-07-04T17:53:00.000000+00:00"
+}
+```
+The registration identifier is the SAID of this message, as follows:
+```python
+regDeb = "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"
+```
+
+Deb uses this to issue a report endorsement credential as follows:
+
+```python
+ {
+        "v": "ACDCCAACAAJSONAAK4.",
+        "t": "acm",
+        "d": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdi",
+        "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+        "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+        "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+        "a":
+        {
+            "d": "EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXc4",
+            "title": "Post Quantum Security",
+            "name": "Zoe Doe",
+            "report": "Imprementation should prioritize cryptographic agility over PQ."
+        },
+        "r":
+        {
+            "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
+            "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
+        }
+}
+```
+
+Note that the value of the `rd` field is the same as the value of regDeb. This binds the issued ACDC to a specific issuance/revocation state registry. Note also that the top-level `i` field value is Deb's AID. Also note there is no nested issuee field. This ACDC is therefore untargeted. The only association it to the student as named author via the `name` field.
+
+This ACDC can be compacted into its most compact form. This is as follows:
+```python
+{
+        "v": "ACDCCAACAAJSONAAF3.",
+        "t": "acm",
+        "d": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdi",
+        "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+        "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+        "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+        "a": "EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-",
+        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+}
+```
+
+Note that the SAIDs of the sections are the same in both the uncompact and compact variants.
+
+The schema for this ACDC is as follows:
+
+```json
+{
+    "$id": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Report Schema",
+    "description": "Report JSON Schema for acm ACDC.",
+    "credentialType": "Report_ACDC_acm_message",
+    "version": "2.0.0",
+    "type": "object",
+    "required": ["v", "d", "i", "s", "a", "r"],
+    "properties":
+    {
+        "v": {"description": "ACDC version string", "type": "string"},
+        "t": {"description": "Message type", "type": "string"},
+        "d": {"description": "Message SAID", "type": "string"},
+        "u": {"description": "Message UUID", "type": "string"},
+        "i": {"description": "Issuer AID", "type": "string"},
+        "rd": {"description": "Registry SAID", "type": "string"},
+        "s":
+        {
+            "description": "Schema Section",
+            "oneOf":
+            [
+                {"description": "Schema Section SAID", "type": "string"},
+                {"description": "Schema Section Detail", "type": "object"}
+            ]
+        },
+        "a":
+         {
+            "description": "Attribute Section",
+            "oneOf":
+            [
+                { "description": "Attribute Section SAID", "type": "string"},
+                {
+                    "description": "Attribute Section Detail",
+                    "type": "object",
+                    "required": [ "d", "u", "i", "title", "author", "report"],
+                    "properties":
+                    {
+                      "d": {"description": "Attribute Section SAID", "type": "string"},
+                      "u": {"description": "Attribute Section UUID", "type": "string"},
+                      "title": {"description": "Report Title", "type": "string"},
+                      "author": {"description": "Author Full Name", "type": "string"},
+                      "report": { "description": "Report Body", "type": "string"}
+                    },
+                    "additionalProperties": False
+                  }
+            ]
+        },
+        "e":
+        {
+            "description": "Edge Section",
+            "oneOf":
+            [
+                {"description": "Edge Section SAID", "type": "string"},
+                {"description": "Edge Section Detail", "type": "object"}
+            ]
+        },
+        "r":
+        {
+            "description": "Rule Section",
+            "oneOf":
+            [
+                {"description": "Rule Section SAID", "type": "string"},
+                {
+                    "description": "Rule Section Detail",
+                    "type": "object",
+                    "required": ["d", "l"],
+                    "properties":
+                    {
+                        "d": {"description": "Rule Section SAID", "type": "string"},
+                        "l": {"description": "Legal Language", "type": "string"}
+                    },
+                    "additionalProperties": False
+                }
+            ]
+        }
     },
+    "additionalProperties": False
+}
+```
+
+Note that the SAID of the schema is provided by the `$id` field. Its field value matches the value of the `s` field in the ACDC itself.
+
+##### Project Report ACDC
+
+Bob (a euphemism for the student) creates a placeholder registry to issue a revocable ACDC that asserts a report authored by Bob.  The associated registry was created with a registration inception event message as follows:
+
+```python
+{
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "n": "0",
+    "dt": "2025-07-04T17:51:00.000000+00:00"
+}
+```
+
+The registration identifier is the SAID of this message, as follows:
+```python
+regBob = "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"
+```
+
+Bob uses this to issue a report credential as follows:
+
+```python
+ {
+        "v": "ACDCCAACAAJSONAAKt.",
+        "t": "acm",
+        "d": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdj",
+        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+        "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+        "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+        "a":
+        {
+            "d": "EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXc5",
+            "title": "PQ Proof of Concept",
+            "name": "Zoe Doe",
+            "report": "Demonstration of recovery from surprise quantum attack"
+        },
+        "r":
+        {
+            "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
+            "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
+        }
+}
+```
+
+Note that the value of the `rd` field is the same as the value of regBob. This binds the issued ACDC to a specific issuance/revocation state registry. Note also that the top-level `i` field value is Bob's AID. Also note there is no nested issuee field. This ACDC is therefore untargeted. The only association is to the student as named author via the `name` field.
+
+This ACDC can be compacted into its most compact form. This is as follows:
+```python
+{
+        "v": "ACDCCAACAAJSONAAF3.",
+        "t": "acm",
+        "d": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdj",
+        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+        "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+        "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+        "a": "EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_",
+        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+}
+```
+Note that the SAIDs of the sections are the same in both the uncompact and compact variants.
+
+This project report ACDC uses the same schema as the research report ACDC.
+
+##### Transcript ACDC with Private Edges
+
+Now that the dependent ACDCs have been issued, Amy (a euphemism for the Sunspot College) can issue the transcript ACDC to Bob.
+
+Amy first creates a placeholder registry for maintaining the issue/revoke status of the transcript ACDC. 
+The associated registry was created with a registration inception event message as follows:
+
+```python
+{
+        "v": "ACDCCAACAAJSONAADa.",
+        "t": "rip",
+        "d": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+        "n": "0",
+        "dt": "2025-07-04T17:50:00.000000+00:00"
+}
+```
+
+The registration identifier is the SAID of this message, as follows:
+```python
+regAmy = "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX"
+```
+
+Amy uses this to issue a transcript ACDC to Bob as follows:
+
+```python
+{
+        "v": "ACDCCAACAAJSONAAXG.",
+        "d": "ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdk",
+        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+        "rd": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+        "s": "EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh",
+        "a":
+        {
+            "d": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+            "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+            "name": "Zoe Doe",
+            "gpa": 3.5,
+            "grades":
+            {
+                "d": "EFQnBFeKAeS4DAWYoKDwWXOT4h2-XaGk7-w4-2N4ktXy",
+                "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+                "history": 3.5,
+                "english": 4.0,
+                "math": 3.0
+            }
+        },
+        "e":
+        {
+            "d": "ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+            "accreditation":
+            {
+                "d": "EAFj8JaNEC3mdFNJKrXW8E03_k9qqb_xM9NjAPVHw-xJ",
+                "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
+                "n": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
+                "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"
+            },
+            "reports":
+            {
+                "d": "EOObmbCppe1S-7vtLuy766_4-RcfrC7p4ciFtBxdexuz",
+                "u": "0ABhY2Rjc3BlY3dvcmtyYXc0",
+                "o": "OR",
+                "research":
+                {
+                    "d": "EN9ngstOcFHqsjqf75JZFKtCRmW76NkeRrUSxTLoqqkI",
+                    "u": "0ABhY2Rjc3BlY3dvcmtyYXc2",
+                    "n": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+                    "o": "NI2I"
+                },
+                "project":
+                {
+                    "d": "EFwHz5qJ4_8c7IefP7_zugX2eIgtoyY8Up_WZ3osXwkI",
+                    "u": "0ABhY2Rjc3BlY3dvcmtyYXc1",
+                    "n": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
+                    "o": "NI2I"
+                }
+            }
+        },
+        "r":
+        {
+            "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
+            "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
+        }
+}
+```
+
+Note that the value of the `rd` field is the same as the value of regAmy. This binds the issued ACDC to a specific issuance/revocation state registry. Note also that the top-level `i` field value is Amy's AID. Also note that nested inside the attribute block with label `a` is the issuee field `i` (not to be confused with the top-level issuer). The issuee field value is Bob's AID.  This binds Bob as the target of the ACDC. 
+
+Notable about this ACDC is the Edge Section. There are three edges, two of which belong to a nested Edge Group.
+The first Edge is to the accreditation ACDC. This is targeted and the value of the `n` field in its block is the accrediation ACDC SAID.  The `s` field value is the schema SAID of the accreditation ACDC schema. Because the default M-ary operator is `AND` and `AND` is what is desired, no operator `o` field is needed for the top-level Edge Section group. Likewise the default operator for a target ACDC is `I2I` so no edge operator `o` field is required.
+
+In the Edge group labeled `reports` are the other two edges; neither of these is targeted.  This edge group uses an `OR` operator. This means that the Edge group is satisfied if either or both of its Edges are satisfied.
+
+For the sake of example, each edge has a Unary, `NI2I` edge operator.
+Because the edges are in blocks, each with a SAID and UUID fields, the edges can be compacted for confidentiality.
+
+This enables the graduated partial disclosure of the edges. The details of the linked (chained) credentials can be hidden by their block SAIDS so a disclosee can't see the linked ACDCs until the disclosse has to agreed to whatever terms are required by the discloser. Likewise for the rule section.  This illustrates that not only attributes but edges and rules can be partially disclosable.
+
+This ACDC can be compacted into its most compact form. This is as follows:
+```python
+{
+        "v": "ACDCCAACAAJSONAAGg.",
+        "d": "ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdk",
+        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+        "rd": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+        "s": "EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh",
+        "a": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
+        "e": "ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0",
+        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+}
+```
+Note that the SAIDs of the sections are the same in both the uncompact and compact varieties
+
+The schema for this ACDC is as follows:
+
+```json
+{
+        "$id": "EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Transcript Schema",
+        "description": "Transcript JSON Schema for acm ACDC.",
+        "credentialType": "Transcript_ACDC_acm_message",
+        "version": "2.0.0",
+        "type": "object",
+        "required": ["v", "d", "i", "s", "a", "r"],
+        "properties":
+        {
+            "v": {"description": "ACDC version string", "type": "string"},
+            "t": {"description": "Message type", "type": "string"},
+            "d": {"description": "Message SAID", "type": "string"},
+            "u": {"description": "Message UUID", "type": "string"},
+            "i": {"description": "Issuer AID", "type": "string"},
+            "rd": {"description": "Registry SAID", "type": "string"},
+            "s":
+            {
+                "description": "Schema Section",
+                "oneOf":
+                [
+                    {"description": "Schema Section SAID", "type": "string"},
+                    {"description": "Schema Section Detail", "type": "object"}
+                ]
+            },
+            "a":
+             {
+                "description": "Attribute Section",
+                "oneOf":
+                [
+                    { "description": "Attribute Section SAID", "type": "string"},
+                    {
+                      "description": "Attribute Section Detail",
+                      "type": "object",
+                      "required": ["d", "u", "i", "name" "gpa", "grades"],
+                      "properties":
+                      {
+                        "d": {"description": "Attribute Section SAID", "type": "string"},
+                        "i": {"description": "Issuee AID", "type": "string"},
+                        "name": {"description": "Student Full Name", "type": "string"},
+                        "gpa": {"description": "Grade Point Average", "type": "number"},
+                        "grades":
+                        {
+                          "description": "Grades Block",
+                          "oneOf":
+                          [
+                            {"description": "Block SAID", "type": "string"},
+                            {
+                              "description": "Block detail",
+                              "type": "object",
+                              "required": ["d", "u", "history" "english", "math"],
+                              "properties":
+                              {
+                                "d": {"description": "Block SAID", "type": "string"},
+                                "u": {"description": "Block UUID", "type": "string"},
+                                "history": {"description": "History Grade", "type": "number"},
+                                "english": {"description": "English Grade", "type": "number"},
+                                "math": {"description": "Math Grade", "type": "number"}
+                              },
+                              "additionalProperties": false
+                            }
+                          ]
+                        },
+                        "additionalProperties": false
+                      }
+                    }
+                ]
+            },
+            "e":
+            {
+                "description": "Edge Section",
+                "oneOf":
+                [
+                  { "description": "Edge Section SAID", "type": "string"},
+                  {
+                    "description": "Edge Section Detail",
+                    "type": "object",
+                    "required": ["d", "u", "accreditation" "reports"],
+                    "properties":
+                    {
+                      "d": {"description": "Edge Section SAID", "type": "string"},
+                      "u": {"description": "Edge Section UUID", "type": "string"},
+                      "o": {"description": "Edge Section M-ary Operator", "type": "string"},
+                      "w": {"description": "Edge Section Weight", "type": "number"},
+                      "accreditation":
+                      {
+                        "description": "Accreditation Edge",
+                        "oneOf":
+                        [
+                          {"description": "Edge SAID", "type": "string"},
+                          {
+                            "description": "Edge Detail",
+                            "type": "object",
+                            "required": ["n"],
+                            "properties":
+                            {
+                              "d": {"description": "Edge SAID", "type": "string"},
+                              "u": {"description": "Edge UUID", "type": "string"},
+                              "n": {"description": "Far Node SAID", "type": "string"},
+                              "s": {"description": "Far Node Schema SAID", "type": "string"},
+                              "o": {"description": "Edge Unary Operator", "type": "string"},
+                              "w": {"description": "Edge Weight", "type": "number"},
+                            },
+                            "additionalProperties": false
+                          }
+                        ]
+                      },
+                      "reports":
+                      {
+                        "description": "Reports Edge Group",
+                        "oneOf":
+                        [
+                          {"description": "Edge Group SAID", "type": "string"},
+                          {
+                            "description": "Edge Group detail",
+                            "type": "object",
+                            "required": ["research", "project"],
+                            "properties":
+                            {
+                              "d": {"description": "Block SAID", "type": "string"},
+                              "u": {"description": "Block UUID", "type": "string"},
+                              "s": {"description": "Far Node Schema SAID", "type": "string"},
+                              "o": {"description": "Edge Group M-ary Operator", "type": "string"},
+                              "w": {"description": "Edge Group Weight", "type": "number"},
+                              "research":
+                              {
+                                "description": "Research Edge",
+                                "oneOf":
+                                [
+                                  {"description": "Edge SAID", "type": "string"},
+                                  {
+                                    "description": "Edge Detail",
+                                    "type": "object",
+                                    "required": ["n"],
+                                    "properties":
+                                    {
+                                      "d": {"description": "Edge SAID", "type": "string"},
+                                      "u": {"description": "Edge UUID", "type": "string"},
+                                      "n": {"description": "Far Node SAID", "type": "string"},
+                                      "s": {"description": "Far Node Schema SAID", "type": "string"},
+                                      "o": {"description": "Edge Unary Operator", "type": "string"},
+                                      "w": {"description": "Edge Weight", "type": "number"},
+                                    },
+                                    "additionalProperties": false
+                                  }
+                                ]
+                              },
+                              "project":
+                              {
+                                "description": "Project Edge",
+                                "oneOf":
+                                [
+                                  {"description": "Edge SAID", "type": "string"},
+                                  {
+                                    "description": "Edge Detail",
+                                    "type": "object",
+                                    "required": ["n"],
+                                    "properties":
+                                    {
+                                      "d": {"description": "Edge SAID", "type": "string"},
+                                      "u": {"description": "Edge UUID", "type": "string"},
+                                      "n": {"description": "Far Node SAID", "type": "string"},
+                                      "s": {"description": "Far Node Schema SAID", "type": "string"},
+                                      "o": {"description": "Edge Unary Operator", "type": "string"},
+                                      "w": {"description": "Edge Weight", "type": "number"},
+                                    },
+                                    "additionalProperties": false
+                                  }
+                                ]
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        ]
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                ]
+            },
+            "r":
+            {
+                "description": "Rule Section",
+                "oneOf":
+                [
+                    {"description": "Rule Section SAID", "type": "string"},
+                    {
+                        "description": "Rule Section Detail",
+                        "type": "object",
+                        "required": ["d", "l"],
+                        "properties":
+                        {
+                            "d": {"description": "Rule Section SAID", "type": "string"},
+                            "l": {"description": "Legal Language", "type": "string"}
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "additionalProperties": false
+}
+
+```
+
+##### Transcript ACDC with Public Edges
+
+Suppose there is no advantage to hidding the edges in the transcript ACDC. As a consequence, the Edge section can be greatly simplified. Instead of each block holding a SAID, UUID, as well as other fields, a given edge can be simplified to just the SAID of the linked ACDC. This requires that the default operators are adequate.  In this case, it is assumed that there is no advantage to hiding the edges. Also the report edges do not actuall need the explicit unary, `NI2I` operators. This is the default for non-targeted ACDCs linked via an edge. All three edges are reexpressed in simple compact form.
+
+The resulting ACDC is as follows:
+
+```python
+{
+    "v": "ACDCCAACAAJSONAAOD.",
+    "d": "EBaEMTKi6ZtHXmkhxHUoGEEtG8JKelw3b0gv6cFTg6BN",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdl",
+    "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+    "rd": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+    "s": "ECVhGE4yeuHZ8KEqWK-lx5O9xrfUg6wiDPkkxxQSjgfk",
     "a":
     {
-      "description": "attribute section",
-      "oneOf":
-      [
+        "d": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+        "name": "Zoe Doe",
+        "gpa": 3.5,
+        "grades":
         {
-          "description": "attribute section SAID",
-          "type": "string"
-        },
-        {
-          "description": "attribute detail",
-          "type": "object",
-          "required":
-          [
-            "d",
-            "i",
-            "score",
-            "name"
-          ],
-          "properties":
-          {
-            "d":
-            {
-              "description": "attribute section SAID",
-              "type": "string"
-            },
-            "i":
-            {
-              "description": "Issuee AID",
-              "type": "string"
-            },
-            "score":
-            {
-              "description": "test score",
-              "type": "integer"
-            },
-            "name":
-            {
-              "description": "test taker full name",
-              "type": "string"
-            }
-          },
-          "additionalProperties": false
+            "d": "EFQnBFeKAeS4DAWYoKDwWXOT4h2-XaGk7-w4-2N4ktXy",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+            "history": 3.5,
+            "english": 4.0,
+            "math": 3.0
         }
-      ]
     },
     "e":
     {
-      "description": "edge section",
-      "oneOf":
-      [
+        "d": "EEWx-E6Rexj3eORT-e2kLcAWVgviTqxwWvxS2LbNKuCh",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+        "accreditation": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
+        "reports":
         {
-          "description": "edge section SAID",
-          "type": "string"
-        },
-        {
-          "description": "edge detail",
-          "type": "object",
-          "required":
-          [
-            "d",
-            "boss"
-          ],
-          "properties":
-          {
-            "d":
-            {
-              "description": "edge section SAID",
-              "type": "string"
-            },
-            "boss":
-            {
-              "description": "boss edge",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "n",
-                "s",
-                "w"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "edge SAID",
-                  "type": "string"
-                },
-                "n":
-                {
-                  "description": "far node SAID",
-                  "type": "string"
-                },
-                "s":
-                {
-                  "description": "far node schema SAID",
-                  "type": "string",
-                  "const": "EiheqcywJcnjtJtQIYPvAu6DZAIl3MORH3dCdoFOLe71"
-                },
-                "w":
-                {
-                  "description": "edge weight",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false
+            "o": "OR",
+            "research": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+            "project": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M"
         }
-      ]
     },
-    "r":
-    {
-      "description": "rule section",
-      "oneOf":
-      [
-        {
-          "description": "rule section SAID",
-          "type": "string"
-        },
-        {
-          "description": "rule detail",
-          "type": "object",
-          "required":
-          [
-            "d",
-            "warrantyDisclaimer",
-            "liabilityDisclaimer"
-          ],
-          "properties":
-          {
-            "d":
-            {
-              "description": "edge section SAID",
-              "type": "string"
-            },
-            "warrantyDisclaimer":
-            {
-              "description": "warranty disclaimer clause",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "l"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "clause SAID",
-                  "type": "string"
-                },
-                "l":
-                {
-                  "description": "legal language",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            },
-            "liabilityDisclaimer":
-            {
-              "description": "liability disclaimer clause",
-              "type": "object",
-              "required":
-              [
-                "d",
-                "l"
-              ],
-              "properties":
-              {
-                "d":
-                {
-                  "description": "clause SAID",
-                  "type": "string"
-                },
-                "l":
-                {
-                  "description": "legal language",
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
+    "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+}
+```
+
+Note that the rule section, `r` field is represented by its SAID. It is the same rule section on the other ACDCs so its can be cached.
+
+Notices that each of the edge values is the SAID of the far node ACDC not the SAID of the edge block. This is the simple edge format.
+
+The most compact variant of this ACDC is as follows:
+
+```python
+{
+        "v": "ACDCCAACAAJSONAAGg.",
+        "d": "EBaEMTKi6ZtHXmkhxHUoGEEtG8JKelw3b0gv6cFTg6BN",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXdl",
+        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+        "rd": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+        "s": "ECVhGE4yeuHZ8KEqWK-lx5O9xrfUg6wiDPkkxxQSjgfk",
+        "a": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
+        "e": "EEWx-E6Rexj3eORT-e2kLcAWVgviTqxwWvxS2LbNKuCh",
+        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
     }
-  },
-  "additionalProperties": false
+```
+
+The ACDC's schema is as follows:
+
+```json
+{
+    "$id": "ECVhGE4yeuHZ8KEqWK-lx5O9xrfUg6wiDPkkxxQSjgfk",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Transcript Schema",
+    "description": "Transcript JSON Schema for acm ACDC.",
+    "credentialType": "Transcript_ACDC_acm_message",
+    "version": "2.0.0",
+    "type": "object",
+    "required": ["v", "d", "i", "s", "a", "r"],
+    "properties":
+    {
+        "v": {"description": "ACDC version string", "type": "string"},
+        "t": {"description": "Message type", "type": "string"},
+        "d": {"description": "Message SAID", "type": "string"},
+        "u": {"description": "Message UUID", "type": "string"},
+        "i": {"description": "Issuer AID", "type": "string"},
+        "rd": {"description": "Registry SAID", "type": "string"},
+        "s":
+        {
+            "description": "Schema Section",
+            "oneOf":
+            [
+                {"description": "Schema Section SAID", "type": "string"},
+                {"description": "Schema Section Detail", "type": "object"}
+            ]
+        },
+        "a":
+         {
+            "description": "Attribute Section",
+            "oneOf":
+            [
+                { "description": "Attribute Section SAID", "type": "string"},
+                {
+                  "description": "Attribute Section Detail",
+                  "type": "object",
+                  "required": ["d", "u", "i", "name" "gpa", "grades"],
+                  "properties":
+                  {
+                    "d": {"description": "Attribute Section SAID", "type": "string"},
+                    "i": {"description": "Issuee AID", "type": "string"},
+                    "name": {"description": "Student Full Name", "type": "string"},
+                    "gpa": {"description": "Grade Point Average", "type": "number"},
+                    "grades":
+                    {
+                      "description": "Grades Block",
+                      "oneOf":
+                      [
+                        {"description": "Block SAID", "type": "string"},
+                        {
+                          "description": "Block detail",
+                          "type": "object",
+                          "required": ["d", "u", "history" "english", "math"],
+                          "properties":
+                          {
+                            "d": {"description": "Block SAID", "type": "string"},
+                            "u": {"description": "Block UUID", "type": "string"},
+                            "history": {"description": "History Grade", "type": "number"},
+                            "english": {"description": "English Grade", "type": "number"},
+                            "math": {"description": "Math Grade", "type": "number"}
+                          },
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "additionalProperties": false
+                  }
+                }
+            ]
+        },
+        "e":
+        {
+            "description": "Edge Section",
+            "oneOf":
+            [
+                { "description": "Edge Section SAID", "type": "string"},
+                {
+                    "description": "Edge Section Detail",
+                    "type": "object",
+                    "required": ["d", "u", "accreditation" "reports"],
+                    "properties":
+                    {
+                        "d": {"description": "Edge Section SAID", "type": "string"},
+                        "u": {"description": "Edge Section UUID", "type": "string"},
+                        "o": {"description": "Edge Section M-ary Operator", "type": "string"},
+                        "w": {"description": "Edge Section Weight", "type": "number"},
+                        "accreditation": {"description": "Far Node SAID", "type": "string"},
+                        "reports":
+                        {
+                            "description": "Edge Group detail",
+                            "type": "object",
+                            "required": ["research", "project"],
+                            "properties":
+                            {
+                                "d": {"description": "Block SAID", "type": "string"},
+                                "u": {"description": "Block UUID", "type": "string"},
+                                "s": {"description": "Far Node Schema SAID", "type": "string"},
+                                "o": {"description": "Edge Group M-ary Operator", "type": "string"},
+                                "w": {"description": "Edge Group Weight", "type": "number"},
+                                "research": {"description": "Far Node SAID", "type": "string"},
+                                "project": {"description": "Far Node SAID", "type": "string"},
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "r":
+        {
+            "description": "Rule Section",
+            "oneOf":
+            [
+                {"description": "Rule Section SAID", "type": "string"},
+                {
+                    "description": "Rule Section Detail",
+                    "type": "object",
+                    "required": ["d", "l"],
+                    "properties":
+                    {
+                        "d": {"description": "Rule Section SAID", "type": "string"},
+                        "l": {"description": "Legal Language", "type": "string"}
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        }
+    },
+    "additionalProperties": false
 }
 ```
 
