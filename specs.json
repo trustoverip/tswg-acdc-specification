@@ -7,7 +7,8 @@
       "markdown_paths": [
         "glossary-intro-created-by-split-tool.md",
         "terms-and-definitions-intro.md",
-        "specification-after-glossary.md"
+        "specification-after-glossary.md",
+        "spec.md"
       ],
       "logo": "https://raw.githubusercontent.com/trustoverip/logo-assets/master/logos/ToIP-Logo-Color-SolidDimensional-Horizontal-LightOnDark.svg",
       "logo_link": "https://github.com/trustoverip/tswg-acdc-specification",
