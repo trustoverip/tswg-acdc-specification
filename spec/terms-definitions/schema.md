@@ -1,3 +1,1 @@
-[[def: Schema]]
-
-~ the SAID of a JSON schema that is used to issue and verify an ACDC.
+[[tref: kmg-1, schema]]
