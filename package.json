@@ -5,7 +5,7 @@
   "description": "Technical specification drafting tool that generates rich specification documents from markdown.",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "spec-up-t": "^1.2.7"
+    "spec-up-t": "file:spec-up-t-1.3.2-beta-7.tgz"
   },
   "author": "Daniel Buchner",
   "repository": {
@@ -27,9 +27,9 @@
     "edit": "node -e \"require('spec-up-t')()\"",
     "render": "node --no-warnings -e \"require('spec-up-t/index.js')({ nowatch: true })\"",
     "dev": "node -e \"require('spec-up-t')({ dev: true })\"",
-    "collectExternalReferencesCache": "node --no-warnings -e \"require('spec-up-t/src/collect-external-references.js').collectExternalReferences({cache: true})\"",
-    "collectExternalReferencesNoCache": "node --no-warnings -e \"require('spec-up-t/src/collect-external-references.js').collectExternalReferences({cache: false})\"",
+    "collectExternalReferences": "node --no-warnings -e \"require('spec-up-t/src/collect-external-references.js').collectExternalReferences()\"",
     "topdf": "node -e \"require('spec-up-t/src/create-pdf.js')\"",
+    "todocx": "node -e \"require('spec-up-t/src/create-docx.js')\"",
     "freeze": "node -e \"require('spec-up-t/src/freeze.js')\"",
     "references": "node -e \"require('spec-up-t/src/references.js')\"",
     "help": "cat ./node_modules/spec-up-t/src/install-from-boilerplate/help.txt",

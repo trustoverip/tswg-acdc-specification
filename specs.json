@@ -20,7 +20,32 @@
       "author": "Trust over IP Foundation",
       "description": "Create technical specifications in markdown. Based on the original Spec-Up, extended with Terminology tooling",
       "spec_terms_directory": "terms-definitions",
-      "external_specs": []
+"external_specs": [
+                {
+                    "external_spec": "kmg-1",
+                    "gh_page": "https://henkvancann.github.io/kerisuite-glossary/",
+                    "url": "https://github.com/henkvancann/kerisuite-glossary",
+                    "terms_dir": "spec/terms-definitions"
+                },
+                {
+                    "external_spec": "toip1",
+                    "gh_page": "https://henkvancann.github.io/ctwg-main-glossary/",
+                    "url": "https://github.com/henkvancann/ctwg-main-glossary",
+                    "terms_dir": "spec/terms-definitions"
+                },
+                {
+                    "external_spec": "vlei1",
+                    "gh_page": "https://henkvancann.github.io/vlei-glossary/",
+                    "url": "https://github.com/henkvancann/vlei-glossary",
+                    "terms_dir": "spec/terms-definitions"
+                },
+                {
+                    "external_spec": "toip2",
+                    "gh_page": "https://henkvancann.github.io/ctwg-general-glossary/",
+                    "url": "https://github.com/henkvancann/ctwg-general-glossary",
+                    "terms_dir": "spec/terms-definitions"
+                }            
+            ]
     }
   ]
 }

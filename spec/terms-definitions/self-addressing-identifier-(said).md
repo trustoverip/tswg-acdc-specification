@@ -1,1 +1,3 @@
-[[tref: kmg-1, self-addressing-identifier-(said)]]
+[[tref: kmg-1, self-addressing-identifier]]
+
+~ - - -
