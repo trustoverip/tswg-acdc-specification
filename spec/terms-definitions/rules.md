@@ -1,3 +1,3 @@
-[[tref: kmg-1, rules]]
+[[tref: kmg-1, rules, Rules]]
 
 ~ - - -

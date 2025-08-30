@@ -1,3 +1,3 @@
-[[tref: kmg-1, schema]]
+[[tref: kmg-1, schema, Schema]]
 
 ~ - - -

@@ -1,3 +1,3 @@
-[[tref: kmg-1, verifiable-data-registry]]
+[[tref: kmg-1, verifiable-data-registry, Verifiable data registry]]
 
 ~ - - -

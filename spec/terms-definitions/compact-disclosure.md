@@ -1,3 +1,3 @@
-[[tref: kmg-1, compact-disclosure]]
+[[tref: kmg-1, compact-disclosure, Compact Disclosure]]
 
 ~ - - -

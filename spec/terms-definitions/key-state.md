@@ -1,3 +1,3 @@
-[[tref: kmg-1, key-state]]
+[[tref: kmg-1, key-state, Key-state]]
 
 ~ - - -

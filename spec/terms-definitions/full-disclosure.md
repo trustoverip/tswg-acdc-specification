@@ -1,3 +1,3 @@
-[[tref: kmg-1, full-disclosure]]
+[[tref: kmg-1, full-disclosure, Full Disclosure]]
 
 ~ - - -

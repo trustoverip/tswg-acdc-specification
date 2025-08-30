@@ -1,3 +1,3 @@
-[[tref: kmg-1, stream]]
+[[tref: kmg-1, stream, Stream]]
 
 ~ - - -

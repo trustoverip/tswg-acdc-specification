@@ -1,3 +1,3 @@
-[[tref: kmg-1, operator]]
+[[tref: kmg-1, operator, Operator]]
 
 ~ - - -

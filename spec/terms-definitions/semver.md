@@ -1,3 +1,3 @@
-[[tref: kmg-1, semver]]
+[[tref: kmg-1, semver, SEMVER]]
 
 ~ - - -

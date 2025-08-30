@@ -1,3 +1,3 @@
-[[tref: kmg-1, controller]]
+[[tref: kmg-1, controller, Controller]]
 
 ~ - - -

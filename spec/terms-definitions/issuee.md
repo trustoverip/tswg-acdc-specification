@@ -1,3 +1,3 @@
-[[tref: kmg-1, issuee]]
+[[tref: kmg-1, issuee, Issuee]]
 
 ~ - - -

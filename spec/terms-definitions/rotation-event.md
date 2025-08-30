@@ -1,3 +1,3 @@
-[[tref: kmg-1, rotation-event]]
+[[tref: kmg-1, rotation-event, Rotation event]]
 
 ~ - - -

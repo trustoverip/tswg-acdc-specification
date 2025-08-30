@@ -1,3 +1,3 @@
-[[tref: kmg-1, attribute]]
+[[tref: kmg-1, attribute, Attribute]]
 
 ~ - - -

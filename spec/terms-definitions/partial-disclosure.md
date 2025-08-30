@@ -1,3 +1,3 @@
-[[tref: kmg-1, partial-disclosure]]
+[[tref: kmg-1, partial-disclosure, Partial Disclosure]]
 
 ~ - - -

@@ -1,3 +1,3 @@
-[[tref: kmg-1, edge]]
+[[tref: kmg-1, edge, Edge]]
 
 ~ - - -

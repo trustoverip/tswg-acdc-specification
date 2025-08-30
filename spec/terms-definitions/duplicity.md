@@ -1,3 +1,3 @@
-[[tref: kmg-1, duplicity]]
+[[tref: kmg-1, duplicity, Duplicity]]
 
 ~ - - -

@@ -1,3 +1,3 @@
-[[tref: kmg-1, disclosee]]
+[[tref: kmg-1, disclosee, Disclosee]]
 
 ~ - - -
