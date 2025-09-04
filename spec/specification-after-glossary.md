@@ -4080,113 +4080,113 @@ Composed Schema that supports both public compact and uncompacted variants
 
 <a id="RFC6901">6</a><a id="ref6"></a>. RFC6901, JavaScript Object Notation (JSON) Pointer, https://datatracker.ietf.org/doc/html/rfc6901
 
-<a id="">7</a><a id="ref7"></a>. JSON, JavaScript Object Notation Delimeters, https://www.json.org/json-en.html
+<a id="JSON">7</a><a id="ref7"></a>. JSON, JavaScript Object Notation Delimeters, https://www.json.org/json-en.html
 
-<a id="">8</a><a id="ref8"></a>. RFC8259, JSON (JavaScript Object Notation), https://datatracker.ietf.org/doc/html/rfc8259
+<a id="RFC8259">8</a><a id="ref8"></a>. RFC8259, JSON (JavaScript Object Notation), https://datatracker.ietf.org/doc/html/rfc8259
 
-<a id="">9</a><a id="ref9"></a>. RFC4627, The application/json Media Type for JavaScript Object Notation (JSON), https://datatracker.ietf.org/doc/rfc4627/
+<a id="RFC4627">9</a><a id="ref9"></a>. RFC4627, The application/json Media Type for JavaScript Object Notation (JSON), https://datatracker.ietf.org/doc/rfc4627/
 
-<a id="">10</a><a id="ref10"></a>. JSch, JSON Schema, https://json-schema.org
+<a id="JSch">10</a><a id="ref10"></a>. JSch, JSON Schema, https://json-schema.org
 
-<a id="">11</a><a id="ref11"></a>. JSch_202012, JSON Schema 2020-12, https://json-schema.org/draft/2020-12/release-notes.html
+<a id="JSch_202012">11</a><a id="ref11"></a>. JSch_202012, JSON Schema 2020-12, https://json-schema.org/draft/2020-12/release-notes.html
 
-<a id="">12</a><a id="ref12"></a>. CBOR, CBOR Mapping Object Codes, https://en.wikipedia.org/wiki/CBOR
+<a id="CBOR">12</a><a id="ref12"></a>. CBOR, CBOR Mapping Object Codes, https://en.wikipedia.org/wiki/CBOR
 
-<a id="">13</a><a id="ref13"></a>. RFC8949, Concise Binary Object Representation (CBOR), https://datatracker.ietf.org/doc/rfc8949/
+<a id="RFC8949">13</a><a id="ref13"></a>. RFC8949, Concise Binary Object Representation (CBOR), https://datatracker.ietf.org/doc/rfc8949/
 
-<a id="">14</a><a id="ref14"></a>. MGPK, Msgpack Mapping Object Codes, https://github.com/msgpack/msgpack/blob/master/spec.md
+<a id="MGPK">14</a><a id="ref14"></a>. MGPK, Msgpack Mapping Object Codes, https://github.com/msgpack/msgpack/blob/master/spec.md
 
-<a id="">15</a><a id="ref10"></a>. RFC3986, Uniform Resource Identifier (URI): Generic Syntax, https://datatracker.ietf.org/doc/html/rfc3986
+<a id="RFC3986">15</a><a id="ref10"></a>. RFC3986, Uniform Resource Identifier (URI): Generic Syntax, https://datatracker.ietf.org/doc/html/rfc3986
 
-<a id="">16</a><a id="ref16"></a>. RFC8820, URI Design and Ownership, https://datatracker.ietf.org/doc/html/rfc8820
+<a id="RFC8820">16</a><a id="ref16"></a>. RFC8820, URI Design and Ownership, https://datatracker.ietf.org/doc/html/rfc8820
 
-<a id="">17</a><a id="ref17"></a>. ACDC_TF, ACDC (Authentic Chained Data Container) Task Force, https://wiki.trustoverip.org/display/HOME/ACDC+%28Authentic+Chained+Data+Container%29+Task+Force
+<a id="ACDC_TF">17</a><a id="ref17"></a>. ACDC_TF, ACDC (Authentic Chained Data Container) Task Force, https://wiki.trustoverip.org/display/HOME/ACDC+%28Authentic+Chained+Data+Container%29+Task+Force
 
-<a id="">18</a><a id="ref18"></a>. TOIP, Trust Over IP (ToIP) Foundation, https://trustoverip.org
+<a id="TOIP">18</a><a id="ref18"></a>. TOIP, Trust Over IP (ToIP) Foundation, https://trustoverip.org
 
-<a id="">19</a><a id="ref19"></a>. ITPS, Information-Theoretic and Perfect Security, https://en.wikipedia.org/wiki/Information-theoretic_security
+<a id="ITPS">19</a><a id="ref19"></a>. ITPS, Information-Theoretic and Perfect Security, https://en.wikipedia.org/wiki/Information-theoretic_security
 
-<a id="">20</a><a id="ref20"></a>. OTP, One-Time-Pad, https://en.wikipedia.org/wiki/One-time_pad 
+<a id="OTP">20</a><a id="ref20"></a>. OTP, One-Time-Pad, https://en.wikipedia.org/wiki/One-time_pad 
 
-<a id="">21</a><a id="ref21"></a>.VCphr, Vernom Cipher (OTP) https://www.ciphermachinesandcryptology.com/en/onetimepad.htm
+<a id="VCphr">21</a><a id="ref21"></a>.VCphr, Vernom Cipher (OTP) https://www.ciphermachinesandcryptology.com/en/onetimepad.htm
 
-<a id="">22</a><a id="ref22"></a>. SSplt, Secret Splitting, https://www.ciphermachinesandcryptology.com/en/secretsplitting.htm
+<a id="SSplt">22</a><a id="ref22"></a>. SSplt, Secret Splitting, https://www.ciphermachinesandcryptology.com/en/secretsplitting.htm
 
-<a id="">23</a><a id="ref23"></a>. SShr, Secret Sharing, https://en.wikipedia.org/wiki/Secret_sharing
+<a id="SShr">23</a><a id="ref23"></a>. SShr, Secret Sharing, https://en.wikipedia.org/wiki/Secret_sharing
 
-<a id="">24</a><a id="ref24"></a>. GLEIF, GLEIF (Global Legal Entity Identifier Foundation),
+<a id="GLEIF">24</a><a id="ref24"></a>. GLEIF, GLEIF (Global Legal Entity Identifier Foundation),
 https://www.gleif.org/en/
 
 <a id="">25</a><a id="ref25"></a>. vLEI, vLEI (verifiable Legal Entity Identifier) Definition, https://github.com/WebOfTrust/vLEI
 
-<a id="">26</a><a id="ref26"></a>. GLEIF_vLEI, GLEIF vLEI (verifiable Legal Entity Identifier), https://www.gleif.org/en/lei-solutions/gleifs-digital-strategy-for-the-lei/introducing-the-verifiable-lei-vlei
+<a id="GLEIF_vLEI">26</a><a id="ref26"></a>. GLEIF_vLEI, GLEIF vLEI (verifiable Legal Entity Identifier), https://www.gleif.org/en/lei-solutions/gleifs-digital-strategy-for-the-lei/introducing-the-verifiable-lei-vlei
 
-<a id="">27</a><a id="ref27"></a>. GLEIF_KERI, GLEIF with KERI Architecture, https://github.com/WebOfTrust/vLEI
+<a id="GLEIF_KERI">27</a><a id="ref27"></a>. GLEIF_KERI, GLEIF with KERI Architecture, https://github.com/WebOfTrust/vLEI
 
-<a id="">28</a><a id="ref28"></a>. W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0, https://w3c-ccg.github.io/did-spec/
+<a id="W3C_DID">28</a><a id="ref28"></a>. W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0, https://w3c-ccg.github.io/did-spec/
 
-<a id="">29</a><a id="ref29"></a>. Salt, Salts, Nonces, and Initial Values, https://medium.com/@fridakahsas/salt-nonces-and-ivs-whats-the-difference-d7a44724a447
+<a id="Salt">29</a><a id="ref29"></a>. Salt, Salts, Nonces, and Initial Values, https://medium.com/@fridakahsas/salt-nonces-and-ivs-whats-the-difference-d7a44724a447
 
-<a id="">30</a><a id="ref30"></a>. RB, Rainbow Table, https://en.wikipedia.org/wiki/Rainbow_table
+<a id="RB">30</a><a id="ref30"></a>. RB, Rainbow Table, https://en.wikipedia.org/wiki/Rainbow_table
 
-<a id="">31</a><a id="ref31"></a>. DRB, Dictionary Attacks, Rainbow Table Attacks and how Password Salting defends against them, https://www.commonlounge.com/discussion/2ee3f431a19e4deabe4aa30b43710aa7
+<a id="DRB">31</a><a id="ref31"></a>. DRB, Dictionary Attacks, Rainbow Table Attacks and how Password Salting defends against them, https://www.commonlounge.com/discussion/2ee3f431a19e4deabe4aa30b43710aa7
 
-<a id="">32</a><a id="ref32"></a>. BDay, Birthday Attack, https://en.wikipedia.org/wiki/Birthday_attack
+<a id="BDay">32</a><a id="ref32"></a>. BDay, Birthday Attack, https://en.wikipedia.org/wiki/Birthday_attack
 
-<a id="">33</a><a id="ref33"></a>. BDC, Birthday Attacks, Collisions, And Password Strength, https://auth0.com/blog/birthday-attacks-collisions-and-password-strength/
+<a id="BDC">33</a><a id="ref33"></a>. BDC, Birthday Attacks, Collisions, And Password Strength, https://auth0.com/blog/birthday-attacks-collisions-and-password-strength/
 
-<a id="">34</a><a id="ref34"></a>. HCR, Hash Collision Resistance, https://en.wikipedia.org/wiki/Collision_resistance
+<a id="HCR">34</a><a id="ref34"></a>. HCR, Hash Collision Resistance, https://en.wikipedia.org/wiki/Collision_resistance
 
-<a id="">35</a><a id="ref35"></a>. QCHC, Cost analysis of hash collisions: Will quantum computers make SHARCS obsolete?, https://cr.yp.to/hash/collisioncost-20090823.pdf
+<a id="QCHC">35</a><a id="ref35"></a>. QCHC, Cost analysis of hash collisions: Will quantum computers make SHARCS obsolete?, https://cr.yp.to/hash/collisioncost-20090823.pdf
 
-<a id="">36</a><a id="ref36"></a>. EdSC, The Provable Security of Ed25519: Theory and Practice Report, https://eprint.iacr.org/2020/823
+<a id="EdSC">36</a><a id="ref36"></a>. EdSC, The Provable Security of Ed25519: Theory and Practice Report, https://eprint.iacr.org/2020/823
 
-<a id="">37</a><a id="ref37"></a>. PSEd, The Provable Security of Ed25519: Theory and Practice, https://ieeexplore.ieee.org/document/9519456?denied=
+<a id="PSEd">37</a><a id="ref37"></a>. PSEd, The Provable Security of Ed25519: Theory and Practice, https://ieeexplore.ieee.org/document/9519456?denied=
 
-<a id="">38</a><a id="ref38"></a>. TMEd, Taming the many EdDSAs, https://eprint.iacr.org/2020/1244.pdf
+<a id="TMEd">38</a><a id="ref38"></a>. TMEd, Taming the many EdDSAs, https://eprint.iacr.org/2020/1244.pdf
 
-<a id="">39</a><a id="ref39"></a>. JSchCp, Schema Composition in JSON Schema, https://json-schema.org/understanding-json-schema/reference/combining.html
+<a id="JSchCp">39</a><a id="ref39"></a>. JSchCp, Schema Composition in JSON Schema, https://json-schema.org/understanding-json-schema/reference/combining.html
 
-<a id="">40</a><a id="ref40"></a>. JSchRE, Regular Expressions in JSON Schema, https://json-schema.org/understanding-json-schema/reference/regular_expressions.html
+<a id="JSchRE">40</a><a id="ref40"></a>. JSchRE, Regular Expressions in JSON Schema, https://json-schema.org/understanding-json-schema/reference/regular_expressions.html
 
-<a id="">41/a><a id="ref41"></a>. JSchId, JSON Schema Identification, https://json-schema.org/understanding-json-schema/structuring.html#schema-identification
+<a id="JSchId">41/a><a id="ref41"></a>. JSchId, JSON Schema Identification, https://json-schema.org/understanding-json-schema/structuring.html#schema-identification
 
-<a id="">42</a><a id="ref42"></a>. JSchCx, Complex JSON Schema Structuring, https://json-schema.org/understanding-json-schema/structuring.html#base-uri
+<a id="JSchCx">42</a><a id="ref42"></a>. JSchCx, Complex JSON Schema Structuring, https://json-schema.org/understanding-json-schema/structuring.html#base-uri
 
-<a id="">43</a><a id="ref43"></a>. RC, Ricardian Contract, https://en.wikipedia.org/wiki/Ricardian_contract
+<a id="RicCon">43</a><a id="ref43"></a>. RC, Ricardian Contract, https://en.wikipedia.org/wiki/Ricardian_contract
 
-<a id="">44</a><a id="ref44"></a>. CLC, Chain-Link Confidentiality, https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2045818
+<a id="CLC">44</a><a id="ref44"></a>. CLC, Chain-Link Confidentiality, https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2045818
 
-<a id="">45</a><a id="ref45"></a>. DHKE, Diffie-Hellman Key Exchange, https://www.infoworld.com/article/3647751/understand-diffie-hellman-key-exchange.html
+<a id="DHKE">45</a><a id="ref45"></a>. DHKE, Diffie-Hellman Key Exchange, https://www.infoworld.com/article/3647751/understand-diffie-hellman-key-exchange.html
 
-<a id="">46</a><a id="ref46"></a>. KeyEx, Key Exchange, https://libsodium.gitbook.io/doc/key_exchange
+<a id="KeyEx">46</a><a id="ref46"></a>. KeyEx, Key Exchange, https://libsodium.gitbook.io/doc/key_exchange
 
-<a id="">47</a><a id="ref47"></a>. IDSys, Identity System Essentials, https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/Identity-System-Essentials.pdf
+<a id="IDSys">47</a><a id="ref47"></a>. IDSys, Identity System Essentials, https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/Identity-System-Essentials.pdf
 
-<a id="">48</a><a id="ref48"></a>. Hash, Cryptographic Hash Function, https://en.wikipedia.org/wiki/Cryptographic_hash_function
+<a id="Hash">48</a><a id="ref48"></a>. Hash, Cryptographic Hash Function, https://en.wikipedia.org/wiki/Cryptographic_hash_function
 
-<a id="">49</a><a id="ref49"></a>. Mrkl, Merkle Tree, https://en.wikipedia.org/wiki/Merkle_tree
+<a id="Mrkl">49</a><a id="ref49"></a>. Mrkl, Merkle Tree, https://en.wikipedia.org/wiki/Merkle_tree
 
-<a id="">50</a><a id="ref50"></a>. TwoPI, Second Pre-image Attack on Merkle Trees, https://flawed.net.nz/2018/02/21/attacking-merkle-trees-with-a-second-preimage-attack/
+<a id="MTSec">50</a><a id="ref50"></a>. TwoPI, Second Pre-image Attack on Merkle Trees, https://flawed.net.nz/2018/02/21/attacking-merkle-trees-with-a-second-preimage-attack/
 
 <a id="">51</a><a id="ref51"></a>. MTSec, Merkle Tree Security, https://blog.enuma.io/update/2019/06/10/merkle-trees-not-that-simple.html
 
-<a id="">52</a><a id="ref52"></a>. DSig, Digital Signature, https://en.wikipedia.org/wiki/Digital_signature
+<a id="DSig">52</a><a id="ref52"></a>. DSig, Digital Signature, https://en.wikipedia.org/wiki/Digital_signature
 
-<a id="">53</a><a id="ref53"></a>. Level, Security Level, https://en.wikipedia.org/wiki/Security_level
+<a id="SecLev">53</a><a id="ref53"></a>. Level, Security Level, https://en.wikipedia.org/wiki/Security_level
 
-<a id="">54</a><a id="ref54"></a>. Twin, Digital Twin, https://en.wikipedia.org/wiki/Digital_twin
+<a id="DigiTwin">54</a><a id="ref54"></a>. Twin, Digital Twin, https://en.wikipedia.org/wiki/Digital_twin
 
-<a id="">55</a><a id="ref55"></a>. TMal, Transaction Malleability, https://en.wikipedia.org/wiki/Transaction_malleability_problem
+<a id="TMal">55</a><a id="ref55"></a>. TMal, Transaction Malleability, https://en.wikipedia.org/wiki/Transaction_malleability_problem
 
-<a id="">56</a><a id="ref56"></a>. PGM, The Property Graph Database Model, http://ceur-ws.org/Vol-2100/paper26.pdf
+<a id="PGM">56</a><a id="ref56"></a>. PGM, The Property Graph Database Model, http://ceur-ws.org/Vol-2100/paper26.pdf
 
-<a id="">57</a><a id="ref57"></a>. Dots, Constructions from Dots and Lines, https://arxiv.org/pdf/1006.2361.pdf
+<a id="Dots">57</a><a id="ref57"></a>. Dots, Constructions from Dots and Lines, https://arxiv.org/pdf/1006.2361.pdf
 
-<a id="">58</a><a id="ref58"></a>. KG, Knowledge Graphs, https://arxiv.org/pdf/2003.02320.pdf
+<a id="KG">58</a><a id="ref58"></a>. KG, Knowledge Graphs, https://arxiv.org/pdf/2003.02320.pdf
 
-<a id="">59</a><a id="ref59"></a>. Abuse, Alice Attempts to Abuse a Verifiable Credential, https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/final-documents/alice-attempts-abuse-verifiable-credential.md
+<a id="AbuseAlice">59</a><a id="ref59"></a>. Abuse, Alice Attempts to Abuse a Verifiable Credential, https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/final-documents/alice-attempts-abuse-verifiable-credential.md
 
-<a id="">60</a><a id="ref60"></a>. SKEM, On using the same key pair for Ed25519 and an X25519 based KEM, https://eprint.iacr.org/2021/509
+<a id="SKEM">60</a><a id="ref60"></a>. SKEM, On using the same key pair for Ed25519 and an X25519 based KEM, https://eprint.iacr.org/2021/509
 
-<a id="">61</a><a id="ref61"></a>.  did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
+<a id="didwebs">61</a><a id="ref61"></a>.  did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
