@@ -54,7 +54,7 @@ The primary field labels are compact in that they MUST use only one or at most t
 
 ### Version String field
 
-The Version String, `v`, field MUST be the first field in any top-level ACDC field map encoded in JSON, CBOR, or MGPK [[spec: RFC4627]] [[spec: RFC4627]] [[12](#ref12)] [[13](#ref13)] [[14](#ref14)].  It provides a regular expression target for determining a serialized field map's serialization format and size (character count) constituting an ACDC message body. A Stream parser SHOULD use the Version String to extract and deserialize (deterministically) any serialized Stream of ACDC Message bodies. Each ACDC Message body in a Stream MAY use a different serialization type. The format for the Version String field value is defined in the CESR specification [[1](#ref1)]. 
+The Version String, `v`, field MUST be the first field in any top-level ACDC field map encoded in JSON, CBOR, or MGPK [[RFC4627](#RFC4627)] [[12](#ref12)] [[13](#ref13)] [[14](#ref14)].  It provides a regular expression target for determining a serialized field map's serialization format and size (character count) constituting an ACDC message body. A Stream parser SHOULD use the Version String to extract and deserialize (deterministically) any serialized Stream of ACDC Message bodies. Each ACDC Message body in a Stream MAY use a different serialization type. The format for the Version String field value is defined in the CESR specification [[1](#ref1)]. 
 
 The protocol field, `PPPP` value in the Version String MUST be `ACDC` for the ACDC protocol. The version field, `VVV`, MUST encode the current version of the ACDC protocol [[1](#ref1)].
 
@@ -4064,9 +4064,7 @@ Composed Schema that supports both public compact and uncompacted variants
 
 ## Bibliography
 
-[[spec]]
-
-### Informative section
+### Normative section
 
 <a id="CESR">1</a><a id="ref1"></a>. Composable Event Streaming Representation, CESR, https://github.com/trustoverip/tswg-acdc-specification
 
@@ -4077,6 +4075,14 @@ Composed Schema that supports both public compact and uncompacted variants
 <a id="OOBI">4</a><a id="ref4"></a>. Out-Of-Band-Introduction, OOBI, https://github.com/trustoverip/tswg-keri-specification
 
 <a id="DID-KERI">5</a><a id="ref5"></a>. DIDK_ID, IETF DID-KERI Internet Draft, https://github.com/WebOfTrust/ietf-did-keri
+
+<a id="W3C_DID">28</a><a id="ref28"></a>. W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0, https://w3c-ccg.github.io/did-spec/
+
+<a id="didwebs">61</a><a id="ref61"></a>. did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
+
+<a id="RFC4627">62</a><a id="ref62"></a>. RFC4627 The application/json Media Type for JavaScript Object Notation (JSON). D. Crockford; 2006-07. Status: Informational.
+
+### Informative section
 
 <a id="RFC6901">6</a><a id="ref6"></a>. RFC6901, JavaScript Object Notation (JSON) Pointer, https://datatracker.ietf.org/doc/html/rfc6901
 
@@ -4114,16 +4120,13 @@ Composed Schema that supports both public compact and uncompacted variants
 
 <a id="SShr">23</a><a id="ref23"></a>. SShr, Secret Sharing, https://en.wikipedia.org/wiki/Secret_sharing
 
-<a id="GLEIF">24</a><a id="ref24"></a>. GLEIF, GLEIF (Global Legal Entity Identifier Foundation),
-https://www.gleif.org/en/
+<a id="GLEIF">24</a><a id="ref24"></a>. GLEIF, GLEIF (Global Legal Entity Identifier Foundation), https://www.gleif.org/en/
 
 <a id="">25</a><a id="ref25"></a>. vLEI, vLEI (verifiable Legal Entity Identifier) Definition, https://github.com/WebOfTrust/vLEI
 
 <a id="GLEIF_vLEI">26</a><a id="ref26"></a>. GLEIF_vLEI, GLEIF vLEI (verifiable Legal Entity Identifier), https://www.gleif.org/en/lei-solutions/gleifs-digital-strategy-for-the-lei/introducing-the-verifiable-lei-vlei
 
 <a id="GLEIF_KERI">27</a><a id="ref27"></a>. GLEIF_KERI, GLEIF with KERI Architecture, https://github.com/WebOfTrust/vLEI
-
-<a id="W3C_DID">28</a><a id="ref28"></a>. W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0, https://w3c-ccg.github.io/did-spec/
 
 <a id="Salt">29</a><a id="ref29"></a>. Salt, Salts, Nonces, and Initial Values, https://medium.com/@fridakahsas/salt-nonces-and-ivs-whats-the-difference-d7a44724a447
 
@@ -4188,5 +4191,3 @@ https://www.gleif.org/en/
 <a id="AbuseAlice">59</a><a id="ref59"></a>. Abuse, Alice Attempts to Abuse a Verifiable Credential, https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/final-documents/alice-attempts-abuse-verifiable-credential.md
 
 <a id="SKEM">60</a><a id="ref60"></a>. SKEM, On using the same key pair for Ed25519 and an X25519 based KEM, https://eprint.iacr.org/2021/509
-
-<a id="didwebs">61</a><a id="ref61"></a>.  did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
