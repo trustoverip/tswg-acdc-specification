@@ -1,4 +1,3 @@
-[//]: # (ACDC fields  {#sec:content})
 
 ## ACDC Structure
 
@@ -471,8 +470,6 @@ When the value of the  Attribute section has been compacted into its SAID, its S
   }
 }
 ```
-
-[//]: # (Create issue to resolve this)
 
 #### Attribute section variants
 
@@ -2505,8 +2502,6 @@ Consider the following disclosure-specific ACDC. The Issuer is the Discloser, th
 }
 ```
 
-[//]: # (examples annex citation)
-
 Informative examples of fully-featured variants of ACDCs can be found in Annex C.
 
 
@@ -2957,8 +2952,6 @@ The Compact Disclosure and distribute property graph fragment mechanisms in ACDC
 
 Hierarchical decomposition of data into a distributed verifiable property graph, where each ACDC is a distributed graph fragment, enables performant reuse of data or more compactly performant reuse of SAIDs and their signatures. The metadata and attribute sections of each ACDC provide a node in the graph and the Edge section of each ACDC provides the Edges to that node. Higher-up nodes in the graph with many lower-level nodes need only be transmitted, verified, and cached once per every node or leaf in the branch not redundantly re-transmitted and re-verified for each node or leaf as is the case for document-based Verifiable Credentials where the whole equivalent of the branched (graph) structure MUST be contained in one document. This truly enables the bow-tie model popularized by Ricardian Contracts, not merely for contracts, but for all data authenticated, authorized, referenced, or conveyed by ACDCs.
 
-[//]: # (Cryptographic Strength and Security {#sec:annexB .informative})
-
 ### Cryptographic Strength and Security
 
 #### Cryptographic Strength
@@ -2973,10 +2966,8 @@ There are about 3600 * 24 * 365 = 313,536,000 = 2<sup>log<sub>2</sub>313536000</
 
 #### Information Theoretic Security and Perfect Security
 
-The highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key) is called Information Theoretic Security [[ref: ITPS]][[19](#ref19)]. A cryptosystem that has this level of security cannot be broken algorithmically even if the adversary has nearly unlimited computing power including quantum computing. The system must be broken by brute force if at all. Brute force means that in order to guarantee success, the adversary must search for every combination of key or seed. A special case of Information Theoretic Security is called Perfect Security [[ref: ITPS]].  Perfect Security means that the ciphertext provides no information about the key. There are two well-known cryptosystems that exhibit Perfect Security. The first is a One-time-pad ([[20](#ref20)]) or Vernum Cipher [[21](#ref21)], and the other is Secret splitting [[21](#ref21)], a type of secret sharing [[21](#ref21)] that uses the same technique as an OTP.
+The highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key) is called Information Theoretic Security [[ref: ITPS]][[19](#ref19)]. A cryptosystem that has this level of security cannot be broken algorithmically even if the adversary has nearly unlimited computing power including quantum computing. The system must be broken by brute force if at all. Brute force means that in order to guarantee success, the adversary must search for every combination of key or seed. A special case of Information Theoretic Security is called Perfect Security [[ref: ITPS]].  Perfect Security means that the ciphertext provides no information about the key. There are two well-known cryptosystems that exhibit Perfect Security. The first is a One-time-pad ([[20](#ref20)]) or Vernum Cipher [[21](#ref21)], and the other is Secret splitting [[22](#ref22)], a type of secret sharing [[23](#ref23)] that uses the same technique as an OTP.
 
-
-[//]: # (# Examples {#sec:annexC .informative} )
 
 ### Selective Disclosure
 
