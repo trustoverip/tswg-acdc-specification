@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Create technical specifications in markdown. Based on the original Spec-Up, extended with Terminology tooling">
     <meta name="author" content="Trust over IP Foundation">
+    <meta property="spec-up-t:github-repo-info" content="trustoverip,tswg-acdc-specification,migrate/main">
     <link rel="icon" href="undefined" type="image/x-icon">
     <meta name="generator" content="Spec-Up-T" />
     <title>Authentic Chained Data Containers (ACDC)</title>
@@ -21,7 +22,7 @@ slide-panels{position:fixed;top:0;left:0;height:100%;width:100%;pointer-events:n
 code[class*=language-],pre[class*=language-]{color:#000;background:0 0;text-shadow:0 1px #fff;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-] ::-moz-selection,code[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection{text-shadow:none;background:#b3d4fc}code[class*=language-] ::selection,code[class*=language-]::selection,pre[class*=language-] ::selection,pre[class*=language-]::selection{text-shadow:none;background:#b3d4fc}@media print{code[class*=language-],pre[class*=language-]{text-shadow:none}}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#f5f2f0}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.token.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{color:#9a6e3a;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.class-name,.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}pre[class*=language-].line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}pre[class*=language-].line-numbers>code{position:relative;white-space:inherit}.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:0;font-size:100%;left:-3.8em;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.line-numbers-rows>span{display:block;counter-increment:linenumber}.line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}
 @keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}
 #logo img{width:100px}.bi{display:inline-block;width:1.2rem;height:1.2rem}#header,#header *{background-color:var(--header-navbar-bg);color:var(--header-navbar-text)}[issue-count]:after{content:"(" attr(issue-count) ")";margin:0 0 0 .3em;padding:.1em 0 0}[issue-count=""][animate]{display:none;opacity:0}[issue-count][animate]:not([issue-count=""]){animation:display-show 1s}#header a:not(#logo),#header a:not(#logo) *,#header button,#header button *{background:#a9dde0}
-.container{min-height:100vh}@media (min-width:768px){.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;z-index:100}}ul.toc{padding:1em 0 1.75em;font-size:.85em}ul.toc,ul.toc ul{margin:0;padding:0;list-style:none}ul.toc li a{display:block;padding:.4em .8em;text-decoration:none;color:var(--toc-text);transition:background .2s ease,padding-left .2s ease,border-left .2s ease;padding-left:.8em;border-left:3px solid transparent;border-bottom:1px solid rgba(0,0,0,.03)}ul.toc ul{margin-left:1.2em!important;margin-top:.3em}ul.toc a:hover{background:#f9f9f9;padding-left:1em;border-left:3px solid #007bff}ul.toc>li>ul>li>a{padding-left:1.5em}ul.toc>li>ul>li>ul>li>a{padding-left:2em}ul.toc a:focus{outline:2px solid #007bff;outline-offset:-2px;box-shadow:0 0 0 3px rgba(0,123,255,.25);position:relative;z-index:1}.powered-by{font-size:.7em}ul.toc li a.active,ul.toc li a[aria-current=page]{border-left:3px solid #007bff;font-weight:500;background:#f0f0f0}ul.toc li:last-child a{border-bottom:none}#toc ul li{position:relative}#toc ul li.has-children{position:relative}.collapse-toggle{position:absolute;top:.35em;right:0;width:28px;height:28px;background:0 0;border:1px solid transparent;border-radius:3px;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .2s,border-color .2s;z-index:2}.collapse-toggle:hover{background-color:rgba(0,0,0,.05)}.collapse-toggle:focus{outline:2px solid #007bff;outline-offset:1px;border-color:#007bff;box-shadow:0 0 0 3px rgba(0,123,255,.25)}.collapse-toggle::after{content:"";border-style:solid;border-width:.15em .15em 0 0;display:inline-block;height:.5em;width:.5em;position:relative;transform:rotate(135deg);transition:transform .2s ease}.collapse-toggle.collapsed::after{transform:rotate(45deg)}#toc ul li.has-children>ul{max-height:1000px;overflow:hidden;transition:max-height .3s ease-in-out,opacity .3s ease-in-out;opacity:1}#toc ul li.has-children.collapsed>ul{max-height:0;overflow:hidden;opacity:.6}.screen-reader-text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.screen-reader-text:focus{width:auto;height:auto;clip:auto;display:block;padding:15px 23px 14px;background-color:#fff;color:#007bff;z-index:100000;font-size:1em;font-weight:700;text-decoration:none;line-height:normal;box-shadow:0 0 2px 2px rgba(0,0,0,.2)}
+.container{min-height:100vh}@media (min-width:768px){.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;z-index:100}}ul.toc{padding:1em 0 1.75em;font-size:.85em}ul.toc,ul.toc ul{margin:0;padding:0;list-style:none}ul.toc li a{display:block;padding:.4em .8em;text-decoration:none;color:var(--toc-text);transition:background .2s ease,padding-left .2s ease,border-left .2s ease;padding-left:.8em;border-left:3px solid transparent;border-bottom:1px solid rgba(0,0,0,.03)}ul.toc ul{margin-left:1.2em!important;margin-top:.3em}ul.toc a:hover{background:#f9f9f9;padding-left:1em;border-left:3px solid #007bff}ul.toc>li>ul>li>a{padding-left:1.5em}ul.toc>li>ul>li>ul>li>a{padding-left:2em}ul.toc a:focus{outline:2px solid #007bff;outline-offset:-2px;box-shadow:0 0 0 3px rgba(0,123,255,.25);position:relative;z-index:1}.spec-footer{font-size:.7em;text-align:center}ul.toc li a.active,ul.toc li a[aria-current=page]{border-left:3px solid #007bff;font-weight:500;background:#f0f0f0}ul.toc li:last-child a{border-bottom:none}#toc ul li{position:relative}#toc ul li.has-children{position:relative}.collapse-toggle{position:absolute;top:.35em;right:0;width:28px;height:28px;background:0 0;border:1px solid transparent;border-radius:3px;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .2s,border-color .2s;z-index:2}.collapse-toggle:hover{background-color:rgba(0,0,0,.05)}.collapse-toggle:focus{outline:2px solid #007bff;outline-offset:1px;border-color:#007bff;box-shadow:0 0 0 3px rgba(0,123,255,.25)}.collapse-toggle::after{content:"";border-style:solid;border-width:.15em .15em 0 0;display:inline-block;height:.5em;width:.5em;position:relative;transform:rotate(135deg);transition:transform .2s ease}.collapse-toggle.collapsed::after{transform:rotate(45deg)}#toc ul li.has-children>ul{max-height:1000px;overflow:hidden;transition:max-height .3s ease-in-out,opacity .3s ease-in-out;opacity:1}#toc ul li.has-children.collapsed>ul{max-height:0;overflow:hidden;opacity:.6}.screen-reader-text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.screen-reader-text:focus{width:auto;height:auto;clip:auto;display:block;padding:15px 23px 14px;background-color:#fff;color:#007bff;z-index:100000;font-size:1em;font-weight:700;text-decoration:none;line-height:normal;box-shadow:0 0 2px 2px rgba(0,0,0,.2)}
 h2,h3,h4,h5,h6{margin-top:1.5em!important}#terminology-section-utility-container{margin:1em auto;width:100%}@media (min-width:576px){#terminology-section-utility-container{position:sticky;top:3.5em;z-index:10}}.toc-anchor{font-size:.875em;color:#73c2df;text-decoration:none;transition:opacity .3s ease}.toc-anchor:hover{opacity:1}dl.terms-and-definitions-list{margin:0;padding:0;position:relative;z-index:1}dl.terms-and-definitions-list>dt{font-weight:700;margin:0;background-color:var(--card-bg-dt);border:1px solid var(--card-border);padding:.5rem 1.25rem;border-radius:.375rem .375rem 0 0;color:var(--card-text);position:relative;line-height:1.5;font-size:1.05em;align-items:center}dl.terms-and-definitions-list>dt>span{margin-right:1.5em}dl.terms-and-definitions-list>dt .btn{font-size:1.2em!important}dl.terms-and-definitions-list>dt:hover{background-color:var(--card-hover-bg);transition:background-color .2s ease-in-out}dl.terms-and-definitions-list>dd{margin:0;background-color:var(--card-bg);border:1px solid var(--card-border);border-top:none;padding:.5rem 2rem;color:var(--card-text);width:100%;position:relative}dl.terms-and-definitions-list dd p{margin:0;color:var(--card-text);padding-left:.5rem}dl.terms-and-definitions-list>dd::before{display:none}dl.terms-and-definitions-list dd table{margin:.5em 0;width:100%;border-collapse:collapse}dl.terms-and-definitions-list dd table td,dl.terms-and-definitions-list dd table th{padding:.5em;border:1px solid #ddd}dl.terms-and-definitions-list dd table th{background-color:#f5f5f5}dl>dd:has(table).meta-info-content-wrapper{display:block;font-size:.7em;position:relative;max-height:none;height:auto;overflow:visible;transition:all .3s ease-out}dl>dd:has(table).meta-info-content-wrapper td,dl>dd:has(table).meta-info-content-wrapper th{padding:.3em}dl>dd:has(table).collapsed.meta-info-content-wrapper{max-height:0;height:0;padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;overflow:hidden;transition:all .3s ease-out;line-height:0}dl>dd:has(table).meta-info-content-wrapper>div{display:block;padding:inherit}.meta-info-toggle-button{position:relative;cursor:pointer}dl.terms-and-definitions-list dt+dd{border-bottom:none}dl.terms-and-definitions-list dd+dd{border-top:none;border-bottom:none}dl.terms-and-definitions-list dd+dt{margin-top:1rem}dl.terms-and-definitions-list dd.last-dd{border-radius:0 0 .375rem .375rem;border-bottom:1px solid var(--card-border)}html.dense-info dl.terms-and-definitions-list>dt{padding:.1rem 1.25rem;display:block;line-height:inherit;font-size:inherit}html.dense-info dl.terms-and-definitions-list dd+dt{margin-top:.3rem}html.dense-info dl.terms-and-definitions-list>dt::before{display:none}html.dense-info dl.terms-and-definitions-list>dt>span{margin-right:0}.transcluded-xref-term{position:relative}dl.terms-and-definitions-list>dd.transcluded-xref-term,dl.terms-and-definitions-list>dt.transcluded-xref-term{background:#a9dde03b}.btn{font-variant:small-caps;text-transform:uppercase;position:relative;z-index:5}.collapse-all-defs-button{float:right}.transclusion-heading{font-size:1.3em;font-weight:700;margin:.2em 0 .2em}dl.terms-and-definitions-list>dd.transcluded-xref-term-embedded{position:relative;padding-left:2.5rem;padding-top:.3rem;padding-bottom:.3rem}dl.terms-and-definitions-list span.transcluded-xref-term::after{content:"";position:absolute;top:50%;transform:translateY(-50%);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-box-arrow-right' viewBox='0 0 16 16' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z'/%3E%3Cpath fill-rule='evenodd' d='M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z'/%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;background-position:center;width:.8rem;height:.8rem;left:.2rem}dl.terms-and-definitions-list span.transcluded-xref-term{padding-left:1.5rem;display:inline-block}.placeholder-tref{display:none}.no-xref-found-message{background:#f8c481;color:#03365f;margin:0 .5em;padding:0 .8em;border-radius:.25rem;font-size:.8rem;font-variant:small-caps;text-transform:uppercase}
 .btn{font-size:.7em!important;margin:0 0 0 .5em!important}
 .highlight-matches-search{font-size:1em;outline:3px solid #1d6dae39;outline-offset:5px;transition:outline .3s ease-in-out}.highlight-matches-search.active{outline:3px solid #1d6dae;transition:outline .3s ease-in-out}.highlight-matches-DIF-search{background-color:#1d6dae11}.highlight-matches-ToIP-search{background-color:#a9dde0b0}.highlight-matches-BTC-search{background-color:#f19019a1}.highlight-matches-KERI-search{background-color:#b5d070d5}.highlight-matches-SSI-search{background-color:#ff0}.highlight-matches-GLEIF-search{background-color:#52dac6a6}
@@ -67,7 +68,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a top-level field map within an ACDC that provides a property of an entity that is inherent or assigned to the entity.</p>\n</dd>\n<dd>\n<p>Also see: <a class=\"x-term-reference term-reference\" data-local-href=\"#term:toip1:attribute\" href=\"https://henkvancann.github.io/ctwg-main-glossary/#term:attribute\">attribute</a></p>\n</dd>"
+      "content": "<dd>\n<p>a top-level field map within an ACDC that provides a property of an entity that is inherent or assigned to the entity.</p>\n</dd>\n<dd>\n<p>Also see: <a class=\"x-term-reference term-reference\" data-local-href=\"#term:toip1:attribute\" href=\"https://henkvancann.github.io/ctwg-main-glossary/#term:attribute\">attribute</a></p>\n</dd>",
+      "sourceFile": "attribute.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -80,7 +82,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a self-managing cryptonymous identifier that must be self-certifying (self-authenticating) and must be encoded in CESR as a qualified Cryptographic primitive.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>An identifier that is <a class=\"term-reference\" href=\"#term:self-certifying-identifier\">self-certifying-identifier</a> and <a class=\"term-reference\" href=\"#term:self-sovereign-identity\">self-sovereign-identity</a> (or <em>self-managing</em>).</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/autonomic-identifier\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a self-managing cryptonymous identifier that must be self-certifying (self-authenticating) and must be encoded in CESR as a qualified Cryptographic primitive.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>An identifier that is <a class=\"term-reference\" href=\"#term:self-certifying-identifier\">self-certifying-identifier</a> and <a class=\"term-reference\" href=\"#term:self-sovereign-identity\">self-sovereign-identity</a> (or <em>self-managing</em>).</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/autonomic-identifier\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "autonomic-identifier.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -93,7 +96,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>contractual restrictions and liability imposed on a recipient of a disclosed <a class=\"term-reference\" href=\"#term:acdc\">ACDC</a> that contractually link the obligations to protect the disclosure of the information contained within the ACDC to all subsequent recipients as the information moves downstream. The Chain-link Confidential Disclosure provides a mechanism for protecting against un-permissioned exploitation of the data disclosed via an ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/chain-link-confidential-disclosure\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>contractual restrictions and liability imposed on a recipient of a disclosed <a class=\"term-reference\" href=\"#term:acdc\">ACDC</a> that contractually link the obligations to protect the disclosure of the information contained within the ACDC to all subsequent recipients as the information moves downstream. The Chain-link Confidential Disclosure provides a mechanism for protecting against un-permissioned exploitation of the data disclosed via an ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/chain-link-confidential-disclosure\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "chain-link-confidential-disclosure.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -106,7 +110,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a disclosure of an ACDC that discloses only the SAID(s) of some or all of its field maps. Both Partial and Selective Disclosure rely on Compact Disclosure.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/compact-disclosure\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a disclosure of an ACDC that discloses only the SAID(s) of some or all of its field maps. Both Partial and Selective Disclosure rely on Compact Disclosure.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/compact-disclosure\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "compact-disclosure.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -119,7 +124,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a discloser of an ACDC that leverages a Graduated Disclosure so that contractual protections can be put into place to minimize the leakage of information that can be correlated. A Contractually Protected Disclosure partially or selectively reveals the information contained within the ACDC in the initial interaction with the recipient and discloses further information only after the recipient agrees to the terms established by the discloser. More information may be progressively revealed as the recipient agrees to additional terms.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/contractually-protected-disclosure\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a discloser of an ACDC that leverages a Graduated Disclosure so that contractual protections can be put into place to minimize the leakage of information that can be correlated. A Contractually Protected Disclosure partially or selectively reveals the information contained within the ACDC in the initial interaction with the recipient and discloses further information only after the recipient agrees to the terms established by the discloser. More information may be progressively revealed as the recipient agrees to additional terms.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/contractually-protected-disclosure\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "contractually-protected-disclosure.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -132,7 +138,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>an entity that can cryptographically prove the control authority over an AID and make changes on the associated KEL. A controller of a multi-sig AID may consist of multiple controlling entities.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/controller\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>an entity that can cryptographically prove the control authority over an AID and make changes on the associated KEL. A controller of a multi-sig AID may consist of multiple controlling entities.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/controller\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "controller.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -145,7 +152,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a role of an entity that is a recipient to which an ACDC is disclosed. A Disclosee may or may not be the Issuee of the disclosed ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/disclosee\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a role of an entity that is a recipient to which an ACDC is disclosed. A Disclosee may or may not be the Issuee of the disclosed ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/disclosee\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "disclosee.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -158,7 +166,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a role of an entity that discloses an <a class=\"term-reference\" href=\"#term:authentic-chained-data-container\">authentic-chained-data-container</a>. A Discloser may or may not be the Issuer of the disclosed ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/discloser\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a role of an entity that discloses an <a class=\"term-reference\" href=\"#term:authentic-chained-data-container\">authentic-chained-data-container</a>. A Discloser may or may not be the Issuer of the disclosed ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/discloser\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "discloser.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -171,7 +180,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>the existence of more than one version of a Verifiable <a class=\"term-reference\" href=\"#term:key-event-log\">key-event-log</a> for a given <a class=\"term-reference\" href=\"#term:aid\">AID</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/duplicity\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>the existence of more than one version of a Verifiable <a class=\"term-reference\" href=\"#term:key-event-log\">key-event-log</a> for a given <a class=\"term-reference\" href=\"#term:aid\">AID</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/duplicity\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "duplicity.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -184,7 +194,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a top-level field map within an ACDC that provides edges that connect to other ACDCs, forming a labeled property graph (LPG).</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/edge\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a top-level field map within an ACDC that provides edges that connect to other ACDCs, forming a labeled property graph (LPG).</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/edge\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "edge.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -197,7 +208,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a code that delineates a number of characters or bytes, as appropriate, that can be extracted atomically from a <a class=\"term-reference\" href=\"#term:stream\">stream</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/framing-code\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a code that delineates a number of characters or bytes, as appropriate, that can be extracted atomically from a <a class=\"term-reference\" href=\"#term:stream\">stream</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/framing-code\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "framing-code.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -210,7 +222,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a disclosure of an ACDC that discloses the full details of some or all of its field maps. In the context of <a class=\"term-reference\" href=\"#term:selective-disclosure\">selective-disclosure</a>, Full Disclosure means detailed disclosure of the selectively disclosed attributes, not the detailed disclosure of all selectively disclosable attributes. In the context of <a class=\"term-reference\" href=\"#term:partial-disclosure\">partial-disclosure</a>, Full Disclosure means detailed disclosure of the field map that was so far only partially disclosed.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/full-disclosure\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a disclosure of an ACDC that discloses the full details of some or all of its field maps. In the context of <a class=\"term-reference\" href=\"#term:selective-disclosure\">selective-disclosure</a>, Full Disclosure means detailed disclosure of the selectively disclosed attributes, not the detailed disclosure of all selectively disclosable attributes. In the context of <a class=\"term-reference\" href=\"#term:partial-disclosure\">partial-disclosure</a>, Full Disclosure means detailed disclosure of the field map that was so far only partially disclosed.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/full-disclosure\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "full-disclosure.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -223,7 +236,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a disclosure of an <a class=\"term-reference\" href=\"#term:acdc\">ACDC</a> that does not reveal its entire content in the initial interaction with the recipient and, instead, partially or selectively reveals only the information contained within the ACDC necessary to further a transaction with the recipient. A Graduated disclosure may involve multiple steps where more information is progressively revealed as the recipient satisfies the conditions set by the <a class=\"term-reference\" href=\"#term:discloser\">discloser</a>. <a class=\"term-reference\" href=\"#term:compact-disclosure\">compact-disclosure</a>, <a class=\"term-reference\" href=\"#term:partial-disclosure\">partial-disclosure</a>, <a class=\"term-reference\" href=\"#term:selective-disclosure\">selective-disclosure</a>, and <a class=\"term-reference\" href=\"#term:full-disclosure\">full-disclosure</a> are all Graduated disclosure mechanisms.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/graduated-disclosure\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a disclosure of an <a class=\"term-reference\" href=\"#term:acdc\">ACDC</a> that does not reveal its entire content in the initial interaction with the recipient and, instead, partially or selectively reveals only the information contained within the ACDC necessary to further a transaction with the recipient. A Graduated disclosure may involve multiple steps where more information is progressively revealed as the recipient satisfies the conditions set by the <a class=\"term-reference\" href=\"#term:discloser\">discloser</a>. <a class=\"term-reference\" href=\"#term:compact-disclosure\">compact-disclosure</a>, <a class=\"term-reference\" href=\"#term:partial-disclosure\">partial-disclosure</a>, <a class=\"term-reference\" href=\"#term:selective-disclosure\">selective-disclosure</a>, and <a class=\"term-reference\" href=\"#term:full-disclosure\">full-disclosure</a> are all Graduated disclosure mechanisms.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/graduated-disclosure\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "graduated-disclosure.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -236,7 +250,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>an <a class=\"term-reference\" href=\"#term:establishment-event\">establishment-event</a> that provides the incepting information needed to derive an AID and establish its initial Key state.</p>\n</dd>\n<dd>\n<p>Source <a path-0=\"github.com\" path-1=\"WebOfTrust\" path-2=\"ietf-keri\" path-3=\"blob\" path-4=\"main\" path-5=\"draft-ssmith-keri.md#basic-terminology\" href=\"https://github.com/WebOfTrust/ietf-keri/blob/main/draft-ssmith-keri.md#basic-terminology\">Sam Smith</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/inception-event\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>an <a class=\"term-reference\" href=\"#term:establishment-event\">establishment-event</a> that provides the incepting information needed to derive an AID and establish its initial Key state.</p>\n</dd>\n<dd>\n<p>Source <a path-0=\"github.com\" path-1=\"WebOfTrust\" path-2=\"ietf-keri\" path-3=\"blob\" path-4=\"main\" path-5=\"draft-ssmith-keri.md#basic-terminology\" href=\"https://github.com/WebOfTrust/ietf-keri/blob/main/draft-ssmith-keri.md#basic-terminology\">Sam Smith</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/inception-event\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "inception-event.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -249,7 +264,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>the highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key).</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>"
+      "content": "<dd>\n<p>the highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key).</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>",
+      "sourceFile": "information-theoretic-security.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -262,7 +278,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>Non-establishment Event that anchors external data to the key-state as established by the most recent prior establishment event.</p>\n</dd>\n<dd>\n<p>Source <a path-0=\"github.com\" path-1=\"WebOfTrust\" path-2=\"ietf-keri\" path-3=\"blob\" path-4=\"main\" path-5=\"draft-ssmith-keri.md#basic-terminology\" href=\"https://github.com/WebOfTrust/ietf-keri/blob/main/draft-ssmith-keri.md#basic-terminology\">Sam Smith</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/interaction-event\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>Non-establishment Event that anchors external data to the key-state as established by the most recent prior establishment event.</p>\n</dd>\n<dd>\n<p>Source <a path-0=\"github.com\" path-1=\"WebOfTrust\" path-2=\"ietf-keri\" path-3=\"blob\" path-4=\"main\" path-5=\"draft-ssmith-keri.md#basic-terminology\" href=\"https://github.com/WebOfTrust/ietf-keri/blob/main/draft-ssmith-keri.md#basic-terminology\">Sam Smith</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/interaction-event\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "interaction-event.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -275,7 +292,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a role of an entity to which the claims of an ACDC are asserted.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/issuee\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a role of an entity to which the claims of an ACDC are asserted.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/issuee\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "issuee.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -288,7 +306,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a role of an entity that asserts claims and creates an ACDC from these claims.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/issuer\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a role of an entity that asserts claims and creates an ACDC from these claims.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/issuer\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "issuer.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -301,7 +320,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a set of currently authoritative keypairs for an AID and any other information necessary to secure or establish control authority over an AID. This includes current keys, prior next key digests, current thresholds, prior next thresholds, witnesses, witness thresholds, and configurations. A key-state of an AID is first established through an inception event and may be altered by subsequent rotation events.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>Also see <a class=\"term-reference\" href=\"#term:validator\">validator</a></p>\n</dd>"
+      "content": "<dd>\n<p>a set of currently authoritative keypairs for an AID and any other information necessary to secure or establish control authority over an AID. This includes current keys, prior next key digests, current thresholds, prior next thresholds, witnesses, witness thresholds, and configurations. A key-state of an AID is first established through an inception event and may be altered by subsequent rotation events.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>Also see <a class=\"term-reference\" href=\"#term:validator\">validator</a></p>\n</dd>",
+      "sourceFile": "key-state.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -314,7 +334,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>an optional field map in the Edge section that enables expression of the edge logic on edge subgraph as either a unary operator on the edge itself or an m-ary operator on the edge group.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/operator\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>an optional field map in the Edge section that enables expression of the edge logic on edge subgraph as either a unary operator on the edge itself or an m-ary operator on the edge group.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/operator\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "operator.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -327,7 +348,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a disclosure of an ACDC that partially discloses its field maps using Compact Disclosure. The Compact Disclosure provides a cryptographically equivalent commitment to the yet-to-be-disclosed content, and the later exchange of the uncompacted content is verifiable to an earlier Partial Disclosure. Unlike Selective disclosure, a partially disclosable field becomes correlatable to its encompassing block after its Full Disclosure.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/partial-disclosure\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a disclosure of an ACDC that partially discloses its field maps using Compact Disclosure. The Compact Disclosure provides a cryptographically equivalent commitment to the yet-to-be-disclosed content, and the later exchange of the uncompacted content is verifiable to an earlier Partial Disclosure. Unlike Selective disclosure, a partially disclosable field becomes correlatable to its encompassing block after its Full Disclosure.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/partial-disclosure\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "partial-disclosure.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -340,7 +362,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a discovery mechanism for information associated with an AID or a SAID, which is based on Invasion Percolation Theory. Once an entity has discovered such information, it may in turn share what it discovers with other entities. Since the information so discovered is end-verifiable, the percolation mechanism and percolating intermediaries do not need to be trusted.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:percolated-information-discovery\">percolated-information-discovery</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/percolated-discovery\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a discovery mechanism for information associated with an AID or a SAID, which is based on Invasion Percolation Theory. Once an entity has discovered such information, it may in turn share what it discovers with other entities. Since the information so discovered is end-verifiable, the percolation mechanism and percolating intermediaries do not need to be trusted.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:percolated-information-discovery\">percolated-information-discovery</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/percolated-discovery\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "percolated-discovery.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -353,7 +376,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a special case of Information theoretic security <a class=\"term-reference\" href=\"#term:itps\">ITPS</a></p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>"
+      "content": "<dd>\n<p>a special case of Information theoretic security <a class=\"term-reference\" href=\"#term:itps\">ITPS</a></p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>",
+      "sourceFile": "perfect-security.md"
     },
     {
       "externalSpec": "toip2",
@@ -366,7 +390,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/ctwg-general-glossary/",
       "commitHash": "b4cc6b9e5be7978a663f6bbac7226fd79a2c7e41",
-      "content": "<dd>\n<p>a serialization of a unitary value. All Primitives in KERI must be expressed in <a class=\"term-reference\" href=\"#term:composable-event-streaming-representation\">composable-event-streaming-representation</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>"
+      "content": "<dd>\n<p>a serialization of a unitary value. All Primitives in KERI must be expressed in <a class=\"term-reference\" href=\"#term:composable-event-streaming-representation\">composable-event-streaming-representation</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>",
+      "sourceFile": "primitive.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -379,7 +404,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>an Establishment Event that provides the information needed to change the Key state, which includes a change to the set of <a class=\"term-reference\" href=\"#term:authoritative\">authoritative</a> keypairs for an AID.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/rotation-event\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>an Establishment Event that provides the information needed to change the Key state, which includes a change to the set of <a class=\"term-reference\" href=\"#term:authoritative\">authoritative</a> keypairs for an AID.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/rotation-event\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "rotation-event.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -392,7 +418,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a top-level field map within an ACDC that provides a legal language as a <a path-0=\"en.wikipedia.org\" path-1=\"wiki\" path-2=\"Ricardian_contract\" href=\"https://en.wikipedia.org/wiki/Ricardian_contract\">Ricardian Contract</a>, which is both human and machine-readable and referenceable by a cryptographic digest.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/rules\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a top-level field map within an ACDC that provides a legal language as a <a path-0=\"en.wikipedia.org\" path-1=\"wiki\" path-2=\"Ricardian_contract\" href=\"https://en.wikipedia.org/wiki/Ricardian_contract\">Ricardian Contract</a>, which is both human and machine-readable and referenceable by a cryptographic digest.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/rules\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "rules.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -405,7 +432,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>the <a class=\"term-reference\" href=\"#term:said\">said</a> of a JSON schema that is used to issue and verify an ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/schema\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>the <a class=\"term-reference\" href=\"#term:said\">said</a> of a JSON schema that is used to issue and verify an ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/schema\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "schema.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -418,7 +446,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a disclosure of an ACDC that selectively discloses its attributes using Compact Disclosure. The set of selectively disclosable attributes is provided as an array of blinded blocks where each attribute in the set has its own dedicated blinded block. Unlike Partial Disclosure, the selectively disclosed fields are not correlatable to the so far undisclosed but selectively disclosable fields in the same encompassing block.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/selective-disclosure\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a disclosure of an ACDC that selectively discloses its attributes using Compact Disclosure. The set of selectively disclosable attributes is provided as an array of blinded blocks where each attribute in the set has its own dedicated blinded block. Unlike Partial Disclosure, the selectively disclosed fields are not correlatable to the so far undisclosed but selectively disclosable fields in the same encompassing block.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/selective-disclosure\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "selective-disclosure.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -431,7 +460,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>any identifier that is deterministically generated out of the content, or a digest of the content.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smtih</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/self-addressing-identifier\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>any identifier that is deterministically generated out of the content, or a digest of the content.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smtih</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/self-addressing-identifier\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "self-addressing-identifier-(said).md"
     },
     {
       "externalSpec": "kmg-1",
@@ -444,7 +474,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>Semantic Versioning Specification 2.0. See also (<a path-0=\"semver.org\" href=\"https://semver.org\"><span>https://semver.org</span></a>)[<a path-0=\"semver.org\" href=\"https://semver.org\"><span>https://semver.org</span></a>]</p>\n</dd>"
+      "content": "<dd>\n<p>Semantic Versioning Specification 2.0. See also (<a path-0=\"semver.org\" href=\"https://semver.org\"><span>https://semver.org</span></a>)[<a path-0=\"semver.org\" href=\"https://semver.org\"><span>https://semver.org</span></a>]</p>\n</dd>",
+      "sourceFile": "semver.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -457,7 +488,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>a <a class=\"term-reference\" href=\"#term:cesr\">CESR</a> Stream is any set of concatenated Primitives, concatenated groups of Primitives, or hierarchically composed groups of <a class=\"term-reference\" href=\"#term:primitive\">primitive</a>s.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/stream\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>a <a class=\"term-reference\" href=\"#term:cesr\">CESR</a> Stream is any set of concatenated Primitives, concatenated groups of Primitives, or hierarchically composed groups of <a class=\"term-reference\" href=\"#term:primitive\">primitive</a>s.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/stream\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "stream.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -470,7 +502,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>an ACDC with the presence of the Issuee field in the attribute or attribute aggregate sections.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:untargeted-acdc\">untargeted-acdc</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/targeted-acdc\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>an ACDC with the presence of the Issuee field in the attribute or attribute aggregate sections.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:untargeted-acdc\">untargeted-acdc</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/targeted-acdc\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "targeted-acdc.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -483,7 +516,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>an ACDC without the presence of the Issuee field in the attribute or attribute aggregate sections.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:targeted-acdc\">targeted-acdc</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/untargeted-acdc\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>an ACDC without the presence of the Issuee field in the attribute or attribute aggregate sections.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:targeted-acdc\">targeted-acdc</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/untargeted-acdc\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "untargeted-acdc.md"
     },
     {
       "externalSpec": "toip2",
@@ -496,7 +530,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/ctwg-general-glossary/",
       "commitHash": "b4cc6b9e5be7978a663f6bbac7226fd79a2c7e41",
-      "content": "<dd>\n<p>any entity or agent that evaluates whether or not a given signed statement as attributed to an identifier is valid at the time of its issuance.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>"
+      "content": "<dd>\n<p>any entity or agent that evaluates whether or not a given signed statement as attributed to an identifier is valid at the time of its issuance.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>",
+      "sourceFile": "validator.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -509,7 +544,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>A role a system might perform by mediating issuance and verification of ACDCs. See <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model-2.0\" path-3=\"#dfn-verifiable-data-registries\" href=\"https://www.w3.org/TR/vc-data-model-2.0/#dfn-verifiable-data-registries\">verifiable data registry</a>.</p>\n</dd>"
+      "content": "<dd>\n<p>A role a system might perform by mediating issuance and verification of ACDCs. See <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model-2.0\" path-3=\"#dfn-verifiable-data-registries\" href=\"https://www.w3.org/TR/vc-data-model-2.0/#dfn-verifiable-data-registries\">verifiable data registry</a>.</p>\n</dd>",
+      "sourceFile": "verifiable-data-registry.md"
     },
     {
       "externalSpec": "toip1",
@@ -522,7 +558,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/ctwg-main-glossary/",
       "commitHash": "c27478b7fc1793b2695c1bc573ae804e117644da",
-      "content": "<dd>\n<p>A <a class=\"term-reference\" href=\"#term:role\">role</a> an <a class=\"term-reference\" href=\"#term:agent\">agent</a> performs to perform <a class=\"term-reference\" href=\"#term:verification\">verification</a> of one or more <a class=\"term-reference\" href=\"#term:proofs\">proofs</a> of the <a class=\"term-reference\" href=\"#term:claims\">claims</a> in a <a class=\"term-reference\" href=\"#term:digital-credential\">digital credential</a> or other <a class=\"term-reference\" href=\"#term:verifiable-data\">verifiable data</a>.</p>\n</dd>\n<dd>\n<p>See also: <a class=\"term-reference\" href=\"#term:relying-party\">relying party</a>; <a class=\"term-reference\" href=\"#term:issuer\">issuer</a>, <a class=\"term-reference\" href=\"#term:holder\">holder</a>.</p>\n</dd>\n<dd>\n<p>Mental model: <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#roles\" href=\"https://www.w3.org/TR/vc-data-model/#roles\">W3C Verifiable Credentials Data Model Roles &amp; Information Flows</a></p>\n</dd>\n<dd>\n<p>Supporting definitions:</p>\n</dd>\n<dd>\n<p><a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#terminology\" href=\"https://www.w3.org/TR/vc-data-model/#terminology\">W3C VC</a>: A role an <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-entities\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-entities\">entity</a> performs by receiving one or more <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-verifiable-credentials\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-verifiable-credentials\">verifiable credentials</a>, optionally inside a <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-verifiable-presentations\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-verifiable-presentations\">verifiable presentation</a> for processing. Other specifications might refer to this concept as a <a class=\"term-reference\" href=\"#term:relying-party\">relying party</a>.</p>\n</dd>\n<dd>\n<p><a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"essifLab-glossary#verifier\" href=\"https://essif-lab.github.io/framework/docs/essifLab-glossary#verifier\">eSSIF-Lab</a>: a component that implements the <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"capability\" href=\"https://essif-lab.github.io/framework/docs/terms/capability\">capability</a> to request <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"peer-agent\" href=\"https://essif-lab.github.io/framework/docs/terms/peer-agent\">peer agents</a> to present (provide) data from credentials (of a specified kind, issued by specified <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"party\" href=\"https://essif-lab.github.io/framework/docs/terms/party\">parties</a>), and to verify such responses (check structure, signatures, dates), according to its <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"principal\" href=\"https://essif-lab.github.io/framework/docs/terms/principal\">principal</a>’s <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"verifier-policy\" href=\"https://essif-lab.github.io/framework/docs/terms/verifier-policy\">verifier policy</a>.</p>\n</dd>\n<dd>\n<p><a path-0=\"csrc.nist.gov\" path-1=\"glossary\" path-2=\"term\" path-3=\"verifier\" href=\"https://csrc.nist.gov/glossary/term/verifier\">NIST</a> The entity that verifies the authenticity of a digital signature using the public key.</p>\n</dd>"
+      "content": "<dd>\n<p>A <a class=\"term-reference\" href=\"#term:role\">role</a> an <a class=\"term-reference\" href=\"#term:agent\">agent</a> performs to perform <a class=\"term-reference\" href=\"#term:verification\">verification</a> of one or more <a class=\"term-reference\" href=\"#term:proofs\">proofs</a> of the <a class=\"term-reference\" href=\"#term:claims\">claims</a> in a <a class=\"term-reference\" href=\"#term:digital-credential\">digital credential</a> or other <a class=\"term-reference\" href=\"#term:verifiable-data\">verifiable data</a>.</p>\n</dd>\n<dd>\n<p>See also: <a class=\"term-reference\" href=\"#term:relying-party\">relying party</a>; <a class=\"term-reference\" href=\"#term:issuer\">issuer</a>, <a class=\"term-reference\" href=\"#term:holder\">holder</a>.</p>\n</dd>\n<dd>\n<p>Mental model: <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#roles\" href=\"https://www.w3.org/TR/vc-data-model/#roles\">W3C Verifiable Credentials Data Model Roles &amp; Information Flows</a></p>\n</dd>\n<dd>\n<p>Supporting definitions:</p>\n</dd>\n<dd>\n<p><a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#terminology\" href=\"https://www.w3.org/TR/vc-data-model/#terminology\">W3C VC</a>: A role an <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-entities\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-entities\">entity</a> performs by receiving one or more <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-verifiable-credentials\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-verifiable-credentials\">verifiable credentials</a>, optionally inside a <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-verifiable-presentations\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-verifiable-presentations\">verifiable presentation</a> for processing. Other specifications might refer to this concept as a <a class=\"term-reference\" href=\"#term:relying-party\">relying party</a>.</p>\n</dd>\n<dd>\n<p><a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"essifLab-glossary#verifier\" href=\"https://essif-lab.github.io/framework/docs/essifLab-glossary#verifier\">eSSIF-Lab</a>: a component that implements the <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"capability\" href=\"https://essif-lab.github.io/framework/docs/terms/capability\">capability</a> to request <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"peer-agent\" href=\"https://essif-lab.github.io/framework/docs/terms/peer-agent\">peer agents</a> to present (provide) data from credentials (of a specified kind, issued by specified <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"party\" href=\"https://essif-lab.github.io/framework/docs/terms/party\">parties</a>), and to verify such responses (check structure, signatures, dates), according to its <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"principal\" href=\"https://essif-lab.github.io/framework/docs/terms/principal\">principal</a>’s <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"verifier-policy\" href=\"https://essif-lab.github.io/framework/docs/terms/verifier-policy\">verifier policy</a>.</p>\n</dd>\n<dd>\n<p><a path-0=\"csrc.nist.gov\" path-1=\"glossary\" path-2=\"term\" path-3=\"verifier\" href=\"https://csrc.nist.gov/glossary/term/verifier\">NIST</a> The entity that verifies the authenticity of a digital signature using the public key.</p>\n</dd>",
+      "sourceFile": "verifier.md"
     },
     {
       "externalSpec": "kmg-1",
@@ -535,7 +572,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
       "avatarUrl": null,
       "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
       "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
-      "content": "<dd>\n<p>an optional field map in the Edge section that provides edge weight property that enables directed weighted edges and operators that use weights.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/weight\">extended KERI glossary</a></p>\n</dd>"
+      "content": "<dd>\n<p>an optional field map in the Edge section that provides edge weight property that enables directed weighted edges and operators that use weights.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/weight\">extended KERI glossary</a></p>\n</dd>",
+      "sourceFile": "weight.md"
     }
   ]
 };</script>
@@ -548,7 +586,7 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <body features="source logo">
     <!-- Skip to content link for accessibility -->
     <a href="#content" class="screen-reader-text">Skip to content</a>
-    
+
     <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <symbol id="svg-github" viewBox="0 0 20 20">
     <path d="M10 0.247c-5.522 0-10 4.477-10 10 0 4.418 2.865 8.167 6.839 9.489 0.5 0.093 0.683-0.217 0.683-0.481 0-0.238-0.009-1.026-0.014-1.862-2.782 0.605-3.369-1.18-3.369-1.18-0.455-1.156-1.11-1.463-1.11-1.463-0.907-0.621 0.069-0.608 0.069-0.608 1.004 0.071 1.533 1.031 1.533 1.031 0.892 1.529 2.339 1.087 2.91 0.831 0.090-0.646 0.349-1.087 0.635-1.337-2.221-0.253-4.556-1.11-4.556-4.942 0-1.092 0.391-1.984 1.030-2.684-0.104-0.252-0.446-1.269 0.097-2.646 0 0 0.84-0.269 2.751 1.025 0.798-0.222 1.653-0.333 2.503-0.337 0.85 0.004 1.706 0.115 2.505 0.337 1.909-1.294 2.747-1.025 2.747-1.025 0.544 1.378 0.202 2.395 0.098 2.646 0.641 0.7 1.029 1.592 1.029 2.684 0 3.841-2.339 4.687-4.566 4.934 0.359 0.31 0.678 0.919 0.678 1.852 0 1.338-0.012 2.415-0.012 2.744 0 0.266 0.18 0.578 0.687 0.48 3.971-1.324 6.833-5.071 6.833-9.488 0-5.523-4.477-10-10-10z"></path>
@@ -642,12 +680,19 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
             <path
                 d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
         </symbol>
+        <symbol id="box-arrow-up-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+            <path fill-rule="evenodd"
+                d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+        </symbol>
     </svg>
 
     <header id="header" class="navbar sticky-top p-0 shadow">
         <!-- Left-aligned elements -->
-        <button class="nav-link d-print-none px-3 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
-            aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="nav-link d-print-none px-3 d-md-none" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
             <svg class="bi">
                 <use xlink:href="#list" />
             </svg>
@@ -656,7 +701,7 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
         <a id="logo" href="https://github.com/trustoverip/tswg-acdc-specification">
             <img class="d-print-none m-1" src="https://raw.githubusercontent.com/trustoverip/logo-assets/master/logos/ToIP-Logo-Color-SolidDimensional-Horizontal-LightOnDark.svg" alt="" />
         </a>
-        
+
         <!-- Spacer to push the following elements to the right -->
         <div class="flex-grow-1"></div>
 
@@ -712,19 +757,19 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
             </div>
 
             <!-- Container width toggle -->
-            <button id="container_toggle" title="Toggle wide/narrow layout" type="button" class="btn btn-sm btn-outline-secondary me-2">
+            <button id="container_toggle" title="Toggle wide/narrow layout" type="button"
+                class="btn btn-sm btn-outline-secondary me-2">
                 <span class="visually-hidden">Toggle wide/narrow layout</span>
                 <i class="bi bi-arrows-angle-expand"></i>
             </button>
 
             <!-- Font size -->
             <div class="adjust-font-size btn-group me-2" role="group">
-                <button title="Decrease font size" type="button"
-                    class="btn btn-outline-secondary m-0 border-end-0" id="decreaseBtn"><span
-                        class="visually-hidden">Decrease font size</span>
+                <button title="Decrease font size" type="button" class="btn btn-outline-secondary m-0 border-end-0"
+                    id="decreaseBtn"><span class="visually-hidden">Decrease font size</span>
                 </button>
-                <button title="Increase font size" type="button"
-                    class="btn btn-outline-secondary m-0 border-start-0" id="increaseBtn">
+                <button title="Increase font size" type="button" class="btn btn-outline-secondary m-0 border-start-0"
+                    id="increaseBtn">
                     <span class="visually-hidden">Increase font size</span>
                 </button>
             </div>
@@ -936,8 +981,15 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 </li>
 </ul>
 
-                        <a class="powered-by mx-auto p-2" href="https://github.com/trustoverip/spec-up-t"
-                            target="_blank" rel="noopener">Powered By Spec-Up-T</a>
+                        <div class="spec-footer mt-3">
+                            <a class="mx-auto p-2" href="https://github.com/trustoverip/spec-up-t"
+                                target="_blank" rel="noopener">Powered By Spec-Up-T</a>
+                            <small>
+                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-09-02T11:35:37.836Z">
+                                    Generated: 2025-09-02T11:35:37.836Z
+                                </time>
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -5068,68 +5120,87 @@ Compact form with Attribute section:</p>
         <div class="offcanvas-body p-0">
             <a target="_blank" rel="noopener" class="btn btn-menu-item m-0 mb-1 border-start-0 border-end-0"
                 href="https://blockchainbird.github.io/spec-up-t-website/docs/user-interface-overview/specification/#explanation-of-the-buttons-in-the-specification">Help</a>
-            <button class="button-token-input btn btn-menu-item m-0 mb-1 border-start-0 border-end-0" type="button" aria-label="Enter GitHub Token">
+            <button class="button-token-input btn btn-menu-item m-0 mb-1 border-start-0 border-end-0" type="button"
+                aria-label="Enter GitHub Token">
                 Enter GitHub Token
             </button>
-            <button id="repo_issues" issue-count animate class="btn btn-menu-item m-0 mb-1 border-start-0 border-end-0" type="button"
-                data-bs-toggle="offcanvas" data-bs-target="#offcanvasIssues" aria-controls="offcanvasIssues">
+            <button id="repo_issues" issue-count animate class="btn btn-menu-item m-0 mb-1 border-start-0 border-end-0"
+                type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasIssues"
+                aria-controls="offcanvasIssues">
                 Issues
             </button>
             <!-- href added via JS -->
             <a id="snapshotLink" class="btn btn-menu-item m-0 mb-1 border-start-0 border-end-0" href="#">Snapshots</a>
             <hr>
-            <p class="ps-3 pe-3">External specifications:</p>
-            <ul class="list-group">
-      <li class="list-group-item border-0 p-0 ps-3">
-        <p>
-          kmg-1:
-          <a href="https://github.com/henkvancann/kerisuite-glossary" target="_blank" class="">
-            <i class="fa fa-link"></i> URL
-          </a>
-          <a href="https://henkvancann.github.io/kerisuite-glossary/" target="_blank" class="">
-            <i class="fa fa-github"></i> GitHub Page
-          </a>
-        </p>
-      </li>
-    
-      <li class="list-group-item border-0 p-0 ps-3">
-        <p>
-          toip1:
-          <a href="https://github.com/henkvancann/ctwg-main-glossary" target="_blank" class="">
-            <i class="fa fa-link"></i> URL
-          </a>
-          <a href="https://henkvancann.github.io/ctwg-main-glossary/" target="_blank" class="">
-            <i class="fa fa-github"></i> GitHub Page
-          </a>
-        </p>
-      </li>
-    
-      <li class="list-group-item border-0 p-0 ps-3">
-        <p>
-          vlei1:
-          <a href="https://github.com/henkvancann/vlei-glossary" target="_blank" class="">
-            <i class="fa fa-link"></i> URL
-          </a>
-          <a href="https://henkvancann.github.io/vlei-glossary/" target="_blank" class="">
-            <i class="fa fa-github"></i> GitHub Page
-          </a>
-        </p>
-      </li>
-    
-      <li class="list-group-item border-0 p-0 ps-3">
-        <p>
-          toip2:
-          <a href="https://github.com/henkvancann/ctwg-general-glossary" target="_blank" class="">
-            <i class="fa fa-link"></i> URL
-          </a>
-          <a href="https://henkvancann.github.io/ctwg-general-glossary/" target="_blank" class="">
-            <i class="fa fa-github"></i> GitHub Page
-          </a>
-        </p>
-      </li>
-    </ul>
+            <div class="ps-3 pe-3">
+                <p class="mb-2 fw-bold">Repository Information:</p>
+                <div id="github-repo-info" class="small text-muted">
+                    <div class="d-flex align-items-center mb-1">
+                        <i class="bi bi-person-circle me-2"></i>
+                        <span>Account: <span id="repo-account">Loading...</span></span>
+                    </div>
+                    <div class="d-flex align-items-center mb-1">
+                        <i class="bi bi-git me-2"></i>
+                        <span>Repository: <span id="repo-name">Loading...</span></span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-tree me-2"></i>
+                        <span>Branch: <span id="repo-branch">Loading...</span></span>
+                    </div>
+                    <a id="repo-url" href="#" target="_blank" rel="noopener"
+                        class="btn btn-sm btn-outline-secondary ms-0">
+                        <i class="bi bi-github me-1"></i>
+                        View on GitHub
+                    </a>
+                </div>
+            </div>
             <hr>
-            <p id="w3c-state">W3C Recommendation, 31 August 2025</p>
+            <div class="ps-3 pe-3">
+                <p class="mb-2 fw-bold">External Specifications:</p>
+                <div class="external-specs-list"><ul class="list-unstyled">
+      <li class="mb-2">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-diagram-3 me-2"></i>
+          <a href="https://github.com/henkvancann/kerisuite-glossary" target="_blank" class="text-decoration-none">kmg-1</a>
+          <a href="https://henkvancann.github.io/kerisuite-glossary/" target="_blank" class="ms-2 btn btn-sm btn-light">
+            <i class="bi bi-github"></i>
+          </a>
+        </div>
+      </li>
+    
+      <li class="mb-2">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-diagram-3 me-2"></i>
+          <a href="https://github.com/henkvancann/ctwg-main-glossary" target="_blank" class="text-decoration-none">toip1</a>
+          <a href="https://henkvancann.github.io/ctwg-main-glossary/" target="_blank" class="ms-2 btn btn-sm btn-light">
+            <i class="bi bi-github"></i>
+          </a>
+        </div>
+      </li>
+    
+      <li class="mb-2">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-diagram-3 me-2"></i>
+          <a href="https://github.com/henkvancann/vlei-glossary" target="_blank" class="text-decoration-none">vlei1</a>
+          <a href="https://henkvancann.github.io/vlei-glossary/" target="_blank" class="ms-2 btn btn-sm btn-light">
+            <i class="bi bi-github"></i>
+          </a>
+        </div>
+      </li>
+    
+      <li class="mb-2">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-diagram-3 me-2"></i>
+          <a href="https://github.com/henkvancann/ctwg-general-glossary" target="_blank" class="text-decoration-none">toip2</a>
+          <a href="https://henkvancann.github.io/ctwg-general-glossary/" target="_blank" class="ms-2 btn btn-sm btn-light">
+            <i class="bi bi-github"></i>
+          </a>
+        </div>
+      </li>
+    </ul></div>
+            </div>
+            <hr>
+            <p class="ps-3 pe-3" id="w3c-state">W3C Recommendation, 02 September 2025</p>
         </div>
     </div>
 
@@ -5235,7 +5306,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @license MIT
  * @since 2024-06-09
  */
-function editTermButtons(){const e=((t=specConfig.spec_directory).startsWith("./")?t=t.substring(2):t.startsWith("/")&&(t=t.substring(1)),t.endsWith("/")&&(t=t.slice(0,-1)),t);var t;document.querySelectorAll('dt:has(> span[id^="term:"])').forEach((t=>{const n=function(e){let t=e;for(;t.querySelector('span[id^="term:"]');)t=t.querySelector('span[id^="term:"]');return t}(t),r=n.getAttribute("id").split(":")[1],i=specConfig.source.branch||"main";n.innerHTML+=`<span class="edit-term-buttons">\n         <a title="Link to the term file in the Github repo in a new tab" target="_blank" rel="noopener" \n            href="https://github.com/${specConfig.source.account}/${specConfig.source.repo}/blob/${i}/${e}/${specConfig.spec_terms_directory}/${r}.md" \n            class="p-1 edit-term-button btn">\n            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" style="shape-rendering: geometricPrecision;">\n               <path fill-rule="evenodd" d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>\n            </svg>\n         </a>\n         <a title="Link to a GitHub page that shows a history of the edits in a new tab" target="_blank" rel="noopener" \n            href="https://github.com/${specConfig.source.account}/${specConfig.source.repo}/commits/${i}/${e}/${specConfig.spec_terms_directory}/${r}.md" \n            class="p-1 history-term-button btn">\n            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" style="shape-rendering: geometricPrecision;">\n               <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>\n               <path fill-rule="evenodd" d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>\n               <circle cx="8" cy="8" r="0.3"/>\n            </svg>\n         </a>\n      </span>`}))}document.addEventListener("DOMContentLoaded",(function(){editTermButtons()}));
+function editTermButtons(){const t=((e=specConfig.spec_directory).startsWith("./")?e=e.substring(2):e.startsWith("/")&&(e=e.substring(1)),e.endsWith("/")&&(e=e.slice(0,-1)),e);var e;const n=getGithubRepoInfo();n?document.querySelectorAll('dt:has(> span[id^="term:"])').forEach((e=>{const r=function(t){let e=t;for(;e.querySelector('span[id^="term:"]');)e=e.querySelector('span[id^="term:"]');return e}(e),i=r.getAttribute("id").split(":")[1];r.innerHTML+=`<span class="edit-term-buttons">\n         <a title="Link to the term file in the Github repo in a new tab" target="_blank" rel="noopener" \n            href="https://github.com/${n.username}/${n.repo}/blob/${n.branch}/${t}/${specConfig.spec_terms_directory}/${i}.md" \n            class="p-1 edit-term-button btn">\n            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" style="shape-rendering: geometricPrecision;">\n               <path fill-rule="evenodd" d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>\n            </svg>\n         </a>\n         <a title="Link to a GitHub page that shows a history of the edits in a new tab" target="_blank" rel="noopener" \n            href="https://github.com/${n.username}/${n.repo}/commits/${n.branch}/${t}/${specConfig.spec_terms_directory}/${i}.md" \n            class="p-1 history-term-button btn">\n            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" style="shape-rendering: geometricPrecision;">\n               <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>\n               <path fill-rule="evenodd" d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>\n               <circle cx="8" cy="8" r="0.3"/>\n            </svg>\n         </a>\n      </span>`})):console.warn("GitHub repository information not available. Edit term buttons will not be created.")}document.addEventListener("DOMContentLoaded",(function(){editTermButtons()}));
 function hideShowUtilityContainer(){const e=document.querySelector(".terms-and-definitions-list");0===(e?e.querySelectorAll("dt"):[]).length&&document.getElementById("terminology-section-utility-container")?.remove()}
 function attachAlphabetIndexFunctionality(){}
 function attachTermFilterFunctionality(e){const t=document.querySelector(".terms-and-definitions-list");0!==(t?t.querySelectorAll("dt"):[]).length&&e.addEventListener("change",(function(t){t.target.matches('input[type="checkbox"]')&&function(t){const c=e.querySelectorAll('input[type="checkbox"]'),o=Array.from(c).filter((e=>e.checked));t.target.checked||0===o.length&&c.forEach((e=>{e!==t.target&&(e.checked=!0)})),c.forEach((e=>{const t=document.querySelector("html");"showLocalTermsCheckbox"===e.id?t.classList.toggle("hide-local-terms",!e.checked):"showExternalTermsCheckbox"===e.id&&t.classList.toggle("hide-external-terms",!e.checked)}))}(t)}))}
@@ -5265,6 +5336,7 @@ function addHrefToSnapshotLink(){const e=document.querySelector("#snapshotLink")
 function adjustFontSize(){const e=document.body;function t(t){let n=parseFloat(window.getComputedStyle(e).fontSize)+t;n>=10&&n<=50&&(e.style.fontSize=`${n}px`)}document.getElementById("decreaseBtn").addEventListener("click",(()=>t(-2))),document.getElementById("increaseBtn").addEventListener("click",(()=>t(2)))}document.addEventListener("DOMContentLoaded",(function(){adjustFontSize()}));
 document.addEventListener("DOMContentLoaded",(function(){const e=document.getElementById("container_toggle"),t=document.querySelector(".container"),n=document.documentElement;"container-fluid"===localStorage.getItem("container_width_preference")&&(t.classList.remove("container"),t.classList.add("container-fluid"),n.classList.add("dense-info"),e.querySelector("i").classList.remove("bi-arrows-angle-expand"),e.querySelector("i").classList.add("bi-arrows-angle-contract")),e.addEventListener("click",(function(){t.classList.contains("container")?(t.classList.remove("container"),t.classList.add("container-fluid"),n.classList.add("dense-info"),e.querySelector("i").classList.remove("bi-arrows-angle-expand"),e.querySelector("i").classList.add("bi-arrows-angle-contract"),localStorage.setItem("container_width_preference","container-fluid")):(t.classList.remove("container-fluid"),t.classList.add("container"),n.classList.remove("dense-info"),e.querySelector("i").classList.remove("bi-arrows-angle-contract"),e.querySelector("i").classList.add("bi-arrows-angle-expand"),localStorage.setItem("container_width_preference","container"))}))}));
 function closeOffCanvasMenu(){document.querySelectorAll("#sidebarMenu a").forEach((e=>{e.addEventListener("click",(function(){const e=document.querySelector("#sidebarMenu");bootstrap.Offcanvas.getOrCreateInstance(e).hide()}))}))}document.addEventListener("DOMContentLoaded",(function(){closeOffCanvasMenu()}));
+function getGithubRepoInfo(){try{const t=document.querySelector('meta[property="spec-up-t:github-repo-info"]');if(!t)return console.warn("GitHub repository meta tag not found"),null;const e=t.getAttribute("content");if(!e)return console.warn("GitHub repository meta tag has no content"),null;const[n,o,r]=e.split(",");return n&&o&&r?{username:n.trim(),repo:o.trim(),branch:r.trim()}:(console.warn("Invalid GitHub repository meta tag format"),null)}catch(t){return console.error("Error extracting GitHub repository information:",t),null}}function getGithubUrl(t=""){const e=getGithubRepoInfo();if(!e)return null;const n=`https://github.com/${e.username}/${e.repo}`;return t?`${n}/${t}`:n}function getCurrentBranchUrl(){const t=getGithubRepoInfo();return t?`https://github.com/${t.username}/${t.repo}/tree/${t.branch}`:null}function populateRepoInfoInSettings(){const t=getGithubRepoInfo(),e=document.getElementById("repo-account"),n=document.getElementById("repo-name"),o=document.getElementById("repo-branch"),r=document.getElementById("repo-url");if(e&&n&&o&&r)if(t){e.textContent=t.username,n.textContent=t.repo,o.textContent=t.branch;const u=getGithubUrl();u?(r.href=u,r.style.display="inline-block"):r.style.display="none"}else e.textContent="Not available",n.textContent="Not available",o.textContent="Not available",r.style.display="none";else console.warn("Repository info elements not found in settings menu")}document.addEventListener("DOMContentLoaded",(function(){populateRepoInfoInSettings()})),"undefined"!=typeof window&&(window.getGithubRepoInfo=getGithubRepoInfo,window.getGithubUrl=getGithubUrl,window.getCurrentBranchUrl=getCurrentBranchUrl,window.populateRepoInfoInSettings=populateRepoInfoInSettings),"undefined"!=typeof module&&module.exports&&(module.exports={getGithubRepoInfo:getGithubRepoInfo,getGithubUrl:getGithubUrl,getCurrentBranchUrl:getCurrentBranchUrl});
 !function(){let e=specConfig.source;e&&"github"===e.host&&fetch(`https://api.github.com/repos/${e.account+"/"+e.repo}/issues`).then((e=>e.json())).then((e=>{let t=e.length;document.querySelectorAll("[issue-count]").forEach((e=>{e.setAttribute("issue-count",t)})),repo_issue_list.innerHTML=e.map((e=>`<li class="repo-issue">\n              <detail-box>\n                <section>${md.render(e.body||"")}</section>\n                <header class="repo-issue-title">\n                  <span class="repo-issue-number">${e.number}</span>\n                  <span class="repo-issue-link">\n                    <a href="${e.html_url}" target="_blank">${e.title}</a>\n                  </span>\n                  <span detail-box-toggle></span>\n                </header>\n              </detail-box>\n            </li>`)).join(""),Prism.highlightAllUnder(repo_issue_list)})),mermaid.initialize({startOnLoad:!0,theme:"neutral"}),document.querySelectorAll(".chartjs").forEach((e=>{new Chart(e,JSON.parse(e.textContent))}));let t=new WeakMap;delegateEvent("pointerover",".term-reference, .spec-reference",((e,n)=>{const r=n.getAttribute("data-local-href")||n.getAttribute("href")||"";let s=document.getElementById(r.replace("#","")),l={allowHTML:!0,inlinePositioning:!0};if(!t.has(n)){if(s){let e=s.closest("dt, td:first-child");if(!e)return;switch(e.tagName){case"DT":l.content=e.nextElementSibling.textContent;break;case"TD":let t=e.closest("table"),n=Array.from(e.closest("tr").children);if(n.shift(),t){let r=Array.from(t.querySelectorAll("thead th"));r.shift(),r.length&&(l.content=`\n              <header>${e.textContent}</header>\n              <table>\n                ${r.map(((e,t)=>`<tr><td>${e.textContent}:</td><td>${n[t]?n[t].textContent:""}</td></tr>`)).join("")}\n              </table>`)}}}else{const e=(n.getAttribute("data-local-href")||"").match(/#term:([^:]+):(.+)/);if(e){const[,t,n]=e;if("undefined"!=typeof allXTrefs&&allXTrefs.xtrefs&&allXTrefs.xtrefs.length>0){const e=allXTrefs.xtrefs.find((e=>e.externalSpec===t&&e.term.toLowerCase()===n.toLowerCase()));if(e&&e.content){const t=document.createElement("div");t.innerHTML=e.content,l.content=t.textContent||t.innerText||""}}}}l.content&&t.set(n,tippy(n,l))}}),{passive:!0})}();
 /**
  * @file Adds a visual horizontal scroll hint to elements with overflow content
