@@ -17,21 +17,14 @@ Authentic Chained Data Containers (ACDC)
 - [Kevin Griffin](https://github.com/m00sey), [GLEIF](https://gleif.org/)
 
 **Contributors:**
-
+- [Henk van Cann](https://github.com/henkvancann), [Blockchainbird](https://blockchainbird.org/)
+- [Kor Dwarshuis](https://github.com/kordwarshuis), [Blockchainbird](https://blockchainbird.org/)
+  
 **Participate:**
 
 ~ [GitHub repo](https://github.com/trustoverip/tswg-acdc-specification)
 ~ [Commit history](https://github.com/trustoverip/tswg-acdc-specification/commits/main)
 
-[//]: # (\maketitle)
-
-[//]: # (\newpage)
-
-[//]: # (\toc)
-
-[//]: # (\newpage)
-
-[//]: # (::: introtitle)
 
 ## Introduction
 
@@ -45,18 +38,15 @@ With a little additional syntactic sugar, this primary facility of chained (tree
 
 To elaborate, the dictionary definition of credential is "evidence of authority, status, rights, entitlement to privileges, etc."  Appropriately structured ACDCs may be used as credentials when their semantics provide verifiable evidence of authority. Chained ACDCs may provide delegated credentials.
 
-Chains of ACDCs that merely provide proof-of-authorship (authenticity) of data may be appended to chains of ACDCs that provide proof-of-authority (delegation) to enable verifiable delegated authorized authorship of data.  This is also a vital facility for authentic data supply chains. Furthermore, any physical supply chain may be measured, monitored, regulated, audited, and/or archived by a data supply chain acting as a digital twin [[54]]. Therefore, ACDCs provide the critical enabling facility for an authentic data economy and, by association, an authentic real (twinned) economy.
+Chains of ACDCs that merely provide proof-of-authorship (authenticity) of data may be appended to chains of ACDCs that provide proof-of-authority (delegation) to enable verifiable delegated authorized authorship of data.  This is also a vital facility for authentic data supply chains. Furthermore, any physical supply chain may be measured, monitored, regulated, audited, and/or archived by a data supply chain acting as a digital twin [[54](#ref54)]. Therefore, ACDCs provide the critical enabling facility for an authentic data economy and, by association, an authentic real (twinned) economy.
 
-ACDCs act as securely attributed (authentic) fragments of a distributed property graph (PG) [[56]] [[57]]. Thus, ACDCs may be used to construct knowledge graphs expressed as property graphs [[58]]. ACDCs enable securely-attributed and privacy-protecting knowledge graphs. Semantically modulated verifiable provenanceable graphs enable authenticatable, delegable, attenuable, and aggregable authorizations and attributions.
+ACDCs act as securely attributed (authentic) fragments of a distributed property graph (PG) [[56](#ref56)] [[57](#ref57)]. Thus, ACDCs may be used to construct knowledge graphs expressed as property graphs [[58](#ref58)]. ACDCs enable securely-attributed and privacy-protecting knowledge graphs. Semantically modulated verifiable provenanceable graphs enable authenticatable, delegable, attenuable, and aggregable authorizations and attributions.
 
-The ACDC specification (including its disclosure mechanisms) leverages two primary cryptographic operations, namely digests and digital signatures [[48]] [[52]]. These operations, when used in an ACDC, MUST have a security level, cryptographic strength, or entropy of approximately 128 bits (nominally) [[53]]. (See [Annex A](#cryptographic-strength-and-security) for a discussion of cryptographic strength and security)
+The ACDC specification (including its disclosure mechanisms) leverages two primary cryptographic operations, namely digests and digital signatures [[48](#ref48)] [[52](#ref52)]. These operations, when used in an ACDC, MUST have a security level, cryptographic strength, or entropy of approximately 128 bits (nominally) [[53](#ref53)]. (See [Annex A](#cryptographic-strength-and-security) for a discussion of cryptographic strength and security)
 
 An important property of high-strength cryptographic digests is that a verifiable cryptographic commitment (such as a digital signature) to the digest of some data is equivalent to a commitment to the data itself. The digest enables confidentiality because secure attribution of the commitment to the digest may be verified without disclosing the digested data. Later, confidential disclosure of the digested data can be verified against the digest. ACDCs leverage this property to enable compact chains of ACDCs that commit to (anchor or seal) data via digests. The data actually contained in an ACDC, therefore, may be merely its digest. The digested data may thereby be equivalently but more compactly and confidentially authenticated and authorized by the chain of ACDCs.
 
 There are several different variants of ACDCs. These enable different types of disclosure mechanisms that provide differing levels of protection from exploitation and enable functional privacy with provisional authentication. A notable feature of ACDCs is support for Contractually Protected Disclosure that provides more comprehensive privacy protection than mere Selective Disclosure alone might provide.
-
-
-[//]: # (:::)
 
 ## Status of This Memo
 
@@ -85,21 +75,13 @@ These materials are made available under and are subject to the [OWF CLA 1.0 - C
 THESE MATERIALS ARE PROVIDED “AS IS.” The Trust Over IP Foundation, established as the Joint Development Foundation Projects, LLC, Trust Over IP Foundation Series ("ToIP"), and its members and contributors (each of ToIP, its members and contributors, a "ToIP Party") expressly disclaim any warranties (express, implied, or otherwise), including implied warranties of merchantability, non-infringement, fitness for a particular purpose, or title, related to the materials. The entire risk as to implementing or otherwise using the materials is assumed by the implementer and user. 
 IN NO EVENT WILL ANY ToIP PARTY BE LIABLE TO ANY OTHER PARTY FOR LOST PROFITS OR ANY FORM OF INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER FROM ANY CAUSES OF ACTION OF ANY KIND WITH RESPECT TO THESE MATERIALS, ANY DELIVERABLE OR THE ToIP GOVERNING AGREEMENT, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE), OR OTHERWISE, AND WHETHER OR NOT THE OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-[//]: # (\mainmatter)
-
-[//]: # (\doctitle)
-
 ## Scope
 
 Implementation design of a protocol-based data container specification that enables secure attribution of data within the container to a cryptographically derived identifier using the KERI and CESR protocols. This makes the containers authenticatable. Containers may be chained together using cryptographic digests to form a verifiable extensible graph data structure. This makes the containers chainable. There is no reliance on trusted third parties.  The application scope includes any electronically transmitted information. The implementation dependency scope assumes CESR and KERI. 
 
 ## Normative references
 
-[//]: # (::: { #nrm:osi .normref label="ISO/IEC 7498-1:1994" })
-
-[//]: # (ISO/IEC 7498-1:1994 Information technology — Open Systems Interconnection — Basic Reference Model: The Basic Model)
-
-[//]: # (:::)
+* ISO/IEC 7498-1:1994 Information technology — Open Systems Interconnection — Basic Reference Model: The Basic Model
 
 [a]. IETF RFC-2119 Key words for use in RFCs to Indicate Requirement Levels
 [a]: https://www.rfc-editor.org/rfc/rfc2119.txt
