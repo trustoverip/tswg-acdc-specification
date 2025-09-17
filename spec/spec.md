@@ -289,7 +289,7 @@ The following table defines the top-level fields in an ACDC and their order of a
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.` that provides protocol type, version, serialization type, size, and terminator. |
+|`v`| Version String| Regexable format: `ACDCMmmGggKKKKSSSS.` that provides protocol type, version, serialization type, size, and terminator. |
 |`d`| Digest ([[3]]) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
 |`i`| Issuer Identifier ([[ref: AID]])| Autonomic Identifier whose control authority is established via KERI verifiable Key State. |
@@ -3502,7 +3502,8 @@ regDeb = "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"
 ```
 
 ##### UUIDs
-Many of the examples include uuid `u` fields with salty nonce values. For ease of reproducibility deterministic uuids are used. These come from the following set:
+
+Many of the examples include UUID, `u` fields with salty nonce values. For ease of reproducibility deterministic UUIDs are used. These come from the following set:
 
 ```python
 assert uuids == \
