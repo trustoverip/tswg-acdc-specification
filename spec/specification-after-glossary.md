@@ -14,7 +14,7 @@ The following table defines the top-level fields in an ACDC and their order of a
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.` that provides protocol type, version, serialization type, size, and terminator. |
+|`v`| Version String | Regexable format: `ACDCMmmGggKKKKSSSS.` that provides protocol type, version, CESR genus version, serialization type, size, and terminator.  |
 |`d`| Digest ([[3](#ref3)]) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
 |`i`| Issuer Identifier ([[ref: AID]])| Autonomic Identifier whose control authority is established via KERI verifiable Key State. |
@@ -3427,7 +3427,7 @@ The following table defines the top-level fields in an ACDC and their order of a
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.`that provides protocol type, Version, serialization type, size, and terminator. |
+|`v`| Version String| Regexable format: `ACDCMmmGggKKKKSSSS.` that provides protocol type, version, CESR genus version, serialization type, size, and terminator. |
 |`t`| Message Type| Three-character Message type |
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
@@ -3513,7 +3513,7 @@ All designated fields are required in ACDC section messages. There are no option
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.` that provides protocol type, Version, serialization type, size, and terminator. |
+|`v`| Version String| Regexable format: `ACDCMmmGggKKKKSSSS.` that provides protocol type, version, CESR genus version, serialization type, size, and terminator |
 |`t`| Message Type| Three-character Message type |
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
