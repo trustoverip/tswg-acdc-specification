@@ -2970,7 +2970,7 @@ All designated fields are required in ACDC section messages. There are no option
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.` that provides protocol type, Version, serialization type, size, and terminator. |
+|`v`| Version String| Regexable format: `ACDCMmmGggKKKKSSSS.` that provides protocol type, version, cesr genus version, serialization type, size, and terminator. |
 |`t`| Message Type| Three-character Message type |
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
