@@ -54,9 +54,10 @@ The primary field labels are compact in that they MUST use only one or at most t
 
 ### Version String field
 
-The Version String, `v`, field MUST be the first field in any top-level ACDC field map encoded in JSON, CBOR, or MGPK [[RFC4627](#RFC4627)] [[12](#ref12)] [[13](#ref13)] [[14](#ref14)].  It provides a regular expression target for determining a serialized field map's serialization format and size (character count) constituting an ACDC message body. A Stream parser SHOULD use the Version String to extract and deserialize (deterministically) any serialized Stream of ACDC Message bodies. Each ACDC Message body in a Stream MAY use a different serialization type. The format for the Version String field value is defined in the CESR specification [[1](#ref1)]. 
+The Version String, `v`, field MUST be the first field in any top-level ACDC field map encoded in JSON, CBOR, or MGPK [[RFC4627](#RFC4627)] [[12](#ref12)] [[13](#ref13)] [[14](#ref14)].  It provides a regular expression target for determining a serialized field map's serialization format and size (character count), constituting an ACDC message body. A Stream parser SHOULD use the Version String to extract and deserialize (deterministically) any serialized Stream of ACDC Message bodies. Each ACDC Message body in a Stream MAY use a different serialization type. The format for the Version String field value is defined in the CESR specification [[1](#ref1)]. 
 
-The protocol field, `PPPP` value in the Version String MUST be `ACDC` for the ACDC protocol. The version field, `VVV`, MUST encode the current version of the ACDC protocol [[1](#ref1)].
+The protocol field, `PPPP` value in the Version String MUST be `ACDC` for the ACDC protocol. The protocol version field, `Mmm`, MUST encode the current major `M` and minor `mm` version of the ACDC protocol [[1](#ref1)] used by the associated message. The CESR genus version field `Ggg` MUST encode the major `G` and minor `gg` version of the CESR protocol used to encode the associated message [[reference to CESR protocol specification]].
+
 
 ##### Legacy Version String field format
 
