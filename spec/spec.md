@@ -2884,7 +2884,7 @@ The following table defines the top-level fields in an ACDC and their order of a
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`v`| Version String| Regexable format: `ACDCMmmKKKKSSSS.`that provides protocol type, Version, serialization type, size, and terminator. |
+|`v`| Version String| Regexable format: `ACDCMmmGggKKKKSSSS.` that provides protocol type, version, cesr genus version, serialization type, size, and terminator.  |
 |`t`| Message Type| Three-character Message type |
 |`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
