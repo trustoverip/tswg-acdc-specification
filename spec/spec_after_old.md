@@ -4166,132 +4166,258 @@ The ACDC's schema is as follows:
 ```
 
 
-## Bibliography
+[//]: # (\backmatter)
 
-### Normative section
+[//]: # (Performance and Scalability {#sec:annexA .informative})
 
-<a id="CESR">1</a><a id="ref1"></a>. Composable Event Streaming Representation, CESR, https://github.com/trustoverip/tswg-acdc-specification
+[//]: # (\newpage)
 
-<a id="KERI">2</a><a id="ref2"></a>. Key Event Receipt Infrastructure, KERI, https://github.com/trustoverip/tswg-keri-specification
+[//]: # (\makebibliography)
 
-<a id="SAID">3</a><a id="ref3"></a>. Self-Addressing IDentifier, SAID, https://github.com/trustoverip/tswg-cesr-specification
+[//]: # (# Bibliography)
 
-<a id="OOBI">4</a><a id="ref4"></a>. Out-Of-Band-Introduction, OOBI, https://github.com/trustoverip/tswg-keri-specification
+[1]. Composable Event Streaming Representation, CESR
 
-<a id="DID-KERI">5</a><a id="ref5"></a>. DIDK_ID, IETF DID-KERI Internet Draft, https://github.com/WebOfTrust/ietf-did-keri
+[1]: https://github.com/trustoverip/tswg-acdc-specification
 
-<a id="W3C_DID">28</a><a id="ref28"></a>. W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0, https://w3c-ccg.github.io/did-spec/
+[2]. Key Event Receipt Infrastructure, KERI
 
-<a id="didwebs">61</a><a id="ref61"></a>. did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
+[2]: https://github.com/trustoverip/tswg-keri-specification
 
-<a id="RFC4627">62</a><a id="ref62"></a>. RFC4627 The application/json Media Type for JavaScript Object Notation (JSON). D. Crockford; 2006-07. Status: Informational.
+[3]. Self-Addressing IDentifier, SAID
 
-### Informative section
+[3]: https://github.com/trustoverip/tswg-cesr-specification
 
-<a id="RFC6901">6</a><a id="ref6"></a>. RFC6901, JavaScript Object Notation (JSON) Pointer, https://datatracker.ietf.org/doc/html/rfc6901
+[4]. Out-Of-Band-Introduction, OOBI
 
-<a id="JSON">7</a><a id="ref7"></a>. JSON, JavaScript Object Notation Delimeters, https://www.json.org/json-en.html
+[4]: https://github.com/trustoverip/tswg-keri-specification
 
-<a id="RFC8259">8</a><a id="ref8"></a>. RFC8259, JSON (JavaScript Object Notation), https://datatracker.ietf.org/doc/html/rfc8259
+[5]. DIDK_ID, IETF DID-KERI Internet Draft
 
-<a id="RFC4627">9</a><a id="ref9"></a>. RFC4627, The application/json Media Type for JavaScript Object Notation (JSON), https://datatracker.ietf.org/doc/rfc4627/
+[5]: https://github.com/WebOfTrust/ietf-did-keri
 
-<a id="JSch">10</a><a id="ref10"></a>. JSch, JSON Schema, https://json-schema.org
+[6]. RFC6901, JavaScript Object Notation (JSON) Pointer
 
-<a id="JSch_202012">11</a><a id="ref11"></a>. JSch_202012, JSON Schema 2020-12, https://json-schema.org/draft/2020-12/release-notes.html
+[6]: https://datatracker.ietf.org/doc/html/rfc6901
 
-<a id="CBOR">12</a><a id="ref12"></a>. CBOR, CBOR Mapping Object Codes, https://en.wikipedia.org/wiki/CBOR
+[7]. JSON, JavaScript Object Notation Delimeters
 
-<a id="RFC8949">13</a><a id="ref13"></a>. RFC8949, Concise Binary Object Representation (CBOR), https://datatracker.ietf.org/doc/rfc8949/
+[7]: https://www.json.org/json-en.html
 
-<a id="MGPK">14</a><a id="ref14"></a>. MGPK, Msgpack Mapping Object Codes, https://github.com/msgpack/msgpack/blob/master/spec.md
+[8]. RFC8259, JSON (JavaScript Object Notation)
 
-<a id="RFC3986">15</a><a id="ref10"></a>. RFC3986, Uniform Resource Identifier (URI): Generic Syntax, https://datatracker.ietf.org/doc/html/rfc3986
+[8]: https://datatracker.ietf.org/doc/html/rfc8259
 
-<a id="RFC8820">16</a><a id="ref16"></a>. RFC8820, URI Design and Ownership, https://datatracker.ietf.org/doc/html/rfc8820
+[9]. RFC4627, The application/json Media Type for JavaScript Object Notation (JSON)
 
-<a id="ACDC_TF">17</a><a id="ref17"></a>. ACDC_TF, ACDC (Authentic Chained Data Container) Task Force, https://wiki.trustoverip.org/display/HOME/ACDC+%28Authentic+Chained+Data+Container%29+Task+Force
+[9]: https://datatracker.ietf.org/doc/rfc4627/
 
-<a id="TOIP">18</a><a id="ref18"></a>. TOIP, Trust Over IP (ToIP) Foundation, https://trustoverip.org
+[10]. JSch, JSON Schema
 
-<a id="ITPS">19</a><a id="ref19"></a>. ITPS, Information-Theoretic and Perfect Security, https://en.wikipedia.org/wiki/Information-theoretic_security
+[10]: https://json-schema.org
 
-<a id="OTP">20</a><a id="ref20"></a>. OTP, One-Time-Pad, https://en.wikipedia.org/wiki/One-time_pad
+[11]. JSch_202012, JSON Schema 2020-12
 
-<a id="VCphr">21</a><a id="ref21"></a>.VCphr, Vernom Cipher (OTP) https://www.ciphermachinesandcryptology.com/en/onetimepad.htm
+[11]: https://json-schema.org/draft/2020-12/release-notes.html
 
-<a id="SSplt">22</a><a id="ref22"></a>. SSplt, Secret Splitting, https://www.ciphermachinesandcryptology.com/en/secretsplitting.htm
+[12]. CBOR, CBOR Mapping Object Codes
 
-<a id="SShr">23</a><a id="ref23"></a>. SShr, Secret Sharing, https://en.wikipedia.org/wiki/Secret_sharing
+[12]: https://en.wikipedia.org/wiki/CBOR
 
-<a id="GLEIF">24</a><a id="ref24"></a>. GLEIF, GLEIF (Global Legal Entity Identifier Foundation), https://www.gleif.org/en/
+[13]. RFC8949, Concise Binary Object Representation (CBOR)
 
-<a id="">25</a><a id="ref25"></a>. vLEI, vLEI (verifiable Legal Entity Identifier) Definition, https://github.com/WebOfTrust/vLEI
+[13]: https://datatracker.ietf.org/doc/rfc8949/
 
-<a id="GLEIF_vLEI">26</a><a id="ref26"></a>. GLEIF_vLEI, GLEIF vLEI (verifiable Legal Entity Identifier), https://www.gleif.org/en/lei-solutions/gleifs-digital-strategy-for-the-lei/introducing-the-verifiable-lei-vlei
+[14]. MGPK, Msgpack Mapping Object Codes
 
-<a id="GLEIF_KERI">27</a><a id="ref27"></a>. GLEIF_KERI, GLEIF with KERI Architecture, https://github.com/WebOfTrust/vLEI
+[14]: https://github.com/msgpack/msgpack/blob/master/spec.md
 
-<a id="Salt">29</a><a id="ref29"></a>. Salt, Salts, Nonces, and Initial Values, https://medium.com/@fridakahsas/salt-nonces-and-ivs-whats-the-difference-d7a44724a447
+[15]. RFC3986, Uniform Resource Identifier (URI): Generic Syntax
 
-<a id="RB">30</a><a id="ref30"></a>. RB, Rainbow Table, https://en.wikipedia.org/wiki/Rainbow_table
+[15]: https://datatracker.ietf.org/doc/html/rfc3986
 
-<a id="DRB">31</a><a id="ref31"></a>. DRB, Dictionary Attacks, Rainbow Table Attacks and how Password Salting defends against them, https://www.commonlounge.com/discussion/2ee3f431a19e4deabe4aa30b43710aa7
+[16]. RFC8820, URI Design and Ownership
 
-<a id="BDay">32</a><a id="ref32"></a>. BDay, Birthday Attack, https://en.wikipedia.org/wiki/Birthday_attack
+[16]: https://datatracker.ietf.org/doc/html/rfc8820
 
-<a id="BDC">33</a><a id="ref33"></a>. BDC, Birthday Attacks, Collisions, And Password Strength, https://auth0.com/blog/birthday-attacks-collisions-and-password-strength/
+[17]. ACDC_TF, ACDC (Authentic Chained Data Container) Task Force
 
-<a id="HCR">34</a><a id="ref34"></a>. HCR, Hash Collision Resistance, https://en.wikipedia.org/wiki/Collision_resistance
+[17]: https://wiki.trustoverip.org/display/HOME/ACDC+%28Authentic+Chained+Data+Container%29+Task+Force
 
-<a id="QCHC">35</a><a id="ref35"></a>. QCHC, Cost analysis of hash collisions: Will quantum computers make SHARCS obsolete?, https://cr.yp.to/hash/collisioncost-20090823.pdf
+[18]. TOIP, Trust Over IP (ToIP) Foundation
 
-<a id="EdSC">36</a><a id="ref36"></a>. EdSC, The Provable Security of Ed25519: Theory and Practice Report, https://eprint.iacr.org/2020/823
+[18]: https://trustoverip.org
 
-<a id="PSEd">37</a><a id="ref37"></a>. PSEd, The Provable Security of Ed25519: Theory and Practice, https://ieeexplore.ieee.org/document/9519456?denied=
+[19]. ITPS, Information-Theoretic and Perfect Security
 
-<a id="TMEd">38</a><a id="ref38"></a>. TMEd, Taming the many EdDSAs, https://eprint.iacr.org/2020/1244.pdf
+[19]: https://en.wikipedia.org/wiki/Information-theoretic_security
 
-<a id="JSchCp">39</a><a id="ref39"></a>. JSchCp, Schema Composition in JSON Schema, https://json-schema.org/understanding-json-schema/reference/combining.html
+[20]. OTP, One-Time-Pad
 
-<a id="JSchRE">40</a><a id="ref40"></a>. JSchRE, Regular Expressions in JSON Schema, https://json-schema.org/understanding-json-schema/reference/regular_expressions.html
+[20]: https://en.wikipedia.org/wiki/One-time_pad
 
-<a id="JSchId">41/a><a id="ref41"></a>. JSchId, JSON Schema Identification, https://json-schema.org/understanding-json-schema/structuring.html#schema-identification
+[21]. VCphr, Vernom Cipher (OTP)
 
-<a id="JSchCx">42</a><a id="ref42"></a>. JSchCx, Complex JSON Schema Structuring, https://json-schema.org/understanding-json-schema/structuring.html#base-uri
+[21]: https://www.ciphermachinesandcryptology.com/en/onetimepad.htm
 
-<a id="RicCon">43</a><a id="ref43"></a>. RC, Ricardian Contract, https://en.wikipedia.org/wiki/Ricardian_contract
+[22]. SSplt, Secret Splitting
 
-<a id="CLC">44</a><a id="ref44"></a>. CLC, Chain-Link Confidentiality, https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2045818
+[22]: https://www.ciphermachinesandcryptology.com/en/secretsplitting.htm
 
-<a id="DHKE">45</a><a id="ref45"></a>. DHKE, Diffie-Hellman Key Exchange, https://www.infoworld.com/article/3647751/understand-diffie-hellman-key-exchange.html
+[23]. SShr, Secret Sharing
 
-<a id="KeyEx">46</a><a id="ref46"></a>. KeyEx, Key Exchange, https://libsodium.gitbook.io/doc/key_exchange
+[23]: https://en.wikipedia.org/wiki/Secret_sharing
 
-<a id="IDSys">47</a><a id="ref47"></a>. IDSys, Identity System Essentials, https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/Identity-System-Essentials.pdf
+[24]. GLEIF, GLEIF (Global Legal Entity Identifier Foundation)
 
-<a id="Hash">48</a><a id="ref48"></a>. Hash, Cryptographic Hash Function, https://en.wikipedia.org/wiki/Cryptographic_hash_function
+[24]: https://www.gleif.org/en/
 
-<a id="Mrkl">49</a><a id="ref49"></a>. Mrkl, Merkle Tree, https://en.wikipedia.org/wiki/Merkle_tree
+[25]. vLEI, vLEI (verifiable Legal Entity Identifier) Definition
 
-<a id="MTSec">50</a><a id="ref50"></a>. TwoPI, Second Pre-image Attack on Merkle Trees, https://flawed.net.nz/2018/02/21/attacking-merkle-trees-with-a-second-preimage-attack/
+[25]: https://github.com/WebOfTrust/vLEI
 
-<a id="">51</a><a id="ref51"></a>. MTSec, Merkle Tree Security, https://blog.enuma.io/update/2019/06/10/merkle-trees-not-that-simple.html
+[26]. GLEIF_vLEI, GLEIF vLEI (verifiable Legal Entity Identifier)
 
-<a id="DSig">52</a><a id="ref52"></a>. DSig, Digital Signature, https://en.wikipedia.org/wiki/Digital_signature
+[26]: https://www.gleif.org/en/lei-solutions/gleifs-digital-strategy-for-the-lei/introducing-the-verifiable-lei-vlei
 
-<a id="SecLev">53</a><a id="ref53"></a>. Level, Security Level, https://en.wikipedia.org/wiki/Security_level
+[27]. GLEIF_KERI, GLEIF with KERI Architecture
 
-<a id="DigiTwin">54</a><a id="ref54"></a>. Twin, Digital Twin, https://en.wikipedia.org/wiki/Digital_twin
+[27]: https://github.com/WebOfTrust/vLEI
 
-<a id="TMal">55</a><a id="ref55"></a>. TMal, Transaction Malleability, https://en.wikipedia.org/wiki/Transaction_malleability_problem
+[28]. W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0
 
-<a id="PGM">56</a><a id="ref56"></a>. PGM, The Property Graph Database Model, http://ceur-ws.org/Vol-2100/paper26.pdf
+[28]: https://w3c-ccg.github.io/did-spec/
 
-<a id="Dots">57</a><a id="ref57"></a>. Dots, Constructions from Dots and Lines, https://arxiv.org/pdf/1006.2361.pdf
+[29]. Salt, Salts, Nonces, and Initial Values
 
-<a id="KG">58</a><a id="ref58"></a>. KG, Knowledge Graphs, https://arxiv.org/pdf/2003.02320.pdf
+[29]: https://medium.com/@fridakahsas/salt-nonces-and-ivs-whats-the-difference-d7a44724a447
 
-<a id="AbuseAlice">59</a><a id="ref59"></a>. Abuse, Alice Attempts to Abuse a Verifiable Credential, https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/final-documents/alice-attempts-abuse-verifiable-credential.md
+[30]. RB, Rainbow Table
 
-<a id="SKEM">60</a><a id="ref60"></a>. SKEM, On using the same key pair for Ed25519 and an X25519 based KEM, https://eprint.iacr.org/2021/509
+[30]: https://en.wikipedia.org/wiki/Rainbow_table
+
+[31]. DRB, Dictionary Attacks, Rainbow Table Attacks and how Password Salting defends against them
+
+[31]: https://www.commonlounge.com/discussion/2ee3f431a19e4deabe4aa30b43710aa7
+
+[32]. BDay, Birthday Attack
+
+[32]: https://en.wikipedia.org/wiki/Birthday_attack
+
+[33]. BDC, Birthday Attacks, Collisions, And Password Strength
+
+[33]: https://auth0.com/blog/birthday-attacks-collisions-and-password-strength/
+
+[34]. HCR, Hash Collision Resistance
+
+[34]: https://en.wikipedia.org/wiki/Collision_resistance
+
+[35]. QCHC, Cost analysis of hash collisions: Will quantum computers make SHARCS obsolete?
+
+[35]: https://cr.yp.to/hash/collisioncost-20090823.pdf
+
+[36]. EdSC, The Provable Security of Ed25519: Theory and Practice Report
+
+[36]: https://eprint.iacr.org/2020/823
+
+[37]. PSEd, The Provable Security of Ed25519: Theory and Practice
+
+[37]: https://ieeexplore.ieee.org/document/9519456?denied=
+
+[38]. TMEd, Taming the many EdDSAs
+
+[38]: https://eprint.iacr.org/2020/1244.pdf
+
+[39]. JSchCp, Schema Composition in JSON Schema
+
+[39]: https://json-schema.org/understanding-json-schema/reference/combining.html
+
+[40]. JSchRE, Regular Expressions in JSON Schema
+
+[40]: https://json-schema.org/understanding-json-schema/reference/regular_expressions.html
+
+[41]. JSchId, JSON Schema Identification
+
+[41]: https://json-schema.org/understanding-json-schema/structuring.html#schema-identification
+
+[42]. JSchCx, Complex JSON Schema Structuring
+
+[42]: https://json-schema.org/understanding-json-schema/structuring.html#base-uri
+
+[43]. RC, Ricardian Contract
+
+[43]: https://en.wikipedia.org/wiki/Ricardian_contract
+
+[44]. CLC, Chain-Link Confidentiality
+
+[44]: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2045818
+
+[45]. DHKE, Diffie-Hellman Key Exchange
+
+[45]: https://www.infoworld.com/article/3647751/understand-diffie-hellman-key-exchange.html
+
+[46]. KeyEx, Key Exchange
+
+[46]: https://libsodium.gitbook.io/doc/key_exchange
+
+[47]. IDSys, Identity System Essentials
+
+[47]: https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/Identity-System-Essentials.pdf
+
+[48]. Hash, Cryptographic Hash Function
+
+[48]: https://en.wikipedia.org/wiki/Cryptographic_hash_function
+
+[49]. Mrkl, Merkle Tree
+
+[49]: https://en.wikipedia.org/wiki/Merkle_tree
+
+[50]. TwoPI, Second Pre-image Attack on Merkle Trees
+
+[50]: https://flawed.net.nz/2018/02/21/attacking-merkle-trees-with-a-second-preimage-attack/
+
+[51]. MTSec, Merkle Tree Security
+
+[51]: https://blog.enuma.io/update/2019/06/10/merkle-trees-not-that-simple.html
+
+[52]. DSig, Digital Signature
+
+[52]: https://en.wikipedia.org/wiki/Digital_signature
+
+[53]. Level, Security Level
+
+[53]: https://en.wikipedia.org/wiki/Security_level
+
+[54]. Twin, Digital Twin
+
+[54]: https://en.wikipedia.org/wiki/Digital_twin
+
+[55]. TMal, Transaction Malleability
+
+[55]: https://en.wikipedia.org/wiki/Transaction_malleability_problem
+
+[56]. PGM, The Property Graph Database Model
+
+[56]: http://ceur-ws.org/Vol-2100/paper26.pdf
+
+[57]. Dots, Constructions from Dots and Lines
+
+[57]: https://arxiv.org/pdf/1006.2361.pdf
+
+[58]. KG, Knowledge Graphs
+
+[58]: https://arxiv.org/pdf/2003.02320.pdf
+
+[59]. Abuse, Alice Attempts to Abuse a Verifiable Credential
+
+[59]: https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/final-documents/alice-attempts-abuse-verifiable-credential.md
+
+[60]. SKEM, On using the same key pair for Ed25519 and an X25519 based KEM
+
+[60]: https://eprint.iacr.org/2021/509
+
+[62]. did:webs Method Specification
+
+[62]: https://trustoverip.github.io/tswg-did-method-webs-specification/
+
+[[spec]]
