@@ -76,7 +76,7 @@ A cryptographic commitment (such as a digital signature or a cryptographic diges
 
 ### Registry SAID field
 
-When present, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. Typically, this field appears at the top level, but in some applications, such as bulk-issued ACDCs [[XXXX]], it may appear nested inside the attribute, `a`, or aggregate, `A`, section field maps [[XXXX]]. This nested appearance better facilitates contractually protected disclosure of the registry SAID.
+When present, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. Typically, this field appears at the top level, but in some applications, such as bulk-issued [bulk-issued](#bulk-issued-private-acdcs) ACDCs [bulk-issued](#bulk-issued-private-acdcs), it may appear nested inside the attribute, `a`, or aggregate, `A`, section field maps [attr](#attribute-section) [aggr](#aggregate-section). This nested appearance better facilitates contractually protected disclosure of the registry SAID.
 
 ### Universally unique identifier (UUID) fields
 
