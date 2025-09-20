@@ -5,9 +5,9 @@
       "spec_directory": "./spec",
       "output_path": "./docs",
       "markdown_paths": [
-        "specification-before-glossary.md",
+        "spec-head.md",
         "terms-and-definitions-intro.md",
-        "specification-after-glossary.md"
+        "spec-body.md"
       ],
       "logo": "https://raw.githubusercontent.com/trustoverip/logo-assets/master/logos/ToIP-Logo-Color-SolidDimensional-Horizontal-LightOnDark.svg",
       "logo_link": "https://github.com/trustoverip/tswg-acdc-specification",
