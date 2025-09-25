@@ -2534,7 +2534,9 @@ The requirement of an anchored issuance proof seal of the aggregate `B` means th
 
 #### Inclusion proof via Merkle tree
 
-The inclusion proof the aggregate value `B` above may be somewhat verbose when there are a very large number of bulk-issued ACDCs in a given set. A more efficient approach is to create a Merkle tree of the blinded SAID digests, b<sub>k</sub>, and set the aggregate ‘B’ value as the Merkle tree root digest [[49](#Mrkl)].
+The inclusion proof of the aggregate value `B` above may be somewhat verbose when there are a very large number of bulk-issued ACDCs in a given set. A more efficient approach is to create a Merkle tree of the blinded SAID digests, b<sub>k</sub>, and set the aggregate `B` value as the Merkle tree root digest [[49](#Mrkl)]. A Merkle tree can be efficient at inclusion proofs. Typically, the computation time to verify the inclusion proof is proportional to the log of the size of the Merkle tree, i.e., `O(log N)` where `N` is the size. This means that a further mechanism to minimize correlation concerning the aggregate `B` as Merkle root for a given bulk-issued set is to merge all bulk-issued sets into a giant Merkle tree. This provides so-called herd privacy. Just knowing the Merkle root, `B` doesn't correlate to a given bulk-issued set of ACDCs. With blindable state TEL registries, a new update message can be issued whenever the Merkle root changes, even though the actual ACDC state has not changed so that and old Merkle root value does not provide any correlatable information.
+
+When building large Merkle trees, more optimized forms of Merkle trees might be indicated. For example, a Sparse Merkle Tree (SMT) more efficiently supports large number of leaf nodes [[61](#VDS)]. SMTs originally developed for the Certificate Transparency network [[62](#CT)][[63](#RFC9162)][[64](#CTC)][[65](#Trillion)]. Since then various optimized versions of SMT have been developed [[66](#Tessera)][[67](#ESMT)][[68](#OCSMT)]. These optimized versions could enable an Issuer to provide efficient inclusion proofs for all bulk-issued ACDCs using a single tree. The values stored in the tree are the blinded SAIDs of each bulk-issued ACDC across all Issuees.  Since the blinded SAIDs are computed over high-entropy blinding factors, the values are not guessable. A 3rd party would have to know the blinded SAID value in order to query the SMT for an inclusion proof or to request its associated TEL.
 
 The Merkle tree needs to have appropriate second-pre-image attack protection of interior branch nodes [[50](#MTSec)] [[51](#ref51)]. The Discloser then only needs to provide a subset of digests from the Merkle tree to prove that a given digest, b<sub>k</sub> contributed to the Merkle tree root digest. For a small-numbered bulk-issued set of ACDCs, the added complexity of the Merkle tree approach may not be worth the savings in verbosity.
 
@@ -4313,3 +4315,24 @@ The ACDC's schema is as follows:
 <a id="AbuseAlice">59</a><a id="ref59"></a>. Abuse, Alice Attempts to Abuse a Verifiable Credential, https://github.com/WebOfTrustInfo/rwot9-prague/blob/master/final-documents/alice-attempts-abuse-verifiable-credential.md
 
 <a id="SKEM">60</a><a id="ref60"></a>. SKEM, On using the same key pair for Ed25519 and an X25519 based KEM, https://eprint.iacr.org/2021/509
+
+<a id="VDS">61</a><a id="ref61"></a>. Verifiable Data Structures, Sparse Merkle Tree, https://github.com/google/trillian/blob/master/docs/papers/VerifiableDataStructures.pdf
+
+<a id="CT">62</a><a id="ref62"></a>. Certificate Transparency, Append Only Logs, https://www.researchgate.net/publication/274056469_Certificate_Transparency
+
+<a id="RFC9162">63</a><a id="ref63"></a>. IETF RFC-9162, Certificate Transparency, https://datatracker.ietf.org/doc/rfc9162/
+
+<a id="CTC">64</a><a id="ref64"></a>. Certificate Transparency Community, https://certificate.transparency.dev/community/
+
+<a id="Trillion">65</a><a id="ref65"></a>. Trillion Sparse Merkle Tree, https://github.com/google/trillian?tab=readme-ov-file
+
+<a id="Tessera">66</a><a id="ref66"></a>. Trillian Tessera, Tiled Transparency Logs, https://github.com/transparency-dev/tessera
+
+<a id="ESMT">67</a><a id="ref67"></a>. Efficient Sparse Merkle Tree, https://eprint.iacr.org/2016/683.pdf
+
+<a id="OCSMT">68</a><a id="ref68"></a>. Optimized Compact Sparse Merkle Tree, https://github.com/nervosnetwork/sparse-merkle-tree/blob/master/SMT.md
+
+
+
+
+
