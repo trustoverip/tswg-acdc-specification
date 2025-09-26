@@ -1650,19 +1650,39 @@ The most compact form of the rule section is simply a field whose value is its S
 
 ## Disclosure Mechanisms and Exploitation Protection
 
-An important design goal of ACDCs is to support the sharing of provably authentic data while also protecting against the exploitation of that data. Often, the term privacy protection is used to describe similar properties. However, a narrow focus on privacy protection may lead to problematic design trade-offs. With ACDCs, the primary design goal is not data privacy protection per se but the more general goal of protection from the unpermissioned exploitation of data. In this light, a given privacy protection mechanism may be employed to help protect against data exploitation but only when it serves that more general-purpose and not as an end in and of itself.
+An important design goal of ACDCs is to support the sharing of provably authentic data while also protecting against the exploitation of that data. Often, the term privacy protection is used to describe similar properties. However, a narrow focus on privacy protection may lead to problematic design trade-offs. With ACDCs, the primary design goal is not data privacy protection per se but the more general goal of protection from the unpermissioned exploitation of data. In this light, a given privacy protection mechanism may be employed to help protect against data exploitation, but only when it serves a more general purpose and not as an end in and of itself.
 
-### Binding to Key State at time of Issuance
+### Binding to Key State at Time of ACDC State Change
 
-To protect against later forgery in the event of a future compromise of the signing keys of the Issuer, the Issuer must anchor an issuance proof digest seal to the ACDC in its KEL. This seal binds the signing Key State to the issuance. There are two cases. In the first case, an issuance/revocation Registry is used. In the second case, an issuance/revocation Registry is not used.
+To protect against later forgery in the event of a future compromise of the Issuer's signing keys, the Issuer must anchor an *issuance* proof digest seal to the ACDC in its KEL either directly or indirectly. This seal binds the signing Key State to the ACDC's *issuance*.
 
-When the ACDC is registered using an issuance/revocation TEL, then the issuance proof seal digest is the SAID of the issuance (Inception) event in the ACDC's TEL entry. The issuance event in the TEL includes the SAID of the ACDC. This binds the ACDC to the issuance proof seal in the Issuer's KEL through the TEL entry.
+There are two cases for anchoring: direct and indirect.
 
-When the ACDC is not registered using an issuance/revocation TEL, then the issuance proof seal digest is the SAID of the ACDC itself.
+With the direct case, the issuance proof digest seal is anchored in the KEL of the Issuer. No issuance/revocation Registry is used. This means the ACDC has only one state, that is, *issued* or, more specifically, *anchored*. The issuance proof seal digest is the SAID of the ACDC itself, or if bulk issued, the aggregate of the bulk issuance.
 
-In either case, this issuance proof seal makes a verifiable binding between the issuance of the ACDC and the Key State of the Issuer at the time of issuance. Because aggregated value ‘A’ provided as the Attribute section, `A`, field, value is bound to the SAID of the ACDC which is also bound to the Key State via the issuance proof seal, the Attribute details of each attribute block are also bound to the Key state.
+With the indirect case, the state of the ACDC is maintained by a Transaction Event LOG (TEL). That TEL could be an issuance/revocation Registry, for example, where the states of the ACDC are either *issued* or *revoked*. A TEL Registry has a registry inception event, `rip`. The SAID of this event MUST be anchored in the Issuer's KEL as the Registry proof seal.  Update events in the Registry's TEL MUST also be anchored. An update event in the TEL MAY include the SAID of the ACDC, either blinded or unblinded. This binds the state of that ACDC to the Issuer's Key State at the time of the update event in the TEL.
 
-The requirement of an anchored issuance proof seal means that the forger must first successfully publish in the KEL of the Issuer an inclusion proof digest seal bound to a forged ACDC. This makes any forgery attempt detectable. To elaborate, the only way to successfully publish such a seal is in a subsequent Interaction Event in a KEL that has not yet changed its Key State via a Rotation Event. Whereas any KEL that has changed its Key State via a Rotation MUST be forked before the Rotation. This makes the forgery attempt either both detectable and recoverable via Rotation in any KEL that has not yet changed its Key State or detectable as Duplicity in any KEL that has changed its Key State. In any event, the issuance proof seal ensures detectability of any later attempt at forgery using compromised keys.
+In either case, this ACDC state proof seal makes a verifiable cryptographic binding between the state of the ACDC and the Key State of the Issuer at the time of ACDC state change.
+
+Likewise, because all the values in the sections of an ACDC are verifiably bound to the ACDC's SAID, then by extension, all the detail values in an ACDC are also verifiably bound to the Issuer's Key state. This means that ACDCs are not directly signed by the Issuer and are bound to the Issuer's Key State (either directly or indirectly), and the Issuer's Key State is signed. This enables the Key State of the Issuer to change independently of the ACDC state.
+
+This is in contrast to other verifiable credential schemes, where the credentials are signed directly; in such schemes, a key rotation forces all the credentials signed with a given set of keys to be revoked; otherwise, a key compromise would enable the compromiser to issue verifiable credentials forged by the compromiser.
+
+The requirement of an anchored ACDC state proof seal means that the forger must first successfully publish in the KEL of the Issuer an inclusion proof digest seal bound to a forged ACDC. The only way to publish an event in the Issuer's KEL is to verifiably sign the event, which means the forger must first compromise the issuer's private signing keys. This makes any forgery attempt detectable, and such an attempt makes the key compromise detectable.
+
+To elaborate, the only way to successfully publish such a seal with compromised signing keys is in an Interaction Event in a KEL that has not yet recovered from that key compromise via a Rotation Event. This makes the forgery attempt both detectable and recoverable. In any event, the ACDC state proof seal ensures the detectability of any attempt at forgery using compromised keys for any ACDC state.
+
+### TEL Registrars and TEL Observers
+
+The use of a Transaction Event Log (TEL) to manage the state of an ACDC may require two infrastructure components, namely, Registrars and Observers. A TEL Registrar is a computing component that operates under the aegis of the ACDC Issuer to maintain and publish a Registry of the ACDC state via a TEL. A TEL Observer, on the other hand, is a computing component that operates under the auspices of one or more Validators to cache the Registry, allowing Validators to validate the state of a given ACDC without exposing a point of validation (PoV). To clarify, an important feature of an Observer is that it can mask the usage of a given ACDC from the Issuer.  The Observer maintains an updated cache of the Registry, reflecting state updates provided by the Registry. A validator queries its Observer, not the Registrar, at a point of validation (PoV) for an ACDC. A point of validation (PoV) occurs when an ACDC is presented to a Validator for validation.  Whereas the interactions between the Observer and Registrar occur when there are ACDC state changes, not when there is a PoV of a given ACDC state. This protects against forced validator-to-issuer correlation of ACDC usage, i.e., no forced phone home validation.
+
+To elaborate, an Observer starts up by downloading and caching the Registries from a Registrar. The Observer then updates its cache of current Registry state by either periodically polling the Registry for state updates or by subscribing to pushed state updates from the Registrar when available. Typically, because ACDC state changes are rare, optimized batch synchronization of state changes across multiple registries may be employed. Race conditions may be mitigated by implementing timed grace periods on revocations, whereby a revocation does not go into effect until a specified date and time after the state update. This enables synchronization batch windows to catch revocations in advance of PoV requests.
+
+![Registrar-Observers](https://raw.githubusercontent.com/trustoverip/tswg-acdc-specification/main/images/Ecosystem.png)
+
+**Figure:** *Registrar Observer Components*
+
+
 
 ### Data Privacy
 
