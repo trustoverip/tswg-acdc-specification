@@ -1734,7 +1734,7 @@ This model is diagrammed below. Need diagram here
 ### Least Disclosure
 ACDCs provide several mechanisms designed to help protect against the exploitation of disclosed data. These are based on the principle of least disclosure as follows:
 
-The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction and no more. [[47](#IDSys)]
+The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction, and no more. [[47](#IDSys)]
 
 ### Graduated Disclosure
 
@@ -1802,18 +1802,18 @@ The baseline exchange protocol is composed of a standard set of routed KERI exch
 
 | Discloser | Disclosee | Initiate | Contents | Description |
 |:-:|:-:|:-:|:--|:--|
-| | `apply`| Y | Schema or its SAID, Attribute field label list, signature on `apply` or its SAID | Schema SAID is type of ACDC, optional label list for Selective Disclosure, CESR-Proof signature|
+| | `apply`| Y | Schema or its SAID, Attribute field label list, Aggregate element label list, signature on `apply` or its SAID | defines wanted disclosure |
 |`spurn`|  | N | |rejects `apply` |
-|`offer`|  | Y | metadata ACDC or its SAID, signature on `offer` or its SAID  | includes Schema or its SAID, other Partial Disclosures, Selective Disclosure label list, CESR-Proof signature |
+|`offer`|  | Y | Metadata ACDC or its SAID, Schema or its SAID, partial disclosure, Aggregate element label list, signature on `offer` or its SAID  | proposes acceptable disclosure |
 | | `spurn` | N | |rejects `offer` |
-| | `agree`| N | signature on `offer` or its SAID | CESR-Proof signature |
+| | `agree`| N | signature and/or anchored seal on `offer` or its SAID | accepts `offer` |
 |`spurn`|  | N | |rejects `agree` |
-|`grant`|  | Y | Full or Selective Disclosure ACDC, signature on `grant` or its SAID  | includes Attribute values, CESR-Proof signature |
-| | `admit` | N | signature on `grant` or its SAID  | CESR-Proof signature |
+|`grant`|  | Y | Full or Selective Disclosure ACDC, signature on `grant` or its SAID  | discloses agreed to `offer` |
+| | `admit` | N | signature and/or anchored seal on `grant` or its SAID  | confirms received `grant` disclosure|
 
 #### Commitments via SAID
 
-All the variants of an ACDC have various degrees of expansion of the compact variant. Therefore, an Issuer commitment via a signature (direct) or KEL anchored seal (indirect) to any variant of ACDC (metadata, compact, partial, nested partial, full, selective, etc.)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top-level section field is either the SAD or the SAID of the SAD of the associated section. Both a SAD and its SAID, when signed or sealed, each provide a verifiable commitment to the SAD. In the former, the signature or seal verification is directly against the SAD itself. In the latter, the SAID as digest MUST first be verified against its SAD, and then the signature or seal on the SAID MAY be verified. This indirect verifiability (one or multiple levels of commitment via cryptographic digests) assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top-level structure as the compact variant, then a signature on any variant MAY be used to verify the Issuer's commitment to any other variant either directly or indirectly, in whole or in part on a top-level section by top-level section basis. This cross-variant Issuer commitment verifiability is an essential property that supports Graduated Disclosure by the Disclosee of any or all variants, whether Full, Compact, Metadata, Partial, Selective etc.
+All variants of an ACDC have various degrees of expansion compared to the compact variant. Therefore, an Issuer commitment via a signature (direct) or KEL anchored seal (indirect) to any variant of ACDC (metadata, compact, partial, nested partial, full, selective, etc.)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top-level section field is either the SAD or the SAID of the SAD of the associated section. Both a SAD and its SAID, when signed or sealed, each provide a verifiable commitment to the SAD. In the former, the signature or seal verification is directly against the SAD itself. In the latter, the SAID as digest MUST first be verified against its SAD, and then the signature or seal on the SAID MAY be verified. This indirect verifiability (one or multiple levels of commitment via cryptographic digests) assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top-level structure as the compact variant, a signature on any variant MAY be used to verify the Issuer's commitment to any other variant either directly or indirectly, in whole or in part, on a top-level section-by-section basis. This cross-variant Issuer commitment verifiability is an essential property that supports Graduated Disclosure by the Disclosee of any or all variants, whether Full, Compact, Metadata, Partial, Selective, etc.
 
 To elaborate, the SAID of a given variant is useful even when it is not the SAID of the variant the Issuer signed because, during Graduated Disclosure, the Discloser MAY choose to sign or seal that given variant to fulfill a given step in an IPEX Graduated Disclosure transaction. The Discloser thereby can make a verifiable disclosure in a given step of the SAD of a given variant that fulfills a commitment made in a prior step via its signature or seal on merely the SAID of the SAD of the variant so disclosed.
 

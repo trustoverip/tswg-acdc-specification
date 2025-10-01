@@ -482,8 +482,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
                             <a class="mx-auto p-2" href="https://github.com/trustoverip/spec-up-t"
                                 target="_blank" rel="noopener">Powered By Spec-Up-T</a>
                             <small>
-                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-09-28T14:29:09.108Z">
-                                    Generated: 2025-09-28T14:29:09.108Z
+                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-10-01T21:26:45.396Z">
+                                    Generated: 2025-10-01T21:26:45.396Z
                                 </time>
                             </small>
                         </div>
@@ -2271,7 +2271,7 @@ Privacy: will the expectations of each party with respect to the usage of shared
 <h2 id="exploitation-protection-mechanisms"><a class="toc-anchor d-print-none" href="#exploitation-protection-mechanisms">§</a> Exploitation Protection Mechanisms</h2>
 <h3 id="least-disclosure"><a class="toc-anchor d-print-none" href="#least-disclosure">§</a> Least Disclosure</h3>
 <p>ACDCs provide several mechanisms designed to help protect against the exploitation of disclosed data. These are based on the principle of least disclosure as follows:</p>
-<p>The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction and no more. [<a href="#IDSys">47</a>]</p>
+<p>The system should disclose only the minimum amount of information about a given party needed to facilitate a transaction, and no more. [<a href="#IDSys">47</a>]</p>
 <h3 id="graduated-disclosure"><a class="toc-anchor d-print-none" href="#graduated-disclosure">§</a> Graduated Disclosure</h3>
 <p>Any given transaction may entail several disclosures that are iterative and incremental, such that one least disclosure facilitates another least disclosure, and so forth. The incremental interactive application of the principle of least disclosure is called Graduated Disclosure. The important insight is that one type of transaction enabled by a given least disclosure is one that specifically enables further disclosure. In other words, disclose enough to enable more disclosure, which in turn may enable even more disclosure.  To clarify, Graduated Disclosure enables a potential Discloser to follow the principle of least disclosure by providing the least amount of information i.e., partial, incomplete, or uncorrelatable information needed to further a transaction. This progression of successive least disclosures to enable further disclosures forms a recursive loop of least disclosure-enabled transactions. In other words, the principle of least disclosure may be applied recursively as part of a Graduated Disclosure. A Contractually Protected Disclosure, for example, may result from the recursive application of least disclosure transactions.</p>
 <p>There are several graduated disclosure mechanisms as follows:</p>
@@ -2342,8 +2342,8 @@ Privacy: will the expectations of each party with respect to the usage of shared
 <td style="text-align:center"></td>
 <td style="text-align:center"><code>apply</code></td>
 <td style="text-align:center">Y</td>
-<td style="text-align:left">Schema or its SAID, Attribute field label list, signature on <code>apply</code> or its SAID</td>
-<td style="text-align:left">Schema SAID is type of ACDC, optional label list for Selective Disclosure, CESR-Proof signature</td>
+<td style="text-align:left">Schema or its SAID, Attribute field label list, Aggregate element label list, signature on <code>apply</code> or its SAID</td>
+<td style="text-align:left">defines wanted disclosure</td>
 </tr>
 <tr>
 <td style="text-align:center"><code>spurn</code></td>
@@ -2356,8 +2356,8 @@ Privacy: will the expectations of each party with respect to the usage of shared
 <td style="text-align:center"><code>offer</code></td>
 <td style="text-align:center"></td>
 <td style="text-align:center">Y</td>
-<td style="text-align:left">metadata ACDC or its SAID, signature on <code>offer</code> or its SAID</td>
-<td style="text-align:left">includes Schema or its SAID, other Partial Disclosures, Selective Disclosure label list, CESR-Proof signature</td>
+<td style="text-align:left">Metadata ACDC or its SAID, Schema or its SAID, partial disclosure, Aggregate element label list, signature on <code>offer</code> or its SAID</td>
+<td style="text-align:left">proposes acceptable disclosure</td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
@@ -2370,8 +2370,8 @@ Privacy: will the expectations of each party with respect to the usage of shared
 <td style="text-align:center"></td>
 <td style="text-align:center"><code>agree</code></td>
 <td style="text-align:center">N</td>
-<td style="text-align:left">signature on <code>offer</code> or its SAID</td>
-<td style="text-align:left">CESR-Proof signature</td>
+<td style="text-align:left">signature and/or anchored seal on <code>offer</code> or its SAID</td>
+<td style="text-align:left">accepts <code>offer</code></td>
 </tr>
 <tr>
 <td style="text-align:center"><code>spurn</code></td>
@@ -2385,19 +2385,19 @@ Privacy: will the expectations of each party with respect to the usage of shared
 <td style="text-align:center"></td>
 <td style="text-align:center">Y</td>
 <td style="text-align:left">Full or Selective Disclosure ACDC, signature on <code>grant</code> or its SAID</td>
-<td style="text-align:left">includes Attribute values, CESR-Proof signature</td>
+<td style="text-align:left">discloses agreed to <code>offer</code></td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
 <td style="text-align:center"><code>admit</code></td>
 <td style="text-align:center">N</td>
-<td style="text-align:left">signature on <code>grant</code> or its SAID</td>
-<td style="text-align:left">CESR-Proof signature</td>
+<td style="text-align:left">signature and/or anchored seal on <code>grant</code> or its SAID</td>
+<td style="text-align:left">confirms received <code>grant</code> disclosure</td>
 </tr>
 </tbody>
 </table>
 </div><h4 id="commitments-via-said"><a class="toc-anchor d-print-none" href="#commitments-via-said">§</a> Commitments via SAID</h4>
-<p>All the variants of an ACDC have various degrees of expansion of the compact variant. Therefore, an Issuer commitment via a signature (direct) or KEL anchored seal (indirect) to any variant of ACDC (metadata, compact, partial, nested partial, full, selective, etc.)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top-level section field is either the SAD or the SAID of the SAD of the associated section. Both a SAD and its SAID, when signed or sealed, each provide a verifiable commitment to the SAD. In the former, the signature or seal verification is directly against the SAD itself. In the latter, the SAID as digest MUST first be verified against its SAD, and then the signature or seal on the SAID MAY be verified. This indirect verifiability (one or multiple levels of commitment via cryptographic digests) assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top-level structure as the compact variant, then a signature on any variant MAY be used to verify the Issuer’s commitment to any other variant either directly or indirectly, in whole or in part on a top-level section by top-level section basis. This cross-variant Issuer commitment verifiability is an essential property that supports Graduated Disclosure by the Disclosee of any or all variants, whether Full, Compact, Metadata, Partial, Selective etc.</p>
+<p>All variants of an ACDC have various degrees of expansion compared to the compact variant. Therefore, an Issuer commitment via a signature (direct) or KEL anchored seal (indirect) to any variant of ACDC (metadata, compact, partial, nested partial, full, selective, etc.)  makes a cryptographic commitment to the top-level section fields shared by all variants of that ACDC because the value of a top-level section field is either the SAD or the SAID of the SAD of the associated section. Both a SAD and its SAID, when signed or sealed, each provide a verifiable commitment to the SAD. In the former, the signature or seal verification is directly against the SAD itself. In the latter, the SAID as digest MUST first be verified against its SAD, and then the signature or seal on the SAID MAY be verified. This indirect verifiability (one or multiple levels of commitment via cryptographic digests) assumes that the cryptographic strength of the SAID digest is equivalent to the cryptographic strength of the signature used to sign it. To clarify, because all variants share the same top-level structure as the compact variant, a signature on any variant MAY be used to verify the Issuer’s commitment to any other variant either directly or indirectly, in whole or in part, on a top-level section-by-section basis. This cross-variant Issuer commitment verifiability is an essential property that supports Graduated Disclosure by the Disclosee of any or all variants, whether Full, Compact, Metadata, Partial, Selective, etc.</p>
 <p>To elaborate, the SAID of a given variant is useful even when it is not the SAID of the variant the Issuer signed because, during Graduated Disclosure, the Discloser MAY choose to sign or seal that given variant to fulfill a given step in an IPEX Graduated Disclosure transaction. The Discloser thereby can make a verifiable disclosure in a given step of the SAD of a given variant that fulfills a commitment made in a prior step via its signature or seal on merely the SAID of the SAD of the variant so disclosed.</p>
 <p>For example, the metadata variant of an ACDC will have a different SAID than the compact variant because some of the top-level field values MAY be empty in the metadata variant. One can think of the metadata variant as a partial manifest that only includes those top-level sections that the Discloser is committing to disclose in order to induce the Disclosee to agree to the contractual terms of use when disclosed.</p>
 <p>To elaborate, an IPEX transaction is between the Discloser and Disclosee, who both SHOULD make non-repudiable commitments to each other via signing or sealing variants of the ACDC to be disclosed. Typically, this means that the Discloser will eventually need to fulfill its commitment with proof of disclosure to the Disclosee. This proof MAY be satisfied either against the Discloser’s signature or seal on the actual disclosed SAD or against the Discloser’s signature or seal on the SAID of the actual disclosed SAD. In addition, the Disclosee SHOULD typically require proof of issuance via a non-repudiable signature or seal by the Issuer on a variant of the disclosed SAD that is verifiable (directly or indirectly) against the variant that is the disclosed SAD.</p>
@@ -4931,7 +4931,7 @@ Because the edges are in blocks, each with a SAID and UUID fields, the edges can
     </ul></div>
             </div>
             <hr>
-            <p class="ps-3 pe-3" id="w3c-state">W3C Recommendation, 28 September 2025</p>
+            <p class="ps-3 pe-3" id="w3c-state">W3C Recommendation, 01 October 2025</p>
         </div>
     </div>
 
