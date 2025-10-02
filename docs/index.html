@@ -482,8 +482,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
                             <a class="mx-auto p-2" href="https://github.com/trustoverip/spec-up-t"
                                 target="_blank" rel="noopener">Powered By Spec-Up-T</a>
                             <small>
-                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-10-01T21:26:45.396Z">
-                                    Generated: 2025-10-01T21:26:45.396Z
+                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-10-02T01:53:39.526Z">
+                                    Generated: 2025-10-02T01:53:39.526Z
                                 </time>
                             </small>
                         </div>
@@ -1315,7 +1315,7 @@ These MAY appear at other levels besides the top-level of an ACDC.</p>
 <h4 id="computation-of-the-agid-aggregate-id"><a class="toc-anchor d-print-none" href="#computation-of-the-agid-aggregate-id">§</a> Computation of the AGID (Aggregate ID)</h4>
 <p>The zeroth entry in the blinded attribute list represents a cryptogrphic digest of a given type. The length of this string is defined by the type of digest. This string is populated with dummy characters, namely <code>#</code> equal to the length of the digest type when CESR encoded as qb64 (text domain).  The remaining <code>N</code> elements in the list are populated with the SAID values (CESR encoded qb64) of each the <code>N</code> blindable attribute blocks. This results in a list with <code>N+1</code> elements. This list is then serialized as a list in whatever serialization kind is used by the enclosing ACDC (CESR, JSON, CBOR, MGPK). A digest of this serialization is computer and qb64 value of that digest replaces the dummied values in the zeroth element. This digest value in CESR qb64 is the AGID.  Working examples of AGID computation are provided below.</p>
 <h4 id="inclusion-proof-via-aggregated-list-digest-agid"><a class="toc-anchor d-print-none" href="#inclusion-proof-via-aggregated-list-digest-agid">§</a> Inclusion proof via aggregated list digest (AGID)</h4>
-<p>All the a<sub>i</sub> in the list are serialized and then aggregated into a single aggregate digest denoted the AGID by computing the digest of their ordered serialization in a list. This is expressed as follows:</p>
+<p>All the a<sub>i</sub> in the list are serialized and then aggregated into a single aggregate digest, denoted the AGID, by computing the digest of their ordered serialization in a list. This is expressed as follows:</p>
 <p>AGID = H(C(a<sub>i</sub> for all i in {0, …, N})), where ‘H’ is the digest (hash) Operator and ‘C’ is the ordered serialization operator.</p>
 <p>In compact form, the value of the selectively disclosable top-level Attribute section, <code>A</code>, field is set to the aggregated value ‘AGID’. This aggregate ‘AGID’ makes a blinded cryptographic commitment to all SAIDS in the list,</p>
 <p>[a<sub>1</sub>, …, a<sub>N</sub>].</p>
@@ -2839,13 +2839,12 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 </tbody>
 </table>
 </div><p>In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, <code>d</code> field in the associated blindable update, <code>bup</code> event.</p>
-<p>An attachment of this blinded attribute block would be prefixed with the appropriate CESR count code as follows:</p>
+<p>An unblinded attachment of this blinded attribute block would be prefixed with the appropriate CESR count code as follows:</p>
 <pre><code>-aAYECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6JaG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv81AAP1AAP
 </code></pre>
 <h4 id="private-blinded-state-registry-example"><a class="toc-anchor d-print-none" href="#private-blinded-state-registry-example">§</a> Private (blinded) state Registry example</h4>
 <p>Consider a blindable state revocation registry for ACDCs operated in blinded (private) mode. The transaction state can be one of two values, <code>issued</code> or <code>revoked</code>. In this case, the placeholder value of the empty string for the transaction state, <code>ts</code> field, is also employed to decorrelate the initialization.  The Issuer with AID, <code>ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf</code> first creates one among many placeholder Registries by issuing the following transaction event:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-
     <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAADa."</span><span class="token punctuation">,</span>
     <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"rip"</span><span class="token punctuation">,</span>
     <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"</span><span class="token punctuation">,</span>
@@ -3932,13 +3931,13 @@ deb <span class="token operator">=</span> <span class="token string">"EEDGM_DvZ9
 <h5 id="accreditation-acdc"><a class="toc-anchor d-print-none" href="#accreditation-acdc">§</a> Accreditation ACDC</h5>
 <p>Cal (a euphemism for the accreditation agency) creates a placeholder registry in order to issue a revokable ACDC to Amy (a euphemism for Sunspot College).  This is created with a registration inception event message as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAADa."</span><span class="token punctuation">,</span>
-        <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"rip"</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcy"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"</span><span class="token punctuation">,</span>
-        <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"0"</span><span class="token punctuation">,</span>
-        <span class="token string">"dt"</span><span class="token punctuation">:</span> <span class="token string">"2025-07-04T17:52:00.000000+00:00"</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAADa."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"rip"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcy"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"</span><span class="token punctuation">,</span>
+    <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"0"</span><span class="token punctuation">,</span>
+    <span class="token string">"dt"</span><span class="token punctuation">:</span> <span class="token string">"2025-07-04T17:52:00.000000+00:00"</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>The registration identifier is the SAID of this message, as follows:</p>
@@ -3946,45 +3945,45 @@ deb <span class="token operator">=</span> <span class="token string">"EEDGM_DvZ9
 </code></pre>
 <p>Cal uses this to issue an accreditation ACDC.  The full ACDC is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-       <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAKX."</span><span class="token punctuation">,</span>
-       <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
-       <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi"</span><span class="token punctuation">,</span>
-       <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdh"</span><span class="token punctuation">,</span>
-       <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"</span><span class="token punctuation">,</span>
-       <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"</span><span class="token punctuation">,</span>
-       <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"</span><span class="token punctuation">,</span>
-       <span class="token string">"a"</span><span class="token punctuation">:</span>
-       <span class="token punctuation">{</span>
-           <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL"</span><span class="token punctuation">,</span>
-           <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc3"</span><span class="token punctuation">,</span>
-           <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"</span><span class="token punctuation">,</span>
-           <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Sunspot College"</span><span class="token punctuation">,</span>
-           <span class="token string">"level"</span><span class="token punctuation">:</span> <span class="token string">"gold"</span>
-       <span class="token punctuation">}</span><span class="token punctuation">,</span>
-       <span class="token string">"r"</span><span class="token punctuation">:</span>
-       <span class="token punctuation">{</span>
-           <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span><span class="token punctuation">,</span>
-           <span class="token string">"l"</span><span class="token punctuation">:</span> <span class="token string">"Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."</span>
-       <span class="token punctuation">}</span>
+   <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAKX."</span><span class="token punctuation">,</span>
+   <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
+   <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi"</span><span class="token punctuation">,</span>
+   <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdh"</span><span class="token punctuation">,</span>
+   <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"</span><span class="token punctuation">,</span>
+   <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"</span><span class="token punctuation">,</span>
+   <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"</span><span class="token punctuation">,</span>
+   <span class="token string">"a"</span><span class="token punctuation">:</span>
+   <span class="token punctuation">{</span>
+       <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL"</span><span class="token punctuation">,</span>
+       <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc3"</span><span class="token punctuation">,</span>
+       <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"</span><span class="token punctuation">,</span>
+       <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Sunspot College"</span><span class="token punctuation">,</span>
+       <span class="token string">"level"</span><span class="token punctuation">:</span> <span class="token string">"gold"</span>
+   <span class="token punctuation">}</span><span class="token punctuation">,</span>
+   <span class="token string">"r"</span><span class="token punctuation">:</span>
+   <span class="token punctuation">{</span>
+       <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span><span class="token punctuation">,</span>
+       <span class="token string">"l"</span><span class="token punctuation">:</span> <span class="token string">"Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."</span>
+   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Note that the value of the <code>rd</code> field is the same as the value of regCal. This binds the issued ACDC to a specific issuance/revocation state registry. Note also that the top-level <code>i</code> field value is Cal’s AID. Also note that nested inside the attribute block with label <code>a</code> is the issuee field <code>i</code> (not to be confused with the top-level issuer). The issuee field value is Amy’s AID.  This binds Amy as the target of the ACDC.</p>
 <p>This ACDC can be compacted into its most compact form. This is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAF3."</span><span class="token punctuation">,</span>
-        <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdh"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"</span><span class="token punctuation">,</span>
-        <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"</span><span class="token punctuation">,</span>
-        <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"</span><span class="token punctuation">,</span>
-        <span class="token string">"a"</span><span class="token punctuation">:</span> <span class="token string">"EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL"</span><span class="token punctuation">,</span>
-        <span class="token string">"r"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAF3."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdh"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT"</span><span class="token punctuation">,</span>
+    <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"</span><span class="token punctuation">,</span>
+    <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"</span><span class="token punctuation">,</span>
+    <span class="token string">"a"</span><span class="token punctuation">:</span> <span class="token string">"EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL"</span><span class="token punctuation">,</span>
+    <span class="token string">"r"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Note that the SAIDs of the sections are the same in both the uncompact and compact variants.</p>
 <p>The schema for this ACDC is as follows:</p>
-<pre class="language-json"><code class="language-json">    <span class="token punctuation">{</span>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
         <span class="token property">"$id"</span><span class="token operator">:</span> <span class="token string">"EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"</span><span class="token punctuation">,</span>
         <span class="token property">"$schema"</span><span class="token operator">:</span> <span class="token string">"https://json-schema.org/draft/2020-12/schema"</span><span class="token punctuation">,</span>
         <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Accreditation Schema"</span><span class="token punctuation">,</span>
@@ -4068,54 +4067,54 @@ deb <span class="token operator">=</span> <span class="token string">"EEDGM_DvZ9
 <h5 id="research-report-acdc"><a class="toc-anchor d-print-none" href="#research-report-acdc">§</a> Research Report ACDC</h5>
 <p>Deb (a euphemism for the department) creates a placeholder registry to issue a revocable ACDC that endorses a report authored by Bob.  The associated registry was created with a registration inception event message as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAADa."</span><span class="token punctuation">,</span>
-        <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"rip"</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcz"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"</span><span class="token punctuation">,</span>
-        <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"0"</span><span class="token punctuation">,</span>
-        <span class="token string">"dt"</span><span class="token punctuation">:</span> <span class="token string">"2025-07-04T17:53:00.000000+00:00"</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAADa."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"rip"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcz"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"</span><span class="token punctuation">,</span>
+    <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"0"</span><span class="token punctuation">,</span>
+    <span class="token string">"dt"</span><span class="token punctuation">:</span> <span class="token string">"2025-07-04T17:53:00.000000+00:00"</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>The registration identifier is the SAID of this message, as follows:</p>
 <pre class="language-python"><code class="language-python">regDeb <span class="token operator">=</span> <span class="token string">"EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"</span>
 </code></pre>
 <p>Deb uses this to issue a report endorsement credential as follows:</p>
-<pre class="language-python"><code class="language-python"> <span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAK4."</span><span class="token punctuation">,</span>
-        <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdi"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"</span><span class="token punctuation">,</span>
-        <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"</span><span class="token punctuation">,</span>
-        <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-"</span><span class="token punctuation">,</span>
-        <span class="token string">"a"</span><span class="token punctuation">:</span>
-        <span class="token punctuation">{</span>
-            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-"</span><span class="token punctuation">,</span>
-            <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc4"</span><span class="token punctuation">,</span>
-            <span class="token string">"title"</span><span class="token punctuation">:</span> <span class="token string">"Post Quantum Security"</span><span class="token punctuation">,</span>
-            <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Zoe Doe"</span><span class="token punctuation">,</span>
-            <span class="token string">"report"</span><span class="token punctuation">:</span> <span class="token string">"Imprementation should prioritize cryptographic agility over PQ."</span>
-        <span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token string">"r"</span><span class="token punctuation">:</span>
-        <span class="token punctuation">{</span>
-            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span><span class="token punctuation">,</span>
-            <span class="token string">"l"</span><span class="token punctuation">:</span> <span class="token string">"Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."</span>
-        <span class="token punctuation">}</span>
+<pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAK4."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdi"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"</span><span class="token punctuation">,</span>
+    <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"</span><span class="token punctuation">,</span>
+    <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-"</span><span class="token punctuation">,</span>
+    <span class="token string">"a"</span><span class="token punctuation">:</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-"</span><span class="token punctuation">,</span>
+        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc4"</span><span class="token punctuation">,</span>
+        <span class="token string">"title"</span><span class="token punctuation">:</span> <span class="token string">"Post Quantum Security"</span><span class="token punctuation">,</span>
+        <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Zoe Doe"</span><span class="token punctuation">,</span>
+        <span class="token string">"report"</span><span class="token punctuation">:</span> <span class="token string">"Imprementation should prioritize cryptographic agility over PQ."</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"r"</span><span class="token punctuation">:</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span><span class="token punctuation">,</span>
+        <span class="token string">"l"</span><span class="token punctuation">:</span> <span class="token string">"Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Note that the value of the <code>rd</code> field is the same as the value of regDeb. This binds the issued ACDC to a specific issuance/revocation state registry. Note also that the top-level <code>i</code> field value is Deb’s AID. Also note there is no nested issuee field. This ACDC is therefore untargeted. The only association it to the student as named author via the <code>name</code> field.</p>
 <p>This ACDC can be compacted into its most compact form. This is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAF3."</span><span class="token punctuation">,</span>
-        <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdi"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"</span><span class="token punctuation">,</span>
-        <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"</span><span class="token punctuation">,</span>
-        <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-"</span><span class="token punctuation">,</span>
-        <span class="token string">"a"</span><span class="token punctuation">:</span> <span class="token string">"EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-"</span><span class="token punctuation">,</span>
-        <span class="token string">"r"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAF3."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdi"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW"</span><span class="token punctuation">,</span>
+    <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"</span><span class="token punctuation">,</span>
+    <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-"</span><span class="token punctuation">,</span>
+    <span class="token string">"a"</span><span class="token punctuation">:</span> <span class="token string">"EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-"</span><span class="token punctuation">,</span>
+    <span class="token string">"r"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Note that the SAIDs of the sections are the same in both the uncompact and compact variants.</p>
@@ -4217,41 +4216,41 @@ deb <span class="token operator">=</span> <span class="token string">"EEDGM_DvZ9
 <pre class="language-python"><code class="language-python">regBob <span class="token operator">=</span> <span class="token string">"ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"</span>
 </code></pre>
 <p>Bob uses this to issue a report credential as follows:</p>
-<pre class="language-python"><code class="language-python"> <span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAKt."</span><span class="token punctuation">,</span>
-        <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdj"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"</span><span class="token punctuation">,</span>
-        <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"</span><span class="token punctuation">,</span>
-        <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-"</span><span class="token punctuation">,</span>
-        <span class="token string">"a"</span><span class="token punctuation">:</span>
-        <span class="token punctuation">{</span>
-            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_"</span><span class="token punctuation">,</span>
-            <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc5"</span><span class="token punctuation">,</span>
-            <span class="token string">"title"</span><span class="token punctuation">:</span> <span class="token string">"PQ Proof of Concept"</span><span class="token punctuation">,</span>
-            <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Zoe Doe"</span><span class="token punctuation">,</span>
-            <span class="token string">"report"</span><span class="token punctuation">:</span> <span class="token string">"Demonstration of recovery from surprise quantum attack"</span>
-        <span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token string">"r"</span><span class="token punctuation">:</span>
-        <span class="token punctuation">{</span>
-            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span><span class="token punctuation">,</span>
-            <span class="token string">"l"</span><span class="token punctuation">:</span> <span class="token string">"Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."</span>
-        <span class="token punctuation">}</span>
+<pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAKt."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdj"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"</span><span class="token punctuation">,</span>
+    <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"</span><span class="token punctuation">,</span>
+    <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-"</span><span class="token punctuation">,</span>
+    <span class="token string">"a"</span><span class="token punctuation">:</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_"</span><span class="token punctuation">,</span>
+        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc5"</span><span class="token punctuation">,</span>
+        <span class="token string">"title"</span><span class="token punctuation">:</span> <span class="token string">"PQ Proof of Concept"</span><span class="token punctuation">,</span>
+        <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Zoe Doe"</span><span class="token punctuation">,</span>
+        <span class="token string">"report"</span><span class="token punctuation">:</span> <span class="token string">"Demonstration of recovery from surprise quantum attack"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"r"</span><span class="token punctuation">:</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span><span class="token punctuation">,</span>
+        <span class="token string">"l"</span><span class="token punctuation">:</span> <span class="token string">"Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Note that the value of the <code>rd</code> field is the same as the value of regBob. This binds the issued ACDC to a specific issuance/revocation state registry. Note also that the top-level <code>i</code> field value is Bob’s AID. Also note there is no nested issuee field. This ACDC is therefore untargeted. The only association is to the student as named author via the <code>name</code> field.</p>
 <p>This ACDC can be compacted into its most compact form. This is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAF3."</span><span class="token punctuation">,</span>
-        <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdj"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"</span><span class="token punctuation">,</span>
-        <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"</span><span class="token punctuation">,</span>
-        <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-"</span><span class="token punctuation">,</span>
-        <span class="token string">"a"</span><span class="token punctuation">:</span> <span class="token string">"EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_"</span><span class="token punctuation">,</span>
-        <span class="token string">"r"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAF3."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"acm"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdj"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"</span><span class="token punctuation">,</span>
+    <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"</span><span class="token punctuation">,</span>
+    <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-"</span><span class="token punctuation">,</span>
+    <span class="token string">"a"</span><span class="token punctuation">:</span> <span class="token string">"EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_"</span><span class="token punctuation">,</span>
+    <span class="token string">"r"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Note that the SAIDs of the sections are the same in both the uncompact and compact variants.</p>
@@ -4261,13 +4260,13 @@ deb <span class="token operator">=</span> <span class="token string">"EEDGM_DvZ9
 <p>Amy first creates a placeholder registry for maintaining the issue/revoke status of the transcript ACDC.
 The associated registry was created with a registration inception event message as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAADa."</span><span class="token punctuation">,</span>
-        <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"rip"</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcw"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"</span><span class="token punctuation">,</span>
-        <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"0"</span><span class="token punctuation">,</span>
-        <span class="token string">"dt"</span><span class="token punctuation">:</span> <span class="token string">"2025-07-04T17:50:00.000000+00:00"</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAADa."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"rip"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcw"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"</span><span class="token punctuation">,</span>
+    <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"0"</span><span class="token punctuation">,</span>
+    <span class="token string">"dt"</span><span class="token punctuation">:</span> <span class="token string">"2025-07-04T17:50:00.000000+00:00"</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>The registration identifier is the SAID of this message, as follows:</p>
@@ -4275,65 +4274,65 @@ The associated registry was created with a registration inception event message 
 </code></pre>
 <p>Amy uses this to issue a transcript ACDC to Bob as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAXG."</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdk"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"</span><span class="token punctuation">,</span>
-        <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX"</span><span class="token punctuation">,</span>
-        <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh"</span><span class="token punctuation">,</span>
-        <span class="token string">"a"</span><span class="token punctuation">:</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAXG."</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdk"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"</span><span class="token punctuation">,</span>
+    <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX"</span><span class="token punctuation">,</span>
+    <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh"</span><span class="token punctuation">,</span>
+    <span class="token string">"a"</span><span class="token punctuation">:</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U"</span><span class="token punctuation">,</span>
+        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcw"</span><span class="token punctuation">,</span>
+        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"</span><span class="token punctuation">,</span>
+        <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Zoe Doe"</span><span class="token punctuation">,</span>
+        <span class="token string">"gpa"</span><span class="token punctuation">:</span> <span class="token number">3.5</span><span class="token punctuation">,</span>
+        <span class="token string">"grades"</span><span class="token punctuation">:</span>
         <span class="token punctuation">{</span>
-            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U"</span><span class="token punctuation">,</span>
-            <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcw"</span><span class="token punctuation">,</span>
-            <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf"</span><span class="token punctuation">,</span>
-            <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Zoe Doe"</span><span class="token punctuation">,</span>
-            <span class="token string">"gpa"</span><span class="token punctuation">:</span> <span class="token number">3.5</span><span class="token punctuation">,</span>
-            <span class="token string">"grades"</span><span class="token punctuation">:</span>
-            <span class="token punctuation">{</span>
-                <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EFQnBFeKAeS4DAWYoKDwWXOT4h2-XaGk7-w4-2N4ktXy"</span><span class="token punctuation">,</span>
-                <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcx"</span><span class="token punctuation">,</span>
-                <span class="token string">"history"</span><span class="token punctuation">:</span> <span class="token number">3.5</span><span class="token punctuation">,</span>
-                <span class="token string">"english"</span><span class="token punctuation">:</span> <span class="token number">4.0</span><span class="token punctuation">,</span>
-                <span class="token string">"math"</span><span class="token punctuation">:</span> <span class="token number">3.0</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token string">"e"</span><span class="token punctuation">:</span>
-        <span class="token punctuation">{</span>
-            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0"</span><span class="token punctuation">,</span>
-            <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcy"</span><span class="token punctuation">,</span>
-            <span class="token string">"accreditation"</span><span class="token punctuation">:</span>
-            <span class="token punctuation">{</span>
-                <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EAFj8JaNEC3mdFNJKrXW8E03_k9qqb_xM9NjAPVHw-xJ"</span><span class="token punctuation">,</span>
-                <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcz"</span><span class="token punctuation">,</span>
-                <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi"</span><span class="token punctuation">,</span>
-                <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"</span>
-            <span class="token punctuation">}</span><span class="token punctuation">,</span>
-            <span class="token string">"reports"</span><span class="token punctuation">:</span>
-            <span class="token punctuation">{</span>
-                <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EOObmbCppe1S-7vtLuy766_4-RcfrC7p4ciFtBxdexuz"</span><span class="token punctuation">,</span>
-                <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc0"</span><span class="token punctuation">,</span>
-                <span class="token string">"o"</span><span class="token punctuation">:</span> <span class="token string">"OR"</span><span class="token punctuation">,</span>
-                <span class="token string">"research"</span><span class="token punctuation">:</span>
-                <span class="token punctuation">{</span>
-                    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EN9ngstOcFHqsjqf75JZFKtCRmW76NkeRrUSxTLoqqkI"</span><span class="token punctuation">,</span>
-                    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc2"</span><span class="token punctuation">,</span>
-                    <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5"</span><span class="token punctuation">,</span>
-                    <span class="token string">"o"</span><span class="token punctuation">:</span> <span class="token string">"NI2I"</span>
-                <span class="token punctuation">}</span><span class="token punctuation">,</span>
-                <span class="token string">"project"</span><span class="token punctuation">:</span>
-                <span class="token punctuation">{</span>
-                    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EFwHz5qJ4_8c7IefP7_zugX2eIgtoyY8Up_WZ3osXwkI"</span><span class="token punctuation">,</span>
-                    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc1"</span><span class="token punctuation">,</span>
-                    <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M"</span><span class="token punctuation">,</span>
-                    <span class="token string">"o"</span><span class="token punctuation">:</span> <span class="token string">"NI2I"</span>
-                <span class="token punctuation">}</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token string">"r"</span><span class="token punctuation">:</span>
-        <span class="token punctuation">{</span>
-            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span><span class="token punctuation">,</span>
-            <span class="token string">"l"</span><span class="token punctuation">:</span> <span class="token string">"Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."</span>
+            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EFQnBFeKAeS4DAWYoKDwWXOT4h2-XaGk7-w4-2N4ktXy"</span><span class="token punctuation">,</span>
+            <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcx"</span><span class="token punctuation">,</span>
+            <span class="token string">"history"</span><span class="token punctuation">:</span> <span class="token number">3.5</span><span class="token punctuation">,</span>
+            <span class="token string">"english"</span><span class="token punctuation">:</span> <span class="token number">4.0</span><span class="token punctuation">,</span>
+            <span class="token string">"math"</span><span class="token punctuation">:</span> <span class="token number">3.0</span>
         <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"e"</span><span class="token punctuation">:</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0"</span><span class="token punctuation">,</span>
+        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcy"</span><span class="token punctuation">,</span>
+        <span class="token string">"accreditation"</span><span class="token punctuation">:</span>
+        <span class="token punctuation">{</span>
+            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EAFj8JaNEC3mdFNJKrXW8E03_k9qqb_xM9NjAPVHw-xJ"</span><span class="token punctuation">,</span>
+            <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXcz"</span><span class="token punctuation">,</span>
+            <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi"</span><span class="token punctuation">,</span>
+            <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token string">"reports"</span><span class="token punctuation">:</span>
+        <span class="token punctuation">{</span>
+            <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EOObmbCppe1S-7vtLuy766_4-RcfrC7p4ciFtBxdexuz"</span><span class="token punctuation">,</span>
+            <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc0"</span><span class="token punctuation">,</span>
+            <span class="token string">"o"</span><span class="token punctuation">:</span> <span class="token string">"OR"</span><span class="token punctuation">,</span>
+            <span class="token string">"research"</span><span class="token punctuation">:</span>
+            <span class="token punctuation">{</span>
+                <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EN9ngstOcFHqsjqf75JZFKtCRmW76NkeRrUSxTLoqqkI"</span><span class="token punctuation">,</span>
+                <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc2"</span><span class="token punctuation">,</span>
+                <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5"</span><span class="token punctuation">,</span>
+                <span class="token string">"o"</span><span class="token punctuation">:</span> <span class="token string">"NI2I"</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token string">"project"</span><span class="token punctuation">:</span>
+            <span class="token punctuation">{</span>
+                <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EFwHz5qJ4_8c7IefP7_zugX2eIgtoyY8Up_WZ3osXwkI"</span><span class="token punctuation">,</span>
+                <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXc1"</span><span class="token punctuation">,</span>
+                <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M"</span><span class="token punctuation">,</span>
+                <span class="token string">"o"</span><span class="token punctuation">:</span> <span class="token string">"NI2I"</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"r"</span><span class="token punctuation">:</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span><span class="token punctuation">,</span>
+        <span class="token string">"l"</span><span class="token punctuation">:</span> <span class="token string">"Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Note that the value of the <code>rd</code> field is the same as the value of regAmy. This binds the issued ACDC to a specific issuance/revocation state registry. Note also that the top-level <code>i</code> field value is Amy’s AID. Also note that nested inside the attribute block with label <code>a</code> is the issuee field <code>i</code> (not to be confused with the top-level issuer). The issuee field value is Bob’s AID.  This binds Bob as the target of the ACDC.</p>
@@ -4345,15 +4344,15 @@ Because the edges are in blocks, each with a SAID and UUID fields, the edges can
 <p>This enables the graduated partial disclosure of the edges. The details of the linked (chained) credentials can be hidden by their block SAIDS so a disclosee can’t see the linked ACDCs until the disclosse has to agreed to whatever terms are required by the discloser. Likewise for the rule section.  This illustrates that not only attributes but edges and rules can be partially disclosable.</p>
 <p>This ACDC can be compacted into its most compact form. This is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-        <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAGg."</span><span class="token punctuation">,</span>
-        <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H"</span><span class="token punctuation">,</span>
-        <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdk"</span><span class="token punctuation">,</span>
-        <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"</span><span class="token punctuation">,</span>
-        <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX"</span><span class="token punctuation">,</span>
-        <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh"</span><span class="token punctuation">,</span>
-        <span class="token string">"a"</span><span class="token punctuation">:</span> <span class="token string">"ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U"</span><span class="token punctuation">,</span>
-        <span class="token string">"e"</span><span class="token punctuation">:</span> <span class="token string">"ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0"</span><span class="token punctuation">,</span>
-        <span class="token string">"r"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAGg."</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H"</span><span class="token punctuation">,</span>
+    <span class="token string">"u"</span><span class="token punctuation">:</span> <span class="token string">"0ABhY2Rjc3BlY3dvcmtyYXdk"</span><span class="token punctuation">,</span>
+    <span class="token string">"i"</span><span class="token punctuation">:</span> <span class="token string">"ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz"</span><span class="token punctuation">,</span>
+    <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX"</span><span class="token punctuation">,</span>
+    <span class="token string">"s"</span><span class="token punctuation">:</span> <span class="token string">"EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh"</span><span class="token punctuation">,</span>
+    <span class="token string">"a"</span><span class="token punctuation">:</span> <span class="token string">"ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U"</span><span class="token punctuation">,</span>
+    <span class="token string">"e"</span><span class="token punctuation">:</span> <span class="token string">"ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0"</span><span class="token punctuation">,</span>
+    <span class="token string">"r"</span><span class="token punctuation">:</span> <span class="token string">"EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Note that the SAIDs of the sections are the same in both the uncompact and compact varieties</p>
