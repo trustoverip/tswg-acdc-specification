@@ -709,13 +709,13 @@ The zeroth entry in the blinded attribute list represents a cryptogrphic digest 
 
 #### Inclusion proof via aggregated list digest (AGID)
 
-All the a<sub>i</sub> in the list are serialized and then aggregated into a single aggregate digest denoted the AGID by computing the digest of their ordered serialization in a list. This is expressed as follows:
+All the a<sub>i</sub> in the list are serialized and then aggregated into a single aggregate digest, denoted the AGID, by computing the digest of their ordered serialization in a list. This is expressed as follows:
 
 AGID = H(C(a<sub>i</sub> for all i in \{0, ..., N\})), where ‘H’ is the digest (hash) Operator and ‘C’ is the ordered serialization operator.
 
 In compact form, the value of the selectively disclosable top-level Attribute section, `A`, field is set to the aggregated value ‘AGID’. This aggregate ‘AGID’ makes a blinded cryptographic commitment to all SAIDS in the list,
 
-\[a<sub>1</sub>, ...., a<sub>N</sub>\].
+\[a<sub>1</sub>, ..., a<sub>N</sub>\].
 
 Please note that the zeroth element \[a<sub>0</sub>] is a placeholder for the AGID itself.
 
@@ -2213,7 +2213,7 @@ Broken out into fields, the values are provided in the table below:
 
 In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, `d` field in the associated blindable update, `bup` event.
 
-An attachment of this blinded attribute block would be prefixed with the appropriate CESR count code as follows:
+An unblinded attachment of this blinded attribute block would be prefixed with the appropriate CESR count code as follows:
 
 ```
 -aAYECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6JaG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv81AAP1AAP
@@ -2225,7 +2225,6 @@ Consider a blindable state revocation registry for ACDCs operated in blinded (pr
 
 ```python
 {
-
     "v": "ACDCCAACAAJSONAADa.",
     "t": "rip",
     "d": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
@@ -3353,13 +3352,13 @@ Cal (a euphemism for the accreditation agency) creates a placeholder registry in
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAADa.",
-        "t": "rip",
-        "d": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
-        "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
-        "n": "0",
-        "dt": "2025-07-04T17:52:00.000000+00:00"
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+    "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
+    "n": "0",
+    "dt": "2025-07-04T17:52:00.000000+00:00"
 }
 ```
 The registration identifier is the SAID of this message, as follows:
@@ -3370,26 +3369,26 @@ regCal = "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw"
 Cal uses this to issue an accreditation ACDC.  The full ACDC is as follows:
  ```python
  {
-        "v": "ACDCCAACAAJSONAAKX.",
-        "t": "acm",
-        "d": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXdh",
-        "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
-        "rd": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
-        "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG",
-        "a":
-        {
-            "d": "EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL",
-            "u": "0ABhY2Rjc3BlY3dvcmtyYXc3",
-            "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
-            "name": "Sunspot College",
-            "level": "gold"
-        },
-        "r":
-        {
-            "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
-            "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
-        }
+    "v": "ACDCCAACAAJSONAAKX.",
+    "t": "acm",
+    "d": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdh",
+    "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
+    "rd": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
+    "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG",
+    "a":
+    {
+        "d": "EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXc3",
+        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+        "name": "Sunspot College",
+        "level": "gold"
+    },
+    "r":
+    {
+        "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
+        "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
+    }
 }
 ```
 
@@ -3398,15 +3397,15 @@ Note that the value of the `rd` field is the same as the value of regCal. This b
 This ACDC can be compacted into its most compact form. This is as follows:
 ```python
 {
-        "v": "ACDCCAACAAJSONAAF3.",
-        "t": "acm",
-        "d": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXdh",
-        "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
-        "rd": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
-        "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG",
-        "a": "EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL",
-        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+    "v": "ACDCCAACAAJSONAAF3.",
+    "t": "acm",
+    "d": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdh",
+    "i": "ECsGDKWAYtHBCkiDrzajkxs3Iw2g-dls3bLUsRP4yVdT",
+    "rd": "EPtolmh_NE2vC02oFc7FOiWkPcEiKUPWm5uu_Gv1JZDw",
+    "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG",
+    "a": "EK799owRYyk8UPFWUmfsm5AJfJmU7jZGtZXJFbg2I0KL",
+    "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
 }
 ```
 
@@ -3415,7 +3414,7 @@ Note that the SAIDs of the sections are the same in both the uncompact and compa
 The schema for this ACDC is as follows:
 
 ```json
-    {
+{
         "$id": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Accreditation Schema",
@@ -3505,13 +3504,13 @@ Deb (a euphemism for the department) creates a placeholder registry to issue a r
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAADa.",
-        "t": "rip",
-        "d": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
-        "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
-        "n": "0",
-        "dt": "2025-07-04T17:53:00.000000+00:00"
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
+    "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+    "n": "0",
+    "dt": "2025-07-04T17:53:00.000000+00:00"
 }
 ```
 The registration identifier is the SAID of this message, as follows:
@@ -3522,27 +3521,27 @@ regDeb = "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU"
 Deb uses this to issue a report endorsement credential as follows:
 
 ```python
- {
-        "v": "ACDCCAACAAJSONAAK4.",
-        "t": "acm",
-        "d": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXdi",
-        "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
-        "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
-        "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
-        "a":
-        {
-            "d": "EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-",
-            "u": "0ABhY2Rjc3BlY3dvcmtyYXc4",
-            "title": "Post Quantum Security",
-            "name": "Zoe Doe",
-            "report": "Imprementation should prioritize cryptographic agility over PQ."
-        },
-        "r":
-        {
-            "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
-            "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
-        }
+{
+    "v": "ACDCCAACAAJSONAAK4.",
+    "t": "acm",
+    "d": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdi",
+    "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+    "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+    "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+    "a":
+    {
+        "d": "EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXc4",
+        "title": "Post Quantum Security",
+        "name": "Zoe Doe",
+        "report": "Imprementation should prioritize cryptographic agility over PQ."
+    },
+    "r":
+    {
+        "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
+        "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
+    }
 }
 ```
 
@@ -3551,15 +3550,15 @@ Note that the value of the `rd` field is the same as the value of regDeb. This b
 This ACDC can be compacted into its most compact form. This is as follows:
 ```python
 {
-        "v": "ACDCCAACAAJSONAAF3.",
-        "t": "acm",
-        "d": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXdi",
-        "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
-        "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
-        "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
-        "a": "EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-",
-        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+    "v": "ACDCCAACAAJSONAAF3.",
+    "t": "acm",
+    "d": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdi",
+    "i": "EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW",
+    "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+    "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+    "a": "EFTqnoiGSf-D76W3geNxEudBI_wz81FIkIXjzsjFztI-",
+    "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
 }
 ```
 
@@ -3675,27 +3674,27 @@ regBob = "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"
 Bob uses this to issue a report credential as follows:
 
 ```python
- {
-        "v": "ACDCCAACAAJSONAAKt.",
-        "t": "acm",
-        "d": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXdj",
-        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
-        "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
-        "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
-        "a":
-        {
-            "d": "EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_",
-            "u": "0ABhY2Rjc3BlY3dvcmtyYXc5",
-            "title": "PQ Proof of Concept",
-            "name": "Zoe Doe",
-            "report": "Demonstration of recovery from surprise quantum attack"
-        },
-        "r":
-        {
-            "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
-            "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
-        }
+{
+    "v": "ACDCCAACAAJSONAAKt.",
+    "t": "acm",
+    "d": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdj",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+    "a":
+    {
+        "d": "EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXc5",
+        "title": "PQ Proof of Concept",
+        "name": "Zoe Doe",
+        "report": "Demonstration of recovery from surprise quantum attack"
+    },
+    "r":
+    {
+        "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
+        "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
+    }
 }
 ```
 
@@ -3704,15 +3703,15 @@ Note that the value of the `rd` field is the same as the value of regBob. This b
 This ACDC can be compacted into its most compact form. This is as follows:
 ```python
 {
-        "v": "ACDCCAACAAJSONAAF3.",
-        "t": "acm",
-        "d": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXdj",
-        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
-        "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
-        "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
-        "a": "EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_",
-        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+    "v": "ACDCCAACAAJSONAAF3.",
+    "t": "acm",
+    "d": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdj",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "s": "EKMXqyMQmOy0RuEj1VgOK9aD4GYR0D8Dcj0kssQtcY4-",
+    "a": "EIg1zAS3FfMMbQtLqARSwS3uGMttVbAPhKB71bjIPTs_",
+    "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
 }
 ```
 Note that the SAIDs of the sections are the same in both the uncompact and compact variants.
@@ -3728,13 +3727,13 @@ The associated registry was created with a registration inception event message 
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAADa.",
-        "t": "rip",
-        "d": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
-        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
-        "n": "0",
-        "dt": "2025-07-04T17:50:00.000000+00:00"
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+    "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+    "n": "0",
+    "dt": "2025-07-04T17:50:00.000000+00:00"
 }
 ```
 
@@ -3747,65 +3746,65 @@ Amy uses this to issue a transcript ACDC to Bob as follows:
 
 ```python
 {
-        "v": "ACDCCAACAAJSONAAXG.",
-        "d": "ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXdk",
-        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
-        "rd": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
-        "s": "EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh",
-        "a":
+    "v": "ACDCCAACAAJSONAAXG.",
+    "d": "ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdk",
+    "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+    "rd": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+    "s": "EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh",
+    "a":
+    {
+        "d": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
+        "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+        "name": "Zoe Doe",
+        "gpa": 3.5,
+        "grades":
         {
-            "d": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
-            "u": "0ABhY2Rjc3BlY3dvcmtyYXcw",
-            "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
-            "name": "Zoe Doe",
-            "gpa": 3.5,
-            "grades":
-            {
-                "d": "EFQnBFeKAeS4DAWYoKDwWXOT4h2-XaGk7-w4-2N4ktXy",
-                "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
-                "history": 3.5,
-                "english": 4.0,
-                "math": 3.0
-            }
-        },
-        "e":
-        {
-            "d": "ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0",
-            "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
-            "accreditation":
-            {
-                "d": "EAFj8JaNEC3mdFNJKrXW8E03_k9qqb_xM9NjAPVHw-xJ",
-                "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
-                "n": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
-                "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"
-            },
-            "reports":
-            {
-                "d": "EOObmbCppe1S-7vtLuy766_4-RcfrC7p4ciFtBxdexuz",
-                "u": "0ABhY2Rjc3BlY3dvcmtyYXc0",
-                "o": "OR",
-                "research":
-                {
-                    "d": "EN9ngstOcFHqsjqf75JZFKtCRmW76NkeRrUSxTLoqqkI",
-                    "u": "0ABhY2Rjc3BlY3dvcmtyYXc2",
-                    "n": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
-                    "o": "NI2I"
-                },
-                "project":
-                {
-                    "d": "EFwHz5qJ4_8c7IefP7_zugX2eIgtoyY8Up_WZ3osXwkI",
-                    "u": "0ABhY2Rjc3BlY3dvcmtyYXc1",
-                    "n": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
-                    "o": "NI2I"
-                }
-            }
-        },
-        "r":
-        {
-            "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
-            "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
+            "d": "EFQnBFeKAeS4DAWYoKDwWXOT4h2-XaGk7-w4-2N4ktXy",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+            "history": 3.5,
+            "english": 4.0,
+            "math": 3.0
         }
+    },
+    "e":
+    {
+        "d": "ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0",
+        "u": "0ABhY2Rjc3BlY3dvcmtyYXcy",
+        "accreditation":
+        {
+            "d": "EAFj8JaNEC3mdFNJKrXW8E03_k9qqb_xM9NjAPVHw-xJ",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXcz",
+            "n": "EIF7egPvC8ITbGRdM9G0kd6aPELDg-azMkAqT-7cMuAi",
+            "s": "EK_iGlfdc7Q-qIGL-kqbDSD2z4fesT4dAQLEHGgH4lLG"
+        },
+        "reports":
+        {
+            "d": "EOObmbCppe1S-7vtLuy766_4-RcfrC7p4ciFtBxdexuz",
+            "u": "0ABhY2Rjc3BlY3dvcmtyYXc0",
+            "o": "OR",
+            "research":
+            {
+                "d": "EN9ngstOcFHqsjqf75JZFKtCRmW76NkeRrUSxTLoqqkI",
+                "u": "0ABhY2Rjc3BlY3dvcmtyYXc2",
+                "n": "EAU5dUws4ffM9jZjWs0QfXTnhJ1qk2u3IUhBwFVbFnt5",
+                "o": "NI2I"
+            },
+            "project":
+            {
+                "d": "EFwHz5qJ4_8c7IefP7_zugX2eIgtoyY8Up_WZ3osXwkI",
+                "u": "0ABhY2Rjc3BlY3dvcmtyYXc1",
+                "n": "EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M",
+                "o": "NI2I"
+            }
+        }
+    },
+    "r":
+    {
+        "d": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU",
+        "l": "Issuer provides this ACDC on an AS IS basis. This ACDC in whole or in part MUST NOT be shared with any other entity besides the intended recipient."
+    }
 }
 ```
 
@@ -3824,15 +3823,15 @@ This enables the graduated partial disclosure of the edges. The details of the l
 This ACDC can be compacted into its most compact form. This is as follows:
 ```python
 {
-        "v": "ACDCCAACAAJSONAAGg.",
-        "d": "ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H",
-        "u": "0ABhY2Rjc3BlY3dvcmtyYXdk",
-        "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
-        "rd": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
-        "s": "EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh",
-        "a": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
-        "e": "ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0",
-        "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
+    "v": "ACDCCAACAAJSONAAGg.",
+    "d": "ENeNWgCCNcOf1JbgKxUzREKpyK5kABYFd2QYUzEfwz9H",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXdk",
+    "i": "ECmiMVHTfZIjhA_rovnfx73T3G_FJzIQtzDn1meBVLAz",
+    "rd": "EOMMCyztOvg970W0dZVJT2JIwlQ22DSeY7wtxNBBtpmX",
+    "s": "EABGAia_vH_zHCRLOK3Bm2xxujV5A8sYIJbypfSM_2Fh",
+    "a": "ELI2TuO6mLF0cR_0iU57EjYK4dExHIHdHxlRcAdO6x-U",
+    "e": "ECpmTyIIc1duvCeIceK19Sbd0uymklmwNTtwtmfjQnX0",
+    "r": "EMZf9m0XYwqo4L8tnIDMZuX7YCZnMswS7Ta9j0CuYfjU"
 }
 ```
 Note that the SAIDs of the sections are the same in both the uncompact and compact varieties
