@@ -407,7 +407,6 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
 <li><a href="#blinded-state-disclosure" >Blinded State Disclosure</a></li>
 <li><a href="#private-blinded-state-registry-example" >Private (blinded) state Registry example</a></li>
 <li><a href="#public-unblinded-blindable-example" >Public Unblinded Blindable Example</a></li>
-<li><a href="#public-non-blindable-update-to-blindable-example" >Public Non-Blindable Update to Blindable Example</a></li>
 <li><a href="#public-non-blindable-state-update-registry-example" >Public Non-Blindable State Update Registry Example</a></li>
 </ul>
 </li>
@@ -482,8 +481,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
                             <a class="mx-auto p-2" href="https://github.com/trustoverip/spec-up-t"
                                 target="_blank" rel="noopener">Powered By Spec-Up-T</a>
                             <small>
-                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-10-02T01:53:39.526Z">
-                                    Generated: 2025-10-02T01:53:39.526Z
+                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-10-04T20:57:19.447Z">
+                                    Generated: 2025-10-04T20:57:19.447Z
                                 </time>
                             </small>
                         </div>
@@ -2646,7 +2645,8 @@ When the <code>td</code> field value is the empty placeholder, it uses the CESR 
 <p>When not empty, the UUID <code>u</code> field value MUST be a cryptographic strength salty nonce with approximately 128 bits of entropy (nominally). The UUID <code>u</code> field means that the block’s SAID <code>d</code> field value provides a secure cryptographic digest of the contents of the block [[48]]. An adversary, when given both the block’s SAID and knowledge of all possible state values, cannot discover the actual state in a computationally feasible manner, such as a rainbow table attack [[30]] [[31]].  Therefore, the block’s UUID, <code>u</code> field securely blinds the contents of the block via its SAID, <code>d</code> field, notwithstanding knowledge of both the block’s structure, possible state values, and SAID.  Moreover, a cryptographic commitment to that block’s SAID, <code>d</code> field does not provide a fixed point of correlation to the block’s state unless and until there has been a disclosure of that state.</p>
 <p>When used in public (unblinded) mode, the UUID, <code>u</code> field value MAY be the empty nonce value.</p>
 <p>The UUID <code>u</code> field should use the <code>Salt_256</code> code for a 32-byte (256-bit) raw salty nonce value with approximately 256 bits of cryptographic strength. But any appropriate cryptographic digest may be used. Typically, this is some derivation process using a salt and a deterministic path based on the sequence number of the associated  <code>bup</code> event message. When used in public unblinded mode, the UUID, <code>u</code> field value MAY be the CESR <code>Empty</code> primitive code with value <code>1AAP</code>.</p>
-<p>When the UUID, <code>u</code>, is derived from a shared secret salt and a public path such as the sequence number using a hierarchically deterministic derivation algorithm and given that the possible state values are finite and small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event. When the <code>u</code> field value is derived from a shared secret salt the derivation algorithm MUSt preserve the approximately 128 bits of cryptographic strength. This typically means a derived UUID <code>u</code> field value is 256 bits in length.</p>
+<p>When the UUID, <code>u</code>, is derived from a shared secret salt and a public path, such as the sequence number using a hierarchically deterministic derivation algorithm, and given that the possible state values are finite and small, then any holder of the shared secret can derive the state given the public information in the top-level fields of the transaction event. When the <code>u</code> field value is derived from a shared secret salt, the derivation algorithm MUST preserve the approximately 128 bits of cryptographic strength. This typically means a derived UUID <code>u</code> field value is 256 bits in length.</p>
+<p>When the UUID is not derived with a hierarchically deterministic derivation algorithm, the Issuer and Issuee may need to interact for each transaction event update in order to exchange the shared secret salt.</p>
 <h5 id="transaction-acdc-said-td-field-2"><a class="toc-anchor d-print-none" href="#transaction-acdc-said-td-field-2">§</a> Transaction ACDC SAID, <code>td</code> field</h5>
 <p>The transaction ACDC SAID, <code>td</code> field value is the SAID of the associated ACDC itself. It is the value of the top-level <code>d</code> field in the ACDC. This binds the ACDC to the TEL (Registry). The events in the registry are in turn, bound to the key state of the issuer via an anchored seal in the KEL of the issuer. This hierarchical binding binds the key-state of the issuer to the TEL, which in turn is bound to the ACDC itself.  This binding is a verifiable commitment by the issuer to its issuance of the ACDC that survives changes in the keystate of the Issuer.</p>
 <h5 id="transaction-state-ts-field-2"><a class="toc-anchor d-print-none" href="#transaction-state-ts-field-2">§</a> Transaction state, <code>ts</code> field</h5>
@@ -2687,7 +2687,7 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 <p>The Issuer MAY provide an authenticated service endpoint for the Discloser to which the Discloser can make a signed request to update the blind.  Each new event published by the Issuer in the Registry MUST increment the sequence number and hence the blinding factor, but MAY or MAY not change the actual blinded state.  Because each updated event in the Registry has a new blinding factor, regardless of any actual change of state or not, an observer cannot correlate state to event updates.</p>
 <p>In some cases, the Blindable-State-Registry may provide correlatable information, such as when the first real transaction state is always the same or the final state results in the registry’s disuse. In those cases, the Issuer MAY choose to define an empty state and an empty ACDC SAID as known placeholder values. The first transaction state update event in the Registry can, therefore, be published before any real ACDC has been created, to which it may be later applied. Disuse of the Registry can be hidden by continuing to update the blind to the state without changing the final state value for some time after the ACDC has been revoked or abandoned.</p>
 <h5 id="calculating-the-said-of-the-serialized-blinded-attribute-block"><a class="toc-anchor d-print-none" href="#calculating-the-said-of-the-serialized-blinded-attribute-block">§</a> Calculating the SAID of the serialized Blinded Attribute block</h5>
-<p>As mentioned above, the expanded attributed block is serialized as a concatenation of the CESR seralizations of each of its field values. The BLID of such a serialization is computed on the QB64 TEXT domain representation. The BLID computation follows the SAID protocol adapted for fixed field representations. First the size of the BLID field is derived from the type of digest to be used for its computation. For example, the number of characters of a BLAKE3-256 digest in CESR Text domain is 44 characters. Its slot is replaced with <code>#</code> dummy characters, specifically forty-four <code>#</code> characters. The Text domain CESR serializations of the remaining fields are appended in order to form the string to be digested. The BLAKE3-256 32-byte raw digest of this dummied full serialization is then computed. This raw digest is serialized in CESR Text domain (qualified Base64). This serialization is the BLID. Finally, the forty-four dummy characters are replaced with the 44 characters of the BLID. The resultant CESR serialized attribute block.</p>
+<p>As mentioned above, the expanded attributed block is serialized as a concatenation of the CESR serializations of each of its field values. The BLID of such a serialization is computed on the QB64 TEXT domain representation. The BLID computation follows the SAID protocol, adapted for fixed-field representations. First, the size of the BLID field is derived from the type of digest to be used for its computation. For example, the number of characters of a BLAKE3-256 digest in the CESR Text domain is 44 characters. Its slot is replaced with <code>#</code> dummy characters, specifically forty-four <code>#</code> characters. The Text domain CESR serializations of the remaining fields are appended in order to form the string to be digested. The BLAKE3-256 32-byte raw digest of this dummied full serialization is then computed. This raw digest is serialized in the CESR Text domain (qualified Base64). This serialization is the BLID. Finally, the forty-four dummy characters are replaced with the 44 characters of the BLID. The resultant CESR serialized attribute block.</p>
 <p>The BLID is the value BLID <code>b</code> field in the associated blindable update <code>bup</code> event message.</p>
 <p>As mentioned previously, disclosure of the blinded attribute block can be provided by attaching its serialization via one of the CESR count (group) count codes labeled <code>BlindedStateGroup</code> with code format <code>-a##</code> or <code>BigBlindedStateGroup</code> with code format <code>--a######</code>.</p>
 <h5 id="blinded-attribute-block-said-calculation-example"><a class="toc-anchor d-print-none" href="#blinded-attribute-block-said-calculation-example">§</a> Blinded Attribute Block SAID Calculation Example</h5>
@@ -2767,7 +2767,7 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 <pre><code>-aAjEOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_taLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
 </code></pre>
 <h5 id="blinded-attribute-block-placeholder-calculation-example"><a class="toc-anchor d-print-none" href="#blinded-attribute-block-placeholder-calculation-example">§</a> Blinded Attribute Block Placeholder Calculation Example</h5>
-<p>Suppose the UUID, <code>u</code> field value is encoded as <code>aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8</code>, the empty placeholder transaction ACDC said, <code>td</code> field value is encoded as <code>1AAP</code> (CESR coding for the empty value), and the transaction state, <code>ts</code> field is also encoded as <code>1AAP</code> for empty. The digest to be used to compute the BLID (Blinding SAID) is the BLAKE3-256 digest, which when CESR encoded has a length of 44 characters. This is filled with forty-four <code>#</code> dummy characters.  The resulting length of the group content is 96 characters.</p>
+<p>Suppose the UUID, <code>u</code> field value is encoded as <code>aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8</code>, the empty placeholder transaction ACDC said, <code>td</code> field value is encoded as <code>1AAP</code> (CESR coding for the empty value), and the transaction state, <code>ts</code> field is also encoded as <code>1AAP</code> for empty. The digest to be used to compute the BLID (Blinding SAID) is the BLAKE3-256 digest, which, when CESR encoded, has a length of 44 characters. This is filled with forty-four <code>#</code> dummy characters.  The resulting length of the group content is 96 characters.</p>
 <p>For the sake of clarity, the field values are shown in the table below:</p>
 <div class="table-responsive-md"><table class="table table-striped table-bordered table-hover">
 <thead>
@@ -2786,7 +2786,7 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 <tr>
 <td><code>u</code></td>
 <td><code>aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8</code></td>
-<td>UUID salty nonce blinding factor, random or HD generated</td>
+<td>UUID salty nonce blinding factor, HD generated</td>
 </tr>
 <tr>
 <td><code>td</code></td>
@@ -2824,7 +2824,7 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 <tr>
 <td><code>u</code></td>
 <td><code>aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8</code></td>
-<td>UUID salty nonce blinding factor, random or HD generated</td>
+<td>UUID salty nonce blinding factor, HD generated</td>
 </tr>
 <tr>
 <td><code>td</code></td>
@@ -2886,7 +2886,7 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 <tr>
 <td><code>u</code></td>
 <td><code>aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8</code></td>
-<td>UUID salty nonce blinding factor, random or HD generated</td>
+<td>UUID salty nonce blinding factor, HD generated</td>
 </tr>
 <tr>
 <td><code>td</code></td>
@@ -2900,10 +2900,12 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 </tr>
 </tbody>
 </table>
-</div><p>Notice that the value of the BLID blinded attribute, <code>b</code> field in the transaction event, matches the value of the BLID <code>d</code> field in the expanded attribute block.  Likewise, notice that the value of the transaction ACDC SAID, in the <code>td</code> field, is the CESR encoded value for empty, serving as a placeholder value. Furthermore, the value of the transaction state, <code>ts</code> field, is also the CESR encoded value for empty. This indicates that the transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. To update the blind, the issuer issues a new blindable update event, <code>bup</code>, with a new blind, UUID <code>u</code> field value in the associate attribute block derived from the shared Salt and the sequence number of the <code>bup</code> event.  This makes the first use(s) of the registry uncorrelated with the eventual actual issuance of a real ACDC.</p>
-<p>Suppose that the Discloser has been given the shared secret salt from which the value of the blind, UUID, <code>u</code> field was derived. The shared secret salt MUST have approximately 128 bits of cryptographic entropy. In this case, in order to preserve the cryptographic entropy through the derivation, the value of the UUID <code>u</code> field is twice as long as the shared secret salt. Typically, the derivation might use a hierarchically deterministic derivation algorithm based on a digest of the shared secret with a deterministic path.</p>
-<p>Suppose later, the real ACDC is issued and is uniquely identified its top-level SAID, <code>d</code> field value, namely, <code>EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M</code>. The Discloser can then download the published blinded update <code>bup</code> transaction event to get the sequence number <code>n</code> field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID, <code>u</code> field value. The Discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, <code>td</code> field MUST be either the empty string placeholder or the real ACDC SAID given above.</p>
-<p>The Discloser can now compute the blinding SAID, BLID, <code>b</code> field value of the expanded Attribute block for all the combinations of the possible values for the <code>td</code> and <code>ts</code> fields. The<code>td</code> field possible values include either <code>1AAP</code> or <code>EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M</code>. The possible <code>ts</code> field values include one of <code>1AAP</code>, <code>0Missued</code>, or <code>Yrevoked</code>. These latter three values correspond to the CESR Text domain encodings of the strings “”, “issued” and “revoked”.  This gives a total of six combinations of possible field values. The Discloser tries each combination until it finds the one that matches the published transaction event blinded attribute, BLID, <code>b</code> field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.</p>
+</div><p>Notice that the value of the BLID blinded attribute, <code>b</code> field in the transaction event, matches the value of the BLID <code>d</code> field in the expanded attribute block.  Likewise, notice that the value of the transaction ACDC SAID, in the <code>td</code> field, is the CESR encoded value for empty, serving as a placeholder value. Furthermore, the value of the transaction state, <code>ts</code> field, is also the CESR encoded value for empty. This indicates that the transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC.</p>
+<p>The issuer issues a new blindable update event, <code>bup</code>, with a new blind, UUID <code>u</code> field value in the associate attribute block derived from the shared Salt and the sequence number of the <code>bup</code> event.  This makes the first use(s) of the registry uncorrelated with the eventual actual issuance of a real ACDC. In this case, the Issuer used a hierarchically deterministic algorithm to compute the UUID, <code>u</code> field in the blinded attribute block.</p>
+<p>To do this, the Issuer and Discloser/Issuee must first have exchanged a shared secret salt from which the value of the blind, UUID, <code>u</code> field was derived. The shared secret salt MUST have approximately 128 bits of cryptographic entropy. The UUID field value is calculated using a hierarchically deterministic algorithm from the salt and the sequence number of the transaction event as the deterministic path. To preserve cryptographic entropy during derivation, the value of the UUID <code>u</code> field must be twice as long as the shared secret salt.</p>
+<p>Suppose later, the real ACDC is issued and is uniquely identified by its top-level SAID, <code>d</code>, field value, namely, <code>EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M</code>. The Issuer creates a new BLID blinded attribute, <code>b</code> field value with the ACDC SAID value for its <code>td</code> field with <code>issued</code> as the ACDC state for the <code>ts</code> field.  The UUID, <code>u</code>, field uses the hierarchically deterministic algorithm with the shared secret salt and the deterministic path set to the next sequence number.  The Issuer issues a new blindable update event <code>bup</code> with its <code>b</code> field set to the SAID of the new blinded attribute block.</p>
+<p>The Discloser can then download the published blinded update <code>bup</code> transaction event to get the sequence number <code>n</code> field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID and the <code>u</code> field value. The Discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, <code>td</code> field MUST be either the empty string placeholder or the real ACDC SAID given above.</p>
+<p>The Discloser can now compute the blinding SAID, BLID, <code>b</code> field value of the expanded Attribute block for all the combinations of the possible values for the <code>td</code> and <code>ts</code> fields. The <code>td</code> field possible values include either <code>1AAP</code> or <code>EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M</code>. The possible <code>ts</code> field values include one of <code>1AAP</code>, <code>0Missued</code>, or <code>Yrevoked</code>. These latter three values correspond to the CESR Text domain encodings of the strings “”, “issued” and “revoked”.  This gives a total of six combinations of possible field values. The Discloser tries each combination until it finds the one that matches the published transaction event blinded attribute, BLID, <code>b</code> field value. The Discloser can then verify if the published value is still a placeholder or the real initial state.</p>
 <p>To elaborate, the value of the Issuer, <code>i</code> field of the corresponding issued ACDC will be the Issuer AID. When secure discovery is employed, the value of the registry SAID, <code>rd</code> field of that ACDC will be the registry SAID given by the value of the SAID, <code>d</code> field in the registry inception, <code>rip</code> event. The value of the top-level <code>d</code> field in the ACDC will be the same as the <code>td</code> field of the attribute block of the blindable update <code>bup</code> event that effectively “issues” the ACDC. These field values cryptographically bind the ACDC to the Registry and, in turn, bind the Registry to the ACDC.</p>
 <p>Suppose the associated update event occurs at sequence number 2. The published blindable update transaction event is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
@@ -2935,7 +2937,7 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 <tr>
 <td><code>u</code></td>
 <td><code>aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB</code></td>
-<td>UUID salty nonce blinding factor, random or HD generated</td>
+<td>UUID salty nonce blinding factor HD generated</td>
 </tr>
 <tr>
 <td><code>td</code></td>
@@ -2954,22 +2956,60 @@ Bytes_Big_L2<span class="token punctuation">:</span> <span class="token builtin"
 <p>The Discloser can then instruct the Issuer to issue one or more updates with new blinding factors so that the initial Disclosee may no longer validate the state of the ACDC without another interactive disclosure by the Discloser.</p>
 <p>Suppose, sometime later, a Validator requires that the Discloser provide continuing proof of issuance. In that case, the Discloser would disclose the current state of the Registry. Suppose it has been revoked. The Discloser may either refuse to disclose (with the associated consequences) or may only verifiably disclose the true state.
 The Discloser could continue to have the blind updated periodically. This would generate new blindable update, <code>bup</code> transaction events with new values for its blinded attribute, <code>b</code> field, but without changing either the <code>td</code> or <code>ts</code> field values. This decorrelates the time of revocation with respect to the latest event in the Registry.</p>
-<h4 id="public-unblinded-blindable-example"><a class="toc-anchor d-print-none" href="#public-unblinded-blindable-example">§</a> Public Unblinded Blindable Example</h4>
-<p>In this case, the issuer attaches the associated expanded blinded attribute block to any publication of a Blindable-Update <code>bup</code> event. As explained above, this uses either of the count codes <code>BlindedStateGroup</code> with code format <code>-a##</code> or <code>BigBlindedStateGroup</code> with code format <code>--a######</code> to attach one or more expanded blinded attribute blocks.</p>
-<h4 id="public-non-blindable-update-to-blindable-example"><a class="toc-anchor d-print-none" href="#public-non-blindable-update-to-blindable-example">§</a> Public Non-Blindable Update to Blindable Example</h4>
-<p>At some time later the issuer decides to make the issuance state public. The issuer can publish a non-blindable update using the update <code>upd</code> event message as follows:</p>
+<p>At some time later, the issuer decides to revoke the issuance. The Issuer first creates a new BLID blinded attribute block with the <code>td</code> field set to the SAID of the ACDC and <code>revoked</code> as the value of the <code>ts</code> field.  The UUID, <code>u</code>, field uses the hierarchically deterministic algorithm with the shared secret salt and the deterministic path set to the next sequence number, which in this case is <code>3</code>, to compute its value.  The Issuer issues a new blindable update event <code>bup</code> with its <code>b</code> field set to the SAID of this new blinded attribute block.</p>
+<p>The published blindable update transaction event is as follows:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
-    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAEy."</span><span class="token punctuation">,</span>
-    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"upd"</span><span class="token punctuation">,</span>
-    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"ENR6tbkJCJXQTiu5TP-RBxkS2_ZSZBgbJmpjKucDe07h"</span><span class="token punctuation">,</span>
+    <span class="token string">"v"</span><span class="token punctuation">:</span> <span class="token string">"ACDCCAACAAJSONAAEi."</span><span class="token punctuation">,</span>
+    <span class="token string">"t"</span><span class="token punctuation">:</span> <span class="token string">"bup"</span><span class="token punctuation">,</span>
+    <span class="token string">"d"</span><span class="token punctuation">:</span> <span class="token string">"EM8B1uDhWaJLfpIiEqgp-3EurGUcbfe7u2k5AarDl2XD"</span><span class="token punctuation">,</span>
     <span class="token string">"rd"</span><span class="token punctuation">:</span> <span class="token string">"ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ"</span><span class="token punctuation">,</span>
     <span class="token string">"n"</span><span class="token punctuation">:</span> <span class="token string">"3"</span><span class="token punctuation">,</span>
     <span class="token string">"p"</span><span class="token punctuation">:</span> <span class="token string">"EBdytzDC4dnatn-6mrCWLSGuM62LM0BgS31YnAg5NTeW"</span><span class="token punctuation">,</span>
     <span class="token string">"dt"</span><span class="token punctuation">:</span> <span class="token string">"2020-08-03T12:00:20.000000+00:00"</span><span class="token punctuation">,</span>
-    <span class="token string">"td"</span><span class="token punctuation">:</span> <span class="token string">"EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M"</span><span class="token punctuation">,</span>
-    <span class="token string">"ts"</span><span class="token punctuation">:</span> <span class="token string">"revoked"</span>
+    <span class="token string">"b"</span><span class="token punctuation">:</span> <span class="token string">"EPj3sZj8OOWTkTgAN5vzVYdANeoj3zxgEn5APb8fCRRN"</span>
 <span class="token punctuation">}</span>
 </code></pre>
+<p>The value of the blinded attribute block BLID, <code>b</code> field, is the value of the SAID field in the associated blinded attribute block.</p>
+<p>The serialized expanded attribute block as follows:</p>
+<pre><code>EPj3sZj8OOWTkTgAN5vzVYdANeoj3zxgEn5APb8fCRRNaGx7b16vGHVPT56tX30kYOEzTwiVY4aabc4k9AawYyZGEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4MYrevoked
+</code></pre>
+<p>Broken out into a table, the fields are as follows:</p>
+<div class="table-responsive-md"><table class="table table-striped table-bordered table-hover">
+<thead>
+<tr>
+<th>Virtual Label</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d</code></td>
+<td><code>EPj3sZj8OOWTkTgAN5vzVYdANeoj3zxgEn5APb8fCRRN</code></td>
+<td>Dummied BLID (Blinding SAID)</td>
+</tr>
+<tr>
+<td><code>u</code></td>
+<td><code>aGx7b16vGHVPT56tX30kYOEzTwiVY4aabc4k9AawYyZG</code></td>
+<td>UUID salty nonce blinding factor HD generated</td>
+</tr>
+<tr>
+<td><code>td</code></td>
+<td><code>EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M</code></td>
+<td>Transaction ACDC SAID field value, top-level <code>d</code></td>
+</tr>
+<tr>
+<td><code>ts</code></td>
+<td><code>Yrevoked</code></td>
+<td>Transaction state value string</td>
+</tr>
+</tbody>
+</table>
+</div><p>To unblind the Discloser would compute the attribute black and then prefix the appropriate CESR group code an attach the encoded group given below:</p>
+<pre class="language-text"><code class="language-text">-aAjEPj3sZj8OOWTkTgAN5vzVYdANeoj3zxgEn5APb8fCRRNaGx7b16vGHVPT56tX30kYOEzTwiVY4aabc4k9AawYyZGEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4MYrevoked
+</code></pre>
+<h4 id="public-unblinded-blindable-example"><a class="toc-anchor d-print-none" href="#public-unblinded-blindable-example">§</a> Public Unblinded Blindable Example</h4>
+<p>In this case, the issuer attaches the associated expanded blinded attribute block to any publication of a Blindable-Update <code>bup</code> event. As explained above, this uses either of the count codes <code>BlindedStateGroup</code> with code format <code>-a##</code> or <code>BigBlindedStateGroup</code> with code format <code>--a######</code> to attach one or more expanded blinded attribute blocks.</p>
 <h4 id="public-non-blindable-state-update-registry-example"><a class="toc-anchor d-print-none" href="#public-non-blindable-state-update-registry-example">§</a> Public Non-Blindable State Update Registry Example</h4>
 <p>Consider a unblindable state revocation Registry for ACDCs operated in an unblinded (public) mode. The transaction state can be one of two values, <code>issued</code>, or <code>revoked</code>. The Issuer with AID, <code>EEDGM_DvZ9qFEAPf_FX08J3HX49ycrVvYVXe9isaP5SW</code> first creates one among many placeholder Registries by issuing the following registry inception <code>rip</code>, transaction event:</p>
 <pre class="language-python"><code class="language-python"><span class="token punctuation">{</span>
@@ -4930,7 +4970,7 @@ Because the edges are in blocks, each with a SAID and UUID fields, the edges can
     </ul></div>
             </div>
             <hr>
-            <p class="ps-3 pe-3" id="w3c-state">W3C Recommendation, 01 October 2025</p>
+            <p class="ps-3 pe-3" id="w3c-state">W3C Recommendation, 04 October 2025</p>
         </div>
     </div>
 
