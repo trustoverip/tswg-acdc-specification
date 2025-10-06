@@ -2036,24 +2036,24 @@ The transaction state, `ts` field value MUST be a string from a small finite set
 
 ##### Blinded attribute, `b` field
 
-The Blinded attribute, `b` field value MUST be the SAID of the blinded attribute block. See below for a description of the Attribute block.
+The blinded attribute, `b` field value MUST be the SAID of the blinded attribute block. This SAID of the blinded attribute block is also known as the BLID for blinding SAID. See below for a description of the blinded attribute block.
 
-#### Blinded attribute block
+#### Blinded Attribute Block
 
-The Blinded attribute block corresponding to the blinded attribute `b` field value has the following fields:
+The blinded attribute block corresponding to the blinded attribute `b` field value has the following fields:
 
 |Virtual Label|Description|
 |---|---|
 |`d`| BLID blinding SAID |
 |`u`| UUID salty nonce blinding factor, random or HD generated |
-|`td`| Transaction ACDC SAID field this is the top-level `d` field in the ACDC|
+|`td`| Transaction ACDC SAID field this is the value of the top-level `d` field in the ACDC|
 |`ts`| Transaction state value string |
 
-The fields MUST appear in the following order `[d, u, td, ts]`.
+The fields MUST appear in the following order: `[d, u, td, ts]`.
 
 The field labels are virtual in that the labels never appear in the CESR serialization; they are a mnemonic for reference purposes. For example, the value of the Bliding SAID `d` field in the blinded attribute block appears as the value of the labeled BLID `b` field in the associated blindable state update, `bup`, message. Likewise, the `td` and `ts` field values have the same semantics as the `td` and `ts` field values in the non-blindable update, `upd` message.
 
-The actual Blinded attribute block is not part of the blindable update message. It MAY be provided as an attachment to some message, such as the associate ACDC, as part of a CESR serialization using one of the CESR group or count codes labeled `BlindedStateGroup` with code format `-a##` or `BigBlindedStateGroup` with code format `--a######`. When provided as an attachment, multiple blinded attribute blocks MAY be included in a given group. A group consists of its count code followed by one or more Blinded attribute blocks, where each block is composed of a concatenation of the four fields serialized in order as CESR primitives that are appropriate for the BLID, UUID, ACDC SAID, and transaction state string fields in that block. An example of an attachment serialization with group code is provided below.
+The actual blinded attribute block is not part of the blindable update message. It MAY be provided as an attachment to some message, such as the associate ACDC, as part of a CESR serialization that MUST use one of the CESR group or count codes labeled `BlindedStateQuadruples` with code format `-a##` or `BigBlindedStateQuadruples` with code format `--a######`. When provided as an attachment, multiple blinded attribute blocks MAY be included in a given group. A group consists of its count code followed by one or more Blinded attribute blocks, where each block is composed of a concatenation of the four fields serialized in order as CESR primitives that are appropriate for the BLID, UUID, ACDC SAID, and transaction state string fields in that block. An example of an attachment serialization with group code is provided below.
 
 ##### BLID, `d` field
 
@@ -2078,11 +2078,14 @@ When the UUID is not derived with a hierarchically deterministic derivation algo
 
 The transaction ACDC SAID, `td` field value is the SAID of the associated ACDC itself. It is the value of the top-level `d` field in the ACDC. This binds the ACDC to the TEL (Registry). The events in the registry are in turn, bound to the key state of the issuer via an anchored seal in the KEL of the issuer. This hierarchical binding binds the key-state of the issuer to the TEL, which in turn is bound to the ACDC itself.  This binding is a verifiable commitment by the issuer to its issuance of the ACDC that survives changes in the keystate of the Issuer.
 
+When the transaction ACDC SAID, `ts`, field value is a placeholder, it is indicated by the empty string, i.e., "", which MUST be CESR encoded as the CESR `Empty` primitive code with value `1AAP`.
+
+
 ##### Transaction state, `ts` field
 
 The transaction state, `ts` field value MUST be a string from a small finite set of strings that delimit the possible values of the transaction state for the Registry. For example, the state values for an issuance/revocation registry may be `issued` or `revoked`.
 
-When the state `ts` field value is a placeholder as indicated by the empty string, i.e., "", it MUST be CESR encoded as the CESR `Empty` primitive code with value `1AAP`.
+When the transaction state `ts` field value is a placeholder, it is indicated by the empty string, i.e., "", which MUST be CESR encoded as the CESR `Empty` primitive code with value `1AAP`.
 
 In general, the state `ts` field value may be encoded using any of the codes from the following table for string-ish encodings:
 
@@ -2133,50 +2136,8 @@ As mentioned above, the expanded attributed block is serialized as a concatenati
 
 The BLID is the value BLID `b` field in the associated blindable update `bup` event message.
 
-As mentioned previously, disclosure of the blinded attribute block can be provided by attaching its serialization via one of the CESR count (group) count codes labeled `BlindedStateGroup` with code format `-a##` or `BigBlindedStateGroup` with code format `--a######`.
+As mentioned previously, disclosure of the blinded attribute block can be provided by attaching its serialization via one of the CESR count (group) count codes labeled `BlindedStateQuadruples` with code format `-a##` or `BigBlindedStateQuadruples` with code format `--a######`.
 
-##### Blinded Attribute Block SAID Calculation Example
-
-For example, suppose the UUID, `u` field value is encoded as `aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB` the transaction ACDC said, `td` field value is encoded as `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`, and the transaction state, `ts` field value is the string "issued" encoded as `0Missued`. The digest to be used to compute the BLID is the BLAKE3-256 digest, which when CESR encoded has a length of 44 characters. This is filled with forty-four `#` dummy characters.  The resulting length of the group content is 140 characters.
-
-For the sake of clarity, the field values are shown in the table below:
-
-|Virtual Label|Value|Description|
-|---|---|---|
-| `d` | `############################################`| Dummied BLID (Blinding SAID) |
-| `u` |`aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB`| UUID salty nonce blinding factor, random or HD generated |
-| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`|
-| `ts` | `0Missued` |Transaction state value string |
-
-
- The 140-character dummied serialization is as follows:
-```
-############################################aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
-```
-
-The CESR encoded Blake3 digest of this string is `EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t`.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
-
-```
-EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_taLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
-```
-
-Broken out into fields, the values are provided in the table below:
-
-|Virtual Label|Value|Description|
-|---|---|---|
-| `d` | `EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t`| Dummied BLID (Blinding SAID) |
-| `u` |`aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB`| UUID salty nonce blinding factor, random or HD generated |
-| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`|
-| `ts` | `0Missued` |Transaction state value string |
-
-
-In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, `b` field in the associated blindable update, `bup` event.
-
-An attachment of this blinded attribute block would be prefixed with the appropriate CESR count code as follows:
-
-```
--aAjEOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_taLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
-```
 
 ##### Blinded Attribute Block Placeholder Calculation Example
 
@@ -2187,7 +2148,7 @@ For the sake of clarity, the field values are shown in the table below:
 |Virtual Label|Value|Description|
 |---|---|---|
 | `d` | `############################################`| Dummied BLID (Blinding SAID) |
-| `u` |`aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`| UUID salty nonce blinding factor, HD generated |
+| `u` | `aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`| UUID salty nonce blinding factor, HD generated |
 | `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`|
 | `ts` | `1AAP` |Transaction state value string |
 
@@ -2208,20 +2169,63 @@ Broken out into fields, the values are provided in the table below:
 |Virtual Label|Value|Description|
 |---|---|---|
 | `d` | `ECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6J`| BLID (Blinding SAID) |
-| `u` |`aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`| UUID salty nonce blinding factor, HD generated |
+| `u` | `aG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv8`| UUID salty nonce blinding factor, HD generated |
 | `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`|
 | `ts` | `1AAP` |Transaction state value string |
 
 
 In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, `d` field in the associated blindable update, `bup` event.
 
-An unblinded attachment of this blinded attribute block would be prefixed with the appropriate CESR count code as follows:
+An unblinded attachment of this blinded attribute block would be prefixed with the appropriate CESR count code, i.e.,  `BlindedStateQuadruples` with code format `-a##`, as follows:
 
 ```
 -aAYECVr7QWEp_aqVQuz4yprRFXVxJ-9uWLx_d6oDinlHU6JaG1lSjdJSNl7TiroPl67Uqzd5eFvzmr6bPlL7Lh4ukv81AAP1AAP
 ```
 
-#### Private (blinded) state Registry example
+##### Blinded Attribute Block ACDC State Calculation Example
+
+For example, suppose the UUID, `u` field value is encoded as `aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB` the transaction ACDC said, `td` field value is encoded as `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`, and the transaction state, `ts` field value is the string "issued" encoded as `0Missued`. The digest to be used to compute the BLID is the BLAKE3-256 digest, which when CESR encoded has a length of 44 characters. This is filled with forty-four `#` dummy characters.  The resulting length of the group content is 140 characters.
+
+For the sake of clarity, the field values are shown in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `############################################`| Dummied BLID (Blinding SAID) |
+| `u` | `aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB`| UUID salty nonce blinding factor, HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `0Missued` |Transaction state value string |
+
+
+ The 140-character dummied serialization is as follows:
+```
+############################################aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
+```
+
+The CESR encoded Blake3 digest of this string is `EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t`.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
+
+```
+EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_taLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
+```
+
+Broken out into fields, the values are provided in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `EOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_t`| Dummied BLID (Blinding SAID) |
+| `u` | `aLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzB`| UUID salty nonce blinding factor, HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `0Missued` |Transaction state value string |
+
+
+In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, `b` field in the associated blindable update, `bup` event.
+
+An attachment of this blinded attribute block would be prefixed with the appropriate CESR count code, i.e.,  `BlindedStateQuadruples` with code format `-a##`, as follows:
+
+```
+-aAjEOtWw6X_aoOJlkzNaLj23IC6MXHl7ZSYSWVulFW_Hr_taLfCdNAnc-0P2SiruarZSajXiUWu5iU2VfQahvpNCyzBEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0Missued
+```
+
+#### Blinded State Registry Example
 
 Consider a blindable state revocation registry for ACDCs operated in blinded (private) mode. The transaction state can be one of two values, `issued` or `revoked`. In this case, the placeholder value of the empty string for the transaction state, `ts` field, is also employed to decorrelate the initialization.  The Issuer with AID, `ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf` first creates one among many placeholder Registries by issuing the following transaction event:
 
@@ -2267,11 +2271,11 @@ Notice in the event above that the registry SAID, `rd` field value matches the v
 
 Notice that the value of the BLID blinded attribute, `b` field in the transaction event, matches the value of the BLID `d` field in the expanded attribute block.  Likewise, notice that the value of the transaction ACDC SAID, in the `td` field, is the CESR encoded value for empty, serving as a placeholder value. Furthermore, the value of the transaction state, `ts` field, is also the CESR encoded value for empty. This indicates that the transaction state does not yet correspond to a real ACDC.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC. 
 
-The issuer issues a new blindable update event, `bup`, with a new blind, UUID `u` field value in the associate attribute block derived from the shared Salt and the sequence number of the `bup` event.  This makes the first use(s) of the registry uncorrelated with the eventual actual issuance of a real ACDC. In this case, the Issuer used a hierarchically deterministic algorithm to compute the UUID, `u` field in the blinded attribute block. 
+At some later time, the issuer issues a new blindable update event, `bup`, with a new blind, UUID `u` field value in the associate attribute block, derived from the shared Salt and the sequence number of the `bup` event.  This makes the first use(s) of the registry uncorrelated with the eventual actual issuance of a real ACDC. In this case, the Issuer used a hierarchically deterministic algorithm to compute the UUID, `u` field in the blinded attribute block. 
 
 To do this, the Issuer and Discloser/Issuee must first have exchanged a shared secret salt from which the value of the blind, UUID, `u` field was derived. The shared secret salt MUST have approximately 128 bits of cryptographic entropy. The UUID field value is calculated using a hierarchically deterministic algorithm from the salt and the sequence number of the transaction event as the deterministic path. To preserve cryptographic entropy during derivation, the value of the UUID `u` field must be twice as long as the shared secret salt.
 
-Suppose later, the real ACDC is issued and is uniquely identified by its top-level SAID, `d`, field value, namely, `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`. The Issuer creates a new BLID blinded attribute, `b` field value with the ACDC SAID value for its `td` field with `issued` as the ACDC state for the `ts` field.  The UUID, `u`, field uses the hierarchically deterministic algorithm with the shared secret salt and the deterministic path set to the next sequence number.  The Issuer issues a new blindable update event `bup` with its `b` field set to the SAID of the new blinded attribute block.
+Suppose even later, the real ACDC is issued and is uniquely identified by its top-level SAID, `d`, field value, namely, `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`. The Issuer creates a new BLID blinded attribute, `b` field value with the ACDC SAID value for its `td` field with `issued` as the ACDC state for the `ts` field.  The UUID, `u`, field uses the hierarchically deterministic algorithm with the shared secret salt and the deterministic path set to the next sequence number.  The Issuer issues a new blindable update event `bup` with its `b` field set to the SAID of the new blinded attribute block.
 
 The Discloser can then download the published blinded update `bup` transaction event to get the sequence number `n` field value. With that value and the shared secret salt, the Discloser can regenerate the blind UUID and the `u` field value. The Discloser also knows the real ACDC that will be used for this Registry. Consequently, it knows that the value of the ACDC, SAID, `td` field MUST be either the empty string placeholder or the real ACDC SAID given above.
 
@@ -2413,6 +2417,276 @@ Sometime later, the ACDC is revoked with the publication by the Issuer of the fo
 ```
 
 Notice that this event is chain-linked to the prior update event.
+
+#### Bound Blinded Attribute Block
+
+The bound blinded attribute block is a variant of the blinded attribute block described above. The bound blinded attribute block differs in that it adds two more fields. These two fields are labeled, respectively, the bound Issue key event sequence number, `bn`, and the bound Issuee key event SAID, `bd`. The associated Issuee key event is the key event in the KEL of the Issuee at the time of the publication of the associated blindable state update event, `bup`. Just like the blinded attribute block, the blinding said (BLID) of a bound blinded attribute block provides the value for the blinded attribute `b` field in the corresponding blindable update, `bup` event. 
+
+Essentially, the bound blinded attribute block binds to the publication time of a given registry's blindable update event, `bup`, in which the blid of the bound blinded attribute block appears to all of the following: the ACDC given by its `td` field value, the state of the ACDC given by its `ts` field value, and the key state of the ACDC's Issuee given by the combination of its `bn` and `bd` field values.
+
+The purpose of the bound blinded attribute block is to better support chains of authority using delegated chained ACDCs. The bound Issuee key state establishes verifiably that a given Issuee in a delegation chain of ACDCs had an authorization to issue its own delegated ACDCs, which authorization had been issued but not yet been revoked at the time of anchoring its own delegated issuance in its own KEL. Similarly, other ACDC states may be bound to the Issuee key state.
+
+The bound blinded attribute block has the following fields:
+
+|Virtual Label|Description|
+|---|---|
+|`d`| BLID blinding SAID |
+|`u`| UUID salty nonce blinding factor, random or HD generated |
+|`td`| Transaction ACDC SAID field, this is the value of the top-level `d` field in the ACDC|
+|`ts`| Transaction state value string |
+|`bn`| Bound Issuee key event sequence number field|
+|`bd`| Bound Issuee key event SAID field|
+
+The fields MUST appear in the following order `[d, u, td, ts, bn, bd]`.
+
+The field labels are virtual in that they never appear in the CESR serialization; they serve as a mnemonic for reference purposes.
+
+The semantics of the first four fields is identical to the blinded attribute block described above and are therefore not repeated here.
+
+The actual bound blinded attribute block is not part of the blindable update message. It MAY be provided as an attachment to some message, such as the associate ACDC, as part of a CESR serialization and MUST use one of the CESR group or count codes labeled `BoundStateSextuples` with code format `-b##` or `BigBoundStateSextuples` with code format `--b######`. When provided as an attachment, multiple blinded attribute blocks MAY be included in a given group. A group consists of its count code followed by one or more Blinded attribute blocks, where each block is composed of a concatenation of the six fields serialized in order as CESR primitives that are appropriate for the BLID, UUID, ACDC SAID, transaction state string, Issuee key state sequence number, and Issuee key state SAID fields in that block. An example of an attachment serialization with group code is provided below.
+
+
+##### Bound Issuee Key Event Sequence Number, `bn` Field
+
+The bound Issuee key event sequence number, `tn`, field value MUST be a CESR encoded non-negative integer. When not a placeholder, it MUST be the value of the `s` field in the current key event in the KEL of the Issuee AID's KEL at the time of publication of the associated blindable statue update, `bup`, event. This value is the sequence number of the key event. This field, in combination with the `bd` field, verifiably binds the ACDC state to the key state of the Issuee at the time the ACDC state is published.
+
+When the bound Issuee key event sequence number, `bn`, field value is a placeholder, it is represented by the hex-encoded value of 0, i.e., "0". It MUST be CESR-encoded as the CESR encoding for the integer value of 0.
+
+In general, the bound Issue key state sequence number field value may be encoded using any of the codes from the following table for non-negative integers:
+
+```python
+Short:   str = 'M'  # Short 2 byte b2 number
+Long:    str = '0H'  # Long 4 byte b2 number
+Tall:    str = 'R'  # Tall 5 byte b2 number
+Big:     str = 'N'  # Big 8 byte b2 number
+Large:   str = 'S'  # Large 11 byte b2 number
+Great:   str = 'T'  # Great 14 byte b2 number
+Huge:    str = '0A'  # Huge 16 byte b2 number (same as Salt_128)
+Vast:    str = 'U'  # Vast 17 byte b2 number
+```
+
+##### Bound Issuee Key Event SAID, `bd` Field
+
+When not a placeholder, the bound Issuee key event SAID, `bd`, field value MUST be the value of the `d` field in the current key event in the KEL of the Issuee AID's KEL at the time of publication of the associated blindable statue update, `bup`, event. This value is the SAID of the key event. This field, in combination with the `bn` field, verifiably binds the ACDC state to the key state of the Issuee at the time the ACDC state is published.
+
+When the bound Issuee key event SAID, `bd`, field value is a placeholder as indicated by the empty string, i.e., "", it MUST be CESR encoded as the CESR `Empty` primitive code with value `1AAP`.
+
+
+
+##### Bound Blinded Attribute Block Placeholder Calculation Example
+
+Suppose the UUID, `u` field value is encoded as `aJxtoz6qVeJxPCZvP-qBJifRfIxP3itQBVAAu7JJHxMa`, the empty placeholder transaction ACDC said, `td` field value is encoded as `1AAP` (CESR coding for the empty value), the transaction state, `ts` field is also encoded as `1AAP` for empty, the bound Issuee key event sequence number, `bn` field value is encoded as `MAAA` for 0, and the bound Issuee key event SAID, `bd` field value is encoded as `1AAP` (CESR coding for the empty value). 
+
+The digest to be used to compute the BLID (Blinding SAID) is the BLAKE3-256 digest, which, when CESR encoded, has a length of 44 characters. This is filled with forty-four `#` dummy characters.  The resulting length of the group content is 104 characters.
+
+For the sake of clarity, the field values are shown in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `############################################`| Dummied BLID (Blinding SAID) |
+| `u` | `aJxtoz6qVeJxPCZvP-qBJifRfIxP3itQBVAAu7JJHxMa`| UUID salty nonce blinding factor, HD generated |
+| `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `1AAP` |Transaction state value string |
+| `bn` | `MAAA`| Bound Issuee key event sequence number field|
+| `bd` | `1AAP`| Bound Issuee key event SAID field|
+
+
+ The 104-character dummied serialization is as follows:
+```
+############################################aJxtoz6qVeJxPCZvP-qBJifRfIxP3itQBVAAu7JJHxMa1AAP1AAPMAAA1AAP
+```
+
+The CESR encoded Blake3 digest of this string is `EFaQ00QW-ZeoMxE9baWcpJbAFXrs5h0ya-wpKnHvMQ0c`.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
+
+```
+EFaQ00QW-ZeoMxE9baWcpJbAFXrs5h0ya-wpKnHvMQ0caJxtoz6qVeJxPCZvP-qBJifRfIxP3itQBVAAu7JJHxMa1AAP1AAPMAAA1AAP
+```
+
+Broken out into fields, the values are provided in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `EFaQ00QW-ZeoMxE9baWcpJbAFXrs5h0ya-wpKnHvMQ0c`| BLID (Blinding SAID) |
+| `u` |`aJxtoz6qVeJxPCZvP-qBJifRfIxP3itQBVAAu7JJHxMa`| UUID salty nonce blinding factor, HD generated |
+| `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `1AAP` |Transaction state value string |
+| `bn` | `MAAA`| Bound Issuee key event sequence number field|
+| `bd` | `1AAP`| Bound Issuee key event SAID field|
+
+In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, `d` field in the associated blindable update, `bup` event.
+
+An unblinded attachment of this blinded attribute block would be prefixed with the appropriate CESR count code, i.e.,  `BoundStateSextuples` with code format `-b##`, as follows:
+
+```
+-bAaEFaQ00QW-ZeoMxE9baWcpJbAFXrs5h0ya-wpKnHvMQ0caJxtoz6qVeJxPCZvP-qBJifRfIxP3itQBVAAu7JJHxMa1AAP1AAPMAAA1AAP
+```
+
+##### Blinded Attribute Block ACDC State Calculation Example
+
+For example, suppose the UUID, `u` field value is encoded as `aKNPEY4_60x6vUx2g5_5kAoJTn0RDspR04Ql8ecNyTkO` the transaction ACDC said, `td` field value is encoded as `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`, the transaction state, `ts` field value is the string "issued" encoded as `0Missued`, the bound Issuee key event sequence number, `bn` field value is encoded as `MAAB` for 1, and the bound Issuee key event SAID, `bd` field value is encoded as `EJOnAKXGaSyJ_43kit0V806NNeGWS07lfjybB1UcfWsv`. The digest to be used for computing the BLID is the BLAKE3-256 digest, which, when CESR-encoded, has a length of 44 characters. This is filled with forty-four `#` dummy characters.  The resulting length of the group content is 188 characters.
+
+For the sake of clarity, the field values are shown in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `############################################`| Dummied BLID (Blinding SAID) |
+| `u` | `aKNPEY4_60x6vUx2g5_5kAoJTn0RDspR04Ql8ecNyTkO`| UUID salty nonce blinding factor, HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `0Missued` |Transaction state value string |
+| `bn` | `MAAB`| Bound Issuee key event sequence number field|
+| `bd` | `EJOnAKXGaSyJ_43kit0V806NNeGWS07lfjybB1UcfWsv`| Bound Issuee key event SAID field|
+
+ The 188-character dummied serialization is as follows:
+```
+############################################aKNPEY4_60x6vUx2g5_5kAoJTn0RDspR04Ql8ecNyTkOEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0MissuedMAABEJOnAKXGaSyJ_43kit0V806NNeGWS07lfjybB1UcfWsv
+```
+
+The CESR encoded Blake3 digest of this string is `EJAeKLEtVtMtt28IdAKJShyZHodEIZTHJHzaP21A_ZU4`.  This is substituted in the serialization above for the dummy characters to provide the final serialized expanded attribute block as follows:
+
+```
+EJAeKLEtVtMtt28IdAKJShyZHodEIZTHJHzaP21A_ZU4aKNPEY4_60x6vUx2g5_5kAoJTn0RDspR04Ql8ecNyTkOEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0MissuedMAABEJOnAKXGaSyJ_43kit0V806NNeGWS07lfjybB1UcfWsv
+```
+
+Broken out into fields, the values are provided in the table below:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `EJAeKLEtVtMtt28IdAKJShyZHodEIZTHJHzaP21A_ZU4`| BLID (Blinding SAID) |
+| `u` | `aKNPEY4_60x6vUx2g5_5kAoJTn0RDspR04Ql8ecNyTkO`| UUID salty nonce blinding factor, HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `0Missued` |Transaction state value string |
+| `bn` | `MAAB`| Bound Issuee key event sequence number field|
+| `bd` | `EJOnAKXGaSyJ_43kit0V806NNeGWS07lfjybB1UcfWsv`| Bound Issuee key event SAID field|
+
+
+In a presentation of the associated ACDC and/or TEL to a Disclosee, a discloser could attach this to verifiably unblind the blinded attribute SAID, `b` field in the associated blindable update, `bup` event.
+
+An attachment of this blinded attribute block would be prefixed with the appropriate CESR count code, i.e.,  `BoundStateSextuples` with code format `-b##`, as follows:
+
+```
+-bAvEJAeKLEtVtMtt28IdAKJShyZHodEIZTHJHzaP21A_ZU4aKNPEY4_60x6vUx2g5_5kAoJTn0RDspR04Ql8ecNyTkOEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M0MissuedMAABEJOnAKXGaSyJ_43kit0V806NNeGWS07lfjybB1UcfWsv
+```
+
+
+#### Bound Blinded State Registry Example
+
+Consider a bound blindable state revocation registry for ACDCs operated in blinded (private) mode. This is identical to the blindable state revocation registry example above except that the bound blindable attribute blocks are used instead of merely blindable attribute blocks.  As above, the transaction state can be one of two values, `issued` or `revoked`. In this case, the placeholder value of the empty string for the transaction state, `ts` field, is also employed to decorrelate the initialization.  The Issuer with AID, `ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf` first creates one among many placeholder Registries by issuing the following transaction event:
+
+```python
+{
+    "v": "ACDCCAACAAJSONAADa.",
+    "t": "rip",
+    "d": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "u": "0ABhY2Rjc3BlY3dvcmtyYXcx",
+    "i": "ECWJZFBtllh99fESUOrBvT3EtBujWtDKCmyzDAXWhYmf",
+    "n": "0",
+    "dt": "2025-07-04T17:51:00.000000+00:00"
+}
+```
+
+Note that the registry identifier, REGID, is `ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ`. It is the value of the `d` field in the registry inception event above. It is computed as the SAID of that event.  When provided in an ACDC, it is the value of the `rd` field.
+
+The state is initialized with decorrelated placeholder values with the issuance of the following placeholder update event:
+
+```python
+{
+    "v": "ACDCCAACAAJSONAAEi.",
+    "t": "bup",
+    "d": "EOBVdcIL2rVEzBDpQvmBpsp3R52DsoKhTAAdvHqAz9yc",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "1",
+    "p": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "dt": "2025-08-01T18:06:10.988921+00:00",
+    "b": "EFaQ00QW-ZeoMxE9baWcpJbAFXrs5h0ya-wpKnHvMQ0c"
+}
+```
+
+Notice in the event above that the registry SAID, `rd` field value matches the value of the SAID, `d` field in the Registry Inception, `rip` event. The value of the blinded attribute block BLID, `b` field is taken from the placeholder bound blinded attribute block above. Repeated here as follows:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `EFaQ00QW-ZeoMxE9baWcpJbAFXrs5h0ya-wpKnHvMQ0c`| BLID (Blinding SAID) |
+| `u` |`aJxtoz6qVeJxPCZvP-qBJifRfIxP3itQBVAAu7JJHxMa`| UUID salty nonce blinding factor, HD generated |
+| `td` | `1AAP`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `1AAP` |Transaction state value string |
+| `bn` | `MAAA`| Bound Issuee key event sequence number field|
+| `bd` | `1AAP`| Bound Issuee key event SAID field|
+
+Notice that the value of the BLID bound blinded attribute, `b` field in the transaction event, matches the value of the BLID, `d`, field in the expanded bound blinded attribute block.  Likewise, notice that the value of the transaction ACDC SAID, in the `td` field, is the CESR encoded value for empty, serving as a placeholder value, as it the value of the transaction state, `ts` field, which is also the CESR encoded value for empty. Furthermore, the values of the bound Issuee key event sequence number, `bn`, and the bound Issuee key event SAID fields are the placeholder values of `MAAA` and `1AAP`. This indicates that the transaction state does not yet correspond to a real ACDC, nor does the bound Issuee key state yet correspond to an extant Issuee's key state.  The blind for this placeholder attribute block may be updated any number of times prior to its first use as the true state of a real ACDC with a real Issuee. 
+
+At some later time, the issuer issues a new blindable update event, `bup`, with a new blind, UUID `u` field value in the associate attribute block, derived from the shared Salt and the sequence number of the `bup` event.  This makes the first use(s) of the registry uncorrelated with the eventual actual issuance of a real ACDC. In this case, the Issuer used a hierarchically deterministic algorithm to compute the UUID, `u` field in the blinded attribute block. 
+
+Suppose even later, the real ACDC is issued and is uniquely identified by its top-level SAID, `d`, field value, namely, `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`. The Issuer creates a new BLID, bound blinded attribute, `b` field value, with the ACDC SAID value for its `td` field, with `issued` as the ACDC state for the `ts` field, with the bound Issuee key event sequence number, `bn`, and key event SAID, `bd` field values taken from the Issuee AID's current key event.  The UUID, `u`, field uses the hierarchically deterministic algorithm with the shared secret salt and the deterministic path set to the next sequence number.  The Issuer issues a new bound blindable update event `bup` with its `b` field set to the SAID of the new bound blinded attribute block.
+
+Suppose the associated update event occurs at sequence number 2 and the bound Issuee key event occurs at sequence number 1 in the Issuee's KEL. The published blindable update transaction event is as follows:
+
+```python
+{
+    "v": "ACDCCAACAAJSONAAEi.",
+    "t": "bup",
+    "d": "EGu4B78s6G_GVrzaoBw2a1vkFpB5tVo-wZ1OGsC9D_pK",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "2",
+    "p": "EOBVdcIL2rVEzBDpQvmBpsp3R52DsoKhTAAdvHqAz9yc",
+    "dt": "2020-08-02T12:00:20.000000+00:00",
+    "b": "EJAeKLEtVtMtt28IdAKJShyZHodEIZTHJHzaP21A_ZU4"
+}
+```
+
+The value of the bound blinded attribute block BLID, `b` field, is taken from the issued bound blinded attribute block above. Repeated here as follows:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `EJAeKLEtVtMtt28IdAKJShyZHodEIZTHJHzaP21A_ZU4`| BLID (Blinding SAID) |
+| `u` | `aKNPEY4_60x6vUx2g5_5kAoJTn0RDspR04Ql8ecNyTkO`| UUID salty nonce blinding factor, HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `0Missued` |Transaction state value string |
+| `bn` | `MAAB`| Bound Issuee key event sequence number field|
+| `bd` | `EJOnAKXGaSyJ_43kit0V806NNeGWS07lfjybB1UcfWsv`| Bound Issuee key event SAID field|
+
+
+Notice that the value of the bound blinded attribute, BLID, `b` field in the transaction event, matches the value of the BLID (Blinding SAID), `d` field in the expanded bound blinded attribute block. Further notice that the value of the `td` field is the same as the SAID (top-level `d`) field value of the issued ACDC.  Also, notice that in this case, the value of the transaction state, `ts` field, is `issued` (not the empty placeholder). Finally, notice, that the values of the bound Issuee key event sequence number and SAID field are not placeholders but correspond to a key event with sequence number == 1 (`s` field value), and SAID = `EJOnAKXGaSyJ_43kit0V806NNeGWS07lfjybB1UcfWsv` (`d` field value).
+
+At some time later, the issuer decides to revoke the issuance. The Issuer first creates a new BLID, a bound blinded attribute block, with the `td` field set to the SAID of the ACDC and `revoked` as the value of the `ts` field with the bound Issuee key event sequence number, `bn`, and key event SAID, `bd` field values taken from the Issuee AID's current key event. In this case, the Issuee's key event is as sequence number == 8. The UUID, `u`, field uses a hierarchically deterministic algorithm with a shared secret salt and a deterministic path set to the next sequence number, which in this case is `3`, to compute its value.  The Issuer issues a new blindable update event `bup` with its `b` field set to the SAID of this new blinded attribute block.
+
+The published blindable update transaction event is as follows:
+
+```python
+{
+    "v": "ACDCCAACAAJSONAAEi.",
+    "t": "bup",
+    "d": "EDXGqM-V_sfj65Dk-lgMnpOZ9DYziqMaYkrju7NRKpFn",
+    "rd": "ECOWJI9kAjpCFYJ7RenpJx2w66-GsGlhyKLO-Or3qOIQ",
+    "n": "3",
+    "p": "EGu4B78s6G_GVrzaoBw2a1vkFpB5tVo-wZ1OGsC9D_pK",
+    "dt": "2020-08-03T12:00:20.000000+00:00",
+    "b": "EIBNZ3t5rA_-PbBNmhtvtf0VgHBjVrE0fc-DO67f-wGv"
+}
+```
+The value of the blinded attribute block BLID, `b` field, is the value of the SAID field in the associated blinded attribute block.
+
+The serialized expanded attribute block is as follows:
+
+```
+EIBNZ3t5rA_-PbBNmhtvtf0VgHBjVrE0fc-DO67f-wGvaFudXE-d0b2owzZNBjd78sx4kCTJx-RTP_Zd19HRUcVDEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4MYrevokedMAAIEDeCPBTHAt75Acgi9PfEciHFnc1r2DKAno3s9_QIYrXk
+```
+
+Broken out into a table, the fields are as follows:
+
+|Virtual Label|Value|Description|
+|---|---|---|
+| `d` | `EIBNZ3t5rA_-PbBNmhtvtf0VgHBjVrE0fc-DO67f-wGv`| BLID (Blinding SAID) |
+| `u` | `aFudXE-d0b2owzZNBjd78sx4kCTJx-RTP_Zd19HRUcVD`| UUID salty nonce blinding factor, HD generated |
+| `td` | `EMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4M`| Transaction ACDC SAID field value, top-level `d`|
+| `ts` | `Yrevoked` |Transaction state value string |
+| `bn` | `MAAI`| Bound Issuee key event sequence number field|
+| `bd` | `EDeCPBTHAt75Acgi9PfEciHFnc1r2DKAno3s9_QIYrXk`| Bound Issuee key event SAID field|
+
+To unblind the Discloser would compute the attribute black and then prefix the appropriate CESR group code, i.e.,  `BoundStateSextuples` with code format `-b##`, and attach the encoded group given below:
+
+```text
+-bAvEIBNZ3t5rA_-PbBNmhtvtf0VgHBjVrE0fc-DO67f-wGvaFudXE-d0b2owzZNBjd78sx4kCTJx-RTP_Zd19HRUcVDEMLjZLIMlfUOoKox_sDwQaJO-0wdoGW0uNbmI28Wwc4MYrevokedMAAIEDeCPBTHAt75Acgi9PfEciHFnc1r2DKAno3s9_QIYrXk
+```
 
 ## Annex
 
