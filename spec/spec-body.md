@@ -1671,7 +1671,7 @@ This is in contrast to other verifiable credential schemes, where the credential
 The approach of binding ACDC state to Issuer key state via anchored TEL sealsis shown in the following diagram:
 
 
-![Bound-ACDC-State](https://github.com/trustoverip/tswg-acdc-specification/blob/main/spec/assets/RegistryTEL.png)
+![Bound-ACDC-State](https://github.com/trustoverip/tswg-acdc-specification/blob/main/spec/assets/RegistryTEL.png?raw=true)
 
 **Figure:** *Registrar Observer Components*
 
@@ -1688,7 +1688,7 @@ The use of a Transaction Event Log (TEL) to manage the state of an ACDC may requ
 
 To elaborate, an Observer starts up by downloading and caching the Registries from a Registrar. The Observer then updates its cache of current Registry state by either periodically polling the Registry for state updates or by subscribing to pushed state updates from the Registrar when available. Typically, because ACDC state changes are rare, optimized batch synchronization of state changes across multiple registries may be employed. Race conditions may be mitigated by implementing timed grace periods on revocations, whereby a revocation does not go into effect until a specified date and time after the state update. This enables synchronization batch windows to catch revocations in advance of PoV requests.
 
-![Registrar-Observers](https://github.com/trustoverip/tswg-acdc-specification/blob/main/spec/assets/RegistrarObserver.png)
+![Registrar-Observers](https://github.com/trustoverip/tswg-acdc-specification/blob/main/spec/assets/RegistrarObserver.png?raw=true)
 
 **Figure:** *Registrar Observer Components*
 

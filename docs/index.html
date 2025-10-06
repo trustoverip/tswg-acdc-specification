@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Create technical specifications in markdown. Based on the original Spec-Up, extended with Terminology tooling">
     <meta name="author" content="Trust over IP Foundation">
-    <meta property="spec-up-t:github-repo-info" content="trustoverip,tswg-acdc-specification,main">
+    <meta property="spec-up-t:github-repo-info" content="trustoverip,tswg-acdc-specification,typosOut">
     <link rel="icon" href="undefined" type="image/x-icon">
     <meta name="generator" content="Spec-Up-T" />
     <title>Authentic Chained Data Containers (ACDC)</title>
@@ -56,7 +56,746 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
           
         
     <script>const allXTrefs = {
-  "xtrefs": []
+  "xtrefs": [
+    {
+      "externalSpec": "kmg-1",
+      "term": "attribute",
+      "alias": "Attribute",
+      "sourceFiles": [
+        {
+          "file": "attribute.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a top-level field map within an ACDC that provides a property of an entity that is inherent or assigned to the entity.</p>\n</dd>\n<dd>\n<p>Also see: <a class=\"x-term-reference term-reference\" data-local-href=\"#term:toip1:attribute\" href=\"https://henkvancann.github.io/ctwg-main-glossary/#term:attribute\">attribute</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "autonomic-identifier",
+      "alias": "Autonomic Identifier",
+      "sourceFiles": [
+        {
+          "file": "autonomic-identifier.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a self-managing cryptonymous identifier that must be self-certifying (self-authenticating) and must be encoded in CESR as a qualified Cryptographic primitive.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>An identifier that is <a class=\"term-reference\" href=\"#term:self-certifying-identifier\">self-certifying-identifier</a> and <a class=\"term-reference\" href=\"#term:self-sovereign-identity\">self-sovereign-identity</a> (or <em>self-managing</em>).</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/autonomic-identifier\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "chain-link-confidential-disclosure",
+      "alias": "Chain-link Confidential Disclosure",
+      "sourceFiles": [
+        {
+          "file": "chain-link-confidential-disclosure.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>contractual restrictions and liability imposed on a recipient of a disclosed <a class=\"term-reference\" href=\"#term:acdc\">ACDC</a> that contractually link the obligations to protect the disclosure of the information contained within the ACDC to all subsequent recipients as the information moves downstream. The Chain-link Confidential Disclosure provides a mechanism for protecting against un-permissioned exploitation of the data disclosed via an ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/chain-link-confidential-disclosure\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "compact-disclosure",
+      "alias": "Compact Disclosure",
+      "sourceFiles": [
+        {
+          "file": "compact-disclosure.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a disclosure of an ACDC that discloses only the SAID(s) of some or all of its field maps. Both Partial and Selective Disclosure rely on Compact Disclosure.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/compact-disclosure\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "contractually-protected-disclosure",
+      "alias": "Contractually Protected Disclosure",
+      "sourceFiles": [
+        {
+          "file": "contractually-protected-disclosure.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a discloser of an ACDC that leverages a Graduated Disclosure so that contractual protections can be put into place to minimize the leakage of information that can be correlated. A Contractually Protected Disclosure partially or selectively reveals the information contained within the ACDC in the initial interaction with the recipient and discloses further information only after the recipient agrees to the terms established by the discloser. More information may be progressively revealed as the recipient agrees to additional terms.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/contractually-protected-disclosure\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "controller",
+      "alias": "Controller",
+      "sourceFiles": [
+        {
+          "file": "controller.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>an entity that can cryptographically prove the control authority over an AID and make changes on the associated KEL. A controller of a multi-sig AID may consist of multiple controlling entities.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/controller\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "disclosee",
+      "alias": "Disclosee",
+      "sourceFiles": [
+        {
+          "file": "disclosee.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a role of an entity that is a recipient to which an ACDC is disclosed. A Disclosee may or may not be the Issuee of the disclosed ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/disclosee\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "discloser",
+      "alias": "Discloser",
+      "sourceFiles": [
+        {
+          "file": "discloser.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a role of an entity that discloses an <a class=\"term-reference\" href=\"#term:authentic-chained-data-container\">authentic-chained-data-container</a>. A Discloser may or may not be the Issuer of the disclosed ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/discloser\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "duplicity",
+      "alias": "Duplicity",
+      "sourceFiles": [
+        {
+          "file": "duplicity.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>the existence of more than one version of a Verifiable <a class=\"term-reference\" href=\"#term:key-event-log\">key-event-log</a> for a given <a class=\"term-reference\" href=\"#term:aid\">AID</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith, 2024</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/duplicity\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "edge",
+      "alias": "Edge",
+      "sourceFiles": [
+        {
+          "file": "edge.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a top-level field map within an ACDC that provides edges that connect to other ACDCs, forming a labeled property graph (LPG).</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/edge\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "framing-code",
+      "alias": "Framing Code",
+      "sourceFiles": [
+        {
+          "file": "framing-code.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a code that delineates a number of characters or bytes, as appropriate, that can be extracted atomically from a <a class=\"term-reference\" href=\"#term:stream\">stream</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/framing-code\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "full-disclosure",
+      "alias": "Full Disclosure",
+      "sourceFiles": [
+        {
+          "file": "full-disclosure.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a disclosure of an ACDC that discloses the full details of some or all of its field maps. In the context of <a class=\"term-reference\" href=\"#term:selective-disclosure\">selective-disclosure</a>, Full Disclosure means detailed disclosure of the selectively disclosed attributes, not the detailed disclosure of all selectively disclosable attributes. In the context of <a class=\"term-reference\" href=\"#term:partial-disclosure\">partial-disclosure</a>, Full Disclosure means detailed disclosure of the field map that was so far only partially disclosed.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/full-disclosure\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "graduated-disclosure",
+      "alias": "Graduated Disclosure",
+      "sourceFiles": [
+        {
+          "file": "graduated-disclosure.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a disclosure of an <a class=\"term-reference\" href=\"#term:acdc\">ACDC</a> that does not reveal its entire content in the initial interaction with the recipient and, instead, partially or selectively reveals only the information contained within the ACDC necessary to further a transaction with the recipient. A Graduated disclosure may involve multiple steps where more information is progressively revealed as the recipient satisfies the conditions set by the <a class=\"term-reference\" href=\"#term:discloser\">discloser</a>. <a class=\"term-reference\" href=\"#term:compact-disclosure\">compact-disclosure</a>, <a class=\"term-reference\" href=\"#term:partial-disclosure\">partial-disclosure</a>, <a class=\"term-reference\" href=\"#term:selective-disclosure\">selective-disclosure</a>, and <a class=\"term-reference\" href=\"#term:full-disclosure\">full-disclosure</a> are all Graduated disclosure mechanisms.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/graduated-disclosure\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "inception-event",
+      "alias": "Inception event",
+      "sourceFiles": [
+        {
+          "file": "inception-event.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>an <a class=\"term-reference\" href=\"#term:establishment-event\">establishment-event</a> that provides the incepting information needed to derive an AID and establish its initial Key state.</p>\n</dd>\n<dd>\n<p>Source <a path-0=\"github.com\" path-1=\"WebOfTrust\" path-2=\"ietf-keri\" path-3=\"blob\" path-4=\"main\" path-5=\"draft-ssmith-keri.md#basic-terminology\" href=\"https://github.com/WebOfTrust/ietf-keri/blob/main/draft-ssmith-keri.md#basic-terminology\">Sam Smith</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/inception-event\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "information-theoretic-security",
+      "alias": "Information theoretic security",
+      "sourceFiles": [
+        {
+          "file": "information-theoretic-security.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>the highest level of cryptographic security with respect to a cryptographic secret (seed, salt, or private key).</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "interaction-event",
+      "alias": "Interaction Event",
+      "sourceFiles": [
+        {
+          "file": "interaction-event.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>Non-establishment Event that anchors external data to the key-state as established by the most recent prior establishment event.</p>\n</dd>\n<dd>\n<p>Source <a path-0=\"github.com\" path-1=\"WebOfTrust\" path-2=\"ietf-keri\" path-3=\"blob\" path-4=\"main\" path-5=\"draft-ssmith-keri.md#basic-terminology\" href=\"https://github.com/WebOfTrust/ietf-keri/blob/main/draft-ssmith-keri.md#basic-terminology\">Sam Smith</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/interaction-event\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "issuee",
+      "alias": "Issuee",
+      "sourceFiles": [
+        {
+          "file": "issuee.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a role of an entity to which the claims of an ACDC are asserted.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/issuee\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "issuer",
+      "alias": "Issuer",
+      "sourceFiles": [
+        {
+          "file": "issuer.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a role of an entity that asserts claims and creates an ACDC from these claims.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/issuer\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "key-state",
+      "alias": "Key-state",
+      "sourceFiles": [
+        {
+          "file": "key-state.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a set of currently authoritative keypairs for an AID and any other information necessary to secure or establish control authority over an AID. This includes current keys, prior next key digests, current thresholds, prior next thresholds, witnesses, witness thresholds, and configurations. A key-state of an AID is first established through an inception event and may be altered by subsequent rotation events.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>Also see <a class=\"term-reference\" href=\"#term:validator\">validator</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "operator",
+      "alias": "Operator",
+      "sourceFiles": [
+        {
+          "file": "operator.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>an optional field map in the Edge section that enables expression of the edge logic on edge subgraph as either a unary operator on the edge itself or an m-ary operator on the edge group.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/operator\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "partial-disclosure",
+      "alias": "Partial Disclosure",
+      "sourceFiles": [
+        {
+          "file": "partial-disclosure.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a disclosure of an ACDC that partially discloses its field maps using Compact Disclosure. The Compact Disclosure provides a cryptographically equivalent commitment to the yet-to-be-disclosed content, and the later exchange of the uncompacted content is verifiable to an earlier Partial Disclosure. Unlike Selective disclosure, a partially disclosable field becomes correlatable to its encompassing block after its Full Disclosure.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/partial-disclosure\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "percolated-discovery",
+      "alias": "Percolated discovery",
+      "sourceFiles": [
+        {
+          "file": "percolated-discovery.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a discovery mechanism for information associated with an AID or a SAID, which is based on Invasion Percolation Theory. Once an entity has discovered such information, it may in turn share what it discovers with other entities. Since the information so discovered is end-verifiable, the percolation mechanism and percolating intermediaries do not need to be trusted.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:percolated-information-discovery\">percolated-information-discovery</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/percolated-discovery\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "perfect-security",
+      "alias": "Perfect security",
+      "sourceFiles": [
+        {
+          "file": "perfect-security.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a special case of Information theoretic security <a class=\"term-reference\" href=\"#term:itps\">ITPS</a></p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>"
+    },
+    {
+      "externalSpec": "toip2",
+      "term": "primitive",
+      "alias": "Primitive",
+      "sourceFiles": [
+        {
+          "file": "primitive.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/ctwg-general-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "ctwg-general-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/ctwg-general-glossary/",
+      "commitHash": "b4cc6b9e5be7978a663f6bbac7226fd79a2c7e41",
+      "content": "<dd>\n<p>a serialization of a unitary value. All Primitives in KERI must be expressed in <a class=\"term-reference\" href=\"#term:composable-event-streaming-representation\">composable-event-streaming-representation</a>.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "rotation-event",
+      "alias": "Rotation event",
+      "sourceFiles": [
+        {
+          "file": "rotation-event.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>an Establishment Event that provides the information needed to change the Key state, which includes a change to the set of <a class=\"term-reference\" href=\"#term:authoritative\">authoritative</a> keypairs for an AID.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/rotation-event\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "rules",
+      "alias": "Rules",
+      "sourceFiles": [
+        {
+          "file": "rules.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a top-level field map within an ACDC that provides a legal language as a <a path-0=\"en.wikipedia.org\" path-1=\"wiki\" path-2=\"Ricardian_contract\" href=\"https://en.wikipedia.org/wiki/Ricardian_contract\">Ricardian Contract</a>, which is both human and machine-readable and referenceable by a cryptographic digest.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/rules\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "schema",
+      "alias": "Schema",
+      "sourceFiles": [
+        {
+          "file": "schema.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>the <a class=\"term-reference\" href=\"#term:said\">said</a> of a JSON schema that is used to issue and verify an ACDC.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/schema\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "selective-disclosure",
+      "alias": "Selective Disclosure",
+      "sourceFiles": [
+        {
+          "file": "selective-disclosure.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a disclosure of an ACDC that selectively discloses its attributes using Compact Disclosure. The set of selectively disclosable attributes is provided as an array of blinded blocks where each attribute in the set has its own dedicated blinded block. Unlike Partial Disclosure, the selectively disclosed fields are not correlatable to the so far undisclosed but selectively disclosable fields in the same encompassing block.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/selective-disclosure\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "self-addressing-identifier",
+      "alias": "Self-addressing Identifier",
+      "sourceFiles": [
+        {
+          "file": "self-addressing-identifier-(said).md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>any identifier that is deterministically generated out of the content, or a digest of the content.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smtih</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/self-addressing-identifier\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "semver",
+      "alias": "SEMVER",
+      "sourceFiles": [
+        {
+          "file": "semver.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>Semantic Versioning Specification 2.0. See also (<a path-0=\"semver.org\" href=\"https://semver.org\"><span>https://semver.org</span></a>)[<a path-0=\"semver.org\" href=\"https://semver.org\"><span>https://semver.org</span></a>]</p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "stream",
+      "alias": "Stream",
+      "sourceFiles": [
+        {
+          "file": "stream.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>a <a class=\"term-reference\" href=\"#term:cesr\">CESR</a> Stream is any set of concatenated Primitives, concatenated groups of Primitives, or hierarchically composed groups of <a class=\"term-reference\" href=\"#term:primitive\">primitive</a>s.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/stream\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "targeted-acdc",
+      "alias": "Targeted ACDC",
+      "sourceFiles": [
+        {
+          "file": "targeted-acdc.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>an ACDC with the presence of the Issuee field in the attribute or attribute aggregate sections.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:untargeted-acdc\">untargeted-acdc</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/targeted-acdc\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "untargeted-acdc",
+      "alias": "Untargeted ACDC",
+      "sourceFiles": [
+        {
+          "file": "untargeted-acdc.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>an ACDC without the presence of the Issuee field in the attribute or attribute aggregate sections.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>\n<dd>\n<p><a class=\"term-reference\" href=\"#term:targeted-acdc\">targeted-acdc</a></p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/untargeted-acdc\">extended KERI glossary</a></p>\n</dd>"
+    },
+    {
+      "externalSpec": "toip2",
+      "term": "validator",
+      "alias": "Validator",
+      "sourceFiles": [
+        {
+          "file": "validator.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/ctwg-general-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "ctwg-general-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/ctwg-general-glossary/",
+      "commitHash": "b4cc6b9e5be7978a663f6bbac7226fd79a2c7e41",
+      "content": "<dd>\n<p>any entity or agent that evaluates whether or not a given signed statement as attributed to an identifier is valid at the time of its issuance.</p>\n</dd>\n<dd>\n<p>Source: Dr. S. Smith</p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "verifiable-data-registry",
+      "alias": "Verifiable data registry",
+      "sourceFiles": [
+        {
+          "file": "verifiable-data-registry.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>A role a system might perform by mediating issuance and verification of ACDCs. See <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model-2.0\" path-3=\"#dfn-verifiable-data-registries\" href=\"https://www.w3.org/TR/vc-data-model-2.0/#dfn-verifiable-data-registries\">verifiable data registry</a>.</p>\n</dd>"
+    },
+    {
+      "externalSpec": "toip1",
+      "term": "verifier",
+      "sourceFiles": [
+        {
+          "file": "verifier.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/ctwg-main-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "ctwg-main-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/ctwg-main-glossary/",
+      "commitHash": "c27478b7fc1793b2695c1bc573ae804e117644da",
+      "content": "<dd>\n<p>A <a class=\"term-reference\" href=\"#term:role\">role</a> an <a class=\"term-reference\" href=\"#term:agent\">agent</a> performs to perform <a class=\"term-reference\" href=\"#term:verification\">verification</a> of one or more <a class=\"term-reference\" href=\"#term:proofs\">proofs</a> of the <a class=\"term-reference\" href=\"#term:claims\">claims</a> in a <a class=\"term-reference\" href=\"#term:digital-credential\">digital credential</a> or other <a class=\"term-reference\" href=\"#term:verifiable-data\">verifiable data</a>.</p>\n</dd>\n<dd>\n<p>See also: <a class=\"term-reference\" href=\"#term:relying-party\">relying party</a>; <a class=\"term-reference\" href=\"#term:issuer\">issuer</a>, <a class=\"term-reference\" href=\"#term:holder\">holder</a>.</p>\n</dd>\n<dd>\n<p>Mental model: <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#roles\" href=\"https://www.w3.org/TR/vc-data-model/#roles\">W3C Verifiable Credentials Data Model Roles &amp; Information Flows</a></p>\n</dd>\n<dd>\n<p>Supporting definitions:</p>\n</dd>\n<dd>\n<p><a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#terminology\" href=\"https://www.w3.org/TR/vc-data-model/#terminology\">W3C VC</a>: A role an <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-entities\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-entities\">entity</a> performs by receiving one or more <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-verifiable-credentials\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-verifiable-credentials\">verifiable credentials</a>, optionally inside a <a path-0=\"www.w3.org\" path-1=\"TR\" path-2=\"vc-data-model\" path-3=\"#dfn-verifiable-presentations\" href=\"https://www.w3.org/TR/vc-data-model/#dfn-verifiable-presentations\">verifiable presentation</a> for processing. Other specifications might refer to this concept as a <a class=\"term-reference\" href=\"#term:relying-party\">relying party</a>.</p>\n</dd>\n<dd>\n<p><a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"essifLab-glossary#verifier\" href=\"https://essif-lab.github.io/framework/docs/essifLab-glossary#verifier\">eSSIF-Lab</a>: a component that implements the <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"capability\" href=\"https://essif-lab.github.io/framework/docs/terms/capability\">capability</a> to request <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"peer-agent\" href=\"https://essif-lab.github.io/framework/docs/terms/peer-agent\">peer agents</a> to present (provide) data from credentials (of a specified kind, issued by specified <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"party\" href=\"https://essif-lab.github.io/framework/docs/terms/party\">parties</a>), and to verify such responses (check structure, signatures, dates), according to its <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"principal\" href=\"https://essif-lab.github.io/framework/docs/terms/principal\">principal</a>’s <a path-0=\"essif-lab.github.io\" path-1=\"framework\" path-2=\"docs\" path-3=\"terms\" path-4=\"verifier-policy\" href=\"https://essif-lab.github.io/framework/docs/terms/verifier-policy\">verifier policy</a>.</p>\n</dd>\n<dd>\n<p><a path-0=\"csrc.nist.gov\" path-1=\"glossary\" path-2=\"term\" path-3=\"verifier\" href=\"https://csrc.nist.gov/glossary/term/verifier\">NIST</a> The entity that verifies the authenticity of a digital signature using the public key.</p>\n</dd>"
+    },
+    {
+      "externalSpec": "kmg-1",
+      "term": "weight",
+      "sourceFiles": [
+        {
+          "file": "weight.md",
+          "type": "tref"
+        }
+      ],
+      "repoUrl": "https://github.com/henkvancann/kerisuite-glossary",
+      "terms_dir": "spec/terms-definitions",
+      "owner": "henkvancann",
+      "repo": "kerisuite-glossary",
+      "site": null,
+      "avatarUrl": null,
+      "ghPageUrl": "https://henkvancann.github.io/kerisuite-glossary/",
+      "commitHash": "6820014a1111b38dc3d653a0026ff981db2dee17",
+      "content": "<dd>\n<p>an optional field map in the Edge section that provides edge weight property that enables directed weighted edges and operators that use weights.</p>\n</dd>\n<dd>\n<p>Source: Dr. S.Smith</p>\n</dd>\n<dd>\n<p>More in <a href=\"https://weboftrust.github.io/WOT-terms/docs/glossary/weight\">extended KERI glossary</a></p>\n</dd>"
+    }
+  ]
 };</script>
 
     <!-- Template based on https://getbootstrap.com/docs/5.3/examples/dashboard/ -->
@@ -481,8 +1220,8 @@ customElements.define("slide-panels",class extends HTMLElement{static get observ
                             <a class="mx-auto p-2" href="https://github.com/trustoverip/spec-up-t"
                                 target="_blank" rel="noopener">Powered By Spec-Up-T</a>
                             <small>
-                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-10-04T20:57:19.447Z">
-                                    Generated: 2025-10-04T20:57:19.447Z
+                                <time class="timestamp mx-auto p-2 text-muted" datetime="2025-10-06T17:01:48.295Z">
+                                    Generated: 2025-10-06T17:01:48.295Z
                                 </time>
                             </small>
                         </div>
@@ -2236,14 +2975,14 @@ The presence of the UUID, <code>u</code> field in an Edge block makes that Edge 
 <p>Likewise, because all the values in the sections of an ACDC are verifiably bound to the ACDC’s SAID, then by extension, all the detail values in an ACDC are also verifiably bound to the Issuer’s Key state. This means that ACDCs are not directly signed by the Issuer and are bound to the Issuer’s Key State (either directly or indirectly), and the Issuer’s Key State is signed. This enables the Key State of the Issuer to change independently of the ACDC state.</p>
 <p>This is in contrast to other verifiable credential schemes, where the credentials are signed directly; in such schemes, a key rotation forces all the credentials signed with a given set of keys to be revoked; otherwise, a key compromise would enable the compromiser to issue verifiable credentials forged by the compromiser.</p>
 <p>The approach of binding ACDC state to Issuer key state via anchored TEL sealsis shown in the following diagram:</p>
-<p><img src="https://github.com/trustoverip/tswg-acdc-specification/blob/main/spec/assets/RegistryTEL.png" alt="Bound-ACDC-State"></p>
+<p><img src="https://github.com/trustoverip/tswg-acdc-specification/blob/main/spec/assets/RegistryTEL.png?raw=true" alt="Bound-ACDC-State"></p>
 <p><strong>Figure:</strong> <em>Registrar Observer Components</em></p>
 <p>The requirement of an anchored ACDC state proof seal means that the forger must first successfully publish in the KEL of the Issuer an inclusion proof digest seal bound to a forged ACDC. The only way to publish an event in the Issuer’s KEL is to verifiably sign the event, which means the forger must first compromise the issuer’s private signing keys. This makes any forgery attempt detectable, and such an attempt makes the key compromise detectable.</p>
 <p>To elaborate, the only way to successfully publish such a seal with compromised signing keys is in an Interaction Event in a KEL that has not yet recovered from that key compromise via a Rotation Event. This makes the forgery attempt both detectable and recoverable. In any event, the ACDC state proof seal ensures the detectability of any attempt at forgery using compromised keys for any ACDC state.</p>
 <h3 id="tel-registrars-and-tel-observers"><a class="toc-anchor d-print-none" href="#tel-registrars-and-tel-observers">§</a> TEL Registrars and TEL Observers</h3>
 <p>The use of a Transaction Event Log (TEL) to manage the state of an ACDC may require two infrastructure components, namely, Registrars and Observers. A TEL Registrar is a computing component that operates under the auspices of the ACDC Issuer to maintain and publish a Registry of the ACDC state via a TEL. A TEL Observer, on the other hand, is a computing component that operates under the auspices of one or more Validators to cache the Registry, allowing Validators to validate the state of a given ACDC without exposing a point of validation (PoV). To clarify, an important feature of an Observer is that it can mask the usage of a given ACDC from the Issuer.  The Observer maintains an updated cache of the Registry, reflecting state updates provided by the Registry. A validator queries its Observer, not the Registrar, at a point of validation (PoV) for an ACDC. A point of validation (PoV) occurs when an ACDC is presented to a Validator for validation.  Whereas the interactions between the Observer and Registrar occur when there are ACDC state changes, not when there is a PoV of a given ACDC state. This protects against forced validator-to-issuer correlation of ACDC usage, i.e., no forced phone home validation.</p>
 <p>To elaborate, an Observer starts up by downloading and caching the Registries from a Registrar. The Observer then updates its cache of current Registry state by either periodically polling the Registry for state updates or by subscribing to pushed state updates from the Registrar when available. Typically, because ACDC state changes are rare, optimized batch synchronization of state changes across multiple registries may be employed. Race conditions may be mitigated by implementing timed grace periods on revocations, whereby a revocation does not go into effect until a specified date and time after the state update. This enables synchronization batch windows to catch revocations in advance of PoV requests.</p>
-<p><img src="https://github.com/trustoverip/tswg-acdc-specification/blob/main/spec/assets/RegistrarObserver.png" alt="Registrar-Observers"></p>
+<p><img src="https://github.com/trustoverip/tswg-acdc-specification/blob/main/spec/assets/RegistrarObserver.png?raw=true" alt="Registrar-Observers"></p>
 <p><strong>Figure:</strong> <em>Registrar Observer Components</em></p>
 <h3 id="data-privacy"><a class="toc-anchor d-print-none" href="#data-privacy">§</a> Data Privacy</h3>
 <p>Information or data privacy is defined as the relationship between the collection and dissemination of data, technology, the public expectation of privacy, contextual information norms, and the legal and political issues surrounding them <a path-0="en.wikipedia.org" path-1="wiki" path-2="Information_privacy" href="https://en.wikipedia.org/wiki/Information_privacy">Information privacy</a>. Data privacy is challenging since it attempts to allow the use of data by 2nd and 3rd parties while protecting personal (1st party) privacy preferences and personally identifiable information (PII). The fields of computer security, data security, and information security all design and use software, hardware, and human resources to address this issue. This definition is consistent with privacy viewed from the perspective of 1st party data rights and the role of 2nd parties in the three-party exploitation model defined below. The Trust over IP (ToIP) Foundation’s architecture specification phrases privacy protection as answering the question:
@@ -4970,7 +5709,7 @@ Because the edges are in blocks, each with a SAID and UUID fields, the edges can
     </ul></div>
             </div>
             <hr>
-            <p class="ps-3 pe-3" id="w3c-state">W3C Recommendation, 04 October 2025</p>
+            <p class="ps-3 pe-3" id="w3c-state">W3C Recommendation, 06 October 2025</p>
         </div>
     </div>
 
