@@ -17,15 +17,15 @@ The following table defines the top-level fields in an ACDC and their order of a
 |:-:|:--|:--|
 |`v`| Version String | Regexable format: `ACDCMmmGggKKKKSSSS.` that provides protocol type, version, CESR genus version, serialization type, size, and terminator |
 |`t`| Message Type | Three-character Message type |
-|`d`| Digest ([[3](#SAID)]) | Self-referential fully qualified cryptographic digest of enclosing map |
+|`d`| Message Digest SAID ([[3](#SAID)]) | Self-referential fully qualified cryptographic digest of enclosing map |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
-|`i`| Issuer Identifier ([[ref: AID]])| Autonomic Identifier whose control authority is established via KERI verifiable Key State. |
-|`rd`| Registry Digest ([[3](#SAID)]) | Issuance and/or revocation, transfer, or retraction registry for ACDC |
-|`s`| Schema| Either the [[3](#SAID)] of a JSON Schema block or the block itself. |
-|`a`| Attribute| Either the [[3](#SAID)] of a block of Attributes or the block itself. |
-|`A`| Attribute Aggregate| Either the aggregate of a selectively disclosable block of attributes or the block itself. |
-|`e`| Edge| Either the [[3](#SAID)] of a block of Edges or the block itself.|
-|`r`| Rule | Either the [[3](#SAID)] a block of Rules or the block itself. |
+|`i`| Issuer AID ([[ref: AID]])| Autonomic Identifier whose control authority is established via KERI verifiable Key State. |
+|`rd`| Registry Digest SAID ([[3](#SAID)]) | Issuance and/or revocation, transfer, or retraction registry for ACDC |
+|`s`| Schema| Either the SAID [[3](#SAID)] of a JSON Schema block or the block itself. |
+|`a`| Attribute| Either the SAID [[3](#SAID)] of a block of Attributes or the block itself. |
+|`A`| Attribute Aggregate| Either the Aggregate of a selectively disclosable block of attributes or the block itself. |
+|`e`| Edge| Either the SAID [[3](#SAID)] of a block of Edges or the block itself.|
+|`r`| Rule | Either the SAID [[3](#SAID)] a block of Rules or the block itself. |
 
 #### Field Ordering
 
@@ -42,12 +42,12 @@ These MAY appear at other levels besides the top-level of an ACDC.
 
 | Label | Title | Description |
 |:-:|:--|:--|
-|`d`| Digest ([[3](#SAID)]) | Self-referential fully qualified cryptographic digest of enclosing map. |
+|`d`| Digest SAID ([[3](#SAID)]) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
-|`i`| Identifier ([[ref: AID]])| Context-dependent AID as determined by its enclosing map such as Issuee identifier. |
-|`rd`| Registry Digest ([[3](#SAID)]) | Issuance and/or revocation, transfer, or retraction registry for ACDC when not at top-level |
+|`i`| Identifier AID ([[ref: AID]])| Context-dependent AID as determined by its enclosing map such as Issuee identifier. |
+|`rd`| Registry Digest SAID ([[3](#SAID)]) | Issuance and/or revocation, transfer, or retraction registry for ACDC when not at top-level |
 |`dt`| Datetime | Context-dependent ISO datetime string |
-|`n`| Node| [[3](#SAID)] of another ACDC as the terminating point (vertex) of a directed Edge that connects the encapsulating ACDC node to the specified ACDC node as a fragment of a distributed property graph (PG).|
+|`n`| Node| SAID [[3](#SAID)] of another ACDC as the terminating point (vertex) of a directed Edge that connects the encapsulating ACDC node to the specified ACDC node as a fragment of a distributed property graph (PG).|
 |`o`| Operator| Either unary operator on Edge or m-ary operator on edge-group in Edge section. Enables expressing of Edge logic on Edge subgraph.|
 |`w`| Weight| Edge weight property that enables default property for directed weighted edges and operators on directed weighted edges.|
 |`l`| Legal Language| Text of Ricardian contract clause.|
@@ -2987,10 +2987,10 @@ The following table defines the top-level fields in an ACDC and their order of a
 |:-:|:--|:--|
 |`v`| Version String| Regexable format: `ACDCMmmGggKKKKSSSS.` that provides protocol type, version, CESR genus version, serialization type, size, and terminator. |
 |`t`| Message Type| Three-character Message type |
-|`d`| Digest (SAID) | Self-referential fully qualified cryptographic digest of enclosing map. |
+|`d`| Message Digest SAID | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
-|`i`| Issuer Identifier (AID)| AID whose control authority is established via KERI verifiable Key State. |
-|`rd`| Registry Digest (SAID) | Issuance and/or revocation, transfer, or retraction Registry for ACDC |
+|`i`| Issuer Identifier AID| AID whose control authority is established via KERI verifiable Key State. |
+|`rd`| Registry Digest SAID | Issuance and/or revocation, transfer, or retraction Registry for ACDC |
 |`s`| Schema| Either the SAID of a JSON Schema block or the block itself. |
 |`a`| Attribute| Either the SAID of a block of Attributes or the block itself. |
 |`A`| Attribute Aggregate| Either the Aggregate of a selectively disclosable block of Attributes or the block itself. |
