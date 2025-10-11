@@ -121,7 +121,7 @@ The top-level Rule section `r`, field value provides both human and machine read
 
 There are several variants of ACDCs determined by the presence/absence of certain fields and/or the value of those fields when used in combination. The primary ACDC variants are public, private, metadata, and bespoke. A given variant MAY be Targeted (Untargeted).
 
-All the variants have two alternate forms, compact and non-compact. In the compact form of any variant, the values of the top-level fields for the Schema, Attribute, Aggregate, Edge, and Rule sections are the SAIDs (digests) of the corresponding expanded (non-compact) form of each section {{SAID}}. When in a non-compact form then one or more of the section fields may be partially or fully expanded. Additional variants arise from the presence or absence of different fields inside the Attribute or Attribute aggregate section.
+All the variants have two alternate forms, compact and non-compact. In the compact form of any variant, the values of the top-level fields for the Schema, Attribute, Aggregate, Edge, and Rule sections are the SAIDs (digests) of the corresponding expanded (non-compact) form of each section [[ref: SAID]]. When in a non-compact form then one or more of the section fields may be partially or fully expanded. Additional variants arise from the presence or absence of different fields inside the Attribute or Attribute aggregate section.
 
 At the top level, the presence (absence), of the UUID, `u`, field produces two additional variant combinations. These are private (public), respectively. In addition, a present but empty UUID, `u`, field produces a *Private Metadata* variant. Furthermore, a given variant MAY be either *Targeted* or *Untargeted* based on the presence of the Issuee field in the Attribute or Attribute aggregate sections. Similarly, any variant with an Attribute section MAY have nested sub-blocks within the Attribute section that are either compact or non-compact. This enables nested Partial Disclosure. The type of disclosure a given variant supports MAY be dependent on how the different sections appear in the ACDC.
 
@@ -253,7 +253,7 @@ ACDC-specific Schema compliance requirements usually are specified in the EGF fo
 
 To elaborate, a Validator can confirm compliance of any non-schema section of the ACDC against its Schema both before and after uncompacted disclosure of that section by using a composed base Schema with `oneOf` pre-disclosure and a decomposed Schema post-disclosure with the compact `oneOf` option removed. This capability provides a mechanism for secure Schema validation of both Compact and uncompacted variants that require the Issuer to only commit to the composed Schema and not to all the different Schema variants for each combination of a given compact/uncompacted section in an ACDC.
 
-One of the most important features of ACDCs is support for Chain-Link Confidentiality [[44]. This provides a powerful mechanism for protecting against unpermissioned exploitation of the data disclosed via an ACDC. Essentially, an exchange of information compatible with Chain-Link Confidentiality starts with an offer by the Discloser to disclose confidential information to a potential Disclosee. This offer includes sufficient metadata about the information to be disclosed such that the Disclosee can agree to those terms. Specifically, the metadata includes both the schema of the information to be disclosed and the terms of use of that data once disclosed. Once the Disclosee has accepted the terms, then Full disclosure is made. A Full Disclosure that happens after contractual acceptance of the terms of use is called permissioned disclosure. The pre-acceptance disclosure of metadata is a form of Partial Disclosure.
+One of the most important features of ACDCs is support for Chain-Link Confidentiality [[44]]. This provides a powerful mechanism for protecting against unpermissioned exploitation of the data disclosed via an ACDC. Essentially, an exchange of information compatible with Chain-Link Confidentiality starts with an offer by the Discloser to disclose confidential information to a potential Disclosee. This offer includes sufficient metadata about the information to be disclosed such that the Disclosee can agree to those terms. Specifically, the metadata includes both the schema of the information to be disclosed and the terms of use of that data once disclosed. Once the Disclosee has accepted the terms, then Full disclosure is made. A Full Disclosure that happens after contractual acceptance of the terms of use is called permissioned disclosure. The pre-acceptance disclosure of metadata is a form of Partial Disclosure.
 
 As is the case for Compact (uncompacted) ACDC disclosure, composable JSON Schema enables the use of the same base Schema for both the validation of the Partial disclosure of the offer metadata prior to contract acceptance and validation of full or detailed disclosure after contract acceptance [[10](#JSch)][[39](#JSchCp)]. A cryptographic commitment to the base schema securely specifies the allowable semantics for both Partial and Full Disclosure. Decomposition of the base Schema enables a Validator to impose more specific semantics at later stages of the exchange process. Specifically, the `oneOf` subschema composition operator validates against either the compact SAID of a block or the full block. Decomposing the schema to remove the optional Compact variant enables a Validator to ensure complaint Full Disclosure. To clarify, a Validator can confirm Schema compliance both before and after detailed disclosure by using a composed base Schema pre-disclosure and a decomposed schema post-disclosure with the undisclosed options removed. These features provide a mechanism for secure schema-validated contractually-bound Partial (and/or Selective) Disclosure of confidential data via ACDCs.
 
@@ -341,7 +341,7 @@ Given the presence of a top-level UUID, `u`, field of the Attribute block whose 
 
 To elaborate, when an ACDC includes a sufficiently high entropy UUID, `u`, field at the top level of its Attributes block then the ACDC MAY be considered a private-attributes ACDC when expressed in compact form, that is, the Attribute block is represented by its SAID, `d`, field and the value of its top-level Attribute section, `a`, field is the value of the nested SAID, `d`, field from the uncompacted version of the Attribute block. A verifiable commitment MAY be made to the compact form of the ACDC without leaking details of the Attributes. Later disclosure of the uncompacted Attribute block SHOULD be verified against its SAID, `d`, field that was provided in the compact form as the value of the top-level Attribute section, `a`, field.
 
-Because the Issuee AID is nested in the attribute block as that block's top-level, Issuee, `i`, field, a presentation exchange (disclosure) could be initiated on behalf of a different AID that has not yet been correlated to the Issuee AID and then only correlated to the Issuee AID after the Disclosee has agreed to the Chain-Link Confidentiality provisions in the rules section of the private-attributes ACDC [[44].
+Because the Issuee AID is nested in the attribute block as that block's top-level, Issuee, `i`, field, a presentation exchange (disclosure) could be initiated on behalf of a different AID that has not yet been correlated to the Issuee AID and then only correlated to the Issuee AID after the Disclosee has agreed to the Chain-Link Confidentiality provisions in the rules section of the private-attributes ACDC [[44]].
 
 Consider an example of an Attribute Section as defined by the following JSON Schema subschema,
 
@@ -750,7 +750,7 @@ The Disclosee may then verify the disclosure by:
 - confirming that the issuance seal digest in the Issuer's KEL is bound to the ACDC top-level SAID, `d`, field either directly or indirectly through a TEL Registry entry.
 
 
-A private selectively disclosable ACDC provides significant correlation minimization because a Discloser may use a metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain Link Confidentiality expressed in the Rule section [[44]. Thus, only malicious Disclosees who violate Chain Link Confidentiality may correlate between presentations of a given private, selectively disclosable ACDC. Nonetheless, the malicious Disclosees are not able to discover any undisclosed Attributes.
+A private selectively disclosable ACDC provides significant correlation minimization because a Discloser may use a metadata ACDC prior to acceptance by the Disclosee of the terms of the Chain Link Confidentiality expressed in the Rule section [[44]]. Thus, only malicious Disclosees who violate Chain Link Confidentiality may correlate between presentations of a given private, selectively disclosable ACDC. Nonetheless, the malicious Disclosees are not able to discover any undisclosed Attributes.
 
 #### Composed Schema for selectively disclosable Aggregate section
 
@@ -1725,7 +1725,7 @@ To elaborate, exploitation based on disclosure is characterized by a Three-party
 - Second-party = Disclosee of data received from First party (Discloser).
 - Third-party = Observer of data disclosed by First party (Discloser) to Second party (Disclosee).
 
-Typically, protection from direct 3rd-party (Observer) exploitation without the collusion of the 2nd-party (Disclosee) of disclosed data may be provided by encrypting that data such that only the 2nd-party (Disclosee) may decrypt that data. Encryption is one effective mechanism for protecting the confidentiality of disclosed data from non-collusive 3rd-party observation. The detailed description of such mechanisms that are compatible with ACDCs is beyond the scope of this specification. See [SPAC](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/SPAC_Message.pdf) and {{TSP}} compatible encryption protocols.
+Typically, protection from direct 3rd-party (Observer) exploitation without the collusion of the 2nd-party (Disclosee) of disclosed data may be provided by encrypting that data such that only the 2nd-party (Disclosee) may decrypt that data. Encryption is one effective mechanism for protecting the confidentiality of disclosed data from non-collusive 3rd-party observation. The detailed description of such mechanisms that are compatible with ACDCs is beyond the scope of this specification. See the Secure Privacy, Authenticity, Confidentiality protocol (SPAC) [[70] #SPAC] and the TSP protocol [[69] (#TSP)].
 
 The primary mechanisms by which 2nd parties (Disclosees) erode the data privacy rights of disclosed data are as follows:
 • Exploitive use of 1st-party (Discloser) data by 2nd parties (Disclosees).
@@ -1787,7 +1787,7 @@ Graduated Disclosure enables a comprehensive protection mechanism called Contrac
 
 In a Contractually Protected Disclosure, the potential Discloser first makes an offer using the least (Partial) Disclosure of some information about other information to be disclosed (Full Disclosure) contingent on the potential Disclosee first agreeing to the contractual terms provided in the offer. The contractual terms could, for example, limit the disclosure to third parties of the yet to be disclosed information. But those contractual terms MAY also include provisions that protect against liability or other concerns, not merely disclosure to third parties. The process by which such least disclosures progress to full disclosure is described in the IPEX (Issuance and Exchange Protocol) section below [IPEX](#issuance-and-presentation-exchange-ipex).
 
-One special case of a Contractually protected disclosure is a Chain-Link Confidential disclosure [[44]. Chain-Link Confidentiality imposes conditions and limitations on the further disclosure and/or use of the disclosed data. These MAY be specific terms of use or other consensual constraints. These terms MAY be applied to subsequent disclosures by the Disclosee that follow the data (hence chain-link). Another way of viewing Chain-link confidential disclosure is that the disclosed data has "strings attached." The chaining, in this case, is different from the chaining of ACDCs via their edges, i.e., a DAG of ACDCs. Chain-link confidentiality, in contrast, chains together a sequence of Disclosees. Each Disclosee in the sequence, in turn, is the Discloser to the next Disclosee. The terms-of-use of the original disclosure as applied to the original Disclosee MUST be applied by each subsequent Discloser to each subsequent Disclosee via each of the subsequent disclosures.  These terms of use are meant to contractually protect the data rights of the original Issuer or Issuee of the data being disclosed. These terms of use typically constrain disclosure to only approved parties, i.e., imbue the chain of disclosures with some degree of confidentiality.
+One special case of a Contractually protected disclosure is a Chain-Link Confidential disclosure [[44]]. Chain-Link Confidentiality imposes conditions and limitations on the further disclosure and/or use of the disclosed data. These MAY be specific terms of use or other consensual constraints. These terms MAY be applied to subsequent disclosures by the Disclosee that follow the data (hence chain-link). Another way of viewing Chain-link confidential disclosure is that the disclosed data has "strings attached." The chaining, in this case, is different from the chaining of ACDCs via their edges, i.e., a DAG of ACDCs. Chain-link confidentiality, in contrast, chains together a sequence of Disclosees. Each Disclosee in the sequence, in turn, is the Discloser to the next Disclosee. The terms-of-use of the original disclosure as applied to the original Disclosee MUST be applied by each subsequent Discloser to each subsequent Disclosee via each of the subsequent disclosures.  These terms of use are meant to contractually protect the data rights of the original Issuer or Issuee of the data being disclosed. These terms of use typically constrain disclosure to only approved parties, i.e., imbue the chain of disclosures with some degree of confidentiality.
 
 Another special case of Contractually Protected Disclosure is Contingent Disclosure. In a Contingent Disclosure, some contingency is specified in the Rules section that places an obligation by some party to make a disclosure when the contingency is satisfied. This might be recourse given the breach of some other contract term. When that contingency is met, then the Contingent Disclosure MUST be made by the party whose responsibility it is to satisfy that disclosure obligation. The responsible party MAY be the Discloser, or it MAY be some other party, such as an escrow agent. The Contingent Disclosure clause MAY reference a cryptographic commitment to a private ACDC or private Attribute ACDC (Partial Disclosure) that satisfies via its Full Disclosure the Contingent Disclosure requirement. Contingent Disclosure MAY be used to limit the actual disclosure of personally identifying information (PII) to a just-in-time, need-to-know basis (i.e., upon the contingency) and not a priori. As long as the Discloser and Disclosee trust the escrow agent and the verifiability of the commitment, there is no need to disclose PII about the Discloser in order to enable a transaction, but merely an agreement to the terms of the contingency. This enables something called latent accountability. Recourse via Full Disclosure of PII is latent in the Contingent Disclosure but never realized (actualized) until the conditions of the contingency is satisfied. This minimizes inadvertent leakage while protecting both the Discloser and the Disclosee.
 
@@ -1800,7 +1800,7 @@ The difference between exchange types is the information disclosed, not the mech
 
 The second is convenience. A standard, simple protocol is easier to implement, support, update, understand, and adopt. The tooling is more consistent.
 
-This IPEX [[ref: IPEX]] protocol leverages important features of ACDCs and ancillary protocols such as CESR [[1](#CESR)], SAIDs [[3](#SAID)], and CESR-Path proofs [[ref: Proof-ID]] as well as Ricardian Contracts [[43] and Graduated Disclosure (Metadata, Partial, Selective, Full) to enable Contractually Protected Disclosure. Contractually Protected Disclosure includes both Chain-Link Confidential [[44] and Contingent Disclosure [[ref: ACDC]].
+This IPEX [[ref: IPEX]] protocol leverages important features of ACDCs and ancillary protocols such as CESR [[1](#CESR)], SAIDs [[3](#SAID)], and CESR-Path proofs [[ref: Proof-ID]] as well as Ricardian Contracts [[43] and Graduated Disclosure (Metadata, Partial, Selective, Full) to enable Contractually Protected Disclosure. Contractually Protected Disclosure includes both Chain-Link Confidentialand Contingent Disclosure  [[44]] [[ref: ACDC]].
 
 ### IPEX Protocol Messages
 
@@ -1996,7 +1996,7 @@ The fields for the Update, `upd` event , given by their labels, MUST appear in t
 
 ##### Version String, `v` field
 
-The Version String, `v` field value uses the same format as an ACDC Version String {{see above}}. The protocol type MUST be `ACDC`.
+The Version String, `v` field value uses the same format as a top-level ACDC message  [Version String](#version-string-field). The protocol type MUST be `ACDC`.
 
 ##### Message type, `t` field
 
@@ -2979,7 +2979,7 @@ Likewise, for all the other ACDC protocol message types, when the serialization 
 
 #### ACDC Message Fields
 
-An ACDC can be represented internally, in computer memory, as a dictionary or hash map or equivalent data structure with labeled fields. We call this abstractly, a field map. One important feature of the fields maps used by ACDC is that they all MUST include a field with a SAID (self-addressing ID) using the SAID protocol [[SAID Protocol]]. We call a field map with a SAID field a self-addressed data structure or self-addressed dict. This is abbreviated with the acronym, SAD. To clarify, the SAD of an ACDC is a labeled field map which includes whose value is the SAID of that SAD. Field maps may be implemented differently in different computer software languages. For example, in Python it may be a `dict`. In Javascript it may be an object or a map. In contrast, The over-the-wire serialization could be native CESR using either a field map or fixed fields at the top level.
+An ACDC can be represented internally, in computer memory, as a dictionary or hash map or equivalent data structure with labeled fields. We call this abstractly, a field map. One important feature of the fields maps used by ACDC is that they all MUST include a field with a SAID (self-addressing ID) using the SAID protocol [[ref: SAID]]. We call a field map with a SAID field a self-addressed data structure or self-addressed dict. This is abbreviated with the acronym, SAD. To clarify, the SAD of an ACDC is a labeled field map which includes whose value is the SAID of that SAD. Field maps may be implemented differently in different computer software languages. For example, in Python it may be a `dict`. In Javascript it may be an object or a map. In contrast, The over-the-wire serialization could be native CESR using either a field map or fixed fields at the top level.
 
 The following table defines the top-level fields in an ACDC and their order of appearance. For some message types, some fields are optional, but all fields that appear MUST appear in this order, `[v, t, d, u, i, s, a, A, e, r]`.
 
@@ -4615,7 +4615,7 @@ The ACDC's schema is as follows:
 
 <a id="GLEIF">24</a><a id="ref24"></a>. GLEIF, GLEIF (Global Legal Entity Identifier Foundation), https://www.gleif.org/en/
 
-<a id="">25</a><a id="ref25"></a>. vLEI, vLEI (verifiable Legal Entity Identifier) Definition, https://github.com/WebOfTrust/vLEI
+<a id="VLEI">25</a><a id="ref25"></a>. vLEI, vLEI (verifiable Legal Entity Identifier) Definition, https://github.com/WebOfTrust/vLEI
 
 <a id="GLEIF_vLEI">26</a><a id="ref26"></a>. GLEIF_vLEI, GLEIF vLEI (verifiable Legal Entity Identifier), https://www.gleif.org/en/lei-solutions/gleifs-digital-strategy-for-the-lei/introducing-the-verifiable-lei-vlei
 
@@ -4663,9 +4663,9 @@ The ACDC's schema is as follows:
 
 <a id="Mrkl">49</a><a id="ref49"></a>. Mrkl, Merkle Tree, https://en.wikipedia.org/wiki/Merkle_tree
 
-<a id="MTSec">50</a><a id="ref50"></a>. TwoPI, Second Pre-image Attack on Merkle Trees, https://flawed.net.nz/2018/02/21/attacking-merkle-trees-with-a-second-preimage-attack/
+<a id="TwoPI">50</a><a id="ref50"></a>. TwoPI, Second Pre-image Attack on Merkle Trees, https://flawed.net.nz/2018/02/21/attacking-merkle-trees-with-a-second-preimage-attack/
 
-<a id="">51</a><a id="ref51"></a>. MTSec, Merkle Tree Security, https://blog.enuma.io/update/2019/06/10/merkle-trees-not-that-simple.html
+<a id="MTSec">51</a><a id="ref51"></a>. MTSec, Merkle Tree Security, https://blog.enuma.io/update/2019/06/10/merkle-trees-not-that-simple.html
 
 <a id="DSig">52</a><a id="ref52"></a>. DSig, Digital Signature, https://en.wikipedia.org/wiki/Digital_signature
 
@@ -4701,6 +4701,8 @@ The ACDC's schema is as follows:
 
 <a id="OCSMT">68</a><a id="ref68"></a>. Optimized Compact Sparse Merkle Tree, https://github.com/nervosnetwork/sparse-merkle-tree/blob/master/SMT.md
 
+<a id="TSP">69</a><a id="ref69"></a>. ToIP Trust Spanning Protocol (TSP),
+https://trustoverip.github.io/tswg-tsp-specification/
 
-
-
+<a id="SPAC">70</a><a id="ref70"></a>. Secure Privacy, Authenticity, Confidentiality (SPAC),
+https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/
