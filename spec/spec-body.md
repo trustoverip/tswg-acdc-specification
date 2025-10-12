@@ -61,11 +61,7 @@ The primary field labels are compact in that they MUST use only one or at most t
 
 The Version String, `v`, field MUST be the first field in any top-level ACDC field map encoded in JSON, CBOR, or MGPK [[RFC4627](#RFC4627)] [[12](#CBOR)] [[13](#RFC8949)] [[14](#MGPK)].  It provides a regular expression target for determining a serialized field map's serialization format and size (character count), constituting an ACDC message body. A Stream parser SHOULD use the Version String to extract and deserialize (deterministically) any serialized Stream of ACDC Message bodies. Each ACDC Message body in a Stream MAY use a different serialization type. The format for the Version String field value is defined in the CESR specification [[1](#CESR)].
 
-<<<<<<< HEAD
-The protocol field, `PPPP` value in the Version String MUST be `ACDC` for the ACDC protocol. The protocol version field, `Mmm`, MUST encode the current major `M` and minor `mm` version of the ACDC protocol [[1](#CESR)] used by the associated message. The CESR genus version field `Ggg` MUST encode the major `G` and minor `gg` version of the CESR protocol used to encode the associated message. [CESR specification](https://trustoverip.github.io/tswg-cesr-specification/).
-=======
 The protocol field, `PPPP` value in the Version String MUST be `ACDC` for the ACDC protocol. The protocol version field, `Mmm`, MUST encode the current major `M` and minor `mm` version of the ACDC protocol [[1](#CESR)] used by the associated message. The CESR genus version field `Ggg` MUST encode the major `G` and minor `gg` version of the CESR protocol used to encode the associated message [[1](#CESR)].
->>>>>>> toip/main
 
 ##### Legacy Version String Field Format
 
@@ -86,7 +82,7 @@ A cryptographic commitment (such as a digital signature or a cryptographic diges
 
 ### Registry SAID Field
 
-When present, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. Typically, this field appears at the top level, but in some applications, such as bulk-issued [bulk-issued](#bulk-issued-private-acdcs) ACDCs [bulk-issued](#bulk-issued-private-acdcs), it may appear nested inside the attribute, `a`, or aggregate, `A`, section field maps [attr](#attribute-section) and [aggr](#aggregate-section). This nested appearance better facilitates contractually protected disclosure of the registry SAID.
+When present, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. Typically, this field appears at the top level, but in some applications, such as bulk-issued [bulk-issued](#bulk-issued-private-acdcs) ACDCs [bulk-issued](#bulk-issued-private-acdcs), it may appear nested inside the [[ref: Attribute]], `a`, or aggregate, `A`, section field maps [attr](#attribute-section) and [aggr](#aggregate-section). This nested appearance better facilitates contractually protected disclosure of the registry SAID.
 
 ### Universally Unique Identifier (UUID) Fields
 
@@ -4573,21 +4569,20 @@ The ACDC's schema is as follows:
 
 <a id="DID-KERI">5</a><a id="ref5"></a>. DIDK_ID, IETF DID-KERI Internet Draft, https://github.com/WebOfTrust/ietf-did-keri
 
+<a id="RFC8259">8</a><a id="ref8"></a>. RFC8259, JSON (JavaScript Object Notation), https://datatracker.ietf.org/doc/html/rfc8259
+
 <a id="W3C_DID">28</a><a id="ref28"></a>. W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0, https://w3c-ccg.github.io/did-spec/
 
-<a id="did-webs">61</a><a id="ref61"></a>. ToIP did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
+<a id="did-webs">61</a><a id="ref71"></a>. ToIP did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
 
-<a id="RFC4627">62</a><a id="ref62"></a>. RFC4627 The application/json Media Type for JavaScript Object Notation (JSON). D. Crockford; 2006-07. Status: Informational.
+<a id="RFC4627">9</a><a id="ref9"></a>. RFC4627, The application/json Media Type for JavaScript Object Notation (JSON), D. Crockford; 2006-07. Status: Informational.https://datatracker.ietf.org/doc/rfc4627/
+
 
 ### Informative section
 
 <a id="RFC6901">6</a><a id="ref6"></a>. RFC6901, JavaScript Object Notation (JSON) Pointer, https://datatracker.ietf.org/doc/html/rfc6901
 
 <a id="JSON">7</a><a id="ref7"></a>. JSON, JavaScript Object Notation Delimeters, https://www.json.org/json-en.html
-
-<a id="RFC8259">8</a><a id="ref8"></a>. RFC8259, JSON (JavaScript Object Notation), https://datatracker.ietf.org/doc/html/rfc8259
-
-<a id="RFC4627">9</a><a id="ref9"></a>. RFC4627, The application/json Media Type for JavaScript Object Notation (JSON), https://datatracker.ietf.org/doc/rfc4627/
 
 <a id="JSch">10</a><a id="ref10"></a>. JSch, JSON Schema, https://json-schema.org
 
