@@ -78,11 +78,11 @@ Some fields in ACDCs MAY have for their value either a field map or a SAID. A SA
 
 More specifically, special top-level ACDC fields MUST have for their value either a serialized field map or the SAID of that field map. Recall that each SAID provides a stable, universal, cryptographically verifiable, and agile reference to its encapsulating block (serialized field map). The special top-level SAID fields in ACDC include the `d`, and `rd` fields. Moreover, the value of top-level `s`, `a`, `e`, and `r` fields MAY be replaced by the SAID of their associated field map. The values of the `s`, `a`, `e`, and `r` fields provide normatively defined sections of an ACDC. When replaced by their SAID, these top-level field values represent their associated sections in *compact* form.
 
-A cryptographic commitment (such as a digital signature or a cryptographic digest) on some other given cryptographic digest, all with sufficient cryptographic strength, including collision resistance [[34](#HCR)] [[35](#QCHC)], of the digest(s), is equivalent to a commitment to thea actual serialized block on which the given digest was derived (computed).  Specifically, a digital signature on a SAID makes a verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. Moreover, a digest of a data block that, in turn, contains digests of yet other data blocks, makes a compact, hierarchical, verifiable cryptographic commitment to the digested data blocks. The combination of non-repudiable commitments and hierarchical commitments enables reasoning about ACDCs in whole or in part via their SAIDs in a fully interoperable, verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts [[43]]. This includes reasoning about the whole ACDC given by its top-level SAID, `d`, field, as well as reasoning about any of its special nested sections using the section SAIDs.
+A cryptographic commitment (such as a digital signature or a cryptographic digest) on some other given cryptographic digest, all with sufficient cryptographic strength, including collision resistance [[34](#HCR)] [[35](#QCHC)], of the digest(s), is equivalent to a commitment to thea actual serialized block on which the given digest was derived (computed).  Specifically, a digital signature on a SAID makes a verifiable cryptographic non-repudiable commitment that is equivalent to a commitment on the full serialization of the associated block from which the SAID was derived. Moreover, a digest of a data block that, in turn, contains digests of yet other data blocks, makes a compact, hierarchical, verifiable cryptographic commitment to the digested data blocks. The combination of non-repudiable commitments and hierarchical commitments enables reasoning about ACDCs in whole or in part via their SAIDs in a fully interoperable, verifiable, compact, and secure manner. This also supports the well-known bow-tie model of Ricardian Contracts [43](#RicCon). This includes reasoning about the whole ACDC given by its top-level SAID, `d`, field, as well as reasoning about any of its special nested sections using the section SAIDs.
 
 ### Registry SAID Field
 
-When present, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. Typically, this field appears at the top level, but in some applications, such as bulk-issued [bulk-issued](#bulk-issued-private-acdcs) ACDCs [bulk-issued](#bulk-issued-private-acdcs), it may appear nested inside the attribute, `a`, or aggregate, `A`, section field maps [attr](#attribute-section) [aggr](#aggregate-section). This nested appearance better facilitates contractually protected disclosure of the registry SAID.
+When present, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. Typically, this field appears at the top level, but in some applications, such as bulk-issued [bulk-issued](#bulk-issued-private-acdcs) ACDCs [bulk-issued](#bulk-issued-private-acdcs), it may appear nested inside the [[ref: Attribute]], `a`, or aggregate, `A`, section field maps [attr](#attribute-section) and [aggr](#aggregate-section). This nested appearance better facilitates contractually protected disclosure of the registry SAID.
 
 ### Universally Unique Identifier (UUID) Fields
 
@@ -4569,21 +4569,20 @@ The ACDC's schema is as follows:
 
 <a id="DID-KERI">5</a><a id="ref5"></a>. DIDK_ID, IETF DID-KERI Internet Draft, https://github.com/WebOfTrust/ietf-did-keri
 
+<a id="RFC8259">8</a><a id="ref8"></a>. RFC8259, JSON (JavaScript Object Notation), https://datatracker.ietf.org/doc/html/rfc8259
+
 <a id="W3C_DID">28</a><a id="ref28"></a>. W3C_DID, W3C Decentralized Identifiers (DIDs) v1.0, https://w3c-ccg.github.io/did-spec/
 
-<a id="did-webs">61</a><a id="ref61"></a>. ToIP did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
+<a id="did-webs">61</a><a id="ref71"></a>. ToIP did:webs Method Specification, https://trustoverip.github.io/tswg-did-method-webs-specification/
 
-<a id="RFC4627">62</a><a id="ref62"></a>. RFC4627 The application/json Media Type for JavaScript Object Notation (JSON). D. Crockford; 2006-07. Status: Informational.
+<a id="RFC4627">9</a><a id="ref9"></a>. RFC4627, The application/json Media Type for JavaScript Object Notation (JSON), D. Crockford; 2006-07. Status: Informational.https://datatracker.ietf.org/doc/rfc4627/
+
 
 ### Informative section
 
 <a id="RFC6901">6</a><a id="ref6"></a>. RFC6901, JavaScript Object Notation (JSON) Pointer, https://datatracker.ietf.org/doc/html/rfc6901
 
 <a id="JSON">7</a><a id="ref7"></a>. JSON, JavaScript Object Notation Delimeters, https://www.json.org/json-en.html
-
-<a id="RFC8259">8</a><a id="ref8"></a>. RFC8259, JSON (JavaScript Object Notation), https://datatracker.ietf.org/doc/html/rfc8259
-
-<a id="RFC4627">9</a><a id="ref9"></a>. RFC4627, The application/json Media Type for JavaScript Object Notation (JSON), https://datatracker.ietf.org/doc/rfc4627/
 
 <a id="JSch">10</a><a id="ref10"></a>. JSch, JSON Schema, https://json-schema.org
 
