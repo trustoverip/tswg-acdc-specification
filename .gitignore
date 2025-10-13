@@ -32,3 +32,4 @@ coverage
 build
 .history
 /.cache/
+package-lock.json
