@@ -45,7 +45,7 @@ These MAY appear at other levels besides the top-level of an ACDC.
 |`d`| Digest SAID ([[3](#SAID)]) | Self-referential fully qualified cryptographic digest of enclosing map. |
 |`u`| UUID | Random Universally Unique Identifier as fully qualified high entropy pseudo-random string, a salty nonce. |
 |`i`| Identifier AID ([[ref: AID]])| Context-dependent AID as determined by its enclosing map such as Issuee identifier. |
-|`rd`| Registry Digest SAID ([[3](#SAID)]) | Issuance and/or revocation, transfer, or retraction registry for ACDC when not at top-level |
+|`rd`| Registry Digest SAID ([[3](#SAID)]) | Issuance and/or revocation, transfer, retraction, or usage registry for ACDC when not at top-level |
 |`dt`| Datetime | Context-dependent ISO datetime string |
 |`n`| Node| SAID [[3](#SAID)] of another ACDC as the terminating point (vertex) of a directed Edge that connects the encapsulating ACDC node to the specified ACDC node as a fragment of a distributed property graph (PG).|
 |`o`| Operator| Either unary operator on Edge or m-ary operator on edge-group in Edge section. Enables expressing of Edge logic on Edge subgraph.|
@@ -82,7 +82,7 @@ A cryptographic commitment (such as a digital signature or a cryptographic diges
 
 ### Registry SAID Field
 
-When present, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. Typically, this field appears at the top level, but in some applications, such as bulk-issued [bulk-issued](#bulk-issued-private-acdcs) ACDCs [bulk-issued](#bulk-issued-private-acdcs), it may appear nested inside the [[ref: Attribute]], `a`, or aggregate, `A`, section field maps [attr](#attribute-section) and [aggr](#aggregate-section). This nested appearance better facilitates contractually protected disclosure of the registry SAID.
+When present at the top-level, the registry SAID, `rd` field value is the SAID of the initializing event for a given transaction event log (TEL) registry that maintains a dynamic state for the ACDC, such as issuance and revocation state. Typically, this field appears at the top level, but in some applications, such as bulk-issued [bulk-issued](#bulk-issued-private-acdcs) ACDCs [bulk-issued](#bulk-issued-private-acdcs), it may appear nested inside the [[ref: Attribute]], `a`, or aggregate, `A`, section field maps [attr](#attribute-section) and [aggr](#aggregate-section). This nested appearance better facilitates contractually protected disclosure of the registry SAID. When the registry SAID, `rd` field is used at the top level for the Issuer's registry, a registry SAID, `rd` field that appears nested in the Attributed, `a`, or Aggregate, `A`, section MAY be used for some other registry, such as an application-specific or Issuer-specific registry.
 
 ### Universally Unique Identifier (UUID) Fields
 
